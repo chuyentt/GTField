@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842567</string>
+		<key>Lon</key>
+		<string>10.531644</string>
+		<key>Name</key>
+		<string>Hospital</string>
+		<key>id</key>
+		<string>1</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.837696</string>
+		<key>Lon</key>
+		<string>10.504251</string>
+		<key>Name</key>
+		<string>Police</string>
+		<key>id</key>
+		<string>2</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.840854</string>
+		<key>Lon</key>
+		<string>10.502010</string>
+		<key>Name</key>
+		<string>Carabinieri</string>
+		<key>id</key>
+		<string>3</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844530</string>
+		<key>Lon</key>
+		<string>10.497459</string>
+		<key>Name</key>
+		<string>Municipal Police</string>
+		<key>id</key>
+		<string>4</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844101</string>
+		<key>Lon</key>
+		<string>10.501774</string>
+		<key>Name</key>
+		<string>City Hall</string>
+		<key>id</key>
+		<string>5</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.852624</string>
+		<key>Lon</key>
+		<string>10.517047</string>
+		<key>Name</key>
+		<string>Fire Fighters</string>
+		<key>id</key>
+		<string>6</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.843984</string>
+		<key>Lon</key>
+		<string>10.502871</string>
+		<key>Name</key>
+		<string>Ambulance</string>
+		<key>id</key>
+		<string>7</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.837565</string>
+		<key>Lon</key>
+		<string>10.506143</string>
+		<key>Name</key>
+		<string>Train Station</string>
+		<key>id</key>
+		<string>8</string>
+	</dict>
+</array>
+</plist>

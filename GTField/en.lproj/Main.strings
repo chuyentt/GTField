@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = "Code & Design"; ObjectID = "4ao-og-Gcz"; */
+"4ao-og-Gcz.text" = "Code & Design";
+
+/* Class = "UILabel"; text = "appyMap"; ObjectID = "5L6-Vs-5c0"; */
+"5L6-Vs-5c0.text" = "appyMap";
+
+/* Class = "UILabel"; text = "- 130+ points of interest"; ObjectID = "8WW-5A-ATX"; */
+"8WW-5A-ATX.text" = "- 130+ points of interest";
+
+/* Class = "UIButton"; normalTitle = "Restore Purchase"; ObjectID = "8aj-4h-C1d"; */
+"8aj-4h-C1d.normalTitle" = "Restore Purchase";
+
+/* Class = "UIButton"; normalTitle = "tap for the full version features"; ObjectID = "D5d-yn-J3y"; */
+"D5d-yn-J3y.normalTitle" = "tap for the full version features";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "I3V-ta-y7a"; */
+"I3V-ta-y7a.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Sezione"; ObjectID = "Stx-q9-P6g"; */
+"Stx-q9-P6g.title" = "Sezione";
+
+/* Class = "UILabel"; text = "1.0"; ObjectID = "Urq-OW-o4X"; */
+"Urq-OW-o4X.text" = "1.0";
+
+/* Class = "UILabel"; text = "- all sections"; ObjectID = "VEV-Yq-Z0k"; */
+"VEV-Yq-Z0k.text" = "- all sections";
+
+/* Class = "UILabel"; text = "- no ads"; ObjectID = "VH2-Cl-nLw"; */
+"VH2-Cl-nLw.text" = "- no ads";
+
+/* Class = "UILabel"; text = "..."; ObjectID = "Xbr-sG-Y4C"; */
+"Xbr-sG-Y4C.text" = "...";
+
+/* Class = "UILabel"; text = "Nome"; ObjectID = "be6-8w-jwE"; */
+"be6-8w-jwE.text" = "Nome";
+
+/* Class = "UILabel"; text = "FREE"; ObjectID = "cdt-9e-tgV"; */
+"cdt-9e-tgV.text" = "FREE";
+
+/* Class = "UILabel"; text = "PoiName"; ObjectID = "cmT-nC-ChE"; */
+"cmT-nC-ChE.text" = "PoiName";
+
+/* Class = "UILabel"; text = "AppyStudio"; ObjectID = "dda-Us-4xo"; */
+"dda-Us-4xo.text" = "AppyStudio";
+
+/* Class = "UILabel"; text = "..."; ObjectID = "fLM-Oa-ZyS"; */
+"fLM-Oa-ZyS.text" = "...";
+
+/* Class = "UILabel"; text = "In the full version you'll find:"; ObjectID = "kxF-G0-ZBu"; */
+"kxF-G0-ZBu.text" = "In the full version you'll find:";
+
+/* Class = "UILabel"; text = "Upgrade to the full version"; ObjectID = "nlZ-ff-W0q"; */
+"nlZ-ff-W0q.text" = "Upgrade to the full version";
+
+/* Class = "UILabel"; text = "NomeSezione"; ObjectID = "uht-AU-UrR"; */
+"uht-AU-UrR.text" = "NomeSezione";
+
+/* Class = "UILabel"; text = "johndoe@website.com"; ObjectID = "wT1-Os-sRz"; */
+"wT1-Os-sRz.text" = "johndoe@website.com";
+
+/* Class = "UILabel"; text = "Searching..."; ObjectID = "y3z-HT-ZhT"; */
+"y3z-HT-ZhT.text" = "Searching...";

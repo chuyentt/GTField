@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842881</string>
+		<key>Lon</key>
+		<string>10.502706</string>
+		<key>Name</key>
+		<string>Piazza San Michele</string>
+		<key>id</key>
+		<string>1</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.841398</string>
+		<key>Lon</key>
+		<string>10.502387</string>
+		<key>Name</key>
+		<string>Piazza Napoleone</string>
+		<key>id</key>
+		<string>2</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.840772</string>
+		<key>Lon</key>
+		<string>10.505182</string>
+		<key>Name</key>
+		<string>Piazza San Martino</string>
+		<key>id</key>
+		<string>3</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844082</string>
+		<key>Lon</key>
+		<string>10.502597</string>
+		<key>Name</key>
+		<string>Piazza San Salvatore</string>
+		<key>id</key>
+		<string>4</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.845343</string>
+		<key>Lon</key>
+		<string>10.506155</string>
+		<key>Name</key>
+		<string>Piazza Anfiteatro</string>
+		<key>id</key>
+		<string>5</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842231</string>
+		<key>Lon</key>
+		<string>10.507927</string>
+		<key>Name</key>
+		<string>P.za S.Maria Forisportam</string>
+		<key>id</key>
+		<string>6</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.846039</string>
+		<key>Lon</key>
+		<string>10.505145</string>
+		<key>Name</key>
+		<string>Piazza San Frediano</string>
+		<key>id</key>
+		<string>7</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.847651</string>
+		<key>Lon</key>
+		<string>10.507387</string>
+		<key>Name</key>
+		<string>Piazza Santa Maria</string>
+		<key>id</key>
+		<string>8</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844052</string>
+		<key>Lon</key>
+		<string>10.504506</string>
+		<key>Name</key>
+		<string>Piazza Guidiccioni</string>
+		<key>id</key>
+		<string>9</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.843334</string>
+		<key>Lon</key>
+		<string>10.504741</string>
+		<key>Name</key>
+		<string>Piazzetta dell&apos;Arancio</string>
+		<key>id</key>
+		<string>10</string>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.84083</string>
+		<key>Lon</key>
+		<string>10.5056</string>
+		<key>Name</key>
+		<string>Museo della Cattedrale</string>
+		<key>id</key>
+		<string>1</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.84353</string>
+		<key>Lon</key>
+		<string>10.499102</string>
+		<key>Name</key>
+		<string>Pinacoteca Palazzo Mansi</string>
+		<key>id</key>
+		<string>2</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.845033</string>
+		<key>Lon</key>
+		<string>10.512248</string>
+		<key>Name</key>
+		<string>Museo di Villa Guinigi</string>
+		<key>id</key>
+		<string>3</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.841135</string>
+		<key>Lon</key>
+		<string>10.499422</string>
+		<key>Name</key>
+		<string>Museo del Fumetto</string>
+		<key>id</key>
+		<string>4</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.841034</string>
+		<key>Lon</key>
+		<string>10.510156</string>
+		<key>Name</key>
+		<string>Orto Botanico</string>
+		<key>id</key>
+		<string>5</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842895</string>
+		<key>Lon</key>
+		<string>10.495882</string>
+		<key>Name</key>
+		<string>Antica Zecca di Lucca</string>
+		<key>id</key>
+		<string>6</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.843299</string>
+		<key>Lon</key>
+		<string>10.501548</string>
+		<key>Name</key>
+		<string>Casa Giacomo Puccini</string>
+		<key>id</key>
+		<string>7</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.841015</string>
+		<key>Lon</key>
+		<string>10.501878</string>
+		<key>Name</key>
+		<string>Museo del Risorgimento</string>
+		<key>id</key>
+		<string>8</string>
+	</dict>
+</array>
+</plist>

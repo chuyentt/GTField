@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.841453</string>
+		<key>Lon</key>
+		<string>10.501872</string>
+		<key>Name</key>
+		<string>Palazzo Ducale</string>
+		<key>id</key>
+		<string>1</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.845868</string>
+		<key>Lon</key>
+		<string>10.503671</string>
+		<key>Name</key>
+		<string>Palazzo Pfanner</string>
+		<key>id</key>
+		<string>2</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844765</string>
+		<key>Lon</key>
+		<string>10.503283</string>
+		<key>Name</key>
+		<string>Palazzo Santini</string>
+		<key>id</key>
+		<string>3</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842668</string>
+		<key>Lon</key>
+		<string>10.505662</string>
+		<key>Name</key>
+		<string>Palazzo Bernardini</string>
+		<key>id</key>
+		<string>4</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.840992</string>
+		<key>Lon</key>
+		<string>10.505118</string>
+		<key>Name</key>
+		<string>Palazzo Micheletti</string>
+		<key>id</key>
+		<string>5</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844266</string>
+		<key>Lon</key>
+		<string>10.501677</string>
+		<key>Name</key>
+		<string>Palazzo Orsetti</string>
+		<key>id</key>
+		<string>6</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842593</string>
+		<key>Lon</key>
+		<string>10.502371</string>
+		<key>Name</key>
+		<string>Palazzo Pretorio</string>
+		<key>id</key>
+		<string>7</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842632</string>
+		<key>Lon</key>
+		<string>10.503851</string>
+		<key>Name</key>
+		<string>Palazzo Cenami</string>
+		<key>id</key>
+		<string>8</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.841081</string>
+		<key>Lon</key>
+		<string>10.503717</string>
+		<key>Name</key>
+		<string>Palazzo Gigli</string>
+		<key>id</key>
+		<string>9</string>
+	</dict>
+</array>
+</plist>

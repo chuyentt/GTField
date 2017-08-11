@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.847947</string>
+		<key>Lon</key>
+		<string>10.507133</string>
+		<key>Name</key>
+		<string>Porta Santa Maria</string>
+		<key>id</key>
+		<string>1</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.848474</string>
+		<key>Lon</key>
+		<string>10.512691</string>
+		<key>Name</key>
+		<string>Porta San Jacopo</string>
+		<key>id</key>
+		<string>2</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.843148</string>
+		<key>Lon</key>
+		<string>10.514086</string>
+		<key>Name</key>
+		<string>Porta Elisa</string>
+		<key>id</key>
+		<string>3</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.838932</string>
+		<key>Lon</key>
+		<string>10.502952</string>
+		<key>Name</key>
+		<string>Porta San Pietro</string>
+		<key>id</key>
+		<string>4</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.842370</string>
+		<key>Lon</key>
+		<string>10.495894</string>
+		<key>Name</key>
+		<string>Porta Sant&apos;Anna</string>
+		<key>id</key>
+		<string>5</string>
+	</dict>
+	<dict>
+		<key>Desc</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id cursus erat. Praesent in lorem ullamcorper, rhoncus nulla eget, malesuada est. Morbi nec egestas augue, id rutrum turpis. Donec augue nunc, laoreet a turpis sit amet, auctor auctor metus. Nunc in accumsan purus.</string>
+		<key>Lat</key>
+		<string>43.844486</string>
+		<key>Lon</key>
+		<string>10.496526</string>
+		<key>Name</key>
+		<string>Porta San Donato</string>
+		<key>id</key>
+		<string>6</string>
+	</dict>
+</array>
+</plist>

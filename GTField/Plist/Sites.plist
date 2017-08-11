@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>1</string>
+		<key>latitude</key>
+		<string>43.842838</string>
+		<key>longitude</key>
+		<string>10.510307</string>
+		<key>name</key>
+		<string>House Paul</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string>Tuesday-Friday: 10am-12:30pm / 3pm-6:30pm - Closed on Saturday, Sunday and Monday</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>2</string>
+		<key>latitude</key>
+		<string>43.842593</string>
+		<key>longitude</key>
+		<string>10.502371</string>
+		<key>name</key>
+		<string>House Tim</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string>All days from 10am to 6pm - Closed on Tuesday.</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>3</string>
+		<key>latitude</key>
+		<string>43.844266</string>
+		<key>longitude</key>
+		<string>10.501677</string>
+		<key>name</key>
+		<string>House Jim</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>4</string>
+		<key>latitude</key>
+		<string>43.841453</string>
+		<key>longitude</key>
+		<string>10.501872</string>
+		<key>name</key>
+		<string>House Frank</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>5</string>
+		<key>latitude</key>
+		<string>43.845868</string>
+		<key>longitude</key>
+		<string>10.503671</string>
+		<key>name</key>
+		<string>House Jack</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>6</string>
+		<key>latitude</key>
+		<string>43.754843</string>
+		<key>longitude</key>
+		<string>10.55484</string>
+		<key>name</key>
+		<string>House Tom</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>7</string>
+		<key>latitude</key>
+		<string>43.754843</string>
+		<key>longitude</key>
+		<string>10.55484</string>
+		<key>name</key>
+		<string>House Brad</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>8</string>
+		<key>latitude</key>
+		<string>43.754843</string>
+		<key>longitude</key>
+		<string>10.55484</string>
+		<key>name</key>
+		<string>House Fred</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>9</string>
+		<key>latitude</key>
+		<string>43.754843</string>
+		<key>longitude</key>
+		<string>10.55484</string>
+		<key>name</key>
+		<string>House Jane</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>10</string>
+		<key>latitude</key>
+		<string>43.754843</string>
+		<key>longitude</key>
+		<string>10.55484</string>
+		<key>name</key>
+		<string>House Mike</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit porta lacus ultricies finibus. Duis congue iaculis sagittis. Maecenas vel lorem sed odio efficitur fringilla. Aliquam eget dui elit. Duis fermentum lacus sed ipsum aliquam, quis iaculis nunc hendrerit.</string>
+		<key>id</key>
+		<string>6</string>
+		<key>latitude</key>
+		<string>43.754843</string>
+		<key>longitude</key>
+		<string>10.55484</string>
+		<key>name</key>
+		<string>House Tom</string>
+		<key>tel</key>
+		<string>583111111</string>
+		<key>time</key>
+		<string></string>
+	</dict>
+</array>
+</plist>

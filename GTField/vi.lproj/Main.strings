@@ -1,0 +1,99 @@
+
+/* Class = "UIButton"; normalTitle = "Directions"; ObjectID = "0Yc-FJ-o9Q"; */
+"0Yc-FJ-o9Q.normalTitle" = "Điều hướng";
+
+/* Class = "UILabel"; text = "id"; ObjectID = "3rm-J4-ZkO"; */
+"3rm-J4-ZkO.text" = "id";
+
+/* Class = "UILabel"; text = "Code & Design"; ObjectID = "4ao-og-Gcz"; */
+"4ao-og-Gcz.text" = "Code & Design";
+
+/* Class = "UIBarButtonItem"; title = "ZoomFit"; ObjectID = "4c1-44-dgT"; */
+"4c1-44-dgT.title" = "ZoomFit";
+
+/* Class = "UILabel"; text = "GTField"; ObjectID = "5L6-Vs-5c0"; */
+"5L6-Vs-5c0.text" = "GTField";
+
+/* Class = "UIBarButtonItem"; title = "Map"; ObjectID = "6nB-j1-PYU"; */
+"6nB-j1-PYU.title" = "Bản đồ";
+
+/* Class = "UIButton"; normalTitle = "Restore Purchase"; ObjectID = "ASU-JZ-aAn"; */
+"ASU-JZ-aAn.normalTitle" = "Restore Purchase";
+
+/* Class = "UIViewController"; title = "Feature Information"; ObjectID = "Dxo-fW-RHG"; */
+"Dxo-fW-RHG.title" = "Thông tin đối tượng";
+
+/* Class = "UIButton"; normalTitle = "Email Feedback"; ObjectID = "GDu-Ak-TTN"; */
+"GDu-Ak-TTN.normalTitle" = "Email phản hồi";
+
+/* Class = "UILabel"; text = "PlistName"; ObjectID = "Hii-Yp-8hj"; */
+"Hii-Yp-8hj.text" = "PlistName";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "I3V-ta-y7a"; */
+"I3V-ta-y7a.text" = "Label";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."; ObjectID = "Kaa-Do-12n"; */
+"Kaa-Do-12n.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "LXk-Yr-2QK"; */
+"LXk-Yr-2QK.text" = "Title";
+
+/* Class = "UILabel"; text = "id"; ObjectID = "MAm-o0-Bxl"; */
+"MAm-o0-Bxl.text" = "id";
+
+/* Class = "UIBarButtonItem"; title = "List"; ObjectID = "Odc-Ra-U9G"; */
+"Odc-Ra-U9G.title" = "List";
+
+/* Class = "UIButton"; normalTitle = "Choose from Library"; ObjectID = "TGL-E9-5xT"; */
+"TGL-E9-5xT.normalTitle" = "Chọn từ thư viện ảnh";
+
+/* Class = "UILabel"; text = "16 Punti di interesse"; ObjectID = "UoU-91-OUN"; */
+"UoU-91-OUN.text" = "16 Punti di interesse";
+
+/* Class = "UILabel"; text = "1.0 (build 1)"; ObjectID = "Urq-OW-o4X"; */
+"Urq-OW-o4X.text" = "1.0 (build 1)";
+
+/* Class = "UILabel"; text = "Active"; ObjectID = "YnR-ln-LEa"; */
+"YnR-ln-LEa.text" = "Active";
+
+/* Class = "UITextField"; placeholder = "Tile of the photo"; ObjectID = "Yob-hv-m4A"; */
+"Yob-hv-m4A.placeholder" = "Tile of the photo";
+
+/* Class = "UITextField"; text = "1955_569024"; ObjectID = "Yob-hv-m4A"; */
+"Yob-hv-m4A.text" = "1955_569024";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "ZMj-8M-6lK"; */
+"ZMj-8M-6lK.text" = "Title";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "cgC-ZJ-mK0"; */
+"cgC-ZJ-mK0.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
+
+/* Class = "UILabel"; text = "Trần Trung Chuyên"; ObjectID = "dda-Us-4xo"; */
+"dda-Us-4xo.text" = "Trần Trung Chuyên";
+
+/* Class = "UILabel"; text = "Poi Name"; ObjectID = "eM7-EU-iJR"; */
+"eM7-EU-iJR.text" = "Poi Name";
+
+/* Class = "UILabel"; text = "Poi Detail"; ObjectID = "jPk-7l-I2n"; */
+"jPk-7l-I2n.text" = "Poi Detail";
+
+/* Class = "UILabel"; text = "Section Name"; ObjectID = "oMQ-1c-QDj"; */
+"oMQ-1c-QDj.text" = "Section Name";
+
+/* Class = "UIButton"; normalTitle = "Take photo"; ObjectID = "qDA-cF-ynK"; */
+"qDA-cF-ynK.normalTitle" = "Chụp ảnh";
+
+/* Class = "UILabel"; text = "Active"; ObjectID = "tfl-Hw-Mgm"; */
+"tfl-Hw-Mgm.text" = "Active";
+
+/* Class = "UINavigationItem"; title = "PhotoMap"; ObjectID = "u3I-1P-fg6"; */
+"u3I-1P-fg6.title" = "PhotoMap";
+
+/* Class = "UILabel"; text = "2017-06-30T12:08:54Z"; ObjectID = "w9z-9H-Bv1"; */
+"w9z-9H-Bv1.text" = "2017-06-30T12:08:54Z";
+
+/* Class = "UILabel"; text = "chuyentt@gmail.com"; ObjectID = "wT1-Os-sRz"; */
+"wT1-Os-sRz.text" = "chuyentt@gmail.com";
+
+/* Class = "UILabel"; text = "Poi Name"; ObjectID = "zcb-Dh-6Ma"; */
+"zcb-Dh-6Ma.text" = "Poi Name";

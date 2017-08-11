@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>id</key>
+		<string>MapsView</string>
+		<key>name</key>
+		<string>Maps View</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>Camera</string>
+		<key>name</key>
+		<string>Camera</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>Photos</string>
+		<key>name</key>
+		<string>Photos</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>SectionWayPoints</string>
+		<key>name</key>
+		<string>Way Points</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>SectionTracks</string>
+		<key>name</key>
+		<string>Tracks</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>Settings</string>
+		<key>name</key>
+		<string>Settings</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>Tools</string>
+		<key>name</key>
+		<string>Tools</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>Help</string>
+		<key>name</key>
+		<string>Help</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+	<dict>
+		<key>id</key>
+		<string>About</string>
+		<key>name</key>
+		<string>About</string>
+		<key>isFree</key>
+		<string>yes</string>
+	</dict>
+</array>
+</plist>
