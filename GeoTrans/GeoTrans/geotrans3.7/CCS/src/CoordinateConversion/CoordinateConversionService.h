@@ -181,7 +181,7 @@ namespace MSP
         /**
          *  Copy constructor
          *
-         *  @param[in] - Instance of Coordinate Conversion Service
+         *  @param[in] ccs Instance of Coordinate Conversion Service
          */
         CoordinateConversionService( const CoordinateConversionService &ccs );
 
@@ -193,7 +193,7 @@ namespace MSP
         /**
          *  Operator =
          *
-         * @param[in] - Instance of Coordinate Conversion Service
+         * @param[in] ccs Instance of Coordinate Conversion Service
          */
         CoordinateConversionService &operator=(
            const CoordinateConversionService &ccs );
@@ -229,14 +229,14 @@ namespace MSP
          * @param[in] targetCoordinates - Converted coordinates of the target coordinate system 
          * @param[in] targetAccuracy - Target circular, linear and spherical errors 
          * @param[out] sourceCoordinates - Coordinates of the source coordinate system to be converted
-         * @param[out] sourceAccuracy - Source circular, linear and spherical errors 
+         * @param[out] sourceAccuracy - Source circular, linear and spherical errors
          * 
          */
         void convertTargetToSource(
            CoordinateTuple* targetCoordinates,
            Accuracy*        targetAccuracy,
            CoordinateTuple& sourceCoordinates,
-           Accuracy&        sourceAccurac );
+           Accuracy&        sourceAccuracy );
     
   
       /**

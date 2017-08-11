@@ -324,7 +324,7 @@ void makeMGRSString(
   for (j=0;j<3;j++)
     MGRSString[i++] = alphabet[letters[j]];
 
-  divisor = computeScale( precision );
+  divisor = computeScale( (int)precision );
 
   easting = fmod (easting, 100000.0);
   if (easting >= 99999.5)
@@ -447,7 +447,7 @@ void breakMGRSString(
       strncpy (north_string, tempMGRSString+j+n, n);
       north_string[n] = 0;
       sscanf (north_string, "%ld", &north);
-      multiplier = computeScale( n );
+      multiplier = computeScale( (int)n );
 
       *easting  = east  * multiplier;  // + (multiplier/2.0); // move to 
       *northing = north * multiplier;  // + (multiplier/2.0); // grid center
@@ -1065,7 +1065,7 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUTM(
     utmCoordinatesOverride = 0;
   }
 
-  double divisor = computeScale( precision );
+  double divisor = computeScale( (int)precision );
 
   easting  = ( long )( (easting +EPSILON2) /divisor ) * divisor;
   northing = ( long )( (northing+EPSILON2) /divisor ) * divisor;
@@ -1088,14 +1088,14 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUTM(
   if(grid_northing >= TWOMIL)
      grid_northing = grid_northing - TWOMIL;
 
-  letters[2] = (long)(grid_northing / ONEHT);
+  letters[2] = (grid_northing / ONEHT);
   if (letters[2] > LETTER_H)
      letters[2] = letters[2] + 1;
 
   if (letters[2] > LETTER_N)
      letters[2] = letters[2] + 1;
 
-  letters[1] = ltr2_low_value + ((long)(easting / ONEHT) - 1);
+  letters[1] = ltr2_low_value + ((easting / ONEHT) - 1);
   if ((ltr2_low_value == LETTER_J) && (letters[1] > LETTER_N))
      letters[1] = letters[1] + 1;
 
@@ -1103,7 +1103,7 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUTM(
 
   return new MGRSorUSNGCoordinates(
      CoordinateType::militaryGridReferenceSystem, MGRSString,
-     MSP::CCS::Precision::toPrecision(precision) );
+     MSP::CCS::Precision::toPrecision((int)precision) );
 }
 
 
@@ -1212,7 +1212,7 @@ MSP::CCS::UTMCoordinates* MGRS::toUTM(
     delete geodeticCoordinates;
     geodeticCoordinates = 0;
 
-    divisor = ONEHT / computeScale( precision );
+    divisor = ONEHT / computeScale( (int)precision );
 	
     if( ! inLatitudeRange(letters[0], latitude, PI_OVER_180/divisor) )
     {
@@ -1279,7 +1279,7 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUPS(
   double easting  = upsCoordinates->easting();
   double northing = upsCoordinates->northing();
 
-  divisor = computeScale( precision );
+  divisor = computeScale( (int)precision );
 
   easting  = (long)((easting +EPSILON2) /divisor) * divisor;
   northing = (long)((northing+EPSILON2) /divisor) * divisor;
@@ -1310,7 +1310,7 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUPS(
 
   grid_northing = northing;
   grid_northing = grid_northing - false_northing;
-  letters[2] = (long)(grid_northing / ONEHT);
+  letters[2] = (grid_northing / ONEHT);
 
   if (letters[2] > LETTER_H)
     letters[2] = letters[2] + 1;
@@ -1320,7 +1320,7 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUPS(
 
   grid_easting = easting;
   grid_easting = grid_easting - false_easting;
-  letters[1] = ltr2_low_value + ((long)(grid_easting / ONEHT));
+  letters[1] = ltr2_low_value + ((grid_easting / ONEHT));
 
   if (easting < TWOMIL)
   {
@@ -1346,7 +1346,7 @@ MSP::CCS::MGRSorUSNGCoordinates* MGRS::fromUPS(
 
   return new MGRSorUSNGCoordinates(
      CoordinateType::militaryGridReferenceSystem, MGRSString, 
-     MSP::CCS::Precision::toPrecision(precision) );
+     MSP::CCS::Precision::toPrecision((int)precision) );
 }
 
 
@@ -1375,7 +1375,7 @@ MSP::CCS::UPSCoordinates* MGRS::toUPS(
   double grid_easting;        /* easting for 100,000 meter grid square      */
   double grid_northing;       /* northing for 100,000 meter grid square     */
   char hemisphere;
-  int index = 0;
+  long index = 0;
 
   if ((letters[0] == LETTER_Y) || (letters[0] == LETTER_Z))
   {
@@ -1611,7 +1611,7 @@ void MGRS::getLatitudeLetter( double latitude, int* letter )
     band = (long)(((latitude + _80) / _8) + 1.0e-12);
     if(band < 0)
       band = 0;
-    *letter = Latitude_Band_Table[band].letter;
+    *letter = (int)Latitude_Band_Table[band].letter;
   }
   else
     throw CoordinateConversionException( ErrorMessages::latitude );

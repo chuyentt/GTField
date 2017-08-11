@@ -113,10 +113,6 @@ namespace MSP
           * according to the current ellipsoid and Transverse Mercator
           * projection coordinates.
           *
-          * @param   longitude   Longitude in radians    (input)
-          * @param   latitude    Latitude in radians     (input)
-          * @param   easting     Easting/X in meters     (output)
-          * @param   northing    Northing/Y in meters    (output)
           */
          MSP::CCS::MapProjectionCoordinates* convertFromGeodetic(
             MSP::CCS::GeodeticCoordinates* geodeticCoordinates );

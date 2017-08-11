@@ -389,7 +389,7 @@ MSP::CCS::UTMCoordinates* UTM::convertFromGeodetic(
       temp_zone = 37;
   }
  
-  TransverseMercator *transverseMercator = transverseMercatorMap[temp_zone];
+  TransverseMercator *transverseMercator = transverseMercatorMap[(int)temp_zone];
 
   if (latitude < 0)
   {
@@ -460,7 +460,7 @@ MSP::CCS::GeodeticCoordinates* UTM::convertToGeodetic(
   if ((northing < MIN_NORTHING) || (northing > MAX_NORTHING))
     throw CoordinateConversionException( ErrorMessages::northing );
 
-  TransverseMercator *transverseMercator = transverseMercatorMap[zone];
+  TransverseMercator *transverseMercator = transverseMercatorMap[(int)zone];
 
   if (hemisphere == 'S')
     False_Northing = 10000000;

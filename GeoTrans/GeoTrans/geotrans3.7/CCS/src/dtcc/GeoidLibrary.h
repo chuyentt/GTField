@@ -569,7 +569,7 @@ namespace MSP
              * @param[in]   num_cols      : Number of columns in grid
              * @param[in]   num_rows      : Number of rows in grid
              * @param[in]   height_buffer : Grid of height adjustments
-             * @param[out]  DeltaHeight   : Height Adjustment, in meters.
+             * @param[out]  delta_height   : Height Adjustment, in meters.
              *
              */
 

@@ -740,7 +740,7 @@ MSP::CCS::MGRSorUSNGCoordinates* USNG::convertFromUPS(
  *    USNGString    : USNG coordinate string           (output)
  */
 
-  int index = 0;
+  //int index = 0;
 
   char hemisphere = upsCoordinates->hemisphere();
   double easting  = upsCoordinates->easting();
@@ -812,7 +812,7 @@ MSP::CCS::UPSCoordinates* USNG::convertToUPS(
   long precision;
   double usng_easting;
   double usng_northing;
-  int index = 0;
+  //int index = 0;
   UPSCoordinates* upsCoordinates = 0;
   GeodeticCoordinates* geodeticCoordinates = 0;
   UTMCoordinates* utmCoordinates = 0;
@@ -1018,10 +1018,10 @@ MSP::CCS::UTMCoordinates* USNG::toUTM(
   double lower_lat_limit;     /* South latitude limits based on 1st letter  */
   double grid_easting;        /* Easting for 100,000 meter grid square      */
   double grid_northing;       /* Northing for 100,000 meter grid square     */
-  double temp_grid_northing = 0.0;
-  double fabs_grid_northing = 0.0;
-  double latitude  = 0.0;
-  double longitude = 0.0;
+//  double temp_grid_northing = 0.0;
+//  double fabs_grid_northing = 0.0;
+//  double latitude  = 0.0;
+//  double longitude = 0.0;
   double divisor   = 1.0;
   UTMCoordinates* utmCoordinates = 0;
 

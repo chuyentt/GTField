@@ -242,7 +242,7 @@ EllipsoidLibraryImplementation::EllipsoidLibraryImplementation():
 
 EllipsoidLibraryImplementation::EllipsoidLibraryImplementation( const EllipsoidLibraryImplementation &el )
 {
-  int size = el.ellipsoidList.size();
+  long size = el.ellipsoidList.size();
   for( int i = 0; i < size; i++ )
     ellipsoidList.push_back( new Ellipsoid( *( el.ellipsoidList[i] ) ) );
 
@@ -269,7 +269,7 @@ EllipsoidLibraryImplementation& EllipsoidLibraryImplementation::operator=( const
   if ( &el == this )
 	  return *this;
 
-  int size = el.ellipsoidList.size();
+  long size = el.ellipsoidList.size();
   for( int i = 0; i < size; i++ )
     ellipsoidList[i] = new Ellipsoid( *( el.ellipsoidList[i] ) );
 
@@ -445,7 +445,7 @@ void EllipsoidLibraryImplementation::removeEllipsoid( const char* code )
 
    ellipsoidList.erase( ellipsoidList.begin() + index ); 
 
-   int numEllipsoids = ellipsoidList.size();
+   long numEllipsoids = ellipsoidList.size();
 
    CCSThreadLock lock(&mutex);
 
@@ -544,7 +544,7 @@ void EllipsoidLibraryImplementation::ellipsoidIndex( const char *code, long* ind
   }
   temp_code[ELLIPSOID_CODE_LENGTH - 1] = 0;
 
-  int numEllipsoids = ellipsoidList.size();
+  long numEllipsoids = ellipsoidList.size();
 
 #ifdef NDK_BUILD
   __android_log_print(ANDROID_LOG_VERBOSE, "GtApp", "ellipsoid code %s %d ", code, numEllipsoids );

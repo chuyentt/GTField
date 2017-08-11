@@ -680,9 +680,6 @@ LambertConformalConic::setCommonLambert1StandardParallelParameters(
  * corresponding state variables.  If any errors occur, an exception
  * is thrown with a description of the error.
  *
- *  @param    originLatitude          latitude of origin, in radians 
- *  @param    falseNorthing             false northing, in meters               
- *  @param    scaleFactor               projection scale factor                  
  *  @throws   CoordinateConversionException    invalid input parameters
  */
 
