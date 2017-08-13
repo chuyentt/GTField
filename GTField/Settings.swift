@@ -10,6 +10,97 @@ import UIKit
 import Foundation
 //import AEXML
 
+enum CoordinateType: Int {
+    case albersEqualAreaConic = 0
+    case azimuthalEquidistant = 1
+    case bonne = 2
+    case britishNationalGrid = 3
+    case cassini = 4
+    case cylindricalEqualArea = 5
+    case eckert4 = 6
+    case eckert6 = 7
+    case equidistantCylindrical = 8
+    case geocentric = 9
+    case geodetic = 10
+    case georef = 11
+    case globalAreaReferenceSystem = 12
+    case gnomonic = 13
+    case lambertConformalConic1Parallel = 14
+    case lambertConformalConic2Parallels = 15
+    case localCartesian = 16
+    case mercatorScaleFactor = 17
+    case mercatorStandardParallel = 18
+    case militaryGridReferenceSystem = 19
+    case millerCylindrical = 20
+    case mollweide = 21
+    case newZealandMapGrid = 22
+    case neys = 23
+    case obliqueMercator = 24
+    case orthographic = 25
+    case polarStereographicScaleFactor = 26
+    case polarStereographicStandardParallel = 27
+    case polyconic = 28
+    case sinusoidal = 29
+    case stereographic = 30
+    case transverseCylindricalEqualArea = 31
+    case transverseMercator = 32
+    case universalPolarStereographic = 33
+    case universalTransverseMercator = 34
+    case usNationalGrid = 35
+    case vanDerGrinten = 36
+    case webMercator = 37
+/*
+     0	AC	Albers Equal Area Conic
+     1	AL	Azimuthal Equidistant (S)
+     2	BF	Bonne
+     3	BN	British National Grid (BNG)
+     4	CP	Equidistant Cylindrical (S)
+     5	CS	Cassini
+     6	ED	Eckert VI (S)
+     7	EF	Eckert IV (S)
+     8	GA	Global Area Reference System (GARS)
+     9	GC	Geocentric
+     10	GD	Geodetic
+     11	GE	GEOREF
+     12	GN	Gnomonic (S)
+     13	L1	Lambert Conformal Conic (1 Standard Parallel)
+     14	L2	Lambert Conformal Conic (2 Standard Parallel)
+     15	LC	Local Cartesian
+     16	LI	Cylindrical Equal Area
+     17	MC	Mercator (Standard Parallel)
+     18	MF	Mercator (Scale Factor)
+     19	MG	Military Grid Reference System (MGRS)
+     20	MH	Miller Cylindrical (S)
+     21	MP	Mollweide (S)
+     22	NT	New Zealand Map Grid (NZMG)
+     23	NY	Ney's (Modified Lambert Conformal Conic)
+     24	OC	Oblique Mercator
+     25	OD	Orthographic (S)
+     26	PF	Polar Stereographic (Scale Factor)
+     27	PG	Polar Stereographic (Standard Parallel)
+     28	PH	Polyconic
+     29	SA	Sinusoidal
+     30	SD	Stereographic (S)
+     31	TC	Transverse Mercator
+     32	TX	Transverse Cylindrical Equal Area
+     33	UP	Universal Polar Stereographic (UPS)
+     34	US	United States National Grid (USNG)
+     35	UT	Universal Transverse Mercator (UTM)
+     36	VA	Van der Grinten
+     37	WM	Web Mercator
+ */
+}
+
+enum HeightType: Int {
+    case noHeight = 0
+    case ellipsoidHeight = 1
+    case EGM96FifteenMinBilinear = 2
+    case EGM96VariableNaturalSpline = 3
+    case EGM84TenDegBilinear = 4
+    case EGM84TenDegNaturalSpline = 5
+    case EGM84ThirtyMinBiLinear = 6
+    case EGM2008TwoPtFiveMinBicubicSpline = 7
+}
 
 /**
  * Lấy danh sách layers cho WFS
@@ -262,7 +353,6 @@ func setImageCompressionQuality(_ value: Float) {
     UserDefaults.standard.synchronize()
 }
 
-
 /************************************************
  * Hiệu ứng âm thanh
  */
@@ -344,3 +434,116 @@ func createSettings() {
 }
 
 
+/************************************************
+ * Datum
+ */
+func getSourceDatumCode() -> String {
+    guard UserDefaults.standard.value(forKey: "SOURCE_DATUM_CODE") != nil else {
+        return "WGE"
+    }
+    return UserDefaults.standard.value(forKey: "SOURCE_DATUM_CODE") as! String
+}
+
+func setSourceDatumCode(_ value: String) {
+    UserDefaults.standard.set(value, forKey: "SOURCE_DATUM_CODE")
+    UserDefaults.standard.synchronize()
+}
+
+func getTargetDatumCode() -> String {
+    guard UserDefaults.standard.value(forKey: "TARGET_DATUM_CODE") != nil else {
+        return "WGE"
+    }
+    return UserDefaults.standard.value(forKey: "TARGET_DATUM_CODE") as! String
+}
+
+func setTargetDatumCode(_ value: String) {
+    UserDefaults.standard.set(value, forKey: "TARGET_DATUM_CODE")
+    UserDefaults.standard.synchronize()
+}
+
+// CoordinateType
+func getSourceCoordinateType() -> Int {
+    guard UserDefaults.standard.object(forKey: "SOURCE_COORDINATE_TYPE") != nil else {
+        return 10
+    }
+    return UserDefaults.standard.integer(forKey: "SOURCE_COORDINATE_TYPE")
+}
+
+func setSourceCoordinateType(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "SOURCE_COORDINATE_TYPE")
+    UserDefaults.standard.synchronize()
+}
+
+func getTargetCoordinateType() -> Int {
+    guard UserDefaults.standard.object(forKey: "TARGET_COORDINATE_TYPE") != nil else {
+        return 35
+    }
+    return UserDefaults.standard.integer(forKey: "TARGET_COORDINATE_TYPE")
+}
+
+func setTargetCoordinateType(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "TARGET_COORDINATE_TYPE")
+    UserDefaults.standard.synchronize()
+}
+
+// HeightType
+func getSourceHeightType() -> Int {
+    guard UserDefaults.standard.object(forKey: "SOURCE_HEIGHT_TYPE") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "SOURCE_HEIGHT_TYPE")
+}
+
+func setSourceHeightType(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "SOURCE_HEIGHT_TYPE")
+    UserDefaults.standard.synchronize()
+}
+
+func getTargetHeightType() -> Int {
+    guard UserDefaults.standard.object(forKey: "TARGET_HEIGHT_TYPE") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "TARGET_HEIGHT_TYPE")
+}
+
+func setTargetHeightType(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "TARGET_HEIGHT_TYPE")
+    UserDefaults.standard.synchronize()
+}
+
+// Displaying
+func getAreaUnit() -> Int {
+    guard UserDefaults.standard.object(forKey: "AREA_UNIT") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "AREA_UNIT")
+}
+
+func setAreaUnit(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "AREA_UNIT")
+    UserDefaults.standard.synchronize()
+}
+
+func getDistanceUnit() -> Int {
+    guard UserDefaults.standard.object(forKey: "DISTANCE_UNIT") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "DISTANCE_UNIT")
+}
+
+func setDistanceUnit(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "DISTANCE_UNIT")
+    UserDefaults.standard.synchronize()
+}
+
+func getLatLngFormat() -> Int {
+    guard UserDefaults.standard.object(forKey: "LAT_LNG_FORMAT") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "LAT_LNG_FORMAT")
+}
+
+func setLatLngFormat(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "LAT_LNG_FORMAT")
+    UserDefaults.standard.synchronize()
+}

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 import Firebase
 
 class SettingsViewController: UITableViewController, GADBannerViewDelegate {
@@ -17,15 +18,12 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     @IBOutlet weak var sliTrackDistanceFilter: UISlider!
     @IBOutlet weak var lblTrackDistanceFilter: UILabel!
     var adMobBannerView = GADBannerView()
+    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.title = "GTField Settings"
-        
-        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.close))
-        
-        self.navigationItem.rightBarButtonItems = [shareItem]
         
         // Load settings
         ENABLE_SOUND_EFFECT = getEnableSoundEffect()
@@ -42,11 +40,6 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    @IBAction func close(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: { () -> Void in
-        })
     }
     
     @IBAction func soundEffectsValueChanged(_ sender: UISwitch) {
@@ -69,6 +62,33 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         setTrackDistanceFilter(TRACK_DISTANCE_FILTER)
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell: UITableViewCell = tableView.cellForRow(at: indexPath)!
+        switch cell.tag {
+        case 0:
+            // To CoordinateType
+            let vc: SelectingTableViewController = SelectingTableViewController()
+            vc.selectionType = .areaUnit
+            let nav: UINavigationController = UINavigationController(rootViewController: vc)
+            self.present(nav, animated: true, completion: { 
+                
+            })
+            break
+        case 1:
+            // Datum
+            break
+        case 2:
+            // Ellipsoid
+            break
+        default:
+            break
+        }
+        print("You selected cell #\(cell.tag)")
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -79,13 +99,15 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
             } else {
                 
             }
+            let request = GADRequest()
+            interstitial.load(request)
             
-            initAdMobBanner()
+            //initAdMobBanner()
         } else {
-            hideBanner(banner: adMobBannerView)
+            //hideBanner(banner: adMobBannerView)
         }
     }
-    
+        
     // Initialize Google AdMob banner
     func initAdMobBanner() {
         adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
@@ -97,6 +119,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
+
     }
     
     

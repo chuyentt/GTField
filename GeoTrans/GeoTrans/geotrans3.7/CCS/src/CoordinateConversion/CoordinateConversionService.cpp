@@ -390,7 +390,7 @@ CoordinateConversionService::CoordinateConversionService(
 
   strcpy(Coordinate_System_Table[29].Name, "Sinusoidal");
   strcpy(Coordinate_System_Table[29].Code, "SA");
-  Coordinate_System_Table[20].coordinateSystem = CoordinateType::sinusoidal;
+  Coordinate_System_Table[29].coordinateSystem = CoordinateType::sinusoidal;
 
   strcpy(Coordinate_System_Table[30].Name, "Stereographic (S)");
   strcpy(Coordinate_System_Table[30].Code, "SD");

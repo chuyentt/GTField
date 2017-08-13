@@ -125,6 +125,7 @@
 		DE434B491F23A8B800935974 /* MBTileFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B481F23A8B800935974 /* MBTileFileManager.swift */; };
 		DE434B4F1F23C9D700935974 /* MBTilesDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B4E1F23C9D700935974 /* MBTilesDB.swift */; };
 		DE44BE021F3E03E400434C2E /* geotrans_data.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DE44BE011F3E03E400434C2E /* geotrans_data.bundle */; };
+		DE44BE0B1F4016E000434C2E /* SelectingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44BE0A1F4016E000434C2E /* SelectingTableViewController.swift */; };
 		DE4E7BDC1F3B6CA30012E317 /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDB1F3B6CA30012E317 /* PhotoTableViewCell.swift */; };
 		DE4E7BE61F3C56340012E317 /* BinaryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDE1F3C56320012E317 /* BinaryReader.swift */; };
 		DE4E7BE71F3C56340012E317 /* CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDF1F3C56320012E317 /* CSV.swift */; };
@@ -339,6 +340,7 @@
 		DE434B481F23A8B800935974 /* MBTileFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBTileFileManager.swift; path = ViewControllers/MBTile/MBTileFileManager.swift; sourceTree = "<group>"; };
 		DE434B4E1F23C9D700935974 /* MBTilesDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBTilesDB.swift; path = ViewControllers/MBTile/MBTilesDB.swift; sourceTree = "<group>"; };
 		DE44BE011F3E03E400434C2E /* geotrans_data.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = geotrans_data.bundle; path = GeoTrans/Example/GeoTrans/geotrans_data.bundle; sourceTree = SOURCE_ROOT; };
+		DE44BE0A1F4016E000434C2E /* SelectingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SelectingTableViewController.swift; path = ViewControllers/Settings/SelectingTableViewController.swift; sourceTree = "<group>"; };
 		DE4E7BDB1F3B6CA30012E317 /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoTableViewCell.swift; path = ViewControllers/PhotoMap/PhotoTableViewCell.swift; sourceTree = "<group>"; };
 		DE4E7BDE1F3C56320012E317 /* BinaryReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BinaryReader.swift; path = CSV/BinaryReader.swift; sourceTree = "<group>"; };
 		DE4E7BDF1F3C56320012E317 /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CSV.swift; path = CSV/CSV.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 			children = (
 				DE28C3C31F17873100C3A190 /* SettingsViewController.swift */,
 				DE434B461F2368AB00935974 /* SettingsContainer.swift */,
+				DE44BE0A1F4016E000434C2E /* SelectingTableViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1167,6 +1170,7 @@
 				16C675E71B94900C00EF4913 /* Global.swift in Sources */,
 				DE35F28F1EEDAD06009EE354 /* Settings.swift in Sources */,
 				169B359D1B9DDEF000B83857 /* MainCollectionViewCell.swift in Sources */,
+				DE44BE0B1F4016E000434C2E /* SelectingTableViewController.swift in Sources */,
 				16D8458E1D8D2DCB005DF780 /* DesignableTabBarController.swift in Sources */,
 				DE2BFE311F37491400DACF78 /* Options.swift in Sources */,
 				DE35F2911EEE2647009EE354 /* Double+Extensions.swift in Sources */,
