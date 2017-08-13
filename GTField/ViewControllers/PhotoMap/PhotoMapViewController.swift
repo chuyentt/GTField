@@ -326,6 +326,11 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+    }
+    
     @IBAction private func btnAction(_ sender: AnyObject) {
         let count = self.photos.count
         let alertController = UIAlertController(title: "What would you like to do?", message: nil, preferredStyle: .actionSheet)

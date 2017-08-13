@@ -12,7 +12,6 @@ import GooglePlaces
 import CoreMotion
 //import AEXML
 import Firebase
-import GeoTrans
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,33 +29,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //container.locationManager = locationManager
         }
         
-        //
-        let geotrans = GeoTrans("WGE", "WGE")
-        var x: Double = 0.0
-        var y: Double = 0.0
-        var z: Double = 0.0
-        let lat = 21.0*DEGREE_TO_RADIAN
-        let lon = 105.0*DEGREE_TO_RADIAN
-        let height = 0.0
-
-        geotrans?.llh2XYZ(lat, lon, height, &x, &y, &z)
-        geotrans?.setTargetDatumCode("VN-2")
-        print(x,y,z)
-        var zone: CLong = 0
-        var hemi: NSString? = nil
-        var easting: Double = 0.0
-        var northing: Double = 0.0
-        geotrans?.geocentric2UTM(x, y, z, &zone, &hemi, &easting, &northing)
-        print(zone, hemi!, easting, northing)
-        
-//        -1612214.53349457 5731088.48380319 2280518.7887406
-//        -1204283.11169226 4281699.65429547 1703872.61206855
-//        let wrapperItem = GeoTrans()
-//        wrapperItem.sayHello()
+//        //
+//        let geotrans = GeoTrans("WGE", "WGE")
+//        var x: Double = 0.0
+//        var y: Double = 0.0
+//        var z: Double = 0.0
+//        let lat = 21.0*DEGREE_TO_RADIAN
+//        let lon = 105.0*DEGREE_TO_RADIAN
+//        let height = 0.0
+//
+//        geotrans?.llh2XYZ(lat, lon, height, &x, &y, &z)
+//        geotrans?.setTargetDatumCode("VN-2")
+//        print(x,y,z)
+//        var zone: CLong = 0
+//        var hemi: NSString? = nil
+//        var easting: Double = 0.0
+//        var northing: Double = 0.0
+//        geotrans?.geocentric2UTM(x, y, z, &zone, &hemi, &easting, &northing)
+//        print(zone, hemi!, easting, northing)
 //        
-//        wrapperItem.testCoordinateConversion()
-//        let s = wrapperItem.datumName(for: "WGE")
-//        print(s!)
+////        -1612214.53349457 5731088.48380319 2280518.7887406
+////        -1204283.11169226 4281699.65429547 1703872.61206855
+////        let wrapperItem = GeoTrans()
+////        wrapperItem.sayHello()
+////        
+////        wrapperItem.testCoordinateConversion()
+////        let s = wrapperItem.datumName(for: "WGE")
+////        print(s!)
         // Xử lý các thay đổi từ phiên bản cũ
         migration()
         

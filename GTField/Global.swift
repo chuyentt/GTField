@@ -10,11 +10,33 @@ import Foundation
 import UIKit
 import CloudKit
 import CoreMotion
+import GeoTrans
+
+var areaUnitItems: [String] = [
+    "\(AreaUnit.squareMeter.name) (\(AreaUnit.squareMeter.symbol))",
+    "\(AreaUnit.squareKilometer.name) (\(AreaUnit.squareKilometer.symbol))",
+    "\(AreaUnit.hectare.name) (\(AreaUnit.hectare.symbol))",
+    "\(AreaUnit.squareYard.name) (\(AreaUnit.squareYard.symbol))",
+    "\(AreaUnit.squareMile.name) (\(AreaUnit.squareMile.symbol))",
+    "\(AreaUnit.acre.name) (\(AreaUnit.acre.symbol))"
+]
+
+var distanceUnitItems: [String] = [
+    "\(LengthUnit.meter.name) (\(LengthUnit.meter.symbol))",
+    "\(LengthUnit.kilometer.name) (\(LengthUnit.kilometer.symbol))",
+    "\(LengthUnit.yard.name) (\(LengthUnit.yard.symbol))",
+    "\(LengthUnit.mile.name) (\(LengthUnit.mile.symbol))"
+]
+var latLngFormatItems: [String] = [
+    "ddd°mm'ss.sss N/S,E/W",
+    "ddd.dddddddd N/S,E/W",
+    "+/-ddd°mm'ss.sss",
+    "+/-ddd.dddddddd"
+]
 
 var DEVICE_WIDTH = ""
 
 let publicDatabase = CKContainer.default().publicCloudDatabase
-
 
 // HUD View (customizable by editing the code below)
 let hudView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
@@ -208,6 +230,89 @@ open class UIDistanceLabel: UILabel {
     }
 }
 
+extension UILabel {
+    
+    private struct AssociatedKeys {
+        static var copyable = "copyable"
+        static var longPressGestureRecognizer = "longPressGestureRecognizer"
+    }
+    
+    @IBInspectable public var copyable: Bool {
+        get {
+            guard let number = objc_getAssociatedObject(self, &AssociatedKeys.copyable) as? NSNumber else {
+                return true
+            }
+            
+            return number.boolValue
+        }
+        
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.copyable, NSNumber(value: newValue),
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+            newValue ? enableCopying() : disableCopying()
+        }
+    }
+    
+    private var longPressGestureRecognizer: UILongPressGestureRecognizer? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.longPressGestureRecognizer) as?
+            UILongPressGestureRecognizer
+        }
+        
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.longPressGestureRecognizer, newValue,
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    private func enableCopying() {
+        isUserInteractionEnabled = true
+        
+        longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showCopyMenu))
+        addGestureRecognizer(longPressGestureRecognizer!)
+    }
+    
+    private func disableCopying() {
+        isUserInteractionEnabled = false
+        
+        if let gestureRecognizer = longPressGestureRecognizer {
+            removeGestureRecognizer(gestureRecognizer)
+            longPressGestureRecognizer = nil
+        }
+    }
+    
+    @objc private func showCopyMenu() {
+        let copyMenu = UIMenuController.shared
+        
+        guard !copyMenu.isMenuVisible else { return }
+        
+        becomeFirstResponder()
+        
+        copyMenu.setTargetRect(bounds, in: self)
+        copyMenu.setMenuVisible(true, animated: true)
+    }
+    
+    override open var canBecomeFirstResponder : Bool {
+        return copyable
+    }
+    
+    override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        guard copyable else { return false }
+        
+        if action == #selector(copy(_:)) {
+            return true
+        }
+        
+        return super.canPerformAction(action, withSender: sender)
+    }
+    
+    override open func copy(_ sender: Any?) {
+        UIPasteboard.general.string = text
+    }
+    
+}
+
 extension CLLocationCoordinate2D {
     func localizedCoordinateString() -> String {
         let latString = (latitude < 0) ? "S" : "N"
@@ -219,6 +324,51 @@ extension CLLocationCoordinate2D {
         let lonString = (longitude < 0) ? "W" : "E"
         return "\(fabs(latitude).toDMSString(0)) \(latString)\n\(fabs(longitude).toDMSString(0)) \(lonString)"
     }
+    
+    func latLngFormated(withTarget: Bool) -> String {
+        var txt1: String = ""
+        var txt2: String = ""
+        let latString = (latitude < 0) ? "S" : "N"
+        let lonString = (longitude < 0) ? "W" : "E"
+        
+        switch getLatLngFormat() {
+        case 0:
+            let latString = (latitude < 0) ? "S" : "N"
+            let lonString = (longitude < 0) ? "W" : "E"
+            txt1 = "\(fabs(latitude).toDMSString(3)) \(latString), \(fabs(longitude).toDMSString(3)) \(lonString)"
+        case 1:
+            let latString = (latitude < 0) ? "S" : "N"
+            let lonString = (longitude < 0) ? "W" : "E"
+            txt1 = "\(fabs(latitude).toString(8)) \(latString), \(fabs(longitude).toString(8)) \(lonString)"
+        case 2:
+            let latString = (latitude < 0) ? "-" : "+"
+            let lonString = (longitude < 0) ? "-" : "+"
+            txt1 = "\(latString)\(fabs(latitude).toDMSString(3)), \(lonString)\(fabs(longitude).toDMSString(3))"
+        case 3:
+            let latString = (latitude < 0) ? "-" : "+"
+            let lonString = (longitude < 0) ? "-" : "+"
+            txt1 = "\(latString)\(fabs(latitude).toString(8)), \(lonString)\(fabs(longitude).toString(8))"
+        default:
+            break
+        }
+        if withTarget {
+            var easting: Double = 0.0
+            var northing: Double = 0.0
+            let alt: Double = 0.0
+            let lat = self.latitude*DEGREE_TO_RADIAN
+            let lon = self.longitude*DEGREE_TO_RADIAN
+            var zone: Int = 0
+            var hemi: NSString? = NSString()
+            let geotrans = GeoTrans(getSourceDatumCode(), getTargetDatumCode())
+            geotrans?.setLat(lat, lng: lon, alt: alt)
+            geotrans?.getUTM(&zone, &hemi, &easting, &northing)
+            txt2 = "\(zone)\(hemi!): \(fabs(northing).toString(3)) \(latString), \(fabs(easting).toString(3)) \(lonString)"
+            return "\(txt1)\n\(txt2)"
+        } else {
+            return txt2
+        }
+    }
+    
     func middleLocationWith(location:CLLocationCoordinate2D) -> CLLocationCoordinate2D {
         
         let lon1 = longitude * .pi / 180

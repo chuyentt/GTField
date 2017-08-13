@@ -198,6 +198,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var buttonSearch: UIButton?
     private var buttonSearchLocal: UIButton?
     
+    // Label
+    private var coordinateLabel: UILabel!
+    private var areaLabel: UILabel!
+    
     // Map Controll
     private var buttonLayer: UIButton?
     private var buttonFeatureInfo: UIButton?
@@ -640,6 +644,115 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1,
                            constant: (toolsView?.frame.width)!).isActive = true
         
+        //----- CoordinateLabel -----
+        coordinateLabel = UILabel()
+        coordinateLabel.isUserInteractionEnabled = true
+        coordinateLabel?.copyable = true
+        coordinateLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 54)
+        coordinateLabel?.translatesAutoresizingMaskIntoConstraints = false
+        coordinateLabel?.textAlignment = .center
+        coordinateLabel?.numberOfLines = 0
+        coordinateLabel?.textColor = UIColor.orange
+        coordinateLabel?.font=UIFont.boldSystemFont(ofSize: 13)
+        self.view?.addSubview(coordinateLabel!)
+        
+        // Đặt chiều cao
+        NSLayoutConstraint(item: coordinateLabel!,
+                           attribute: .height,
+                           relatedBy: .equal,
+                           toItem: nil,
+                           attribute: .notAnAttribute,
+                           multiplier: 1,
+                           constant: 54).isActive = true
+        // Căn trái
+        NSLayoutConstraint(item: coordinateLabel!,
+                           attribute: .leading,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .leading,
+                           multiplier: 1.0,
+                           constant: 5).isActive = true
+        // Căn phải
+        NSLayoutConstraint(item: toolsView!,
+                           attribute: .trailing,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .trailingMargin,
+                           multiplier: 1.0,
+                           constant: 5).isActive = true
+        // Căn trên
+        NSLayoutConstraint(item: coordinateLabel!,
+                           attribute: .top,
+                           relatedBy: .equal,
+                           toItem: self.topLayoutGuide,
+                           attribute: .bottom,
+                           multiplier: 1.0,
+                           constant: 54).isActive = true
+        
+        // Căn giữa so với view
+        NSLayoutConstraint(item: coordinateLabel!,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+
+        //----- AreaLabel -----
+        areaLabel = UILabel()
+        areaLabel.isUserInteractionEnabled = true
+        areaLabel?.copyable = true
+        areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 54)
+        areaLabel?.translatesAutoresizingMaskIntoConstraints = false
+        areaLabel?.textAlignment = .center
+        areaLabel?.numberOfLines = 0
+        areaLabel?.textColor = UIColor.brown
+        areaLabel?.font=UIFont.boldSystemFont(ofSize: 15)
+        areaLabel.isHidden = true
+        self.view?.addSubview(areaLabel!)
+        
+        // Đặt chiều cao
+        NSLayoutConstraint(item: areaLabel!,
+                           attribute: .height,
+                           relatedBy: .equal,
+                           toItem: nil,
+                           attribute: .notAnAttribute,
+                           multiplier: 1,
+                           constant: 54).isActive = true
+        // Căn trái
+        NSLayoutConstraint(item: areaLabel!,
+                           attribute: .leading,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .leading,
+                           multiplier: 1.0,
+                           constant: 5).isActive = true
+        // Căn phải
+        NSLayoutConstraint(item: areaLabel!,
+                           attribute: .trailing,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .trailingMargin,
+                           multiplier: 1.0,
+                           constant: 5).isActive = true
+        // Căn trên
+        NSLayoutConstraint(item: areaLabel!,
+                           attribute: .top,
+                           relatedBy: .equal,
+                           toItem: self.topLayoutGuide,
+                           attribute: .bottom,
+                           multiplier: 1.0,
+                           constant: 110).isActive = true
+        
+        // Căn giữa so với view
+        NSLayoutConstraint(item: areaLabel!,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+       
         //----- Button Layer -----
         buttonLayer = UIButton(frame: CGRect.zero)
         buttonLayer?.translatesAutoresizingMaskIntoConstraints = false
@@ -1123,6 +1236,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.navigationController?.toolbarItems?.removeAll()
         var items = [UIBarButtonItem]()
         if selectedOverlay != nil {
+            areaLabel.isHidden = false
+            areaLabel.text = "Area: \((selectedOverlay?.trackSegment.area.areaUnit())!)\nLength: \((selectedOverlay?.trackSegment.length.distanceUnit())!)"
             let editable = selectedOverlay?.trackSegment.root.attributes["type"] != "tracks"
             if editable {
                 items.append(
@@ -1130,6 +1245,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 )
             }
         } else if selectedPolygonOverlay != nil {
+            areaLabel.isHidden = false
+            areaLabel.text = "Area: \((selectedPolygonOverlay?.pointSegment.area.areaUnit())!)\nLength: \((selectedPolygonOverlay?.pointSegment.length.distanceUnit())!)"
             let editable = selectedPolygonOverlay?.pointSegment.root.attributes["type"] != "tracks"
             if editable {
                 items.append(
@@ -1146,6 +1263,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         )
         items.append(
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        )
+        items.append(
+            UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(didDeleteOverlay))
         )
 //        if selectedOverlay != nil {
 //            items.append(
@@ -1209,12 +1329,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func didDeSelectOverlay() {
+        areaLabel.isHidden = true
         selectedOverlay?.trackSegment.actions = .none
         selectedPolygonOverlay?.pointSegment.actions = .none
         selectedOverlay = nil
         selectedPolygonOverlay = nil
         self.navigationController?.isToolbarHidden = true
         self.showSomeView()
+    }
+    
+    func didDeleteOverlay() {
+        areaLabel.isHidden = true
+        if selectedOverlay != nil {
+            selectedOverlay?.trackSegment.delete()
+            selectedOverlay = nil
+        }
+        if selectedPolygonOverlay != nil {
+            selectedPolygonOverlay?.pointSegment.delete()
+            selectedPolygonOverlay = nil
+        }
     }
     
     func didCancelAddMarker() {
@@ -2821,6 +2954,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        coordinateLabel?.text = mapView.projection.coordinate(for: mapView.center).latLngFormated(withTarget: true)
         let region = mapView.projection.visibleRegion()
         let bound = GMSCoordinateBounds(region: region)
         

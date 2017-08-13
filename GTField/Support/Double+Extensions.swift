@@ -24,6 +24,42 @@ extension Double {
         let d = Int(second / 3600)
         let m = abs(Int(second) % 3600) / 60
         let s = second - (Double(d) * 3600.0 + Double(m) * 60.0)
-        return "\(sign)\(d)° \(m)' \(s.toString(fractionDigits))\""
+        return "\(sign)\(d)°\(m)'\(s.toString(fractionDigits))\""
+    }
+
+    func areaUnit() -> String {
+        switch getAreaUnit() {
+        case 0:
+            return self.squareMeter().rounded(3).description
+        case 1:
+            return self.squareMeter().converted(squareKilometer().unit).rounded(3).description
+        case 2:
+            return self.squareMeter().converted(hectare().unit).rounded(3).description
+        case 3:
+            return self.squareMeter().converted(squareYard().unit).rounded(3).description
+        case 4:
+            return self.squareMeter().converted(squareMile().unit).rounded(3).description
+        case 5:
+            return self.squareMeter().converted(acre().unit).rounded(3).description
+        default:
+            break
+        }
+        return toString(3)
+    }
+    
+    func distanceUnit() -> String {
+        switch getDistanceUnit() {
+        case 0:
+            return self.meter().rounded(3).description
+        case 1:
+            return self.meter().converted(kilometer().unit).rounded(3).description
+        case 2:
+            return self.meter().converted(yard().unit).rounded(3).description
+        case 3:
+            return self.meter().converted(mile().unit).rounded(3).description
+        default:
+            break
+        }
+        return toString(3)
     }
 }

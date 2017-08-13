@@ -341,7 +341,6 @@ void convertGeocentricToUtm(
     northing = targetCoordinates.northing();
 }
 
-
 /**
  * Function which uses the given Geocentric to MGRS Coordinate Conversion
  * Service, 'ccsGeocentricToMgrs', to convert the given x, y, z coordinates
@@ -411,6 +410,10 @@ std::string convertGeocentricToMgrs(
     HeightType::Enum targetHeightType;
     CoordinateType::Enum sourceCoordinateType;
     CoordinateType::Enum targetCoordinateType;
+    
+    double _lat;
+    double _lng;
+    double _alt;
 }
 
 //@property TestCppClass *cppItem;
@@ -778,8 +781,58 @@ std::string convertGeocentricToMgrs(
     }
 }
 
+- (void)setLat:(double)latitude lng:(double)longitude alt:(double)altitude {
+    _lat = latitude;
+    _lng = longitude;
+    _alt = altitude;
+}
 
-- (int)llh2XYZ:(double)lat :(double)lon :(double)height :(double *)x :(double *)y :(double *)z {
+- (int)getUTM:(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing {
+    int status = 1;
+    try {
+        // Chuyển từ lat,lng,alt sang xyz
+        double x;
+        double y;
+        double z;
+        try {
+            GeodeticParameters ellipsoidParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            CoordinateSystemParameters geocentricParams(CoordinateType::geocentric);
+            CoordinateConversionService ccsGeodeticEllipsoidToGeocentric(srcCode, &ellipsoidParams, targetCode, &geocentricParams);
+            convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
+                                                 _lat, _lng, _alt,
+                                                 x, y, z);
+            
+            UTMParameters utmParams = UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
+            CoordinateConversionService ccsGeodeticToUtm(srcCode, &geocentricParams, targetCode, &utmParams);
+            
+            char _hemi;
+            convertGeocentricToUtm(ccsGeodeticToUtm,
+                                   x, y, z,
+                                   *zone, _hemi, *easting, *northing);
+            
+            *hemi = [NSString stringWithFormat:@"%c" , _hemi];
+            status = 0;
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+    return status;
+}
+
+- (int)llh2XYZ:(double)lat :(double)lon :(double)h :(double *)x :(double *)y :(double *)z {
     int status = 1;
     
     try {
@@ -787,20 +840,8 @@ std::string convertGeocentricToMgrs(
         CoordinateSystemParameters geocentricParams(CoordinateType::geocentric);
         CoordinateConversionService ccsGeodeticEllipsoidToGeocentric(srcCode, &ellipsoidParams, targetCode, &geocentricParams);
         convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
-                                             lat, lon, height,
+                                             lat, lon, h,
                                              *x, *y, *z);
-        
-        NSLog(@"Convert Geodetic (Ellipsoid Height) to Geocentric");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-        NSLog(@"Output:");
-        NSLog(@"x: %f", *x);
-        NSLog(@"y: %f", *y);
-        NSLog(@"z: %f", *z);
-        
-        
         status = 0;
     } catch(CoordinateConversionException& e) {
         // catch and report any exceptions thrown by the Coordinate

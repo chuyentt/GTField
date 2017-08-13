@@ -17,6 +17,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     @IBOutlet weak var sliImageCompressionQuality: UISlider!
     @IBOutlet weak var sliTrackDistanceFilter: UISlider!
     @IBOutlet weak var lblTrackDistanceFilter: UILabel!
+        
     var adMobBannerView = GADBannerView()
     var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     
@@ -62,27 +63,83 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         setTrackDistanceFilter(TRACK_DISTANCE_FILTER)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell: UITableViewCell = tableView.cellForRow(at: indexPath)!
-        switch cell.tag {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        switch indexPath.section {
         case 0:
-            // To CoordinateType
-            let vc: SelectingTableViewController = SelectingTableViewController()
-            vc.selectionType = .areaUnit
-            let nav: UINavigationController = UINavigationController(rootViewController: vc)
-            self.present(nav, animated: true, completion: { 
-                
-            })
             break
         case 1:
-            // Datum
             break
         case 2:
-            // Ellipsoid
+            break
+        case 3:
+            switch cell.tag {
+            case 0: // Area Unit
+                cell.detailTextLabel?.text = areaUnitItems[getAreaUnit()]
+                break
+            case 1: // Length Unit
+                cell.detailTextLabel?.text = distanceUnitItems[getDistanceUnit()]
+                break
+            case 2: // Coordniate
+                cell.detailTextLabel?.text = latLngFormatItems[getLatLngFormat()]
+                break
+            default:
+                break
+            }
             break
         default:
             break
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell: UITableViewCell = tableView.cellForRow(at: indexPath)!
+        switch indexPath.section {
+        case 0:
+            break
+        case 1:
+            break
+        case 2:
+            break
+        case 3:
+            switch cell.tag {
+            case 0: // Area Unit
+                let vc: SelectingTableViewController = SelectingTableViewController()
+                vc.selectionType = .areaUnit
+                vc.itemList = areaUnitItems
+                vc.textLabel = cell.detailTextLabel
+                let nav: UINavigationController = UINavigationController(rootViewController: vc)
+                self.present(nav, animated: true, completion: {
+                    
+                })
+                break
+            case 1: // Length Unit
+                let vc: SelectingTableViewController = SelectingTableViewController()
+                vc.selectionType = .distanceUnit
+                vc.itemList = distanceUnitItems
+                vc.textLabel = cell.detailTextLabel
+                let nav: UINavigationController = UINavigationController(rootViewController: vc)
+                self.present(nav, animated: true, completion: {
+                    
+                })
+                break
+            case 2: // Coordniate
+                let vc: SelectingTableViewController = SelectingTableViewController()
+                vc.selectionType = .latLngFormat
+                vc.itemList = latLngFormatItems
+                vc.textLabel = cell.detailTextLabel
+                let nav: UINavigationController = UINavigationController(rootViewController: vc)
+                self.present(nav, animated: true, completion: {
+                    
+                })
+                break
+            default:
+                break
+            }
+            break
+        default:
+            break
+        }
+        
         print("You selected cell #\(cell.tag)")
         if (self.interstitial.isReady) {
             self.interstitial.present(fromRootViewController: self)

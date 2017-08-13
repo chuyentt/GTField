@@ -32,16 +32,22 @@ class PhotoAnnotation: NSObject, MKAnnotation {
         get { return getImage() }
     }
     
-    private var _thumbnail: UIImage?
+    //private var _thumbnail: UIImage?
     var thumbnail: UIImage? {
         get {
-            if _thumbnail == nil {
-                let imageData = try! Data(contentsOf: URL(fileURLWithPath: imagePath!))
-                let dataProvider = CGDataProvider(data: imageData as CFData)
-                let imageSource = CGImageSourceCreateWithDataProvider(dataProvider!, nil)
-                _thumbnail = thumbnailImage(src: imageSource!)
-            }
-            return _thumbnail
+            let imageData = try! Data(contentsOf: URL(fileURLWithPath: imagePath!))
+            let dataProvider = CGDataProvider(data: imageData as CFData)
+            let imageSource = CGImageSourceCreateWithDataProvider(dataProvider!, nil)
+            return thumbnailImage(src: imageSource!)
+            
+            // Nếu lưu _thumbnail thì một nhiều ảnh sẽ bị memorywaring
+//            if _thumbnail == nil {
+//                let imageData = try! Data(contentsOf: URL(fileURLWithPath: imagePath!))
+//                let dataProvider = CGDataProvider(data: imageData as CFData)
+//                let imageSource = CGImageSourceCreateWithDataProvider(dataProvider!, nil)
+//                _thumbnail = thumbnailImage(src: imageSource!)
+//            }
+//            return _thumbnail
         }
     }
     

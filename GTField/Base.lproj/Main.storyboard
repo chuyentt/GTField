@@ -148,7 +148,7 @@
                                                     <rect key="frame" x="0.0" y="66" width="90" height="24"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="I3V-ta-y7a" customClass="SpringLabel" customModule="GTField" customModuleProvider="target">
-                                                            <rect key="frame" x="3" y="4.5" width="84" height="15.5"/>
+                                                            <rect key="frame" x="3" y="5" width="84" height="15.5"/>
                                                             <fontDescription key="fontDescription" name="Bauhaus-Medium" family="Bauhaus-Medium" pointSize="16"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -251,7 +251,7 @@
         <scene sceneID="s3X-XF-NNi">
             <objects>
                 <navigationController id="VCg-63-Fe7" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ml0-BE-ic4">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ml0-BE-ic4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -267,7 +267,7 @@
         <scene sceneID="LZv-Wc-dTn">
             <objects>
                 <navigationController id="lbB-zP-vSf" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="d6l-oz-pX4">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="d6l-oz-pX4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -350,7 +350,7 @@
         <scene sceneID="HwB-ur-axo">
             <objects>
                 <navigationController id="CkG-Iy-EG6" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="a6u-KE-WZ8">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="a6u-KE-WZ8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -578,6 +578,97 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Units and Formats" id="Fji-0X-GLK">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="ekQ-ul-U1k" detailTextLabel="dJF-hV-f5i" style="IBUITableViewCellStyleValue1" id="kVf-S8-yXm">
+                                        <rect key="frame" x="0.0" y="565" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kVf-S8-yXm" id="OUs-ip-9nV">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Area" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ekQ-ul-U1k">
+                                                    <rect key="frame" x="15" y="12" width="35.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Square meter (m²)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dJF-hV-f5i">
+                                                    <rect key="frame" x="200" y="12" width="140" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="tag">
+                                                <integer key="value" value="0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="hgj-Qd-wKb" detailTextLabel="zR6-5z-w4D" style="IBUITableViewCellStyleValue1" id="GnC-rm-U7Q">
+                                        <rect key="frame" x="0.0" y="609" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GnC-rm-U7Q" id="lIC-1g-cvC">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Length" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hgj-Qd-wKb">
+                                                    <rect key="frame" x="15" y="12" width="53.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Meter (m)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zR6-5z-w4D">
+                                                    <rect key="frame" x="265" y="12" width="75" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="tag">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="9Qn-8n-fzi" detailTextLabel="nks-X5-mcA" style="IBUITableViewCellStyleValue1" id="UCH-Ny-26G">
+                                        <rect key="frame" x="0.0" y="653" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UCH-Ny-26G" id="J4X-ll-9XP">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Coordinates" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Qn-8n-fzi">
+                                                    <rect key="frame" x="15" y="12" width="93" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="ddd°mm'ss.ssss N/S,E/W" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nks-X5-mcA">
+                                                    <rect key="frame" x="146" y="12" width="194" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="tag">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="l1M-nG-mXm" id="5bT-6d-dJm"/>
@@ -601,7 +692,7 @@
         <scene sceneID="X2J-2z-RqQ">
             <objects>
                 <navigationController id="FpU-vf-4Pb" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="fLn-Su-rY6">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fLn-Su-rY6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -618,7 +709,7 @@
             <objects>
                 <navigationController autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" id="7V9-k6-dBT" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Dbd-bG-pHW">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Dbd-bG-pHW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
@@ -798,7 +889,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MAm-o0-Bxl">
-                                                    <rect key="frame" x="224" y="27" width="14" height="16.5"/>
+                                                    <rect key="frame" x="224" y="27.5" width="14" height="16.5"/>
                                                     <fontDescription key="fontDescription" name="Bauhaus-Light" family="Bauhaus-Light" pointSize="17"/>
                                                     <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1038,7 +1129,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3rm-J4-ZkO">
-                                                    <rect key="frame" x="224" y="26.5" width="14" height="16.5"/>
+                                                    <rect key="frame" x="224" y="27" width="14" height="16.5"/>
                                                     <fontDescription key="fontDescription" name="Bauhaus-Light" family="Bauhaus-Light" pointSize="17"/>
                                                     <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1099,7 +1190,7 @@
         <scene sceneID="g4l-1b-QgD">
             <objects>
                 <navigationController id="df1-i2-yM4" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="QQN-HZ-RNr">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QQN-HZ-RNr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1115,7 +1206,7 @@
         <scene sceneID="LNA-rH-Hkl">
             <objects>
                 <navigationController id="P1C-iW-ZUu" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="b8o-lt-r6W">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="b8o-lt-r6W">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1131,7 +1222,7 @@
         <scene sceneID="6ie-Ll-c6S">
             <objects>
                 <navigationController id="JAb-Ok-DcR" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ezT-la-QG0">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ezT-la-QG0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1607,7 +1698,7 @@
             <objects>
                 <navigationController navigationBarHidden="YES" id="8ls-qh-LBO" sceneMemberID="viewController">
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="RNr-Na-df8">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RNr-Na-df8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

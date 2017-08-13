@@ -20,9 +20,13 @@
 - (void)setSourceHeightType:(NSInteger)index;
 - (void)setTargetHeightType:(NSInteger)index;
 
+- (void)setLat:(double)latitude lng:(double)longitude alt:(double)altitude;
+
 - (int)testCoordinateConversion:(NSString *)sourceDatumCode :(NSString *)targetDatumCode;
 
 - (int)llh2XYZ:(double)lat :(double)lon :(double)h :(double *)x :(double *)y :(double *)z;
+- (int)getUTM:(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing;
+
 - (int)geocentric2MGRS:(double)x :(double)y :(double)z :(NSString **)mgrsStr;
 - (int)geocentric2UTM:(double)x :(double)y :(double)z :(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing;
 

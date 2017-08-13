@@ -381,6 +381,16 @@ class GPXTrackSegment: GMSOverlay {
             }
         }
     }
+    var area: Double {
+        get {
+            return GMSGeometryArea(path)
+        }
+    }
+    var length: Double {
+        get {
+            return GMSGeometryLength(path)
+        }
+    }
     private var _actions: GPXTrackSegmentActions = .none
     var actions: GPXTrackSegmentActions {
         get { return _actions }
@@ -741,6 +751,16 @@ class GPXPointSegment: GMSOverlay {
             } else {
 
             }
+        }
+    }
+    var area: Double {
+        get {
+            return GMSGeometryArea(path)
+        }
+    }
+    var length: Double {
+        get {
+            return GMSGeometryLength(path)
         }
     }
     private var _actions: GPXPointSegmentActions = .none
