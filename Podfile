@@ -1,3 +1,4 @@
+# Lưu ý: Sau mỗi lần pod update thì phải kéo thư mục src vào GeoTrans
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
