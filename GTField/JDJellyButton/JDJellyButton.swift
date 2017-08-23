@@ -67,8 +67,8 @@ class JDJellyButton
     }
 
     //
-    var buttonWidth:CGFloat = 54.0
-    var buttonHeight:CGFloat = 54.0
+    var buttonWidth:CGFloat = 44.0
+    var buttonHeight:CGFloat = 44.0
     //
     
     init() {
@@ -161,9 +161,9 @@ extension JDJellyButton:MainButtonDelegate
 {
     func MainButtonHasBeenTap(touch:UITouch)
     {
-        let point = touch.location(in: RootView!)
-        Container.frame.origin.x = point.x - 0.5 * self.Container.frame.width
-        Container.frame.origin.y = point.y - 0.5 * self.Container.frame.height
+//        let point = touch.location(in: RootView!)
+//        Container.frame.origin.x = point.x - 0.5 * self.Container.frame.width
+//        Container.frame.origin.y = point.y - 0.5 * self.Container.frame.height
     }
     
 }

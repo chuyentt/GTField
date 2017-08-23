@@ -111,6 +111,9 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
+                if (self.interstitial.isReady) {
+                    self.interstitial.present(fromRootViewController: vc)
+                }
                 break
             case 1: // Length Unit
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -121,6 +124,9 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
+                if (self.interstitial.isReady) {
+                    self.interstitial.present(fromRootViewController: vc)
+                }
                 break
             case 2: // Coordniate
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -131,6 +137,9 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
+                if (self.interstitial.isReady) {
+                    self.interstitial.present(fromRootViewController: vc)
+                }
                 break
             default:
                 break
@@ -141,9 +150,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         }
         
         print("You selected cell #\(cell.tag)")
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

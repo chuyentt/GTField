@@ -21,6 +21,20 @@ let STROKE_WIDTH_SELECTING: CGFloat = 2
 let FILL_COLOR_EDITING = UIColor.clear
 let STROKE_WIDTH_EDITING: CGFloat = 2
 
+extension GMSPath {
+    func closed() -> GMSPath {
+        let cllc2d1 = self.coordinate(at: 0)
+        let cllc2d2 = self.coordinate(at: count()-1)
+        if cllc2d1.latitude == cllc2d2.latitude && cllc2d1.longitude == cllc2d2.longitude {
+            return self
+        } else {
+            let path = self.mutableCopy() as? GMSMutablePath
+            path?.add(cllc2d1)
+            return path!
+        }
+    }
+}
+
 class GPXMetadata: NSObject {
     private var _root: AEXMLElement
     var root: AEXMLElement {
@@ -187,7 +201,10 @@ class GPXWaypoint: GMSMarker {
     
     init(xmlElement: AEXMLElement) {
         _root = xmlElement
-        _name = _root["title"]
+        _name = _root["name"]
+        if _name.error != nil {
+            _name = _root["title"]
+        }
         _ele = _root["ele"]
         _desc = _root["desc"]
         _iconType = _root["type"]
@@ -354,11 +371,82 @@ class GPXPointSegmentOverlay: GMSPolygon {
     }
 }
 
+extension GPXTrackSegment: VertexViewTouchDelegate {
+    func touchBegan(touch: UITouch) {
+        
+    }
+    
+    func touchMoved(touch: UITouch) {
+//        let idx1 = (activeIndex - 1) >= 0 ? (activeIndex - 1) : path.count() - 1
+//        let idx2 = (activeIndex + 1) < path.count() ? (activeIndex + 1) : 0
+//        let pt = GMSMutablePath()
+//        pt.add(path.coordinate(at: idx1))
+//        pt.add(path.coordinate(at: idx2))
+//        let dashedPolyline = GMSPolyline(path: pt)
+//        dashedPolyline.map = map
+    }
+    
+    func touchEnded(touch: UITouch) {
+        let view: VertexView = touch.view as! VertexView
+        let poi = view.origin
+        let position = map?.projection.coordinate(for: poi)
+        self.updateVertex(self.activeIndex, position!)
+        
+        print(position?.localizedCoordinateString() ?? "")
+        //selectedOverlay?.trackSegment.updateVertex(index, position)
+    }
+}
+
 class GPXTrackSegment: GMSOverlay {
     var vertices: [GMSMarker] = [GMSMarker]()
     var middlePoint: [GMSMarker] = [GMSMarker]()
     var _oldPath: GMSMutablePath?
     var _oldTrackPts: [GPXTrackPoint] = [GPXTrackPoint]()
+    private var _activeIndex: UInt = 0
+    private var _activeVertexView: VertexView? = nil
+    private var _areaLabel: UILabel? = nil
+    var areaLabel: UILabel {
+        get {
+            if _areaLabel == nil {
+                _areaLabel = UILabel()
+                _areaLabel?.isUserInteractionEnabled = true
+                _areaLabel?.copyable = true
+                _areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
+                _areaLabel?.translatesAutoresizingMaskIntoConstraints = false
+                _areaLabel?.textAlignment = .center
+                _areaLabel?.numberOfLines = 0
+                _areaLabel?.textColor = UIColor.brown
+                _areaLabel?.font=UIFont.boldSystemFont(ofSize: 12)
+                _areaLabel?.isHidden = true
+                map?.addSubview(_areaLabel!)
+                // Căn trên
+                NSLayoutConstraint(item: _areaLabel!,
+                                   attribute: .top,
+                                   relatedBy: .equal,
+                                   toItem: map,
+                                   attribute: .top,
+                                   multiplier: 1.0,
+                                   constant: 110).isActive = true
+                
+                // Căn giữa so với view
+                NSLayoutConstraint(item: _areaLabel!,
+                                   attribute: .centerX,
+                                   relatedBy: .equal,
+                                   toItem: map,
+                                   attribute: .centerX,
+                                   multiplier: 1.0,
+                                   constant: 0).isActive = true
+            }
+            return _areaLabel!
+        }
+    }
+    
+    var activeIndex: UInt {
+        get { return _activeIndex }
+        set (value) {
+            _activeIndex = value
+        }
+    }
     
     // TODO: Nên thay NSObject bằng GMSPolyline để quản lý với bản đồ
     enum GPXTrackSegmentActions {
@@ -371,6 +459,8 @@ class GPXTrackSegment: GMSOverlay {
         case reset
         case delete
     }
+    
+    //
     override var map: GMSMapView? {
         didSet {
             _polyline?.map = map
@@ -381,6 +471,7 @@ class GPXTrackSegment: GMSOverlay {
             }
         }
     }
+    
     var area: Double {
         get {
             return GMSGeometryArea(path)
@@ -391,6 +482,11 @@ class GPXTrackSegment: GMSOverlay {
             return GMSGeometryLength(path)
         }
     }
+    
+    func updateLabel() {
+        areaLabel.text = "Length: \((length.distanceUnit()))"
+    }
+    
     private var _actions: GPXTrackSegmentActions = .none
     var actions: GPXTrackSegmentActions {
         get { return _actions }
@@ -422,6 +518,7 @@ class GPXTrackSegment: GMSOverlay {
             case .clear:
                 _polyline?.map = nil
                 _polyline = nil
+                removeVertices()
                 break
             case .done:
                 _polyline?.strokeColor = UIColor.clear
@@ -433,6 +530,8 @@ class GPXTrackSegment: GMSOverlay {
                 
                 break
             case .selecting:
+                areaLabel.isHidden = false
+                updateLabel()
                 _polyline?.spans = nil
                 _polyline?.strokeColor = STROKE_COLOR_SELECTING
                 _polyline?.strokeWidth = 2
@@ -467,7 +566,7 @@ class GPXTrackSegment: GMSOverlay {
         for i:UInt in 0...(path.count()) {
             let coord = path.coordinate(at: i)
             let vertex = GMSMarker(position: coord)
-            vertex.isDraggable = true
+            //vertex.isDraggable = true
             let markerImage = UIImage(named: "vertex")!.withRenderingMode(.alwaysTemplate)
             vertex.icon = markerImage
             vertex.userData =  ["type":"vertex","id": "\(i)"]
@@ -487,7 +586,12 @@ class GPXTrackSegment: GMSOverlay {
                 middlePoint.append(middle)
             }
         }
+        // Hiện vertex để sửa (drag)
+        setActiveVertex(_activeIndex)
+        areaLabel.isHidden = false
+        updateLabel()
     }
+    
     private func removeVertices() {
         for vertex in vertices {
             vertex.map = nil
@@ -497,12 +601,38 @@ class GPXTrackSegment: GMSOverlay {
         }
         vertices.removeAll()
         middlePoint.removeAll()
+        
+        // Ẩn vertex sau khi sửa xong (drag)
+        deActiveVertex()
+        areaLabel.isHidden = true
     }
+    
     private func setEditing(_ editing: Bool) {
         if editing {
             addVertices()
         } else {
             removeVertices()
+        }
+    }
+    
+    // Thay đổi icon, cho phéo drag để chỉnh sửa đỉnh
+    func setActiveVertex(_ index: UInt) {
+        activeIndex = index
+        let poi = map?.projection.point(for: path.coordinate(at: index))
+        if _activeVertexView == nil {
+            _activeVertexView = VertexView(origin: poi!)
+            map?.addSubview(_activeVertexView!)
+        } else {
+            _activeVertexView?.origin = poi!
+            _activeVertexView?.isHidden = false
+        }
+        _activeVertexView?.delegate = self
+    }
+    
+    // Bỏ chế độ chỉnh sửa đỉnh
+    func deActiveVertex() {
+        if _activeVertexView != nil {
+            _activeVertexView?.isHidden = true
         }
     }
     
@@ -526,7 +656,13 @@ class GPXTrackSegment: GMSOverlay {
     
     // Xóa đỉnh
     func deleteVertex(_ index: UInt) {
-        deleteTrackPoint(at: index)
+        if path.count() > 0 {
+            deleteTrackPoint(at: index)
+        }
+    }
+    
+    func deleteActiveVertex() {
+        deleteVertex(activeIndex)
     }
     
 //    private var _desc: AEXMLElement
@@ -727,11 +863,76 @@ class GPXTrackSegment: GMSOverlay {
     }
 }
 
+extension GPXPointSegment: VertexViewTouchDelegate {
+    func touchBegan(touch: UITouch) {
+        
+    }
+    
+    func touchMoved(touch: UITouch) {
+        
+    }
+    
+    func touchEnded(touch: UITouch) {
+        let view: VertexView = touch.view as! VertexView
+        let poi = view.origin
+        let position = map?.projection.coordinate(for: poi)
+        self.updateVertex(self.activeIndex, position!)
+        
+        print(position?.localizedCoordinateString() ?? "")
+        //selectedOverlay?.trackSegment.updateVertex(index, position)
+    }
+}
+
 class GPXPointSegment: GMSOverlay {
     var vertices: [GMSMarker] = [GMSMarker]()
     var middlePoint: [GMSMarker] = [GMSMarker]()
     var _oldPath: GMSMutablePath?
     var _oldPts: [GPXPoint] = [GPXPoint]()
+    private var _activeIndex: UInt = 0
+    private var _activeVertexView: VertexView? = nil
+    private var _areaLabel: UILabel? = nil
+    var areaLabel: UILabel {
+        get {
+            if _areaLabel == nil {
+                _areaLabel = UILabel()
+                _areaLabel?.isUserInteractionEnabled = true
+                _areaLabel?.copyable = true
+                _areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
+                _areaLabel?.translatesAutoresizingMaskIntoConstraints = false
+                _areaLabel?.textAlignment = .center
+                _areaLabel?.numberOfLines = 0
+                _areaLabel?.textColor = UIColor.brown
+                _areaLabel?.font=UIFont.boldSystemFont(ofSize: 12)
+                _areaLabel?.isHidden = true
+                map?.addSubview(_areaLabel!)
+                // Căn trên
+                NSLayoutConstraint(item: _areaLabel!,
+                                   attribute: .top,
+                                   relatedBy: .equal,
+                                   toItem: map,
+                                   attribute: .top,
+                                   multiplier: 1.0,
+                                   constant: 110).isActive = true
+                
+                // Căn giữa so với view
+                NSLayoutConstraint(item: _areaLabel!,
+                                   attribute: .centerX,
+                                   relatedBy: .equal,
+                                   toItem: map,
+                                   attribute: .centerX,
+                                   multiplier: 1.0,
+                                   constant: 0).isActive = true
+            }
+            return _areaLabel!
+        }
+    }
+    
+    var activeIndex: UInt {
+        get { return _activeIndex }
+        set (value) {
+            _activeIndex = value
+        }
+    }
     
     // TODO: Nên thay NSObject bằng GMSPolyline để quản lý với bản đồ
     enum GPXPointSegmentActions {
@@ -760,9 +961,14 @@ class GPXPointSegment: GMSOverlay {
     }
     var length: Double {
         get {
-            return GMSGeometryLength(path)
+            return GMSGeometryLength(path.closed())
         }
     }
+    
+    func updateLabel() {
+        areaLabel.text = "Area: \((area.areaUnit())), Perimeter: \((length.distanceUnit()))"
+    }
+    
     private var _actions: GPXPointSegmentActions = .none
     var actions: GPXPointSegmentActions {
         get { return _actions }
@@ -801,6 +1007,8 @@ class GPXPointSegment: GMSOverlay {
                 removeVertices()
                 break
             case .selecting:
+                areaLabel.isHidden = false
+                updateLabel()
                 _polygon?.fillColor = FILL_COLOR_SELECTING
                 _polygon?.strokeColor = STROKE_COLOR_SELECTING
                 _polygon?.strokeWidth = STROKE_WIDTH_SELECTING
@@ -867,7 +1075,11 @@ class GPXPointSegment: GMSOverlay {
                 middlePoint.append(middle)
             }
         }
+        setActiveVertex(activeIndex)
+        areaLabel.isHidden = false
+        updateLabel()
     }
+    
     private func removeVertices() {
         for vertex in vertices {
             vertex.map = nil
@@ -877,12 +1089,36 @@ class GPXPointSegment: GMSOverlay {
         }
         vertices.removeAll()
         middlePoint.removeAll()
+        deActiveVertex()
+        areaLabel.isHidden = true
     }
+    
     private func setEditing(_ editing: Bool) {
         if editing {
             addVertices()
         } else {
             removeVertices()
+        }
+    }
+    
+    // Thay đổi icon, cho phéo drag để chỉnh sửa đỉnh
+    func setActiveVertex(_ index: UInt) {
+        _activeIndex = index
+        let poi = map?.projection.point(for: path.coordinate(at: index))
+        if _activeVertexView == nil {
+            _activeVertexView = VertexView(origin: poi!)
+            map?.addSubview(_activeVertexView!)
+        } else {
+            _activeVertexView?.origin = poi!
+            _activeVertexView?.isHidden = false
+        }
+        _activeVertexView?.delegate = self
+    }
+    
+    // Bỏ chế độ chỉnh sửa đỉnh
+    func deActiveVertex() {
+        if _activeVertexView != nil {
+            _activeVertexView?.isHidden = true
         }
     }
     
@@ -906,29 +1142,15 @@ class GPXPointSegment: GMSOverlay {
     
     // Xóa đỉnh
     func deleteVertex(_ index: UInt) {
-        deletePoint(at: index)
+        if path.count() > 0 {
+            deletePoint(at: index)
+        }
     }
     
-//    private var _desc: AEXMLElement
-//    var desc: String {
-//        get {
-//            if let value = _desc.value {
-//                return value.removingPercentEncoding!
-//            } else {
-//                _desc.value = ""
-//            }
-//            return (_desc.value?.removingPercentEncoding)!
-//        }
-//        set (desc) {
-//            _desc.value = desc.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
-//        }
-//    }
+    func deleteActiveVertex() {
+        deleteVertex(activeIndex)
+    }
 
-    
-//    private var _coords: [CLLocationCoordinate2D]
-//    var coords: [CLLocationCoordinate2D] {
-//        get { return _coords }
-//    }
     private var _elevations: [CLLocationDistance]
     var elevations: [CLLocationDistance] {
         get { return _elevations }

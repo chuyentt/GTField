@@ -14,8 +14,12 @@ import Photos
 //import AEXML
 import AVFoundation
 import CoreMotion
+import GoogleMobileAds
+import Firebase
 
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MotionContainer {
+    
+    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     
     // Bắt buôc phải có nếu dùng MotionContainer
     var motionManager: CMMotionManager?
@@ -63,6 +67,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         stopUpdateMotion()
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
+        }
     }
     
     override func viewDidLoad() {
@@ -82,6 +89,16 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         lblPosition1.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: 10, y: 20)
         lblPosition2.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: lblPosition1.frame.width + lblPosition2.frame.width, y: lblPosition1.frame.height + 25 + lblPosition2.frame.height/2)
         lblBearing.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: lblPosition1.frame.width + lblPosition2.frame.width + lblBearing.frame.width*2, y: lblPosition1.frame.height + 35 + lblPosition2.frame.height + lblBearing.frame.height/2)
+        
+        if ADS_ENABLED == true {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                
+            } else {
+                
+            }
+            let request = GADRequest()
+            interstitial.load(request)
+        }
     }
     
     // Bắt buôc phải có nếu dùng MotionContainer

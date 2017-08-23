@@ -72,6 +72,8 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     var poiLon = ""
     var poiDestBearing = 0.0
     var poiDateTime = ""
+    
+    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     var adMobBannerView = GADBannerView()
     //
 
@@ -84,6 +86,14 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         centerMap()
         addPin()
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height+200)
+        
+        if ADS_ENABLED == true {
+            initAdMobBanner()
+            let request = GADRequest()
+            interstitial.load(request)
+        } else {
+            hideBanner(banner: adMobBannerView)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -97,14 +107,13 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         
         self.imgPoi?.image = self.dataObject?.image
         
-        // Chuyển từ PoiDetailViewController
-        
-        if ADS_ENABLED == true {
-            initAdMobBanner()
-        } else {
-            hideBanner(banner: adMobBannerView)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
         }
-
     }
     
     

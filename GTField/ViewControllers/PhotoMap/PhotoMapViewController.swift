@@ -17,7 +17,8 @@ import UIKit
 import MapKit
 import ImageIO
 import MessageUI
-//import AEXML
+import GoogleMobileAds
+import Firebase
 
 func synchronized(_ object: AnyObject, block: () -> Void) {
     objc_sync_enter(object)
@@ -27,7 +28,10 @@ func synchronized(_ object: AnyObject, block: () -> Void) {
 
 
 @objc(PhotoMapViewController)
-class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate {
+class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate, GADBannerViewDelegate {
+    
+    var adMobBannerView = GADBannerView()
+    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     
     private var photos: [PhotoAnnotation] = [PhotoAnnotation]()
     private var allAnnotationsMapView: MKMapView?
@@ -324,11 +328,94 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         // now load all photos from Resources and add them as annotations to the map view
         self.populateMapWithAllPhotoAnnotations()
         
+        if ADS_ENABLED == true {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                
+            } else {
+                
+            }
+            let request = GADRequest()
+            interstitial.load(request)
+            initAdMobBanner()
+        } else {
+            hideBanner(banner: adMobBannerView)
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
+        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
+    }
+    
+    // Initialize Google AdMob banner
+    func initAdMobBanner() {
+        switch DEVICE_WIDTH {
+        case "320": //5,SE
+            adMobBannerView = GADBannerView(adSize: GADAdSizeFromCGSize(CGSize(width: 256, height: 40)))
+            break
+        case "375": //6,7
+            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            break
+        case "414": //6+,7+
+            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            break
+        case "768": //iPad
+            adMobBannerView = GADBannerView(adSize: kGADAdSizeFullBanner)
+            break
+        default:
+            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            break
+        }
+        
+        self.view.addSubview(adMobBannerView)
+        adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
+        adMobBannerView.rootViewController = self
+        adMobBannerView.delegate = self
+        let request = GADRequest()
+        adMobBannerView.load(request)
+        adMobBannerView.load(GADRequest())
+    }
+    
+    
+    // Hide the banner
+    func hideBanner(banner: UIView) {
+        UIView.beginAnimations("hideBanner", context: nil)
+        // Hide the banner moving it below the bottom of the screen
+        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
+        UIView.commitAnimations()
+        banner.isHidden = true
+    }
+    
+    
+    // Show the banner
+    func showBanner(banner: UIView) {
+        UIView.beginAnimations("showBanner", context: nil)
+        
+        // Move the banner on the bottom of the screen
+        banner.frame = CGRect(x:0, y:self.view.frame.size.height - banner.frame.size.height,
+                              width:banner.frame.size.width, height:banner.frame.size.height);
+        UIView.commitAnimations()
+        banner.isHidden = false
+    }
+    
+    
+    // AdMob banner available
+    func adViewDidReceiveAd(_ view: GADBannerView) {
+        print("AdMob loaded!")
+        showBanner(banner: adMobBannerView)
+    }
+    
+    // NO AdMob banner available
+    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+        print("AdMob Can't load ads right now, they'll be available later \n\(error)")
+        hideBanner(banner: adMobBannerView)
     }
     
     @IBAction private func btnAction(_ sender: AnyObject) {

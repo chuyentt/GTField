@@ -317,12 +317,12 @@ extension CLLocationCoordinate2D {
     func localizedCoordinateString() -> String {
         let latString = (latitude < 0) ? "S" : "N"
         let lonString = (longitude < 0) ? "W" : "E"
-        return "\(fabs(latitude)) \(latString)\n\(fabs(longitude)) \(lonString)"
+        return "\(fabs(latitude))\(latString)\n\(fabs(longitude))\(lonString)"
     }
     func localizedCoordinateString2() -> String {
         let latString = (latitude < 0) ? "S" : "N"
         let lonString = (longitude < 0) ? "W" : "E"
-        return "\(fabs(latitude).toDMSString(0)) \(latString)\n\(fabs(longitude).toDMSString(0)) \(lonString)"
+        return "\(fabs(latitude).toDMSString(0))\(latString)\n\(fabs(longitude).toDMSString(0))\(lonString)"
     }
     
     func latLngFormated(withTarget: Bool) -> String {
@@ -335,11 +335,11 @@ extension CLLocationCoordinate2D {
         case 0:
             let latString = (latitude < 0) ? "S" : "N"
             let lonString = (longitude < 0) ? "W" : "E"
-            txt1 = "\(fabs(latitude).toDMSString(3)) \(latString), \(fabs(longitude).toDMSString(3)) \(lonString)"
+            txt1 = "\(fabs(latitude).toDMSString(3))\(latString), \(fabs(longitude).toDMSString(3))\(lonString)"
         case 1:
             let latString = (latitude < 0) ? "S" : "N"
             let lonString = (longitude < 0) ? "W" : "E"
-            txt1 = "\(fabs(latitude).toString(8)) \(latString), \(fabs(longitude).toString(8)) \(lonString)"
+            txt1 = "\(fabs(latitude).toString(8))\(latString), \(fabs(longitude).toString(8))\(lonString)"
         case 2:
             let latString = (latitude < 0) ? "-" : "+"
             let lonString = (longitude < 0) ? "-" : "+"
@@ -362,7 +362,7 @@ extension CLLocationCoordinate2D {
             let geotrans = GeoTrans(getSourceDatumCode(), getTargetDatumCode())
             geotrans?.setLat(lat, lng: lon, alt: alt)
             geotrans?.getUTM(&zone, &hemi, &easting, &northing)
-            txt2 = "\(zone)\(hemi!): \(fabs(northing).toString(3)) \(latString), \(fabs(easting).toString(3)) \(lonString)"
+            txt2 = "\(zone)\(hemi!): \(fabs(northing).toString(3))\(latString), \(fabs(easting).toString(3))\(lonString)"
             return "\(txt1)\n\(txt2)"
         } else {
             return txt2

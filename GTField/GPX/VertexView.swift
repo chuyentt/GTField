@@ -16,13 +16,23 @@ protocol VertexViewTouchDelegate:class {
 
 class VertexView: UIView {
     weak var delegate: VertexViewTouchDelegate?
+    var origin: CGPoint {
+        set(value) {
+            center = value.applying(CGAffineTransform(translationX: 0, y: 36))
+        }
+        get {
+            return center.applying(CGAffineTransform(translationX: 0, y: -36))
+        }
+    }
     
     init(origin: CGPoint) {
         
-        super.init(frame: CGRect(x: 0.0, y: 0.0, width: 16, height: 16))
-        self.center = origin
+        super.init(frame: CGRect(x: 0.0, y: 0.0, width: 60, height: 96))
+        self.origin = origin
         self.backgroundColor = UIColor.clear
-        
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "activeVertex"))
+        self.addSubview(imageView)
+        self.isUserInteractionEnabled = true
         initGestureRecognizers()
     }
     
@@ -71,24 +81,24 @@ class VertexView: UIView {
         panGR.setTranslation(CGPoint.zero, in: self)
     }
     
-    override func draw(_ rect: CGRect) {
-        
-        // ======== Tạo đường tròn ngoài cùng fill =====
-        let circlePath = UIBezierPath(arcCenter: CGPoint(x: 8, y: 8), radius: 8, startAngle: 0.0, endAngle:.pi*2, clockwise: true)
-        
-        let circleLayer = CAShapeLayer()
-        circleLayer.path = circlePath.cgPath
-        circleLayer.fillColor = UIColor(hue: 204.0/360.0, saturation: 65.0/100.0, brightness: 50.0/100.0, alpha: 1.0).cgColor
-        layer.addSublayer(circleLayer)
-        
-        // ======== Tạo đường tròn chồng lên =====
-        let circle1Path = UIBezierPath(arcCenter: CGPoint(x: 8, y: 8), radius: 5, startAngle: 0.0, endAngle:.pi*2, clockwise: true)
-        
-        let circle1Layer = CAShapeLayer()
-        circle1Layer.path = circle1Path.cgPath
-        circle1Layer.fillColor = UIColor.clear.cgColor
-        circle1Layer.strokeColor = UIColor.white.cgColor
-        circle1Layer.lineWidth = 3
-        layer.addSublayer(circle1Layer)
-    }
+//    override func draw(_ rect: CGRect) {
+//        
+//        // ======== Tạo đường tròn ngoài cùng fill =====
+//        let circlePath = UIBezierPath(arcCenter: CGPoint(x: 8, y: 8), radius: 8, startAngle: 0.0, endAngle:.pi*2, clockwise: true)
+//        
+//        let circleLayer = CAShapeLayer()
+//        circleLayer.path = circlePath.cgPath
+//        circleLayer.fillColor = UIColor(hue: 204.0/360.0, saturation: 65.0/100.0, brightness: 50.0/100.0, alpha: 1.0).cgColor
+//        layer.addSublayer(circleLayer)
+//        
+//        // ======== Tạo đường tròn chồng lên =====
+//        let circle1Path = UIBezierPath(arcCenter: CGPoint(x: 8, y: 8), radius: 5, startAngle: 0.0, endAngle:.pi*2, clockwise: true)
+//        
+//        let circle1Layer = CAShapeLayer()
+//        circle1Layer.path = circle1Path.cgPath
+//        circle1Layer.fillColor = UIColor.clear.cgColor
+//        circle1Layer.strokeColor = UIColor.white.cgColor
+//        circle1Layer.lineWidth = 3
+//        layer.addSublayer(circle1Layer)
+//    }
 }

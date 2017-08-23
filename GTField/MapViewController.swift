@@ -200,7 +200,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     // Label
     private var coordinateLabel: UILabel!
-    private var areaLabel: UILabel!
     
     // Map Controll
     private var buttonLayer: UIButton?
@@ -289,6 +288,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var opacitySlider: UISlider?
     
     var cross:UIImageView = UIImageView(image: #imageLiteral(resourceName: "vertexCross"))
+    
+    var vertexView: VertexView?
     
     override func loadView() {
         UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.default, animated: false)
@@ -384,7 +385,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //                           constant: 0).isActive = true
     }
     
+    
     func setupView() {
+        // Thêm view sửa đỉnh
+        self.mapView?.settings.consumesGesturesInView = false
+        
         // Bảng chi tiết khi chạm vào màn hình
         // đây sẽ là nơi hiện thông tin chi tiết
         // khi chạm vào màn hình ở chế độ bình thường thì sẽ ẩn toolsView
@@ -504,30 +509,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1.0,
                            constant: 0).isActive = true
         
-        // Kết nối với GeoServer để kiểm tra
-        self.view.addSubview(self.imageViewForCheckingGeoServer)
-        self.imageViewForCheckingGeoServer.translatesAutoresizingMaskIntoConstraints = false
-        // Căn trên
-        NSLayoutConstraint(item: self.imageViewForCheckingGeoServer,
-                           attribute: .top,
-                           relatedBy: .equal,
-                           toItem: toolsView,
-                           attribute: .bottom,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
-        // Căn giữa X
-        NSLayoutConstraint(item: self.imageViewForCheckingGeoServer,
-                           attribute: .centerX,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .centerX,
-                           multiplier: 1.0,
-                           constant: 0).isActive = true
-        
         //----- Button search -----
         buttonSearch = UIButton(frame: CGRect.zero)
-        buttonSearch?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 13.0)
+        buttonSearch?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 12.0)
         buttonSearch?.setTitle("<<Search on Google>>", for: .normal)
+        buttonSearch?.sizeToFit()
         buttonSearch?.setTitleColor(UIColor.lightGray, for: .normal)
         buttonSearch?.translatesAutoresizingMaskIntoConstraints = false
         // Tạo bo góc
@@ -558,8 +544,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         //----- Button search local -----
         buttonSearchLocal = UIButton(frame: CGRect.zero)
-        buttonSearchLocal?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 13.0)
+        buttonSearchLocal?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 12.0)
         buttonSearchLocal?.setTitle("<<Search local data>>", for: .normal)
+        buttonSearchLocal?.sizeToFit()
         buttonSearchLocal?.setTitleColor(UIColor.lightGray, for: .normal)
         buttonSearchLocal?.translatesAutoresizingMaskIntoConstraints = false
         // Tạo bo góc
@@ -575,10 +562,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: buttonSearchLocal!,
                            attribute: .leading,
                            relatedBy: .equal,
-                           toItem: buttonSearch,
-                           attribute: .trailing,
+                           toItem: toolsView,
+                           attribute: .leading,
                            multiplier: 1.0,
-                           constant: 0).isActive = true
+                           constant: (buttonSearch?.frame.width)!).isActive = true
         // Căn giữa Y
         NSLayoutConstraint(item: buttonSearchLocal!,
                            attribute: .centerY,
@@ -648,12 +635,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         coordinateLabel = UILabel()
         coordinateLabel.isUserInteractionEnabled = true
         coordinateLabel?.copyable = true
-        coordinateLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 54)
+        coordinateLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
         coordinateLabel?.translatesAutoresizingMaskIntoConstraints = false
         coordinateLabel?.textAlignment = .center
         coordinateLabel?.numberOfLines = 0
         coordinateLabel?.textColor = UIColor.orange
-        coordinateLabel?.font=UIFont.boldSystemFont(ofSize: 13)
+        coordinateLabel?.font=UIFont.boldSystemFont(ofSize: 12)
         self.view?.addSubview(coordinateLabel!)
         
         // Đặt chiều cao
@@ -663,7 +650,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: nil,
                            attribute: .notAnAttribute,
                            multiplier: 1,
-                           constant: 54).isActive = true
+                           constant: 32).isActive = true
         // Căn trái
         NSLayoutConstraint(item: coordinateLabel!,
                            attribute: .leading,
@@ -691,61 +678,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         // Căn giữa so với view
         NSLayoutConstraint(item: coordinateLabel!,
-                           attribute: .centerX,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .centerX,
-                           multiplier: 1.0,
-                           constant: 0).isActive = true
-
-        //----- AreaLabel -----
-        areaLabel = UILabel()
-        areaLabel.isUserInteractionEnabled = true
-        areaLabel?.copyable = true
-        areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 54)
-        areaLabel?.translatesAutoresizingMaskIntoConstraints = false
-        areaLabel?.textAlignment = .center
-        areaLabel?.numberOfLines = 0
-        areaLabel?.textColor = UIColor.brown
-        areaLabel?.font=UIFont.boldSystemFont(ofSize: 15)
-        areaLabel.isHidden = true
-        self.view?.addSubview(areaLabel!)
-        
-        // Đặt chiều cao
-        NSLayoutConstraint(item: areaLabel!,
-                           attribute: .height,
-                           relatedBy: .equal,
-                           toItem: nil,
-                           attribute: .notAnAttribute,
-                           multiplier: 1,
-                           constant: 54).isActive = true
-        // Căn trái
-        NSLayoutConstraint(item: areaLabel!,
-                           attribute: .leading,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .leading,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
-        // Căn phải
-        NSLayoutConstraint(item: areaLabel!,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
-        // Căn trên
-        NSLayoutConstraint(item: areaLabel!,
-                           attribute: .top,
-                           relatedBy: .equal,
-                           toItem: self.topLayoutGuide,
-                           attribute: .bottom,
-                           multiplier: 1.0,
-                           constant: 110).isActive = true
-        
-        // Căn giữa so với view
-        NSLayoutConstraint(item: areaLabel!,
                            attribute: .centerX,
                            relatedBy: .equal,
                            toItem: self.view,
@@ -788,6 +720,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1.0,
                            constant: 10).isActive = true
         
+        // Kết nối với GeoServer để kiểm tra
+        self.view.addSubview(self.imageViewForCheckingGeoServer)
+        self.imageViewForCheckingGeoServer.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Căn trên
+        NSLayoutConstraint(item: self.imageViewForCheckingGeoServer,
+                           attribute: .top,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .bottom,
+                           multiplier: 1.0,
+                           constant: 5).isActive = true
+        // Căn giữa buttonLayer
+        NSLayoutConstraint(item: self.imageViewForCheckingGeoServer,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+        
         //----- Button Folder -----
         buttonFolder = UIButton(frame: CGRect.zero)
         buttonFolder?.translatesAutoresizingMaskIntoConstraints = false
@@ -811,7 +764,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .leading,
                            relatedBy: .equal,
                            toItem: self.view,
-                           attribute: .leadingMargin,
+                           attribute: .leading,
                            multiplier: 1.0,
                            constant: 5).isActive = true
         // Căn trên
@@ -844,14 +797,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Cho vào View.
         self.view.addSubview(buttonFeatureInfo!)
         
-        // Căn phải
-        NSLayoutConstraint(item: buttonFeatureInfo!,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
+//        // Căn phải
+//        NSLayoutConstraint(item: buttonFeatureInfo!,
+//                           attribute: .trailing,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .trailingMargin,
+//                           multiplier: 1.0,
+//                           constant: 5).isActive = true
         // Căn trên
         NSLayoutConstraint(item: buttonFeatureInfo!,
                            attribute: .top,
@@ -860,6 +813,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: 25).isActive = true
+        
+        // Căn giữa buttonLayer
+        NSLayoutConstraint(item: buttonFeatureInfo!,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
         
         //----- Button ZoomIn -----
         buttonZoomIn = UIButton(frame: CGRect.zero)
@@ -879,14 +841,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Cho vào View.
         self.view.addSubview(buttonZoomIn!)
         
-        // Căn phải
-        NSLayoutConstraint(item: buttonZoomIn!,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
+//        // Căn phải
+//        NSLayoutConstraint(item: buttonZoomIn!,
+//                           attribute: .trailing,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .trailingMargin,
+//                           multiplier: 1.0,
+//                           constant: 5).isActive = true
         // Căn giữa Y
         NSLayoutConstraint(item: buttonZoomIn!,
                            attribute: .centerY,
@@ -896,6 +858,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1.0,
                            constant: 0).isActive = true
         
+        // Căn giữa buttonLayer
+        NSLayoutConstraint(item: buttonZoomIn!,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
         
         //----- Button ZoomOut -----
         buttonZoomOut = UIButton(frame: CGRect.zero)
@@ -915,14 +885,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Cho vào View.
         self.view.addSubview(buttonZoomOut!)
         
-        // Căn phải
-        NSLayoutConstraint(item: buttonZoomOut!,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
+//        // Căn phải
+//        NSLayoutConstraint(item: buttonZoomOut!,
+//                           attribute: .trailing,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .trailingMargin,
+//                           multiplier: 1.0,
+//                           constant: 5).isActive = true
         // Căn trên
         NSLayoutConstraint(item: buttonZoomOut!,
                            attribute: .top,
@@ -931,6 +901,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: 15).isActive = true
+        
+        // Căn giữa buttonLayer
+        NSLayoutConstraint(item: buttonZoomOut!,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
         
         //----- Button TakePhoto -----
         //
@@ -951,14 +930,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Cho vào View.
         self.view.addSubview(buttonTakePhoto!)
         
-        // Căn phải
-        NSLayoutConstraint(item: buttonTakePhoto!,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
+//        // Căn phải
+//        NSLayoutConstraint(item: buttonTakePhoto!,
+//                           attribute: .trailing,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .trailingMargin,
+//                           multiplier: 1.0,
+//                           constant: 5).isActive = true
         // Căn trên
         NSLayoutConstraint(item: buttonTakePhoto!,
                            attribute: .top,
@@ -967,6 +946,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: 15).isActive = true
+        
+        // Căn giữa buttonLayer
+        NSLayoutConstraint(item: buttonTakePhoto!,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
         
         // Setup the results view controller.
         tableDataSource = GMSAutocompleteTableDataSource()
@@ -1007,20 +995,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         buttonRecord = JDJellyButton(rootView: self.view)
         buttonRecord?.attachtoView(rootView: self.view,
                                    mainbutton: #imageLiteral(resourceName: "buttonAddMarker"),
-                                   frame: CGRect(x: 0, y: 0, width: 54, height: 54))
+                                   frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        
         buttonRecord?.delegate = self
         buttonRecord?.datasource = self
         buttonRecord?.setJellyType(type: .LeftLine)
         buttonRecord?.Container.translatesAutoresizingMaskIntoConstraints = false
         
-        // Căn phải
-        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: -44).isActive = true
+//        // Căn phải
+//        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
+//                           attribute: .trailing,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .trailingMargin,
+//                           multiplier: 1.0,
+//                           constant: -44).isActive = true
         // Căn dưới
         NSLayoutConstraint(item: buttonRecord?.Container! as Any,
                            attribute: .bottom,
@@ -1030,6 +1019,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1.0,
                            constant: -140).isActive = true
         
+        // Căn giữa buttonLayer
+        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: buttonLayer,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: -22).isActive = true
+
         //=====
         buttonRecording = JDJellyButton(rootView: self.view)
         buttonRecording?.attachtoView(rootView: self.view,
@@ -1230,14 +1228,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
 
     func didSelectOverlay() {
+        hideSomeView()
         self.navigationController?.isToolbarHidden = false
         self.navigationController?.toolbar.barStyle = .black
         self.navigationController?.toolbar.tintColor = UIColor.white
         self.navigationController?.toolbarItems?.removeAll()
         var items = [UIBarButtonItem]()
         if selectedOverlay != nil {
-            areaLabel.isHidden = false
-            areaLabel.text = "Area: \((selectedOverlay?.trackSegment.area.areaUnit())!)\nLength: \((selectedOverlay?.trackSegment.length.distanceUnit())!)"
             let editable = selectedOverlay?.trackSegment.root.attributes["type"] != "tracks"
             if editable {
                 items.append(
@@ -1245,8 +1242,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 )
             }
         } else if selectedPolygonOverlay != nil {
-            areaLabel.isHidden = false
-            areaLabel.text = "Area: \((selectedPolygonOverlay?.pointSegment.area.areaUnit())!)\nLength: \((selectedPolygonOverlay?.pointSegment.length.distanceUnit())!)"
             let editable = selectedPolygonOverlay?.pointSegment.root.attributes["type"] != "tracks"
             if editable {
                 items.append(
@@ -1267,15 +1262,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         items.append(
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(didDeleteOverlay))
         )
-//        if selectedOverlay != nil {
-//            items.append(
-//                UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(actionEditTrackSegment))
-//            )
-//        } else if selectedPolygonOverlay != nil {
-//            items.append(
-//                UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(actionEditPointSegment))
-//            )
-//        }
         self.navigationController?.toolbar.items = items
     }
     
@@ -1288,6 +1274,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         self.navigationController?.toolbarItems?.removeAll()
         var items = [UIBarButtonItem]()
+        items.append(
+            UIBarButtonItem(image: #imageLiteral(resourceName: "removeVertex"), style: UIBarButtonItemStyle.done, target: self, action: #selector(removeActiveVertex))
+        )
         items.append(
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         )
@@ -1302,7 +1291,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         )
         self.navigationController?.toolbar.items = items
         
-        self.hideSomeView()
     }
     
     func didSaveOverlay() {
@@ -1329,7 +1317,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func didDeSelectOverlay() {
-        areaLabel.isHidden = true
         selectedOverlay?.trackSegment.actions = .none
         selectedPolygonOverlay?.pointSegment.actions = .none
         selectedOverlay = nil
@@ -1339,7 +1326,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func didDeleteOverlay() {
-        areaLabel.isHidden = true
         if selectedOverlay != nil {
             selectedOverlay?.trackSegment.delete()
             selectedOverlay = nil
@@ -1369,6 +1355,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         if (self.interstitial.isReady) {
             self.interstitial.present(fromRootViewController: self)
+        }
+    }
+    
+    func removeActiveVertex() {
+        if selectedOverlay != nil {
+            selectedOverlay?.trackSegment.deleteActiveVertex()
+        } else if selectedPolygonOverlay != nil {
+            selectedPolygonOverlay?.pointSegment.deleteActiveVertex()
         }
     }
     
@@ -1462,9 +1456,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated: true) { () -> Void in }
         
-        
-//        let fileName = createDocumentFileFor(subPath: "GPX", fileName: (gpx?.metadata.name)!, ext: "gpx")
-//        actionSendEmailGPX(fileName)
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: vc)
+        }
     }
     
     
@@ -1486,6 +1480,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } else {
             self.isRequesFeatureInfo = true
             // Hiện thông báo trên màn map
+        }
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
         }
     }
     
@@ -1519,8 +1516,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonFolder?.isHidden = true
         self.buttonTakePhoto?.isHidden = true
         UserDefaults.standard.set(self.buttonRecord?.MainButton.isHidden, forKey: "buttonRecordMainButtonisHidden")
+        UserDefaults.standard.synchronize()
         UserDefaults.standard.set(self.buttonRecording?.MainButton.isHidden, forKey: "buttonRecordingMainButtonisHidden")
+        UserDefaults.standard.synchronize()
         UserDefaults.standard.set(self.buttonPaused?.MainButton.isHidden, forKey: "buttonPausedMainButtonisHidden")
+        UserDefaults.standard.synchronize()
         
         self.buttonRecord?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonRecording?.MainButton.closingButtonGroup(expandagain: false)
@@ -1539,7 +1539,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomOut?.isHidden = false
         self.buttonFolder?.isHidden = false
         self.buttonTakePhoto?.isHidden = false
-        UserDefaults.standard.set(self.buttonRecord?.MainButton.isHidden, forKey: "buttonRecordisHidden")
         self.buttonRecord?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordMainButtonisHidden") as! Bool
         self.buttonRecording?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordingMainButtonisHidden") as! Bool
         self.buttonPaused?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonPausedMainButtonisHidden") as! Bool
@@ -2297,6 +2296,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         default:
             break
         }
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
+        }
     }
     
     func pathOfActiveLayersBoundary() -> GMSPath {
@@ -2662,6 +2664,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         default:
             break
         }
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
+        }
     }
     
     class MyButton: UIButton {
@@ -2820,13 +2825,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 let index = UInt(attributes["id"]!)!
                 if selectedOverlay != nil {
                     if type == "vertex" {
-                        selectedOverlay?.trackSegment.deleteVertex(index)
+                        selectedOverlay?.trackSegment.setActiveVertex(index)
                     } else if type == "middle" {
                         selectedOverlay?.trackSegment.insertVertex(index, marker.position)
                     }
                 } else if selectedPolygonOverlay != nil {
                     if type == "vertex" {
-                        selectedPolygonOverlay?.pointSegment.deleteVertex(index)
+                        selectedPolygonOverlay?.pointSegment.setActiveVertex(index)
                     } else if type == "middle" {
                         selectedPolygonOverlay?.pointSegment.insertVertex(index, marker.position)
                     }
@@ -2852,6 +2857,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         print("didDrag ", marker.position.localizedCoordinateString())
     }
     
+    // Có thể bỏ vì đã thêm activeVertex
     func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
         print("didEndDragging ", marker.position.localizedCoordinateString())
         if marker.userData != nil {
@@ -2877,22 +2883,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
-        if let trackSegmentOverlay: GPXTrackSegmentOverlay = overlay as? GPXTrackSegmentOverlay,
-            self.gpx?.currentPointSegment?.actions != .selecting {
+                if let trackSegmentOverlay: GPXTrackSegmentOverlay = overlay as? GPXTrackSegmentOverlay,
+            (self.gpx?.currentPointSegment?.actions != .selecting ||
+             self.gpx?.currentPointSegment?.actions != .editing) {
             selectedOverlay?.trackSegment.actions = .none
             selectedOverlay = trackSegmentOverlay
             selectedOverlay?.trackSegment.actions = .selecting
             self.didSelectOverlay()
-            
-//            selectedOverlay?.trackSegment.actionButton.addTarget(self, action: #selector(actionEditTrackSegment), for: .touchUpInside)
         } else if let pointSegmentOverlay: GPXPointSegmentOverlay = overlay as? GPXPointSegmentOverlay,
-            self.gpx?.currentPointSegment?.actions != .selecting {
+            (self.gpx?.currentPointSegment?.actions != .selecting ||
+             self.gpx?.currentPointSegment?.actions != .editing) {
             selectedPolygonOverlay?.pointSegment.actions = .none
             selectedPolygonOverlay = pointSegmentOverlay
             selectedPolygonOverlay?.pointSegment.actions = .selecting
             self.didSelectOverlay()
-            
-//            selectedPolygonOverlay?.pointSegment.actionButton.addTarget(self, action: #selector(actionEditPointSegment), for: .touchUpInside)
         }
     }
     
@@ -2962,6 +2966,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.buttonFeatureInfo?.isHidden = false
         } else {
             self.buttonFeatureInfo?.isHidden = true
+        }
+        
+        // Gỡ activeVertex
+        if selectedOverlay != nil, selectedOverlay?.trackSegment.actions == .editing {
+            selectedOverlay?.trackSegment.deActiveVertex()
+        }
+        if selectedPolygonOverlay != nil, selectedPolygonOverlay?.pointSegment.actions == .editing {
+            selectedPolygonOverlay?.pointSegment.deActiveVertex()
         }
     }
     
