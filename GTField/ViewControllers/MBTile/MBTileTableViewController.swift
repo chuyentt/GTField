@@ -24,7 +24,7 @@ class MBTileTableViewController: UITableViewController {
         self.tableView.frame = CGRect(x: navBarFrame.width + 1, y: 0, width: self.view.frame.width, height:
             self.view.frame.height - navBarFrame.height)
         
-        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(close))
+        let shareItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
         
         self.navigationItem.rightBarButtonItems = [shareItem]
         
@@ -73,7 +73,7 @@ class MBTileTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "MBTiles specification"
+        return NSLocalizedString("MBTiles specification", comment: "")
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -112,27 +112,27 @@ class MBTileTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let filename = itemList.object(at: (indexPath as NSIndexPath).row) as? NSString as String? ?? ""
         let alert = UIAlertController(
-            title: "What would you like to do?",
+            title: NSLocalizedString("Select option", comment: ""),
             message: nil,
             preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(
-            title: "Cancel",
+            title: NSLocalizedString("Cancel", comment: ""),
             style: .cancel,
             handler: { (action: UIAlertAction!) in
                 // Cancel
         }))
         alert.addAction(UIAlertAction(
-            title: "Edit the description",
+            title: NSLocalizedString("Edit the description", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
                 let fileURL: URL = docsURL.appendingPathComponent(filename).appendingPathExtension(kMBTileFileExt)
                 let mbtileDB = MBTileDB(path: fileURL.path)
                 var desc = mbtileDB.metadataValueFor(name: "description")
                 // Yêu cầu nhập mô tả tile mỗi lần tải
-                let alertController = UIAlertController(title: "Type Your Download Description", message: "", preferredStyle: .alert)
+                let alertController = UIAlertController(title: NSLocalizedString("Type Your Download Description", comment: ""), message: "", preferredStyle: .alert)
                 
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {
+                alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: {
                     alert -> Void in
                     desc = (alertController.textFields?.first?.text)!
                     if desc.length > 0 {
@@ -141,7 +141,7 @@ class MBTileTableViewController: UITableViewController {
                     }
                 }))
                 alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
-                    textField.placeholder = "Description of the offline map"
+                    textField.placeholder = NSLocalizedString("Description of the offline map", comment: "")
                     textField.text = desc
                     textField.keyboardAppearance = .dark
                     textField.autocapitalizationType = .sentences
@@ -151,21 +151,21 @@ class MBTileTableViewController: UITableViewController {
                 self.actionSendEmailMBTile(fileURL)
         }))
         alert.addAction(UIAlertAction(
-            title: "Send by email",
+            title: NSLocalizedString("Send by email", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
                 let fileURL: URL = docsURL.appendingPathComponent(filename).appendingPathExtension(kMBTileFileExt)
                 self.actionSendEmailMBTile(fileURL)
         }))
         alert.addAction(UIAlertAction(
-            title: "Set default offline data",
+            title: NSLocalizedString("Set default offline data", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
                 let fileURL: URL = docsURL.appendingPathComponent(filename).appendingPathExtension(kMBTileFileExt)
                 self.delegate?.didLoadMBTileFilePath(fileURL.lastPathComponent)
         }))
         alert.addAction(UIAlertAction(
-            title: "Delete",
+            title: NSLocalizedString("Delete", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
                 self.actionDeleteFileAtIndex((indexPath as NSIndexPath).row)
@@ -202,10 +202,11 @@ class MBTileTableViewController: UITableViewController {
         
         if MFMailComposeViewController.canSendMail() {
             // set the subject
-            composer.setSubject("[\(APP_NAME)] Export Offline Map")
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export Offline Map", comment: ""))
             
             //Add some text to the body and attach the file
-            let body = "\(APP_FULL_NAME). Export (MBTiles Offline Map format).<br />You can copy files between your computer and apps on your iOS device using File Sharing. https://support.apple.com/en-us/HT201301<br />"
+            let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
+            
             composer.setMessageBody(body, isHTML: true)
             //composer.setToRecipients(["chuyentt@gmail.com"])
             do {
@@ -220,7 +221,7 @@ class MBTileTableViewController: UITableViewController {
                 self.present(composer, animated: true, completion: nil)
             }
         } else {
-            let alert = UIAlertView(title: "No email accounts configured", message: "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
             alert.show()
         }
     }
@@ -240,11 +241,11 @@ extension MBTileTableViewController:MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: "Sent", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
             break
         default:
-            let alert = UIAlertView(title: "Whoops", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
         }
         self.dismiss(animated: true, completion: nil)

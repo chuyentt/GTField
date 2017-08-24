@@ -267,13 +267,13 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                     break
                 case 3: // WayPoints
                     let vc = GPXTableViewController(nibName: nil, bundle: nil)
-                    vc.title = "Your Way Points"
+                    //vc.title = "Your Way Points"
                     let navController = UINavigationController(rootViewController: vc)
                     self.present(navController, animated: true) { () -> Void in }
                     break
                 case 4: // Tracks
                     let vc = GPXTableViewController(nibName: nil, bundle: nil)
-                    vc.title = "Your Tracks"
+                    //vc.title = "Your Tracks"
                     let navController = UINavigationController(rootViewController: vc)
                     self.present(navController, animated: true) { () -> Void in }
                     break

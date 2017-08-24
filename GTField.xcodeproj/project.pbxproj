@@ -87,6 +87,7 @@
 		DE085E211F266839005DD248 /* MBTileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE085E201F266839005DD248 /* MBTileTableViewController.swift */; };
 		DE085E241F2987A8005DD248 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE085E231F2987A8005DD248 /* WebViewController.swift */; };
 		DE146DD31EF609C200F3C055 /* OfflineTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE146DD21EF609C200F3C055 /* OfflineTileLayer.swift */; };
+		DE26455B1F4E8AFA008B759B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DE2645591F4E8AFA008B759B /* Localizable.strings */; };
 		DE2648171F0DAE9000CC324D /* Track.json in Resources */ = {isa = PBXBuildFile; fileRef = DE2648161F0DAE8D00CC324D /* Track.json */; };
 		DE2648191F0DF38C00CC324D /* Track.gpx in Resources */ = {isa = PBXBuildFile; fileRef = DE2648181F0DF38C00CC324D /* Track.gpx */; };
 		DE28C3BD1F17673600C3A190 /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DE28C3BC1F17673600C3A190 /* beep.mp3 */; };
@@ -222,7 +223,6 @@
 /* Begin PBXFileReference section */
 		12510DB04947E9A2DC308599 /* Pods-GTField.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GTField.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GTField/Pods-GTField.debug.xcconfig"; sourceTree = "<group>"; };
 		162823A019AB38A100D08755 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		162823A719AB38A100D08755 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16349EE61A28543D00D670A7 /* GTFieldGeo.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = GTFieldGeo.geojson; path = GTField/GTFieldGeo.geojson; sourceTree = SOURCE_ROOT; };
 		164381681CB3B4D4007FA14E /* Houses1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Houses1.jpg; sourceTree = "<group>"; };
 		164381691CB3B4D4007FA14E /* Houses2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Houses2.jpg; sourceTree = "<group>"; };
@@ -312,7 +312,10 @@
 		DE085E201F266839005DD248 /* MBTileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBTileTableViewController.swift; path = ViewControllers/MBTile/MBTileTableViewController.swift; sourceTree = "<group>"; };
 		DE085E231F2987A8005DD248 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = ViewControllers/WebViews/WebViewController.swift; sourceTree = "<group>"; };
 		DE146DD21EF609C200F3C055 /* OfflineTileLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OfflineTileLayer.swift; path = MapViews/OfflineTileLayer.swift; sourceTree = "<group>"; };
-		DE2648131F0C9E0200CC324D /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
+		DE2645641F4E9E66008B759B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DE2645651F4EBEFE008B759B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DE2645661F4EBF4D008B759B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
+		DE2645691F4EC4B5008B759B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DE2648161F0DAE8D00CC324D /* Track.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Track.json; path = Plist/Track.json; sourceTree = "<group>"; };
 		DE2648181F0DF38C00CC324D /* Track.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Track.gpx; path = Plist/Track.gpx; sourceTree = "<group>"; };
 		DE28C3BC1F17673600C3A190 /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
@@ -345,6 +348,7 @@
 		DE377A821F0F3E61004C87D5 /* JDJellyMainButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JDJellyMainButton.swift; sourceTree = "<group>"; };
 		DE379D651F15A57000B0FEA0 /* GPXFilesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXFilesTableViewController.swift; path = MapViews/GPXFilesTableViewController.swift; sourceTree = "<group>"; };
 		DE379D671F15A73300B0FEA0 /* GPXFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXFileManager.swift; path = MapViews/GPXFileManager.swift; sourceTree = "<group>"; };
+		DE3934BD1F4F3D1A00F85457 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		DE434B331F19CE7500935974 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = Reachability/Reachability.swift; sourceTree = "<group>"; };
 		DE434B361F1B4D0A00935974 /* MotionContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MotionContainer.swift; path = Motion/MotionContainer.swift; sourceTree = "<group>"; };
 		DE434B3C1F22FA4900935974 /* GPXHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXHelper.swift; path = GPX/GPXHelper.swift; sourceTree = "<group>"; };
@@ -955,6 +959,7 @@
 			isa = PBXGroup;
 			children = (
 				162823A619AB38A100D08755 /* Main.storyboard */,
+				DE2645591F4E8AFA008B759B /* Localizable.strings */,
 				169B359A1B9DDBE700B83857 /* Config.swift */,
 			);
 			name = Resources;
@@ -1049,6 +1054,8 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				en,
+				vi,
 				Base,
 			);
 			mainGroup = 1628239219AB38A100D08755;
@@ -1081,6 +1088,7 @@
 				DE434B451F233A0E00935974 /* GoogleService-Info.plist in Resources */,
 				DE67818B1E55F25800026C86 /* bauhausm.ttf in Resources */,
 				164D488D1A397B3800C669A6 /* Image.xcassets in Resources */,
+				DE26455B1F4E8AFA008B759B /* Localizable.strings in Resources */,
 				16D845961D8D2DCB005DF780 /* LoadingView.xib in Resources */,
 				DEAD15621EEA55D000BFD5CE /* Trash.plist in Resources */,
 				DEAD15591EEA55D000BFD5CE /* Monuments.plist in Resources */,
@@ -1333,10 +1341,20 @@
 		162823A619AB38A100D08755 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				162823A719AB38A100D08755 /* Base */,
-				DE2648131F0C9E0200CC324D /* vi */,
+				DE2645651F4EBEFE008B759B /* Base */,
+				DE2645661F4EBF4D008B759B /* vi */,
+				DE3934BD1F4F3D1A00F85457 /* en */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		DE2645591F4E8AFA008B759B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DE2645641F4E9E66008B759B /* vi */,
+				DE2645691F4EC4B5008B759B /* Base */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1346,6 +1364,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1394,6 +1413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

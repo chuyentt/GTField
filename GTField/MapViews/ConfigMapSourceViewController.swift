@@ -20,7 +20,7 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.title = "Map Source Configuration"
+        self.title = NSLocalizedString("Map Source Configuration", comment: "")
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -78,7 +78,7 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
             let offlineActiveTilesPath = getOfflineActiveTilesPath()
             // Kiểm tra xem có phải là dữ liệu cũ không Download01
             if offlineActiveTilesPath == "" || offlineActiveTilesPath == "Download01" {
-                cell.lblCellTitle?.text = "Select an offline data"
+                cell.lblCellTitle?.text = NSLocalizedString("Select an offline data", comment: "")
             } else {
                 let offlineTileURL = docsURL.appendingPathComponent(offlineActiveTilesPath)
                 let mbtileDB = MBTileDB(path: offlineTileURL.path)
@@ -114,16 +114,16 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
         let cell = tableView.cellForRow(at: indexPath)!
         switch indexPath.section {
         case 0:
-            let alertController = UIAlertController(title: "Type Your GeoServer Host", message: "", preferredStyle: .alert)
+            let alertController = UIAlertController(title: NSLocalizedString("Type Your GeoServer Host", comment: ""), message: "", preferredStyle: .alert)
             
-            alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: {
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Save", comment: ""), style: .default, handler: {
                 alert -> Void in
                 let textField = alertController.textFields![0] as UITextField
                 if setGeoServerBaseUrl(urlString: textField.text!) {
                     self.tableView.reloadData()
                 } else {
                     // create the alert
-                    let alert = UIAlertController(title: "Invalid input URL", message: "e.g.: http://192.168.1.153:8080", preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: NSLocalizedString("Invalid input URL", comment: ""), message: NSLocalizedString("e.g.: http://192.168.1.153:8080", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                     
                     // add an action (button)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
@@ -138,7 +138,7 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             
             alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
-                textField.placeholder = "e.g.: http://192.168.1.153:8080"
+                textField.placeholder = NSLocalizedString("e.g.: http://192.168.1.153:8080", comment: "")
             })
             self.present(alertController, animated: true, completion: nil)
             break
@@ -146,10 +146,10 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
             // Kiểm tra kết nối trước
             if (self.imageViewForCheckingGeoServer.image == #imageLiteral(resourceName: "IconGeoServerBaseUrlOffline")) {
                 // create the alert
-                let alert = UIAlertController(title: "Could not connect to GeoServer!", message: "Please verify GeoServer Base Url", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                     alert -> Void in
                     return
                 }))
@@ -164,10 +164,10 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
             // Kiểm tra kết nối trước
             if (self.imageViewForCheckingGeoServer.image == #imageLiteral(resourceName: "IconGeoServerBaseUrlOffline")) {
                 // create the alert
-                let alert = UIAlertController(title: "Could not connect to GeoServer!", message: "Please verify GeoServer Base Url", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                     alert -> Void in
                     return
                 }))
@@ -199,13 +199,13 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "GeoServer Base Url"
+            return NSLocalizedString("GeoServer Base Url", comment: "")
         case 1:
-            return "WMS Layer or Layer-Group"
+            return NSLocalizedString("WMS Layer or Layer-Group", comment: "")
         case 2:
-            return "WFS Layer"
+            return NSLocalizedString("WFS Layer", comment: "")
         case 3:
-            return "Offline data"
+            return NSLocalizedString("Offline data", comment: "")
         default:
             return nil
         }
@@ -214,13 +214,13 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "Support GeoServer installed on your system, by giving ip address of system like \"http://192.168.1.52:8080\" instead of \"http://localhost:8080\""
+            return NSLocalizedString("Support GeoServer installed on your system, by giving ip address of system like \"http://192.168.1.52:8080\" instead of \"http://localhost:8080\"", comment: "")
         case 1:
-            return "This is an overlay layer on your base"
+            return NSLocalizedString("This is an overlay layer on your base", comment: "")
         case 2:
-            return "This is layer for accessing information (require internet connection)"
+            return NSLocalizedString("This is layer for accessing information (require internet connection)", comment: "")
         case 3:
-            return "Support MBTiles file format (GTField can get mbtiles file from your Email, iCloud Drive, Google Drive, Dropbox or downloaded from the Internet)"
+            return NSLocalizedString("Support MBTiles file format (GTField can get mbtiles file from your Email, iCloud Drive, Google Drive, Dropbox or downloaded from the Internet)", comment: "")
         default:
             return nil
         }

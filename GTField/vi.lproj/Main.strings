@@ -1,30 +1,57 @@
 
+/* Class = "UILabel"; text = "Universal Transverse Mercator (UTM)"; ObjectID = "0CO-n7-oSA"; */
+"0CO-n7-oSA.text" = "Universal Transverse Mercator (UTM)";
+
 /* Class = "UIButton"; normalTitle = "Directions"; ObjectID = "0Yc-FJ-o9Q"; */
-"0Yc-FJ-o9Q.normalTitle" = "Điều hướng";
+"0Yc-FJ-o9Q.normalTitle" = "Directions";
+
+/* Class = "UIViewController"; title = "GTField Settings"; ObjectID = "3Ov-KZ-Ua8"; */
+"3Ov-KZ-Ua8.title" = "Thiết lập GTField";
 
 /* Class = "UILabel"; text = "id"; ObjectID = "3rm-J4-ZkO"; */
 "3rm-J4-ZkO.text" = "id";
 
-/* Class = "UILabel"; text = "Code & Design"; ObjectID = "4ao-og-Gcz"; */
-"4ao-og-Gcz.text" = "Code & Design";
+/* Class = "UITableViewSection"; footerTitle = "Trong trường hợp này, bạn có cơ hội để tiết kiệm pin."; ObjectID = "6dB-Oe-m0g"; */
+"6dB-Oe-m0g.footerTitle" = "Trong trường hợp này, bạn có cơ hội để tiết kiệm pin.";
 
-/* Class = "UIBarButtonItem"; title = "ZoomFit"; ObjectID = "4c1-44-dgT"; */
-"4c1-44-dgT.title" = "ZoomFit";
-
-/* Class = "UILabel"; text = "GTField"; ObjectID = "5L6-Vs-5c0"; */
-"5L6-Vs-5c0.text" = "GTField";
+/* Class = "UITableViewSection"; headerTitle = "Thiết lập lộ trình"; ObjectID = "6dB-Oe-m0g"; */
+"6dB-Oe-m0g.headerTitle" = "Thiết lập ghi lộ trình";
 
 /* Class = "UIBarButtonItem"; title = "Map"; ObjectID = "6nB-j1-PYU"; */
 "6nB-j1-PYU.title" = "Bản đồ";
 
-/* Class = "UIButton"; normalTitle = "Restore Purchase"; ObjectID = "ASU-JZ-aAn"; */
-"ASU-JZ-aAn.normalTitle" = "Restore Purchase";
+/* Class = "UITableViewController"; title = "Tools View Controller"; ObjectID = "7w5-S1-fKw"; */
+"7w5-S1-fKw.title" = "Các công cụ";
 
-/* Class = "UIViewController"; title = "Feature Information"; ObjectID = "Dxo-fW-RHG"; */
-"Dxo-fW-RHG.title" = "Thông tin đối tượng";
+/* Class = "UIButton"; normalTitle = "Bỏ qua"; ObjectID = "8z4-CC-aGC"; */
+"8z4-CC-aGC.normalTitle" = "Bỏ qua";
 
-/* Class = "UIButton"; normalTitle = "Email Feedback"; ObjectID = "GDu-Ak-TTN"; */
-"GDu-Ak-TTN.normalTitle" = "Email phản hồi";
+/* Class = "UILabel"; text = "Tọa độ"; ObjectID = "9Qn-8n-fzi"; */
+"9Qn-8n-fzi.text" = "Tọa độ";
+
+/* Class = "UITableViewSection"; headerTitle = "Thiết lập chung"; ObjectID = "9bQ-kF-0XN"; */
+"9bQ-kF-0XN.headerTitle" = "Thiết lập chung";
+
+/* Class = "UILabel"; text = "∡ 358°22'56\" T\n(478 KB)"; ObjectID = "B29-hi-ttG"; */
+"B29-hi-ttG.text" = "∡ 358°22'56\" T\n(478 KB)";
+
+/* Class = "UIViewController"; title = "Thông tin thuộc tính"; ObjectID = "Dxo-fW-RHG"; */
+"Dxo-fW-RHG.title" = "Thông tin thuộc tính";
+
+/* Class = "UITableViewSection"; headerTitle = "Thiết lập tọa độ và chuyển đổi"; ObjectID = "EK0-r4-kbZ"; */
+"EK0-r4-kbZ.headerTitle" = "Thiết lập tọa độ và chuyển đổi";
+
+/* Class = "UINavigationItem"; title = "Tools View Controller"; ObjectID = "EYM-9H-2Rh"; */
+"EYM-9H-2Rh.title" = "Các công cụ";
+
+/* Class = "UILabel"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu"; ObjectID = "FKP-of-D8S"; */
+"FKP-of-D8S.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu";
+
+/* Class = "UITableViewSection"; headerTitle = "Thiết lập đơn vị và định dạng"; ObjectID = "Fji-0X-GLK"; */
+"Fji-0X-GLK.headerTitle" = "Thiết lập đơn vị và định dạng";
+
+/* Class = "UILabel"; text = "Phép chiếu"; ObjectID = "HbX-mF-4wZ"; */
+"HbX-mF-4wZ.text" = "Phép chiếu";
 
 /* Class = "UILabel"; text = "PlistName"; ObjectID = "Hii-Yp-8hj"; */
 "Hii-Yp-8hj.text" = "PlistName";
@@ -32,8 +59,14 @@
 /* Class = "UILabel"; text = "Label"; ObjectID = "I3V-ta-y7a"; */
 "I3V-ta-y7a.text" = "Label";
 
+/* Class = "UILabel"; text = "∡ 358°22'56\" T\n(478 KB)"; ObjectID = "JN5-nG-3WG"; */
+"JN5-nG-3WG.text" = "∡ 358°22'56\" T\n(478 KB)";
+
 /* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."; ObjectID = "Kaa-Do-12n"; */
 "Kaa-Do-12n.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+
+/* Class = "UILabel"; text = "ToWGS84"; ObjectID = "L8g-wq-zM5"; */
+"L8g-wq-zM5.text" = "Hệ chuyển đổi";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "LXk-Yr-2QK"; */
 "LXk-Yr-2QK.text" = "Title";
@@ -41,17 +74,32 @@
 /* Class = "UILabel"; text = "id"; ObjectID = "MAm-o0-Bxl"; */
 "MAm-o0-Bxl.text" = "id";
 
-/* Class = "UIBarButtonItem"; title = "List"; ObjectID = "Odc-Ra-U9G"; */
-"Odc-Ra-U9G.title" = "List";
+/* Class = "UILabel"; text = "-21.123456\n-105.123456"; ObjectID = "Nai-no-yh4"; */
+"Nai-no-yh4.text" = "-21.123456\n-105.123456";
 
-/* Class = "UIButton"; normalTitle = "Choose from Library"; ObjectID = "TGL-E9-5xT"; */
+/* Class = "UIBarButtonItem"; title = "List"; ObjectID = "Odc-Ra-U9G"; */
+"Odc-Ra-U9G.title" = "Danh sách";
+
+/* Class = "UILabel"; text = "World Geodetic System 1984"; ObjectID = "RPy-gE-BhE"; */
+"RPy-gE-BhE.text" = "World Geodetic System 1984";
+
+/* Class = "UILabel"; text = "(21° 12' 33\" N)\n(105° 12' 33\" E)"; ObjectID = "SeJ-S9-2W6"; */
+"SeJ-S9-2W6.text" = "(21° 12' 33\" N)\n(105° 12' 33\" E)";
+
+/* Class = "UIButton"; normalTitle = "Chọn từ thư viện ảnh"; ObjectID = "TGL-E9-5xT"; */
 "TGL-E9-5xT.normalTitle" = "Chọn từ thư viện ảnh";
 
 /* Class = "UILabel"; text = "16 Punti di interesse"; ObjectID = "UoU-91-OUN"; */
 "UoU-91-OUN.text" = "16 Punti di interesse";
 
-/* Class = "UILabel"; text = "1.0 (build 1)"; ObjectID = "Urq-OW-o4X"; */
-"Urq-OW-o4X.text" = "1.0 (build 1)";
+/* Class = "UILabel"; text = "10"; ObjectID = "VjP-sY-PwM"; */
+"VjP-sY-PwM.text" = "10";
+
+/* Class = "UISegmentedControl"; WPk-be-qeR.segmentTitles[0] = "Map"; ObjectID = "WPk-be-qeR"; */
+"WPk-be-qeR.segmentTitles[0]" = "Bản đồ";
+
+/* Class = "UISegmentedControl"; WPk-be-qeR.segmentTitles[1] = "List"; ObjectID = "WPk-be-qeR"; */
+"WPk-be-qeR.segmentTitles[1]" = "Danh sách";
 
 /* Class = "UILabel"; text = "Active"; ObjectID = "YnR-ln-LEa"; */
 "YnR-ln-LEa.text" = "Active";
@@ -65,35 +113,77 @@
 /* Class = "UILabel"; text = "Title"; ObjectID = "ZMj-8M-6lK"; */
 "ZMj-8M-6lK.text" = "Title";
 
+/* Class = "UILabel"; text = "Size"; ObjectID = "bJa-N5-r8b"; */
+"bJa-N5-r8b.text" = "Size";
+
+/* Class = "UILabel"; text = "Lọc khoảng cách (mét / điểm)"; ObjectID = "cUJ-dm-OHB"; */
+"cUJ-dm-OHB.text" = "Lọc khoảng cách (mét / điểm)";
+
 /* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "cgC-ZJ-mK0"; */
 "cgC-ZJ-mK0.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
 
-/* Class = "UILabel"; text = "Trần Trung Chuyên"; ObjectID = "dda-Us-4xo"; */
-"dda-Us-4xo.text" = "Trần Trung Chuyên";
+/* Class = "UILabel"; text = "Square meter (m²)"; ObjectID = "dJF-hV-f5i"; */
+"dJF-hV-f5i.text" = "Square meter (m²)";
 
 /* Class = "UILabel"; text = "Poi Name"; ObjectID = "eM7-EU-iJR"; */
 "eM7-EU-iJR.text" = "Poi Name";
 
+/* Class = "UILabel"; text = "Diện tích"; ObjectID = "ekQ-ul-U1k"; */
+"ekQ-ul-U1k.text" = "Diện tích";
+
+/* Class = "UILabel"; text = "Chiều dài"; ObjectID = "hgj-Qd-wKb"; */
+"hgj-Qd-wKb.text" = "Chiều dài";
+
+/* Class = "UILabel"; text = "Chất lượng ảnh chụp"; ObjectID = "jGm-ZO-YMX"; */
+"jGm-ZO-YMX.text" = "Chất lượng ảnh chụp";
+
 /* Class = "UILabel"; text = "Poi Detail"; ObjectID = "jPk-7l-I2n"; */
 "jPk-7l-I2n.text" = "Poi Detail";
+
+/* Class = "UILabel"; text = "Ellipsoid Trái Đất"; ObjectID = "kxS-tY-N6s"; */
+"kxS-tY-N6s.text" = "Ellipsoid Trái Đất";
+
+/* Class = "UILabel"; text = "WGS 1984"; ObjectID = "mVl-Ew-UbN"; */
+"mVl-Ew-UbN.text" = "WGS 1984";
+
+/* Class = "UILabel"; text = "(21° 12' 33\" N)\n(105° 12' 33\" E)"; ObjectID = "mkc-Gl-qGa"; */
+"mkc-Gl-qGa.text" = "(21° 12' 33\" N)\n(105° 12' 33\" E)";
+
+/* Class = "UILabel"; text = "ddd°mm'ss.ssss N/S,E/W"; ObjectID = "nks-X5-mcA"; */
+"nks-X5-mcA.text" = "ddd°mm'ss.ssss N/S,E/W";
 
 /* Class = "UILabel"; text = "Section Name"; ObjectID = "oMQ-1c-QDj"; */
 "oMQ-1c-QDj.text" = "Section Name";
 
-/* Class = "UIButton"; normalTitle = "Take photo"; ObjectID = "qDA-cF-ynK"; */
+/* Class = "UINavigationItem"; title = "GTField Settings"; ObjectID = "oi7-bI-tSq"; */
+"oi7-bI-tSq.title" = "GTField Settings";
+
+/* Class = "UILabel"; text = "0.3"; ObjectID = "pAL-sY-E3r"; */
+"pAL-sY-E3r.text" = "0.3";
+
+/* Class = "UIButton"; normalTitle = "Chụp ảnh"; ObjectID = "qDA-cF-ynK"; */
 "qDA-cF-ynK.normalTitle" = "Chụp ảnh";
+
+/* Class = "UILabel"; text = "-21.123456\n-105.123456"; ObjectID = "rZc-Cz-XfK"; */
+"rZc-Cz-XfK.text" = "-21.123456\n-105.123456";
+
+/* Class = "UILabel"; text = "Section Name"; ObjectID = "rkp-do-1hs"; */
+"rkp-do-1hs.text" = "Section Name";
+
+/* Class = "UILabel"; text = "DateTime"; ObjectID = "rwe-aF-Hqj"; */
+"rwe-aF-Hqj.text" = "DateTime";
 
 /* Class = "UILabel"; text = "Active"; ObjectID = "tfl-Hw-Mgm"; */
 "tfl-Hw-Mgm.text" = "Active";
 
-/* Class = "UINavigationItem"; title = "PhotoMap"; ObjectID = "u3I-1P-fg6"; */
-"u3I-1P-fg6.title" = "PhotoMap";
-
 /* Class = "UILabel"; text = "2017-06-30T12:08:54Z"; ObjectID = "w9z-9H-Bv1"; */
 "w9z-9H-Bv1.text" = "2017-06-30T12:08:54Z";
 
-/* Class = "UILabel"; text = "chuyentt@gmail.com"; ObjectID = "wT1-Os-sRz"; */
-"wT1-Os-sRz.text" = "chuyentt@gmail.com";
+/* Class = "UILabel"; text = "Cho phép hiệu ứng âm thanh"; ObjectID = "wtV-Fm-Xr0"; */
+"wtV-Fm-Xr0.text" = "Cho phép hiệu ứng âm thanh";
+
+/* Class = "UILabel"; text = "Meter (m)"; ObjectID = "zR6-5z-w4D"; */
+"zR6-5z-w4D.text" = "Meter (m)";
 
 /* Class = "UILabel"; text = "Poi Name"; ObjectID = "zcb-Dh-6Ma"; */
 "zcb-Dh-6Ma.text" = "Poi Name";

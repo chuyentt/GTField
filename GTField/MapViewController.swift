@@ -162,11 +162,11 @@ extension MapViewController:MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: "Sent", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
             break
         default:
-            let alert = UIAlertView(title: "Whoops", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
         }
         self.dismiss(animated: true, completion: nil)
@@ -512,7 +512,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //----- Button search -----
         buttonSearch = UIButton(frame: CGRect.zero)
         buttonSearch?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 12.0)
-        buttonSearch?.setTitle("<<Search on Google>>", for: .normal)
+        buttonSearch?.setTitle(NSLocalizedString("<<Search on Google>>", comment: ""), for: .normal)
         buttonSearch?.sizeToFit()
         buttonSearch?.setTitleColor(UIColor.lightGray, for: .normal)
         buttonSearch?.translatesAutoresizingMaskIntoConstraints = false
@@ -545,7 +545,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //----- Button search local -----
         buttonSearchLocal = UIButton(frame: CGRect.zero)
         buttonSearchLocal?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 12.0)
-        buttonSearchLocal?.setTitle("<<Search local data>>", for: .normal)
+        buttonSearchLocal?.setTitle(NSLocalizedString("<<Search local data>>", comment: ""), for: .normal)
         buttonSearchLocal?.sizeToFit()
         buttonSearchLocal?.setTitleColor(UIColor.lightGray, for: .normal)
         buttonSearchLocal?.translatesAutoresizingMaskIntoConstraints = false
@@ -582,7 +582,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         searchField?.translatesAutoresizingMaskIntoConstraints = false
         searchField?.borderStyle = .none
         searchField?.backgroundColor = UIColor.white
-        searchField?.placeholder = "Search..."
+        searchField?.placeholder = NSLocalizedString("Search...", comment: "")
         searchField?.autocorrectionType = .no
         searchField?.keyboardType = .default
         searchField?.returnKeyType = .done
@@ -1371,10 +1371,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             btnClose(sender)
         } else {
             // create the alert
-            let alert = UIAlertController(title: "Downloading!", message: "Please wait while downloading the map!", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: NSLocalizedString("Downloading!", comment: ""), message: "Please wait while downloading the map!", preferredStyle: UIAlertControllerStyle.alert)
             
             // add an action (button)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                 alert -> Void in
                 return
             }))
@@ -1409,14 +1409,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Kiểm tra nếu đang lưu lộ trình thì thông báo
         if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways && isUpdatingLocation {
             let alert = UIAlertController(
-                title: "WARINING CLOSE",
-                message: "You are in a route recording session. If close this map view, it will not continue recording",
+                title: NSLocalizedString("Warning close", comment: ""),
+                message: NSLocalizedString("You are in a route recording session. If close this map view, it will not continue recording", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
                 
             }))
-            alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 // Dừng dịch vụ định vị
                 if #available(iOS 9.0, *) {
                     self.manager.allowsBackgroundLocationUpdates = false
@@ -1467,10 +1467,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let img = self.imageViewForCheckingGeoServer.image
         if img == #imageLiteral(resourceName: "IconBroken") {
             // create the alert
-            let alert = UIAlertController(title: "Could not connect to GeoServer!", message: "Please verify GeoServer Base Url", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
             
             // add an action (button)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                 alert -> Void in
                 return
             }))
@@ -1582,7 +1582,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 case 10: // buttonLayer
                     // Tiêu đề "Map type"
                     let mapTypeLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
-                    mapTypeLabel.text = "Map type"
+                    mapTypeLabel.text = NSLocalizedString("Map type", comment: "")
                     mapTypeLabel.textColor = UIColor.black
                     mapTypeLabel.font = UIFont(name: "Bauhaus-Medium", size: 14.0)
                     mapTypeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -1633,7 +1633,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapTypeDefault?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonMapTypeDefault?.setTitle("Default", for: UIControlState.normal)
+                    self.buttonMapTypeDefault?.setTitle(NSLocalizedString("Default", comment: ""), for: UIControlState.normal)
                     self.buttonMapTypeDefault?.titleLabel?.font = titleLabelFont
                     self.buttonMapTypeDefault?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapTypeDefault?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -1654,7 +1654,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapTypeSatellite?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonMapTypeSatellite?.setTitle("Satellite", for: UIControlState.normal)
+                    self.buttonMapTypeSatellite?.setTitle(NSLocalizedString("Satellite", comment: ""), for: UIControlState.normal)
                     self.buttonMapTypeSatellite?.titleLabel?.font = titleLabelFont
                     self.buttonMapTypeSatellite?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapTypeSatellite?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -1675,7 +1675,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapTypeTerrain?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonMapTypeTerrain?.setTitle("Terrain", for: UIControlState.normal)
+                    self.buttonMapTypeTerrain?.setTitle(NSLocalizedString("Terrain", comment: ""), for: UIControlState.normal)
                     self.buttonMapTypeTerrain?.titleLabel?.font = titleLabelFont
                     self.buttonMapTypeTerrain?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapTypeTerrain?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -1797,7 +1797,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                     // Tiêu đề "Map source"
                     let mapSourceLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
-                    mapSourceLabel.text = "Map source"
+                    mapSourceLabel.text = NSLocalizedString("Map source", comment: "")
                     mapSourceLabel.textColor = UIColor.black
                     mapSourceLabel.font = UIFont(name: "Bauhaus-Medium", size: 14.0)
                     mapSourceLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -1830,7 +1830,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapSourceConfiguration?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapSourceConfiguration?.setTitleColor(UIColor.red, for: UIControlState.highlighted)
                     self.buttonMapSourceConfiguration?.translatesAutoresizingMaskIntoConstraints = false
-                    self.buttonMapSourceConfiguration?.setTitle("Configuration...", for: UIControlState.normal)
+                    self.buttonMapSourceConfiguration?.setTitle(NSLocalizedString("Configuration...", comment: ""), for: UIControlState.normal)
                     self.buttonMapSourceConfiguration?.addTarget(self, action: #selector(MapViewController.btnMapSource(_:)), for: .touchUpInside)
                     
                     
@@ -1869,7 +1869,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapSourceWMS?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonMapSourceWMS?.setTitle("GeoServer", for: UIControlState.normal)
+                    self.buttonMapSourceWMS?.setTitle(NSLocalizedString("GeoServer", comment: ""), for: UIControlState.normal)
                     self.buttonMapSourceWMS?.titleLabel?.font = titleLabelFont
                     self.buttonMapSourceWMS?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapSourceWMS?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -1895,7 +1895,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapSourceOffline?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonMapSourceOffline?.setTitle("Offline Map", for: UIControlState.normal)
+                    self.buttonMapSourceOffline?.setTitle(NSLocalizedString("Offline Map", comment: ""), for: UIControlState.normal)
                     self.buttonMapSourceOffline?.titleLabel?.font = titleLabelFont
                     self.buttonMapSourceOffline?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapSourceOffline?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -1921,7 +1921,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapSourceDownload?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonMapSourceDownload?.setTitle("Download", for: UIControlState.normal)
+                    self.buttonMapSourceDownload?.setTitle(NSLocalizedString("Download", comment: ""), for: UIControlState.normal)
                     self.buttonMapSourceDownload?.titleLabel?.font = titleLabelFont
                     self.buttonMapSourceDownload?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapSourceDownload?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -2098,7 +2098,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                     // Add Label
                     self.progressLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-                    self.progressLabel?.text = "Download Map"
+                    self.progressLabel?.text = NSLocalizedString("Download Map", comment: "")
                     self.progressLabel?.translatesAutoresizingMaskIntoConstraints = false
                     self.paneView?.addSubview(self.progressLabel!)
                     
@@ -2159,7 +2159,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonDownload?.imageEdgeInsets = UIEdgeInsets(top: imageOrigin, left: imageOrigin, bottom: imageBottom, right: imageOrigin)
                     
                     //Text
-                    self.buttonDownload?.setTitle("Download", for: UIControlState.normal)
+                    self.buttonDownload?.setTitle(NSLocalizedString("Download", comment: ""), for: UIControlState.normal)
                     self.buttonDownload?.titleLabel?.font = titleLabelFont
                     self.buttonDownload?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonDownload?.setTitleColor(self.view.tintColor, for: UIControlState.highlighted)
@@ -2360,10 +2360,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.operationQueue.isSuspended = false
         if !self.operationQueue.operations.isEmpty {
             // create the alert
-            let alert = UIAlertController(title: "Downloading", message: "Please wait!", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: NSLocalizedString("Downloading", comment: ""), message: NSLocalizedString("Please wait!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
             
             // add an action (button)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                 alert -> Void in
                 return
             }))
@@ -2379,7 +2379,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.buttonDownload?.isHidden = true          
             
             // Tạo tên file mặc định tự tăng
-            let fileName = "Download"
+            let fileName = NSLocalizedString("Download", comment: "")
             var tileName = fileName
             var mbtilesURL = docsURL.appendingPathComponent(tileName).appendingPathExtension(kMBTileFileExt)
             var counter = 0
@@ -2393,9 +2393,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             DOWNLOADING_PATH_TO_DATABASE = mbtilesURL.path
             
             // Yêu cầu nhập mô tả tile mỗi lần tải
-            let alertController = UIAlertController(title: "Type Your Download Description", message: "", preferredStyle: .alert)
+            let alertController = UIAlertController(title: NSLocalizedString("Type Your Download Description", comment: ""), message: "", preferredStyle: .alert)
             
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: {
                 alert -> Void in
                 let textField = alertController.textFields![0] as UITextField
                 delayQueue.asyncAfter(deadline: .now() + additionalTime) {
@@ -2442,7 +2442,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }))
             
             alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
-                textField.placeholder = "Description of the layer"
+                textField.placeholder = NSLocalizedString("Description of the layer", comment: "")
                 textField.keyboardAppearance = .dark
                 textField.autocapitalizationType = .sentences
             })
@@ -2450,10 +2450,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
         } else {  // Vẫn còn tiles bị lỗi chưa tải được
             // create the alert
-            let alert = UIAlertController(title: "Downloading", message: "There are still \(self.tiles.count) previous tiles not downloaded, would you like to try again?", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: NSLocalizedString("Downloading", comment: ""), message: NSLocalizedString("There are still", comment: "")+" \(self.tiles.count) "+NSLocalizedString("previous tiles not downloaded, would you like to try again?", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
             
             // add an action (button)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                 alert -> Void in
                 self.operationQueue = OperationQueue()
                 self.totalTileDownloaded = 0
@@ -2468,7 +2468,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.operationQueue.addObserver(self, forKeyPath: "operations", options: .new, context: nil)
             }))
             
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: {
                 alert -> Void in
                 self.tiles.removeAll()
                 self.btnMapSourceDownload(UIButton())
@@ -2504,10 +2504,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     // Ẩn pane
                     self.togglePaneView(9999)
                     // create the alert
-                    let alert = UIAlertController(title: "All tiles in the download list have been downloaded!", message: "\(tilesFailed) failed!", preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: NSLocalizedString("All tiles in the download list have been downloaded!", comment: ""), message: "\(tilesFailed) "+NSLocalizedString("failed!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                     
                     // add an action (button)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                         alert -> Void in
                         return
                     }))
@@ -2519,7 +2519,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 DispatchQueue.main.async(execute: {
                     
                     self.totalTileDownloaded += 1
-                    self.progressLabel?.text = "\(self.totalTileDownloaded) of \(self.urlList.count) tiles successfull downloaded!"
+                    self.progressLabel?.text = "\(self.totalTileDownloaded) of \(self.urlList.count) "+NSLocalizedString("tiles successfull downloaded!", comment: "")
                     let progress = Float(self.totalTileDownloaded) / Float(self.urlList.count)
                     self.progressView?.progress = progress
                 })
@@ -2536,10 +2536,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let img = self.imageViewForCheckingGeoServer.image
             if img == #imageLiteral(resourceName: "IconBroken") {
                 // create the alert
-                let alert = UIAlertController(title: "Could not connect to GeoServer!", message: "Please verify GeoServer Base Url", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                     alert -> Void in
                     return
                 }))
@@ -2595,10 +2595,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             } else {
                 // create the alert
-                let alert = UIAlertController(title: "No offline data", message: "Please goto Configuration...!", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("No offline data", comment: ""), message: NSLocalizedString("Please goto Configuration...!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                     alert -> Void in
                     
                 }))
@@ -2612,10 +2612,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             // Nếu chưa chọn bản đồ nguồn là GeoServer
             if wmsTileLayer == nil || wmsTileLayer?.map == nil {
                 // create the alert
-                let alert = UIAlertController(title: "No map source is selected", message: "Please select GeoServer for Map source first!", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("No map source is selected", comment: ""), message: NSLocalizedString("Please select GeoServer for Map source first!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
                     alert -> Void in
                     
                 }))
@@ -2932,23 +2932,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         if let wpt: GPXWaypoint = marker as? GPXWaypoint {
             print(wpt.desc)
-            let alertController = UIAlertController(title: "Type your New description or Delete this marker", message: "current description\n\(wpt.desc)", preferredStyle: .alert)
+            let alertController = UIAlertController(title: NSLocalizedString("Type your New description or Delete this marker", comment: ""), message: NSLocalizedString("current description", comment: "")+"\n\(wpt.desc)", preferredStyle: .alert)
             
-            alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: {
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Save", comment: ""), style: .default, handler: {
                 alert -> Void in
                 let textField = alertController.textFields![0] as UITextField
                 wpt.desc = textField.text!
                 self.gpx?.save()
             }))
-            alertController.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .default, handler: {
                 alert -> Void in
                 wpt.delete()
                 self.gpx?.save()
             }))
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
             
             alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
-                textField.placeholder = "New description"
+                textField.placeholder = NSLocalizedString("New description", comment: "")
             })
             self.present(alertController, animated: true, completion: nil)
         }
@@ -3073,15 +3073,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         case .denied:
             //The user explicitly denied the use of location services for this app or location services are currently disabled in Settings.
             let alert = UIAlertController(
-                title: "IMPORTANT",
-                message: "\(APP_NAME) has been denied access your location. The location services access required for embed the GPS information within the picture!. To enable access, please go to app settings and turn it on.",
+                title: NSLocalizedString("IMPORTANT", comment: ""),
+                message: "\(APP_NAME) "+NSLocalizedString("has been denied access your location. The location services access required for embed the GPS information within the picture or display your location on the map!. To enable access, please go to app settings and turn it on.", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
-            alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
@@ -3092,15 +3092,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         case .restricted:
             //This app is not authorized to use location services. The user cannot change this app’s status, possibly due to active restrictions such as parental controls being in place.
             let alert = UIAlertController(
-                title: "IMPORTANT",
-                message: "\(APP_NAME) is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place",
+                title: NSLocalizedString("IMPORTANT", comment: ""),
+                message: "\(APP_NAME) "+NSLocalizedString("is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
-            alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
@@ -3127,14 +3127,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             break
         case .authorizedWhenInUse:
             let alert = UIAlertController(
-                title: "IMPORTANT",
-                message: "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option.",
+                title: NSLocalizedString("IMPORTANT", comment: ""),
+                message: NSLocalizedString("Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option.", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
                 
             }))
-            alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
             }))
             // show the alert
@@ -3156,15 +3156,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             break
         case .restricted: // Nếu dịch vụ định vị bị vô hiệu hóa toàn bộ
             let alert = UIAlertController(
-                title: "IMPORTANT",
-                message: "\(APP_NAME) is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place",
+                title: NSLocalizedString("IMPORTANT", comment: ""),
+                message: "\(APP_NAME) "+NSLocalizedString("is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
-            alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
@@ -3174,15 +3174,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             break
         case .denied:
             let alert = UIAlertController(
-                title: "IMPORTANT",
-                message: "\(APP_NAME) has been denied access your location. The location services access required for embed the GPS information within the picture!. To enable access, please go to app settings and select \"While Using the App\" or \"Alway\" option.",
+                title: NSLocalizedString("IMPORTANT", comment: ""),
+                message: "\(APP_NAME) "+NSLocalizedString("has been denied access your location. The location services access required for embed the GPS information within the picture or display your location on the map!. To enable access, please go to app settings and turn it on.", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
-            alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
@@ -3225,10 +3225,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         composer.mailComposeDelegate = self
         if MFMailComposeViewController.canSendMail() {
             // set the subject
-            composer.setSubject("[\(APP_NAME)] Export Waypoints & Tracks to GPX file")
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export Waypoints & Tracks to GPX file", comment: ""))
             
             //Add some text to the body and attach the file
-            let body = "\(APP_FULL_NAME). Export Waypoints & Tracks to GPX file.<br />You can copy files between your computer and apps on your iOS device using File Sharing. https://support.apple.com/en-us/HT201301<br />"
+            let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
+            
             composer.setMessageBody(body, isHTML: true)
             //composer.setToRecipients(["chuyentt@gmail.com"])
             do {
@@ -3243,7 +3244,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.present(composer, animated: true, completion: nil)
             }
         } else {
-            let alert = UIAlertView(title: "No email accounts configured", message: "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
             alert.show()
         }
     }

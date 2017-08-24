@@ -51,7 +51,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: uiBusy)
         uiBusy.hidesWhenStopped = true
         uiBusy.startAnimating()
-        self.title = "Waiting for request layers"
+        self.title = NSLocalizedString("Waiting for request layers", comment: "")
         if layerFor == "WMS" {
             let url = getCapabilitiesForWMS()
             var request = URLRequest(url: url!)
@@ -61,7 +61,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
                 DispatchQueue.main.async(execute: {
                     self.uiBusy.stopAnimating()
                     self.navigationItem.rightBarButtonItem = self.buttonRefresh
-                    self.title = ""
+                    self.title = NSLocalizedString("Select a WMS Layer or Layer-Group", comment: "")
                     if error != nil {
                         
                     } else {
@@ -105,7 +105,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
                 DispatchQueue.main.async(execute: {
                     self.uiBusy.stopAnimating()
                     self.navigationItem.rightBarButtonItem = self.buttonRefresh
-                    self.title = ""
+                    self.title = NSLocalizedString("Select a WFS Layer", comment: "")
                     if error != nil {
                         
                     } else {
@@ -159,7 +159,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
         var dict = arrRes[(indexPath as NSIndexPath).section]
         cell.textLabel?.text = dict["Name"] as? String
         if cell.textLabel?.text == layerName {
-            cell.detailTextLabel?.text = "Active"
+            cell.detailTextLabel?.text = NSLocalizedString("Active", comment: "")
             cell.detailTextLabel?.backgroundColor = self.view.tintColor
         } else {
             cell.detailTextLabel?.text = nil

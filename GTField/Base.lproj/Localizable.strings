@@ -1,0 +1,136 @@
+/* 
+  Localizable.strings
+  GTField
+
+  Created by Chuyen Trung Tran on 8/24/17.
+  Copyright © 2017 Tran Trung Chuyen. All rights reserved.
+*/
+
+/* General */
+"Warning delete" = "Warning delete";
+"Warning close" = "Warning close";
+
+/* Buttons */
+"OK" = "OK";
+"Save" = "Save";
+"Cancel" = "Cancel";
+"Close" = "Close";
+"Delete" = "Delete";
+
+/* Search box on Maps View */
+"<<Search on Google>>" = "<<Search on Google>>";
+"<<Search local data>>" = "<<Search local data>>";
+
+/* GPX */
+"Your GPX files" = "Your GPX files";
+"GPX specification" = "GPX specification";
+"Select option" = "Select option";
+"Send by email" = "Send by email";
+"Load in Map" = "Load in Map";
+"No Item" = "No Item";
+"No email accounts configured" = "No email accounts configured";
+"Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account" = "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account";
+"Export Waypoints & Tracks to GPX file" = "Export Waypoints & Tracks to GPX file";
+"You can copy your files between your computer and apps on your iOS device using File Sharing." = "You can copy your files between your computer and apps on your iOS device using File Sharing.";
+"Whoops" = "Whoops";
+"Sent" = "Sent";
+
+/* PhotoMapViewController */
+"Zoom All" = "Zoom All";
+"Export all" = "Export all";
+"photo's location to csv" = "photo's location to csv";
+"Export photo's location to CSV file" = "Export photo's location to CSV file";
+"Map" = "Map";
+"List" = "List";
+"Export Offline Map" = "Export Offline Map";
+"Export photo's location to GPX file" = "Export photo's location to GPX file";
+"This photo will be deleted from this app on your device" = "This photo will be deleted from this app on your device";
+
+/* PhotosViewController */
+"Photos" = "Photos";
+"of" = "of";
+"Edit this photo title" = "Edit this photo title";
+"Edit this photo description" = "Edit this photo description";
+"photo's location to GPX" = "photo's location to GPX";
+"Save this photo to Camera Roll" = "Save this photo to Camera Roll";
+"Your photo was successfully saved" = "Your photo was successfully saved";
+"Save Error!" = "Save Error!";
+"Save all" = "Save all";
+"photos to Camera Roll" = "photos to Camera Roll";
+"All your photos was successfully saved" = "All your photos was successfully saved";
+"Delete this photo forever" = "Delete this photo forever";
+"Delete  all" = "Delete  all";
+"photos forever" = "photos forever";
+"photos will be deleted from this app on your device" = "photos will be deleted from this app on your device";
+
+/* MapViewController */
+"Search..." = "Search...";
+"Downloading!" = "Downloading!";
+"Please wait while downloading the map!" = "Please wait while downloading the map!";
+"You are in a route recording session. If close this map view, it will not continue recording" = "You are in a route recording session. If close this map view, it will not continue recording";
+"Could not connect to GeoServer!" = "Could not connect to GeoServer!";
+"Please verify GeoServer Base Url" = "Please verify GeoServer Base Url";
+"Map type" = "Map type";
+"Default" = "Default";
+"Satellite" = "Satellite";
+"Terrain" = "Terrain";
+"Map source" = "Map source";
+"Configuration..." = "Configuration...";
+"GeoServer" = "GeoServer";
+"Offline Map" = "Offline Map";
+"Download" = "Download";
+"Download Map" = "Download Map";
+"Downloading" = "Downloading";
+"Please wait!" = "Please wait!";
+"Type Your Download Description" = "Type Your Download Description";
+"Description of the layer" = "Description of the layer";
+"There are still" = "There are still";
+"previous tiles not downloaded, would you like to try again?" = "previous tiles not downloaded, would you like to try again?";
+"All tiles in the download list have been downloaded!" = "All tiles in the download list have been downloaded!";
+"failed!" = "failed!";
+"tiles successfull downloaded!" = "tiles successfull downloaded!";
+"No offline data" = "No offline data";
+"Please goto Configuration...!" = "Please goto Configuration...!";
+"No map source is selected" = "No map source is selected";
+"Please select GeoServer for Map source first!" = "Please select GeoServer for Map source first!";
+"Type your New description or Delete this marker" = "Type your New description or Delete this marker";
+"current description" = "current description";
+"New description" = "New description";
+"IMPORTANT" = "IMPORTANT";
+"has been denied access your location. The location services access required for embed the GPS information within the picture or display your location on the map!. To enable access, please go to app settings and turn it on." = "has been denied access your location. The location services access required for embed the GPS information within the picture!. To enable access, please go to app settings and turn it on.";
+"Settings..." = "Settings...";
+"is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place";
+"Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option.";
+
+/* ConfigMapSourceViewController */
+"Map Source Configuration" = "Map Source Configuration";
+"Select an offline data" = "Select an offline data";
+"Type Your GeoServer Host" = "Type Your GeoServer Host";
+"Invalid input URL" = "Invalid input URL";
+"e.g.: http://192.168.1.153:8080" = "e.g.: http://192.168.1.153:8080";
+"GeoServer Base Url" = "GeoServer Base Url";
+"WMS Layer or Layer-Group" = "WMS Layer or Layer-Group";
+"WFS Layer" = "WFS Layer";
+"Offline data" = "Offline data";
+"Support GeoServer installed on your system, by giving ip address of system like \"http://192.168.1.52:8080\" instead of \"http://localhost:8080\"" = "Support GeoServer installed on your system, by giving ip address of system like \"http://192.168.1.52:8080\" instead of \"http://localhost:8080\"";
+"This is an overlay layer on your base" = "This is an overlay layer on your base";
+"This is layer for accessing information (require internet connection)" = "This is layer for accessing information (require internet connection)";
+"Support MBTiles file format (GTField can get mbtiles file from your Email, iCloud Drive, Google Drive, Dropbox or downloaded from the Internet)" = "Support MBTiles file format (GTField can get mbtiles file from your Email, iCloud Drive, Google Drive, Dropbox or downloaded from the Internet)";
+
+/* GSLayersViewController */
+"Waiting for request layers" = "Waiting for request layers";
+"Select a WMS Layer or Layer-Group" = "Select a WMS Layer or Layer-Group";
+"Select a WFS Layer" = "Select a WFS Layer";
+"Active" = "Active";
+
+/* MBTileTableViewController */
+"MBTiles specification" = "MBTiles specification";
+"Edit the description" = "Edit the description";
+"Description of the offline map" = "Description of the offline map";
+"Set default offline data" = "Set default offline data";
+
+/* GPXHelper */
+"Length:" = "Length:";
+"Area:" = "Area:";
+"Perimeter:" = "Perimeter:";
+

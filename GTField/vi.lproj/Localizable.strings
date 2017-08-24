@@ -1,0 +1,135 @@
+/* 
+  Localizable.strings
+  GTField
+
+  Created by Chuyen Trung Tran on 8/24/17.
+  Copyright © 2017 Tran Trung Chuyen. All rights reserved.
+*/
+
+/* General */
+"Warning delete" = "Cảnh báo xóa";
+"Warning close" = "Cảnh báo đóng";
+
+/* Buttons */
+"OK" = "Đồng ý";
+"Save" = "Lưu";
+"Cancel" = "Bỏ qua";
+"Close" = "Đóng";
+"Delete" = "Xóa";
+
+/* Search box on Maps View */
+"<<Search on Google>>" = "<<Tìm trên Google>>";
+"<<Search local data>>" = "<<Tìm dữ liệu nội bộ>>";
+
+/* GPX */
+"Your GPX files" = "Dữ liệu GPX";
+"GPX specification" = "Thông tin file GPX";
+"Select option" = "Chọn phương án";
+"Send by email" = "Gửi bằng email";
+"Load in Map" = "Mở trên bản đồ";
+"No Item" = "Không có mục nào";
+"No email accounts configured" = "Chưa có tài khoản email nào được cấu hình";
+"Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account" = "Hãy thêm tài khoản thư trong Cài đặt để có thể gửi thư đi, bằng cách đi đến Cài đặt > Thư > Tài khoản > Thêm tài khoản";
+"Export Waypoints & Tracks to GPX file" = "Xuất dữ liệu sang tệp tin định dạng GPX";
+"You can copy your files between your computer and apps on your iOS device using File Sharing." = "Bạn có thể sao chép các tệp tin giữa điện thoại và máy tính thông qua ứng dụng bằng dịch vụ chia sẻ file của iTunes.";
+"Whoops" = "Rất tiếc";
+"Sent" = "Đã gửi";
+
+/* PhotoMapViewController */
+"Zoom All" = "Tất cả";
+"Export all" = "Xuất tất cả";
+"photo's location to csv" = "vị trí của các ảnh sang tệp tin CSV";
+"Export photo's location to CSV file" = "Xuất vị trí của ảnh sang tệp tin CSV";
+"Map" = "Bản đồ";
+"List" = "Danh sách";
+"Export Offline Map" = "Xuất bản đồ offline";
+"Export photo's location to GPX file" = "Xuất vị trí của ảnh sang tệp tin GPX";
+"This photo will be deleted from this app on your device" = "Ảnh này sẽ bị xóa khỏi ứng dụng trên thiết bị của bạn";
+
+/* PhotosViewController */
+"Photos" = "Ảnh";
+"of" = "trong";
+"Edit this photo title" = "Sửa tiêu đề ảnh";
+"Edit this photo description" = "Sửa mô tả ảnh";
+"photo's location to GPX" = "vị trí các ảnh sang tệp tin định dạng GPX";
+"Save this photo to Camera Roll" = "Lưu ảnh này vào Camera Roll";
+"Your photo was successfully saved" = "Ảnh của bạn đã được lưu thành công";
+"Save Error!" = "Lỗi khi lưu!";
+"Save all" = "Lưu tất cả";
+"photos to Camera Roll" = "ảnh vào Camera Roll";
+"All your photos was successfully saved" = "Tất cả ảnh của bạn đã được lưu thành công";
+"Delete this photo forever" = "Xóa ảnh này vĩnh viễn";
+"Delete  all" = "Xóa tất cả";
+"photos forever" = "ảnh vĩnh viễn";
+"photos will be deleted from this app on your device" = "ảnh sẽ bị xóa khỏi ứng dụng trên thiết bị của bạn";
+
+/* MapViewController */
+"Search..." = "Tìm...";
+"Downloading!" = "Đang tải!";
+"Please wait while downloading the map!" = "Xin hãy đợi trong khi đang tải bản đồ";
+"You are in a route recording session. If close this map view, it will not continue recording" = "Bạn đang trong trạng thái ghi lại lộ trình. Nếu chọn Đóng bản đồ này, nó sẽ không còn ghi nữa.";
+"Could not connect to GeoServer!" = "Không thể kết nối tới máy chủ GeoServer!";
+"Please verify GeoServer Base Url" = "Hãy xem lại đường dẫn đến máy chủ GeoServer";
+"Map type" = "Loại bản đồ";
+"Default" = "Mặc định";
+"Satellite" = "Ảnh vệ tinh";
+"Terrain" = "Địa hình";
+"Map source" = "Nguồn cấp bản đồ";
+"Configuration..." = "Cấu hình...";
+"GeoServer" = "GeoServer";
+"Offline Map" = "Bản đồ Offline";
+"Download" = "Tải về";
+"Download Map" = "Tải bản đồ";
+"Downloading" = "Đang tải";
+"Please wait!" = "Xin hãy đợi!";
+"Type Your Download Description" = "Nhập mô tả tải về";
+"Description of the layer" = "Mô tả cho lớp bản đồ này";
+"There are still" = "Vẫn còn";
+"previous tiles not downloaded, would you like to try again?" = "mảnh trước đó chưa được tải, bạn có muốn tải lại?";
+"All tiles in the download list have been downloaded!" = "Tất cả các mảnh trong danh sách tải đã được tải về!";
+"failed!" = "không thành công!";
+"tiles successfull downloaded!" = "mảnh tải về thành công!";
+"No offline data" = "Không có dữ liệu ngoại tuyến";
+"Please goto Configuration...!" = "Xin hãy đi đến Cấu hình...!";
+"No map source is selected" = "Chưa chọn nguồn bản đồ";
+"Please select GeoServer for Map source first!" = "Hãy chọn GeoServer cho nguồn bản đồ trước!";
+"Type your New description or Delete this marker" = "Nhập Mô tả mới hoặc Xóa điểm mốc này";
+"current description" = "mô tả hiện tại";
+"New description" = "Mô tả mới";
+"IMPORTANT" = "QUAN TRỌNG";
+"has been denied access your location. The location services access required for embed the GPS information within the picture or display your location on the map!. To enable access, please go to app settings and turn it on." = "đã bị từ chối truy cập vị trí của bạn. Việc truy cập dịch vụ định vị là để nhúng thông tin GPS vào trong ảnh hoặc hiển thị vị trí của bạn trên bản đồ!. Để cho phép truy cập, xin hãy đi tới Cài đặt cho ứng dụng và bật lên.";
+"Settings..." = "Cài đặt...";
+"is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "hiện không được phép sử dụng dịch vụ định vị. Bạn không thể thay đổi trạng thái của ứng dụng này, có thể do các hạn chế đang hoạt động như kiểm soát của phụ huynh đang được áp dụng";
+"Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Yêu cầu duy trì quyền truy cập dịch vụ định vị chỉ sử dụng trong khi bạn ghi lại lộ trình ở mọi lúc trong công việc hiện trường của bạn. Để cho phép truy cập, hãy đi tới cài đặt ứng dụng và chọn tùy chọn \"Luôn luôn\".";
+
+/* ConfigMapSourceViewController */
+"Map Source Configuration" = "Cấu hình nguồn cấp bản đồ";
+"Select an offline data" = "Chọn một dữ liệu ngoại tuyến";
+"Type Your GeoServer Host" = "Nhập vào địa chỉ máy chủ GeoServer";
+"Invalid input URL" = "Địa chỉ URL không hợp lệ";
+"e.g.: http://192.168.1.153:8080" = "Ví dụ: http://192.168.1.153:8080";
+"GeoServer Base Url" = "Đường dẫn đến máy chủ GeoServer";
+"WMS Layer or Layer-Group" = "Lớp bản đồ nền hoặc chồng xếp lớp WMS";
+"WFS Layer" = "Lớp thuộc tính WFS";
+"Offline data" = "Dữ liệu offline";
+"Support GeoServer installed on your system, by giving ip address of system like \"http://192.168.1.52:8080\" instead of \"http://localhost:8080\"" = "Hỗ trợ cả phần mềm máy chủ GeoServer cài trên laptop hoặc PC, bằng cách cung cấp địa chỉ IP của máy, ví dụ \"http://192.168.1.52:8080\" thay vì \"http://localhost:8080\"";
+"This is an overlay layer on your base" = "Đây là một lớp bản đồ sẽ chồng xếp lên nền bản đồ sẵn có";
+"This is layer for accessing information (require internet connection)" = "Đây là một lớp dữ liệu thuộc tính để truy cập thông tin (yêu cầu có internet)";
+"Support MBTiles file format (GTField can get mbtiles file from your Email, iCloud Drive, Google Drive, Dropbox or downloaded from the Internet)" = "Hỗ trợ định dạng tệp tin MBTiles (GTField có thể nhận tệp tin mbtiles từ Email, iCloud Drive, Google Drive, Dropbox hay tải về từ Internet)";
+
+/* GSLayersViewController */
+"Waiting for request layers" = "Xin hãy đợi để tải về các lớp bản đồ";
+"Select a WMS Layer or Layer-Group" = "Chọn một lớp bản đồ hoặc chồng xếp lớp";
+"Select a WFS Layer" = "Chọn một lớp dữ liệu thuộc tính";
+"Active" = "Đã chọn";
+
+/* MBTileTableViewController */
+"MBTiles specification" = "Thông tin file MBTiles";
+"Edit the description" = "Sửa mô tả dữ liệu";
+"Description of the offline map" = "Mô tả của bản đồ ngoại tuyến";
+"Set default offline data" = "Đặt làm mặc định";
+
+/* GPXHelper */
+"Length:" = "Chiều dài:";
+"Area:" = "Diện tích:";
+"Perimeter:" = "Chu vi:";

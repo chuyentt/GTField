@@ -484,7 +484,7 @@ class GPXTrackSegment: GMSOverlay {
     }
     
     func updateLabel() {
-        areaLabel.text = "Length: \((length.distanceUnit()))"
+        areaLabel.text = NSLocalizedString("Length:", comment: "") + " \((length.distanceUnit()))"
     }
     
     private var _actions: GPXTrackSegmentActions = .none
@@ -966,7 +966,7 @@ class GPXPointSegment: GMSOverlay {
     }
     
     func updateLabel() {
-        areaLabel.text = "Area: \((area.areaUnit())), Perimeter: \((length.distanceUnit()))"
+        areaLabel.text = NSLocalizedString("Area:", comment: "")+" \((area.areaUnit())), "+NSLocalizedString("Perimeter:", comment: "")+" \((length.distanceUnit()))"
     }
     
     private var _actions: GPXPointSegmentActions = .none

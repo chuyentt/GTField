@@ -316,7 +316,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         
         super.viewDidLoad()
 
-        buttonZoomFit = UIBarButtonItem(title: "Zoom All", style: UIBarButtonItemStyle.done, target: self, action: #selector(zoomToPhotosRect(_:)))
+        buttonZoomFit = UIBarButtonItem(title: NSLocalizedString("Zoom All", comment: ""), style: UIBarButtonItemStyle.done, target: self, action: #selector(zoomToPhotosRect(_:)))
         buttonAction = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(btnAction(_:)))
         
         self.navigationItem.rightBarButtonItem = buttonZoomFit
@@ -420,9 +420,9 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     
     @IBAction private func btnAction(_ sender: AnyObject) {
         let count = self.photos.count
-        let alertController = UIAlertController(title: "What would you like to do?", message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: NSLocalizedString("Select option", comment: ""), message: nil, preferredStyle: .actionSheet)
         
-        let exportCSVButton = UIAlertAction(title: "Export all (\(count)) photo's location to csv", style: .default, handler: { (action) -> Void in
+        let exportCSVButton = UIAlertAction(title: NSLocalizedString("Export all", comment: "")+" (\(count)) "+NSLocalizedString("photo's location to csv", comment: ""), style: .default, handler: { (action) -> Void in
             
             DispatchQueue.global().async() {
                 self.view.showLoading()
@@ -458,7 +458,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             self.actionSendEmailCSV(fileURL!)
         })
         
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
+        let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { (action) -> Void in
             
         })
         
@@ -478,10 +478,11 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         composer.mailComposeDelegate = self
         if MFMailComposeViewController.canSendMail() {
             // set the subject
-            composer.setSubject("[\(APP_NAME)] Export photo's location to CSV file")
+            composer.setSubject("[\(APP_NAME)] "+NSLocalizedString("Export photo's location to CSV file", comment: ""))
             
             //Add some text to the body and attach the file
-            let body = "\(APP_FULL_NAME). Export photo's location to CSV file.<br />You can copy Photos folder between your computer and apps on your iOS device using File Sharing. https://support.apple.com/en-us/HT201301<br />"
+            let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
+            
             composer.setMessageBody(body, isHTML: true)
             //composer.setToRecipients(["chuyentt@gmail.com"])
             do {
@@ -496,7 +497,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
                 self.present(composer, animated: true, completion: nil)
             }
         } else {
-            let alert = UIAlertView(title: "No email accounts configured", message: "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
             alert.show()
         }
     }
@@ -504,11 +505,11 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: "Sent", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
             break
         default:
-            let alert = UIAlertView(title: "Whoops", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
         }
         self.dismiss(animated: true, completion: nil)
@@ -650,18 +651,18 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         let photo = self.photos[indexPath.row]
         if editingStyle == UITableViewCellEditingStyle.delete {
             let alert = UIAlertController(
-                title: "Delete Photo",
-                message: "This photo will be deleted from this app on your device",
+                title: NSLocalizedString("Warning delete", comment: ""),
+                message: NSLocalizedString("This photo will be deleted from this app on your device", comment: ""),
                 preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(
-                title: "Cancel",
+                title: NSLocalizedString("Cancel", comment: ""),
                 style: .cancel,
                 handler: { (action: UIAlertAction!) in
                     // Cancel
             }))
             alert.addAction(UIAlertAction(
-                title: "OK",
+                title: NSLocalizedString("OK", comment: ""),
                 style: .default,
                 handler: { (action: UIAlertAction!) in
                     photo.delete(all: false)

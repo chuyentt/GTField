@@ -14,7 +14,7 @@
 		<key>id</key>
 		<string>Camera</string>
 		<key>name</key>
-		<string>Camera</string>
+		<string>Camera GPS</string>
 		<key>isFree</key>
 		<string>yes</string>
 	</dict>

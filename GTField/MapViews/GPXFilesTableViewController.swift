@@ -40,9 +40,9 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Your GPX Files"
+        self.title = NSLocalizedString("Your GPX files", comment: "")
         
-        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(GPXFilesTableViewController.closeGPXFilesTableViewController))
+        let shareItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(GPXFilesTableViewController.closeGPXFilesTableViewController))
         self.navigationItem.rightBarButtonItems = [shareItem]
         
         //get gpx files
@@ -101,7 +101,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "GPX specification"
+        return NSLocalizedString("GPX specification", comment: "")
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -163,11 +163,11 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // self.showAlert(fileList.objectAtIndex(indexPath.row) as NSString, rowToUseInAlert: indexPath.row)
         let sheet = UIActionSheet()
-        sheet.title = "Select option"
-        sheet.addButton(withTitle: "Send by email")
-        sheet.addButton(withTitle: "Load in Map")
-        sheet.addButton(withTitle: "Cancel")
-        sheet.addButton(withTitle: "Delete")
+        sheet.title = NSLocalizedString("Select option", comment: "")
+        sheet.addButton(withTitle: NSLocalizedString("Send by email", comment: ""))
+        sheet.addButton(withTitle: NSLocalizedString("Load in Map", comment: ""))
+        sheet.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+        sheet.addButton(withTitle: NSLocalizedString("Delete", comment: ""))
         sheet.cancelButtonIndex = 2
         sheet.destructiveButtonIndex = 3
         
@@ -240,10 +240,11 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             let fileURL: URL = docsURL.appendingPathComponent(filename)
             
             // set the subject
-            composer.setSubject("[Open GPX tracker] Gpx File")
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export Waypoints & Tracks to GPX file", comment: ""))
             
             //Add some text to the body and attach the file
-            let body = "Open GPX Tracker \n is an open source app for Apple devices. Create GPS tracks and export them to GPX files."
+            let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
+            
             composer.setMessageBody(body, isHTML: true)
             do {
                 let fileData: Data = try Data(contentsOf: URL(fileURLWithPath: fileURL.path), options: .mappedIfSafe)
@@ -259,7 +260,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 self.present(composer, animated: true, completion: nil)
             }
         } else {
-            let alert = UIAlertView(title: "No email accounts configured", message: "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
             alert.show()
         }
     }
@@ -335,11 +336,11 @@ extension GPXFilesTableViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: "Sent", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
             break
         default:
-            let alert = UIAlertView(title: "Whoops", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
         }
         self.dismiss(animated: true, completion: nil)

@@ -34,7 +34,7 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
     private func updateNavBarTitle() {
         
         if self.modelController.pageData.count > 1 {
-            self.title = "Photos (\(self.modelController.currentPageIndex + 1) of \(self.modelController.pageData.count))"
+            self.title = NSLocalizedString("Photos", comment: "") + " (\(self.modelController.currentPageIndex + 1) "+NSLocalizedString("of", comment: "")+" \(self.modelController.pageData.count))"
         } else {
             self.title = self.photosToShow[self.modelController.currentPageIndex].imgName
         }
@@ -132,15 +132,15 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         default: // Actions
             // Nên khống chế số lượng ảnh < 50 khi export gpx
             let count = self.photosToShow.count
-            let alertController = UIAlertController(title: "What would you like to do?", message: nil, preferredStyle: .actionSheet)
-            let editPhotoTitleButton = UIAlertAction(title: "Edit this photo title", style: .default, handler: { (action) -> Void in
+            let alertController = UIAlertController(title: NSLocalizedString("Select option", comment: ""), message: nil, preferredStyle: .actionSheet)
+            let editPhotoTitleButton = UIAlertAction(title: NSLocalizedString("Edit this photo title", comment: ""), style: .default, handler: { (action) -> Void in
                 self.editPhotoTitle()
             })
-            let editPhotoDescButton = UIAlertAction(title: "Edit this photo description", style: .default, handler: { (action) -> Void in
+            let editPhotoDescButton = UIAlertAction(title: NSLocalizedString("Edit this photo description", comment: ""), style: .default, handler: { (action) -> Void in
                 self.editPhotoDesc()
             })
             
-            let exportGPXButton = UIAlertAction(title: "Export all (\(count)) photo's location to GPX", style: .default, handler: { (action) -> Void in
+            let exportGPXButton = UIAlertAction(title: NSLocalizedString("Export all", comment: "")+" (\(count)) "+NSLocalizedString("photo's location to GPX", comment: ""), style: .default, handler: { (action) -> Void in
                 
                 DispatchQueue.global().async() {
                     self.dataViewController?.view.showLoading()
@@ -176,25 +176,25 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
                 self.actionSendEmail(gpxFileUrl)
             })
             
-            let savePhotoButton = UIAlertAction(title: "Save this photo to Camera Roll", style: .default, handler: { (action) -> Void in
+            let savePhotoButton = UIAlertAction(title: NSLocalizedString("Save this photo to Camera Roll", comment: ""), style: .default, handler: { (action) -> Void in
                 let currentPhoto = self.photosToShow[self.modelController.currentPageIndex]
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(fileURLWithPath: currentPhoto.imagePath!))
                 }) { saved, error in
                     if saved {
-                        let alertController = UIAlertController(title: "Your photo was successfully saved", message: nil, preferredStyle: .alert)
-                        let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        let alertController = UIAlertController(title: NSLocalizedString("Your photo was successfully saved", comment: ""), message: nil, preferredStyle: .alert)
+                        let defaultAction = UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil)
                         alertController.addAction(defaultAction)
                         self.present(alertController, animated: true, completion: nil)
                     } else {
-                        let alertController = UIAlertController(title: "Save Error!", message: error?.localizedDescription, preferredStyle: .alert)
-                        let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        let alertController = UIAlertController(title: NSLocalizedString("Save Error!", comment: ""), message: error?.localizedDescription, preferredStyle: .alert)
+                        let defaultAction = UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil)
                         alertController.addAction(defaultAction)
                         self.present(alertController, animated: true, completion: nil)
                     }
                 }
             })
-            let savePhotosButton = UIAlertAction(title: "Save all (\(count)) photos to Camera Roll", style: .default, handler: { (action) -> Void in
+            let savePhotosButton = UIAlertAction(title: NSLocalizedString("Save all", comment: "") + " (\(count)) "+NSLocalizedString("photos to Camera Roll", comment: ""), style: .default, handler: { (action) -> Void in
                 // TODO: xem xét xử lý các cluster
                 var saveCounter = 0
                 let queue = OperationQueue()
@@ -213,21 +213,21 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
                 }
                 queue.waitUntilAllOperationsAreFinished()
                 
-                let alertController = UIAlertController(title: "All your photos was successfully saved", message: nil, preferredStyle: .alert)
-                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                let alertController = UIAlertController(title: NSLocalizedString("All your photos was successfully saved", comment: ""), message: nil, preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil)
                 alertController.addAction(defaultAction)
                 self.present(alertController, animated: true, completion: nil)
             })
             
-            let  deletePhotoButton = UIAlertAction(title: "Delete this photo forever", style: .destructive, handler: { (action) -> Void in
+            let  deletePhotoButton = UIAlertAction(title: NSLocalizedString("Delete this photo forever", comment: ""), style: .destructive, handler: { (action) -> Void in
                 self.deletePhoto(sender)
             })
             
-            let  deletePhotosButton = UIAlertAction(title: "Delete  all (\(count))  photos forever", style: .destructive, handler: { (action) -> Void in
+            let  deletePhotosButton = UIAlertAction(title: NSLocalizedString("Delete  all", comment: "")+" (\(count)) "+NSLocalizedString("photos forever", comment: ""), style: .destructive, handler: { (action) -> Void in
                 self.deletePhotos(sender)
             })
             
-            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
+            let cancelButton = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { (action) -> Void in
                 
             })
             
@@ -283,18 +283,18 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
     
     func deletePhoto(_ sender: Any?) {
         let alert = UIAlertController(
-            title: "Delete Photo",
-            message: "This photo will be deleted from this app on your device",
+            title: NSLocalizedString("Warning delete", comment: ""),
+            message: NSLocalizedString("This photo will be deleted from this app on your device", comment: ""),
             preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(
-            title: "Cancel",
+            title: NSLocalizedString("Cancel", comment: ""),
             style: .cancel,
             handler: { (action: UIAlertAction!) in
                 // Cancel
         }))
         alert.addAction(UIAlertAction(
-            title: "OK",
+            title: NSLocalizedString("OK", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
                 // Gỡ photoshow
@@ -325,18 +325,18 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         let count = self.photosToShow.count
         
         let alert = UIAlertController(
-            title: "Delete Photos",
-            message: "\(count) photos will be deleted from this app on your device",
+            title: NSLocalizedString("Warning delete", comment: ""),
+            message: "\(count) "+NSLocalizedString("photos will be deleted from this app on your device", comment: ""),
             preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(
-            title: "Cancel",
+            title: NSLocalizedString("Cancel", comment: ""),
             style: .cancel,
             handler: { (action: UIAlertAction!) in
                 // Cancel
         }))
         alert.addAction(UIAlertAction(
-            title: "OK",
+            title: NSLocalizedString("OK", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
                 if count == 1 {
@@ -357,10 +357,11 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         composer.mailComposeDelegate = self
         if MFMailComposeViewController.canSendMail() {
             // set the subject
-            composer.setSubject("[\(APP_NAME)] Export photo's location to GPX file")
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export photo's location to GPX file", comment: ""))
             
             //Add some text to the body and attach the file
-            let body = "\(APP_FULL_NAME). Export photo's location to GPX file.<br />You can copy files between your computer and apps on your iOS device using File Sharing. https://support.apple.com/en-us/HT201301<br />"
+           let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
+            
             composer.setMessageBody(body, isHTML: true)
             //composer.setToRecipients(["chuyentt@gmail.com"])
             do {
@@ -375,7 +376,7 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
                 self.present(composer, animated: true, completion: nil)
             }
         } else {
-            let alert = UIAlertView(title: "No email accounts configured", message: "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
             alert.show()
         }
     }
@@ -383,11 +384,11 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: "Sent", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
             break
         default:
-            let alert = UIAlertView(title: "Whoops", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
             alert.show()
         }
         self.dismiss(animated: true, completion: nil)
