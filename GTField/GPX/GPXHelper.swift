@@ -192,7 +192,7 @@ class GPXWaypoint: GMSMarker {
         super.init()
         self.position = position
         title = _name.value
-        snippet = "\(position.latitude.toString(6)),\(position.longitude.toString(6))"
+        //snippet = position.latLngFormated(withTarget: true)
         appearAnimation = .pop
         isFlat = true
         groundAnchor = CGPoint(x:0.5, y:1.0)
@@ -214,7 +214,7 @@ class GPXWaypoint: GMSMarker {
         let position = CLLocationCoordinate2D(latitude: Double(attributes["lat"]!)!, longitude: Double(attributes["lon"]!)!)
         self.position = position
         title = _name.value
-        snippet = "\(position.latitude.toString(6)),\(position.longitude.toString(6))"
+        //snippet = position.latLngFormated(withTarget: true)
         appearAnimation = .pop
         isFlat = true
         groundAnchor = CGPoint(x:0.5, y:1.0)

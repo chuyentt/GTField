@@ -2839,6 +2839,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
         } else {
             mapView.selectedMarker = marker
+            if marker.isTappable {
+                marker.snippet = marker.position.latLngFormated(withTarget: true)
+            }
         }
         return true
     }
