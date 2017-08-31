@@ -349,6 +349,9 @@
 		DE379D651F15A57000B0FEA0 /* GPXFilesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXFilesTableViewController.swift; path = MapViews/GPXFilesTableViewController.swift; sourceTree = "<group>"; };
 		DE379D671F15A73300B0FEA0 /* GPXFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXFileManager.swift; path = MapViews/GPXFileManager.swift; sourceTree = "<group>"; };
 		DE3934BD1F4F3D1A00F85457 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		DE4098AA1F5141960017C2EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DE4098AB1F5144EE0017C2EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		DE4098AC1F5144EE0017C2EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DE434B331F19CE7500935974 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = Reachability/Reachability.swift; sourceTree = "<group>"; };
 		DE434B361F1B4D0A00935974 /* MotionContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MotionContainer.swift; path = Motion/MotionContainer.swift; sourceTree = "<group>"; };
 		DE434B3C1F22FA4900935974 /* GPXHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXHelper.swift; path = GPX/GPXHelper.swift; sourceTree = "<group>"; };
@@ -1057,6 +1060,7 @@
 				en,
 				vi,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 1628239219AB38A100D08755;
 			productRefGroup = 1628239C19AB38A100D08755 /* Products */;
@@ -1344,6 +1348,7 @@
 				DE2645651F4EBEFE008B759B /* Base */,
 				DE2645661F4EBF4D008B759B /* vi */,
 				DE3934BD1F4F3D1A00F85457 /* en */,
+				DE4098AB1F5144EE0017C2EC /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1353,6 +1358,8 @@
 			children = (
 				DE2645641F4E9E66008B759B /* vi */,
 				DE2645691F4EC4B5008B759B /* Base */,
+				DE4098AA1F5141960017C2EC /* en */,
+				DE4098AC1F5144EE0017C2EC /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

@@ -181,8 +181,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let mbtileDB = MBTileDB(path: url.path)
             if mbtileDB.isDBOpen {
                 let format = mbtileDB.metadataValueFor(name: "format")
-                if format.lowercased() != "png" && format.lowercased() != "jpg" {
-                    let alert = UIAlertView(title: "This format \"\(format)\" does not support", message: nil, delegate: nil, cancelButtonTitle: "OK")
+                if format.lowercased().length != 0 && (format.lowercased() != "png" && format.lowercased() != "jpg") {
+                    let alert = UIAlertView(title: NSLocalizedString("This format", comment: "")+" \"\(format)\" "+NSLocalizedString("does not support", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
                     alert.show()
                 } else {
                     let bounds = mbtileDB.metadataValueFor(name: "bounds")
@@ -208,10 +208,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                         do {
                             try FileManager.default.copyItem(at: url, to: mbtilesURL)
-                            let alert = UIAlertView(title: "Your file \"\(url.lastPathComponent)\" was copied to GTField documents folder with the new name \"\(mbtilesURL.lastPathComponent)\".", message: nil, delegate: nil, cancelButtonTitle: "OK")
+                            let alert = UIAlertView(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(mbtilesURL.lastPathComponent)\".", message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
                             alert.show()
                         } catch {
-                            let alert = UIAlertView(title: "Ooops! Something went wrong: \(error)", message: nil, delegate: nil, cancelButtonTitle: "OK")
+                            let alert = UIAlertView(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
                             alert.show()
                         }
                     }

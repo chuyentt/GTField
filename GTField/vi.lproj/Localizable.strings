@@ -128,6 +128,11 @@
 "Edit the description" = "Sửa mô tả dữ liệu";
 "Description of the offline map" = "Mô tả của bản đồ ngoại tuyến";
 "Set default offline data" = "Đặt làm mặc định";
+"This format" = "Định dạng";
+"does not support" = "chưa được hỗ trợ";
+"Your file" = "File của bạn";
+"was copied to GTField documents folder with the new name" = "đã được sao chép tới thư mục tài liệu của GTField với một tên mới";
+"Ooops! Something went wrong:" = "Rất tiếc! có gì đó sai sai:";
 
 /* GPXHelper */
 "Length:" = "Chiều dài:";

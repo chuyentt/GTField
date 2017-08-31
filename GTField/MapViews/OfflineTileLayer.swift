@@ -31,8 +31,8 @@ class OfflineTileLayer: GMSTileLayer {
         offlineTileDB = MBTileDB(path: pathToDatabase!)
         if offlineTileDB != nil, (offlineTileDB?.isDBOpen)! {
             let format = offlineTileDB?.metadataValueFor(name: "format")
-            if (format?.lowercased())! != "png" && (format?.lowercased())! != "jpg" {
-                let alert = UIAlertView(title: "This format \"\(format!)\" does not support", message: nil, delegate: nil, cancelButtonTitle: "OK")
+            if format?.lowercased().length != 0 && (format?.lowercased() != "png" && format?.lowercased() != "jpg") {
+                let alert = UIAlertView(title: NSLocalizedString("This format", comment: "")+" \"\(format ?? "")\" "+NSLocalizedString("does not support", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
                 alert.show()
                 return nil
             }

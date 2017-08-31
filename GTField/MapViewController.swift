@@ -511,7 +511,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         //----- Button search -----
         buttonSearch = UIButton(frame: CGRect.zero)
-        buttonSearch?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 12.0)
+        buttonSearch?.titleLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+        //UIFont(name: "Bauhaus-Medium", size: 12.0)
         buttonSearch?.setTitle(NSLocalizedString("<<Search on Google>>", comment: ""), for: .normal)
         buttonSearch?.sizeToFit()
         buttonSearch?.setTitleColor(UIColor.lightGray, for: .normal)
@@ -544,7 +545,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         //----- Button search local -----
         buttonSearchLocal = UIButton(frame: CGRect.zero)
-        buttonSearchLocal?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 12.0)
+        buttonSearchLocal?.titleLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+        //UIFont(name: "Bauhaus-Medium", size: 12.0)
         buttonSearchLocal?.setTitle(NSLocalizedString("<<Search local data>>", comment: ""), for: .normal)
         buttonSearchLocal?.sizeToFit()
         buttonSearchLocal?.setTitleColor(UIColor.lightGray, for: .normal)
@@ -640,7 +642,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         coordinateLabel?.textAlignment = .center
         coordinateLabel?.numberOfLines = 0
         coordinateLabel?.textColor = UIColor.orange
-        coordinateLabel?.font=UIFont.boldSystemFont(ofSize: 12)
+        coordinateLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+        //UIFont.boldSystemFont(ofSize: 12)
         self.view?.addSubview(coordinateLabel!)
         
         // Đặt chiều cao
@@ -1228,7 +1231,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
 
     func didSelectOverlay() {
-        hideSomeView()
         self.navigationController?.isToolbarHidden = false
         self.navigationController?.toolbar.barStyle = .black
         self.navigationController?.toolbar.tintColor = UIColor.white
@@ -1263,6 +1265,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(didDeleteOverlay))
         )
         self.navigationController?.toolbar.items = items
+        self.hideSomeView()
     }
     
     func didEditOverlay() {
@@ -1455,10 +1458,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         vc.delegate = self
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated: true) { () -> Void in }
-        
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: vc)
-        }
     }
     
     
@@ -1515,12 +1514,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomOut?.isHidden = true
         self.buttonFolder?.isHidden = true
         self.buttonTakePhoto?.isHidden = true
-        UserDefaults.standard.set(self.buttonRecord?.MainButton.isHidden, forKey: "buttonRecordMainButtonisHidden")
-        UserDefaults.standard.synchronize()
+        //UserDefaults.standard.set(self.buttonRecord?.MainButton.isHidden, forKey: "buttonRecordMainButtonisHidden")
         UserDefaults.standard.set(self.buttonRecording?.MainButton.isHidden, forKey: "buttonRecordingMainButtonisHidden")
-        UserDefaults.standard.synchronize()
         UserDefaults.standard.set(self.buttonPaused?.MainButton.isHidden, forKey: "buttonPausedMainButtonisHidden")
-        UserDefaults.standard.synchronize()
         
         self.buttonRecord?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonRecording?.MainButton.closingButtonGroup(expandagain: false)
@@ -1539,7 +1535,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomOut?.isHidden = false
         self.buttonFolder?.isHidden = false
         self.buttonTakePhoto?.isHidden = false
-        self.buttonRecord?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordMainButtonisHidden") as! Bool
+        
+        self.buttonRecord?.MainButton.isHidden = false
+        //self.buttonRecord?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordMainButtonisHidden") as! Bool
         self.buttonRecording?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordingMainButtonisHidden") as! Bool
         self.buttonPaused?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonPausedMainButtonisHidden") as! Bool
         
@@ -1584,7 +1582,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     let mapTypeLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
                     mapTypeLabel.text = NSLocalizedString("Map type", comment: "")
                     mapTypeLabel.textColor = UIColor.black
-                    mapTypeLabel.font = UIFont(name: "Bauhaus-Medium", size: 14.0)
+                    mapTypeLabel.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+                    //UIFont(name: "Bauhaus-Medium", size: 14.0)
                     mapTypeLabel.translatesAutoresizingMaskIntoConstraints = false
                     
                     self.paneView?.addSubview(mapTypeLabel)
@@ -1618,7 +1617,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     let textTop : CGFloat = imageOrigin + imageSize.height + gap
                     let textBottom : CGFloat = borderSize + gap
                     let imageBottom : CGFloat = textBottom + textHeight + gap
-                    let titleLabelFont =  UIFont(name: "Bauhaus-Light", size: 13.0)
+                    let titleLabelFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+                    //UIFont(name: "Bauhaus-Light", size: 13.0)
                     
                     // BUTTON1
                     self.buttonMapTypeDefault = MyButton()
@@ -1799,7 +1799,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     let mapSourceLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
                     mapSourceLabel.text = NSLocalizedString("Map source", comment: "")
                     mapSourceLabel.textColor = UIColor.black
-                    mapSourceLabel.font = UIFont(name: "Bauhaus-Medium", size: 14.0)
+                    mapSourceLabel.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+                    //UIFont(name: "Bauhaus-Medium", size: 14.0)
                     mapSourceLabel.translatesAutoresizingMaskIntoConstraints = false
                     
                     self.paneView?.addSubview(mapSourceLabel)
@@ -1826,7 +1827,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.buttonMapSourceConfiguration = UIButton()
                     self.buttonMapSourceConfiguration?.tag = 21
                     self.buttonMapSourceConfiguration?.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
-                    self.buttonMapSourceConfiguration?.titleLabel?.font = UIFont(name: "Bauhaus-Medium", size: 18.0)
+                    self.buttonMapSourceConfiguration?.titleLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+                    //UIFont(name: "Bauhaus-Medium", size: 18.0)
                     self.buttonMapSourceConfiguration?.setTitleColor(self.view.tintColor, for: UIControlState.normal)
                     self.buttonMapSourceConfiguration?.setTitleColor(UIColor.red, for: UIControlState.highlighted)
                     self.buttonMapSourceConfiguration?.translatesAutoresizingMaskIntoConstraints = false
@@ -2086,7 +2088,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     let textTop : CGFloat = imageOrigin + imageSize.height + gap
                     let textBottom : CGFloat = borderSize + gap
                     let imageBottom : CGFloat = textBottom + textHeight + gap
-                    let titleLabelFont =  UIFont(name: "Bauhaus-Light", size: 13.0)
+                    let titleLabelFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+                    //UIFont(name: "Bauhaus-Light", size: 13.0)
                     
                     // Progress
                     // Create Progress View Control
@@ -2886,19 +2889,31 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
-                if let trackSegmentOverlay: GPXTrackSegmentOverlay = overlay as? GPXTrackSegmentOverlay,
-            (self.gpx?.currentPointSegment?.actions != .selecting ||
-             self.gpx?.currentPointSegment?.actions != .editing) {
+        if (self.mapView?.padding.bottom != 0.0) {
+            togglePaneView(0)
+        }
+        didDeSelectOverlay()
+        if let trackSegmentOverlay: GPXTrackSegmentOverlay = overlay as? GPXTrackSegmentOverlay,
+            (selectedPolygonOverlay?.pointSegment.actions != .selecting ||
+             selectedPolygonOverlay?.pointSegment.actions != .editing) {
+            
             selectedOverlay?.trackSegment.actions = .none
             selectedOverlay = trackSegmentOverlay
             selectedOverlay?.trackSegment.actions = .selecting
+            
+            selectedPolygonOverlay?.pointSegment.actions = .none
+            selectedPolygonOverlay = nil
             self.didSelectOverlay()
         } else if let pointSegmentOverlay: GPXPointSegmentOverlay = overlay as? GPXPointSegmentOverlay,
-            (self.gpx?.currentPointSegment?.actions != .selecting ||
-             self.gpx?.currentPointSegment?.actions != .editing) {
+            (selectedOverlay?.trackSegment.actions != .selecting ||
+             selectedOverlay?.trackSegment.actions != .editing) {
+            
             selectedPolygonOverlay?.pointSegment.actions = .none
             selectedPolygonOverlay = pointSegmentOverlay
             selectedPolygonOverlay?.pointSegment.actions = .selecting
+            
+            selectedOverlay?.trackSegment.actions = .none
+            selectedOverlay = nil
             self.didSelectOverlay()
         }
     }
@@ -2913,19 +2928,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             } else { // Nên kiểm tra điều kiện trước khi tìm kiếm
                 if self.isRequesFeatureInfo {
                     getGFeatureFor(coordinate: coordinate)
-                }
-                if self.gpx?.currentPointSegment?.actions == .editing {
-                    self.gpx?.currentPointSegment?.addPoint(GPXPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601))
-                } else if self.gpx?.currentTrackSegment?.actions == .editing {
-                    self.gpx?.currentTrackSegment?.addTrackPoint(GPXTrackPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601), GPXTrackSegment.GPXTrackSegmentActions.editing)
+                } else if selectedPolygonOverlay?.pointSegment.actions == .editing {
+                    selectedPolygonOverlay?.pointSegment.addPoint(GPXPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601))
+                } else if selectedOverlay?.trackSegment.actions == .editing {
+                    selectedOverlay?.trackSegment.addTrackPoint(GPXTrackPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601), GPXTrackSegment.GPXTrackSegmentActions.editing)
                 } else {
                     if selectedOverlay != nil {
                         selectedOverlay?.trackSegment.actions = .none
                         selectedOverlay = nil
+                        didDeSelectOverlay()
                     }
                     if selectedPolygonOverlay != nil {
                         selectedPolygonOverlay?.pointSegment.actions = .none
                         selectedPolygonOverlay = nil
+                        didDeSelectOverlay()
                     }
                 }
             }

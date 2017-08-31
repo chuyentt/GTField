@@ -36,9 +36,12 @@ let APP_BUILD: String = Bundle.main.buildVersionNumber!
 let APP_WEBSITE: String = "http://geomatics.vn"
 let APP_FULL_NAME: String = APP_NAME + " v" + APP_VERSION + " (build " + APP_BUILD + ")"
 
-let TEXTVIEW_FONT_DEFAULT: UIFont = UIFont(name: "Bauhaus-Light", size: 17.0)!
-let TEXTVIEW_FONT_EDIT: UIFont = UIFont(name: "Bauhaus-Medium", size: 17.0)!
-let TITLE_FONT_DEFAULT: UIFont = UIFont(name: "Bauhaus-Medium", size: 22.0)!
+let TEXTVIEW_FONT_DEFAULT: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+//UIFont(name: "Bauhaus-Light", size: 17.0)!
+let TEXTVIEW_FONT_EDIT: UIFont = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+//UIFont(name: "Bauhaus-Medium", size: 17.0)!
+let TITLE_FONT_DEFAULT: UIFont = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+//UIFont(name: "Bauhaus-Medium", size: 22.0)!
 let TEXTVIEW_TEXT_COLOR_DEFAULT: UIColor = UIColor.darkGray
 
 var IMAGE_COMPRESSION_QUALITY: Float = getImageCompressionQuality()
@@ -73,13 +76,13 @@ func configMainView() {
     UINavigationBar.appearance().barTintColor = UIColor(red: (82.0/255.0), green: (172.0/255.0), blue: (238.0/255.0), alpha: 1.0)
     UINavigationBar.appearance().tintColor = UIColor.white
     
-    let font = UIFont(name: "Bauhaus-Medium", size: 18)
+    let font = UIFont(name: "Helvetica", size: UIFont.systemFontSize)
     
     if let font = font {
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.white]
     }
     
-    let fontButton = UIFont(name: "Bauhaus-Medium", size: 18)
+    let fontButton = UIFont(name: "Helvetica", size: UIFont.systemFontSize)
     
     if let fontButton = fontButton {
         UIBarButtonItem.appearance().setTitleTextAttributes(

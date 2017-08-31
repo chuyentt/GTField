@@ -484,7 +484,7 @@ class GPXTrackSegment: GMSOverlay {
     }
     
     func updateLabel() {
-        areaLabel.text = NSLocalizedString("Length:", comment: "") + " \((length.distanceUnit()))"
+        areaLabel.text = NSLocalizedString("Area:", comment: "")+" \((area.areaUnit())), " + NSLocalizedString("Length:", comment: "") + " \((length.distanceUnit()))"
     }
     
     private var _actions: GPXTrackSegmentActions = .none
@@ -705,6 +705,7 @@ class GPXTrackSegment: GMSOverlay {
     func delete() {
         map = nil
         root.removeFromParent()
+        areaLabel.isHidden = true
     }
     
     private var _polyline: GPXTrackSegmentOverlay?
@@ -1169,6 +1170,7 @@ class GPXPointSegment: GMSOverlay {
     func delete() {
         map = nil
         root.removeFromParent()
+        areaLabel.isHidden = true
     }
 
     private var _polygon: GPXPointSegmentOverlay?

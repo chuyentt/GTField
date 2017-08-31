@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kNoFiles = "No gpx files"
+let kNoFiles = NSLocalizedString("No Item", comment: "")
 
 import UIKit
 import MessageUI
@@ -29,6 +29,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     var selectedRowIndex = -1
     weak var delegate: GPXFilesTableViewControllerDelegate?
     var adMobBannerView = GADBannerView()
+    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -52,16 +53,6 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             self.fileList.addObjects(from: list as [AnyObject])
             self.gpxFilesFound = true
         }
-    }
-    
-    func closeGPXFilesTableViewController() {
-        print("closeGPXFIlesTableViewController()")
-        self.dismiss(animated: true, completion: { () -> Void in
-        })
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
         if ADS_ENABLED == true {
             
@@ -77,9 +68,22 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         }
     }
     
+    func closeGPXFilesTableViewController() {
+        print("closeGPXFIlesTableViewController()")
+        self.dismiss(animated: true, completion: { () -> Void in
+        })
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tableView.reloadData()
+        if (self.interstitial.isReady) {
+            self.interstitial.present(fromRootViewController: self)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -254,11 +258,11 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             } catch {
             }
             
-            if let nav = self.navigationController {
-                nav.present(composer, animated: true, completion: nil)
-            } else {
+//            if let nav = self.navigationController {
+//                nav.present(composer, animated: true, completion: nil)
+//            } else {
                 self.present(composer, animated: true, completion: nil)
-            }
+//            }
         } else {
             let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
             alert.show()
@@ -273,9 +277,9 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
+        interstitial.load(request)
         //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
         adMobBannerView.load(request)
-        adMobBannerView.load(GADRequest())
     }
     
     
