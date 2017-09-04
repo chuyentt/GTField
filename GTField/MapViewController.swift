@@ -641,8 +641,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         coordinateLabel?.translatesAutoresizingMaskIntoConstraints = false
         coordinateLabel?.textAlignment = .center
         coordinateLabel?.numberOfLines = 0
+        coordinateLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        coordinateLabel?.sizeToFit()
         coordinateLabel?.textColor = UIColor.orange
-        coordinateLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
+        coordinateLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
         //UIFont.boldSystemFont(ofSize: 12)
         self.view?.addSubview(coordinateLabel!)
         
@@ -653,7 +655,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: nil,
                            attribute: .notAnAttribute,
                            multiplier: 1,
-                           constant: 32).isActive = true
+                           constant: 52).isActive = true
         // Căn trái
         NSLayoutConstraint(item: coordinateLabel!,
                            attribute: .leading,

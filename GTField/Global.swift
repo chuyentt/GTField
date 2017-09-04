@@ -42,6 +42,7 @@ let publicDatabase = CKContainer.default().publicCloudDatabase
 let hudView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
 let indicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
 extension UIView {
+    
     func showHUD(_ view: UIView) {
         hudView.center = CGPoint(x: view.frame.size.width/2, y: view.frame.size.height/2)
         hudView.backgroundColor = UIColor.black
@@ -352,17 +353,145 @@ extension CLLocationCoordinate2D {
             break
         }
         if withTarget {
-            var easting: Double = 0.0
-            var northing: Double = 0.0
-            let alt: Double = 0.0
             let lat = self.latitude*DEGREE_TO_RADIAN
             let lon = self.longitude*DEGREE_TO_RADIAN
+            let alt: Double = 0.0
+            
+            var warningMessage: NSString? = NSString()
+            var easting: Double = 0.0
+            var northing: Double = 0.0
             var zone: Int = 0
             var hemi: NSString? = NSString()
-            let geotrans = GeoTrans(getSourceDatumCode(), getTargetDatumCode())
-            geotrans?.setLat(lat, lng: lon, alt: alt)
-            geotrans?.getUTM(&zone, &hemi, &easting, &northing)
-            txt2 = "\(zone)\(hemi!): \(fabs(northing).toString(3))\(latString), \(fabs(easting).toString(3))\(lonString)"
+            var mgrsOrUsngString: NSString? = NSString()
+            var precision: Int = 0
+            var georefString:NSString? = NSString()
+            var garsString:NSString? = NSString()
+            var cartesianX:Double = 0.0
+            var cartesianY:Double = 0.0
+            var cartesianZ:Double = 0.0
+            
+//            let geotrans = GeoTrans(getSourceDatumCode(), getTargetDatumCode())
+            //let geotrans = GeoTrans("WGE", "VN-2")
+            //geotrans?.defineDatum(1, dCode: "VN", name: "Vietnam", eCode: "WE", dx: -191.90441429, dy: -39.30318279, dz: -111.45032835, rx: -0.00928836, ry: 0.01975479, rz: -0.00427372, sf: 0.25290628/1000000.0e0)
+            
+            // Đặt tham số ellipsoid hiện tại
+            setEllipsoidParameters(6378137.0, 1.0/298.257223563)
+            
+            // Đặt tham số tính chuyển hiện tại, GeoTrans sẽ đọc từ UserDefault thay vì đọc từ file dat
+            setSevenParamDatum(-191.90441429, -39.30318279, -111.45032835, -0.00928836, 0.01975479, -0.00427372, 0.00000025290628)
+            
+            // Đặt lưới chiếu hiện tại
+            setCoordinateType(CoordinateType.transverseMercator.rawValue as Int)
+            
+            // Đặt tham số lưới chiếu hiện tại
+            setMapProjection5Parameters(105.0*DEG2RAD, 0.0, 0.9999, 500000.0, 0.0);
+
+//            geotrans?.setSourceDatumCode("WGE");
+//            geotrans?.setTargetDatumCode("VN-2");
+            
+//            geotrans?.getUTM(&zone, &hemi, &easting, &northing)
+//            txt2 = "\(zone)\(hemi!): \(fabs(northing).toString(3))\(latString), \(fabs(easting).toString(3))\(lonString)"
+            //geotrans?.getTMForLat(lat, lng: lon, easting: &easting, northing: &northing);
+            //geotrans?.setLat(lat, lng: lon, alt: alt)
+            //geotrans?.getTM(&easting, &northing)
+            
+            // Kiểm tra thiết lập lưới chiếu hiện tại
+            var coordinateType = 0; //UTM
+            getCoordinateType(&coordinateType)
+            let type: CoordinateType = CoordinateType(rawValue: coordinateType)!
+            switch type {
+            case CoordinateType.geocentric, CoordinateType.localCartesian:
+                geotrans?.getCartesianCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, x:&cartesianX, y:&cartesianY, z:&cartesianZ)
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = "\(fabs(cartesianX).toString(3)), \(fabs(cartesianY).toString(3))"
+                }
+                break
+            case CoordinateType.globalAreaReferenceSystem:
+                geotrans?.getGARSCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, garsString:&garsString, precision:&precision)
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = garsString! as String
+                }
+                break
+            case CoordinateType.georef:
+                geotrans?.getGEOREFCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, georefString:&georefString, precision:&precision)
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = georefString! as String
+                }
+                break
+            case CoordinateType.albersEqualAreaConic,
+                 CoordinateType.azimuthalEquidistant,
+                 CoordinateType.bonne,
+                 CoordinateType.cassini,
+                 CoordinateType.cylindricalEqualArea,
+                 CoordinateType.eckert4,
+                 CoordinateType.eckert6,
+                 CoordinateType.equidistantCylindrical,
+                 CoordinateType.gnomonic,
+                 CoordinateType.lambertConformalConic1Parallel,
+                 CoordinateType.lambertConformalConic2Parallels,
+                 CoordinateType.mercatorScaleFactor,
+                 CoordinateType.mercatorStandardParallel,
+                 CoordinateType.millerCylindrical,
+                 CoordinateType.mollweide,
+                 CoordinateType.neys,
+                 CoordinateType.newZealandMapGrid,
+                 CoordinateType.obliqueMercator,
+                 CoordinateType.orthographic,
+                 CoordinateType.polyconic,
+                 CoordinateType.polarStereographicScaleFactor,
+                 CoordinateType.polarStereographicStandardParallel,
+                 CoordinateType.sinusoidal,
+                 CoordinateType.stereographic,
+                 CoordinateType.transverseMercator,
+                 CoordinateType.transverseCylindricalEqualArea,
+                 CoordinateType.vanDerGrinten,
+                 CoordinateType.webMercator:
+                
+                // Tính chuyển tọa độ
+                geotrans?.getMapProjectionCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, easting: &easting, northing: &northing);
+                
+                // Nếu lỗi thì thay tọa độ bằng warningMessage
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = "\(fabs(northing).toString(3))\(latString), \(fabs(easting).toString(3))\(lonString)"
+                }
+                break
+            case CoordinateType.militaryGridReferenceSystem,
+                 CoordinateType.usNationalGrid:
+                geotrans?.getMGRSorUSNGCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, mgrs:&mgrsOrUsngString, precision:&precision)
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = mgrsOrUsngString! as String
+                }
+                break
+            case CoordinateType.universalPolarStereographic:
+                geotrans?.getUPSCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, hemisphere:&hemi, easting:&easting, northing:&northing)
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = "\(hemi!): \(fabs(northing).toString(3))\(latString), \(fabs(easting).toString(3))\(lonString)"
+                }
+                break
+            case CoordinateType.universalTransverseMercator:
+                geotrans?.getUTMCoordinates(forLat:lat, lng:lon, alt:alt, type:coordinateType, warningMessage:&warningMessage, zone:&zone, hemisphere:&hemi, easting:&easting, northing:&northing)
+                if (warningMessage?.length)! > 0 {
+                    txt2 = NSLocalizedString((warningMessage! as String), comment: "")
+                } else {
+                    txt2 = "\(zone)\(hemi!): \(fabs(northing).toString(3))\(latString), \(fabs(easting).toString(3))\(lonString)"
+                }
+                break
+            default:
+                break
+            }
+            
             return "\(txt1)\n\(txt2)"
         } else {
             return txt2

@@ -30,8 +30,8 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'GeoTrans/Classes/**/*'
-  
+  s.source_files = ['GeoTrans/Classes/**/*']
+
   # s.resource_bundles = {
   #   'GeoTrans' => ['GeoTrans/Assets/*.png']
   # }

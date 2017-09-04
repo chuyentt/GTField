@@ -151,6 +151,8 @@
 #include "CCSThreadMutex.h"
 #include "CCSThreadLock.h"
 
+#import "GeoTrans.h"
+
 /*
  *    math.h     - standard C mathematics library
  *    EllipsoidLibrary.h  - used to get ellipsoid parameters
@@ -1408,17 +1410,51 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftFromWGS84(
     }
     case DatumType::sevenParamDatum:
     {
-      SevenParameterDatum* sevenParameterDatum =
-         ( SevenParameterDatum* )localDatum;
+        // Không lấy theo thiết lập mà lấy theo NSUserDefault
+        //SevenParameterDatum* sevenParameterDatum = ( SevenParameterDatum* )localDatum;
 
-      double targetX = WGS84X - sevenParameterDatum->deltaX() - sevenParameterDatum->rotationZ() * WGS84Y
-                 + sevenParameterDatum->rotationY() * WGS84Z - sevenParameterDatum->scaleFactor() * WGS84X;
+        // Chỗ này họ tính sai
+//      double targetX = WGS84X - sevenParameterDatum->deltaX() - sevenParameterDatum->rotationZ() * WGS84Y
+//                 + sevenParameterDatum->rotationY() * WGS84Z - sevenParameterDatum->scaleFactor() * WGS84X;
+//
+//      double targetY = WGS84Y - sevenParameterDatum->deltaY() + sevenParameterDatum->rotationZ() * WGS84X
+//                 - sevenParameterDatum->rotationX() * WGS84Z - sevenParameterDatum->scaleFactor() * WGS84Y;
+//
+//      double targetZ = WGS84Z - sevenParameterDatum->deltaZ() - sevenParameterDatum->rotationY() * WGS84X
+//                 + sevenParameterDatum->rotationX() * WGS84Y - sevenParameterDatum->scaleFactor() * WGS84Z;
 
-      double targetY = WGS84Y - sevenParameterDatum->deltaY() + sevenParameterDatum->rotationZ() * WGS84X
-                 - sevenParameterDatum->rotationX() * WGS84Z - sevenParameterDatum->scaleFactor() * WGS84Y;
-
-      double targetZ = WGS84Z - sevenParameterDatum->deltaZ() - sevenParameterDatum->rotationY() * WGS84X
-                 + sevenParameterDatum->rotationX() * WGS84Y - sevenParameterDatum->scaleFactor() * WGS84Z;
+        // Fix lại
+        double dx = 0;
+        double dy = 0;
+        double dz = 0;
+        double rx = 0;
+        double ry = 0;
+        double rz = 0;
+        double sf = 0;
+        getSevenParamDatum(&dx, &dy, &dz, &rx, &ry, &rz, &sf);
+        
+        double DX = -dx;                     //0
+        double DY = -dy;                     //1
+        double DZ = -dz;                     //2
+        double RX = -((rx/3600.0e0)/180.0e0)*PI; //3
+        double RY = -((ry/3600.0e0)/180.0e0)*PI; //4
+        double RZ = -((rz/3600.0e0)/180.0e0)*PI; //5
+        double SF = 1.0e0-(sf);    //6
+        double a[4][4];
+        a[1][1] = cos(RY)*cos(RZ);
+        a[1][2] = cos(RY)*sin(RZ);
+        a[1][3] = -sin(RY);
+        a[2][1] = sin(RX)*sin(RY)*cos(RZ)-cos(RX)*sin(RZ);
+        a[2][2] = sin(RX)*sin(RY)*sin(RZ)+cos(RX)*cos(RZ);
+        a[2][3] = sin(RX)*cos(RY);
+        a[3][1] = cos(RX)*sin(RY)*cos(RZ)+sin(RX)*sin(RZ);
+        a[3][2] = cos(RX)*sin(RY)*sin(RZ)-sin(RX)*cos(RZ);
+        a[3][3] = cos(RX)*cos(RY);
+        
+        double targetX = DX + (a[1][1]*WGS84X + a[1][2]*WGS84Y + a[1][3]*WGS84Z)*SF;
+        double targetY = DY + (a[2][1]*WGS84X + a[2][2]*WGS84Y + a[2][3]*WGS84Z)*SF;
+        double targetZ = DZ + (a[3][1]*WGS84X + a[3][2]*WGS84Y + a[3][3]*WGS84Z)*SF;
+        // End fix
 
       return new CartesianCoordinates( CoordinateType::geocentric, targetX, targetY, targetZ );
     }
@@ -1479,26 +1515,63 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftToWGS84(
     }
     case DatumType::sevenParamDatum:
     {
-      SevenParameterDatum* sevenParameterDatum = ( SevenParameterDatum* )localDatum;
+      //SevenParameterDatum* sevenParameterDatum = ( SevenParameterDatum* )localDatum;
 
-      double wgs84X = sourceX + sevenParameterDatum->deltaX() + sevenParameterDatum->rotationZ() * sourceY
-                 - sevenParameterDatum->rotationY() * sourceZ + sevenParameterDatum->scaleFactor() * sourceX;
+        // Chỗ này họ tính sai
+//      double wgs84X = sourceX + sevenParameterDatum->deltaX() + sevenParameterDatum->rotationZ() * sourceY
+//                 - sevenParameterDatum->rotationY() * sourceZ + sevenParameterDatum->scaleFactor() * sourceX;
+//
+//      double wgs84Y = sourceY + sevenParameterDatum->deltaY() - sevenParameterDatum->rotationZ() * sourceX
+//                 + sevenParameterDatum->rotationX() * sourceZ + sevenParameterDatum->scaleFactor() * sourceY;
+//
+//      double wgs84Z = sourceZ + sevenParameterDatum->deltaZ() + sevenParameterDatum->rotationY() * sourceX
+//                 - sevenParameterDatum->rotationX() * sourceY + sevenParameterDatum->scaleFactor() * sourceZ;
 
-      double wgs84Y = sourceY + sevenParameterDatum->deltaY() - sevenParameterDatum->rotationZ() * sourceX
-                 + sevenParameterDatum->rotationX() * sourceZ + sevenParameterDatum->scaleFactor() * sourceY;
-
-      double wgs84Z = sourceZ + sevenParameterDatum->deltaZ() + sevenParameterDatum->rotationY() * sourceX
-                 - sevenParameterDatum->rotationX() * sourceY + sevenParameterDatum->scaleFactor() * sourceZ;
+        // Fix lại:
+        double dx = 0;
+        double dy = 0;
+        double dz = 0;
+        double rx = 0;
+        double ry = 0;
+        double rz = 0;
+        double sf = 0;
+        getSevenParamDatum(&dx, &dy, &dz, &rx, &ry, &rz, &sf);
+        
+        double DX = dx;                          //0
+        double DY = dy;                          //1
+        double DZ = dz;                          //2
+        double RX = ((rx/3600.e0)/180.e0)*PI; //3
+        double RY = ((ry/3600.e0)/180.e0)*PI; //4
+        double RZ = ((rz/3600.e0)/180.e0)*PI; //5
+        double SF = 1.0e0+(sf);  //6
+        double a[4][4];
+        a[1][1] = cos(RY)*cos(RZ);
+        a[1][2] = cos(RY)*sin(RZ);
+        a[1][3] = -sin(RY);
+        a[2][1] = sin(RX)*sin(RY)*cos(RZ)-cos(RX)*sin(RZ);
+        a[2][2] = sin(RX)*sin(RY)*sin(RZ)+cos(RX)*cos(RZ);
+        a[2][3] = sin(RX)*cos(RY);
+        a[3][1] = cos(RX)*sin(RY)*cos(RZ)+sin(RX)*sin(RZ);
+        a[3][2] = cos(RX)*sin(RY)*sin(RZ)-sin(RX)*cos(RZ);
+        a[3][3] = cos(RX)*cos(RY);
+        
+        double wgs84X = DX + (a[1][1]*sourceX + a[1][2]*sourceY + a[1][3]*sourceZ)*SF;
+        double wgs84Y = DY + (a[2][1]*sourceX + a[2][2]*sourceY + a[2][3]*sourceY)*SF;
+        double wgs84Z = DZ + (a[3][1]*sourceX + a[3][2]*sourceY + a[3][3]*sourceY)*SF;
+        // End fix
 
       return new CartesianCoordinates( CoordinateType::geocentric, wgs84X, wgs84Y, wgs84Z );
     }
     case DatumType::threeParamDatum:
     {
-      ThreeParameterDatum* threeParameterDatum = ( ThreeParameterDatum* )localDatum;
-
-      double wgs84X = sourceX + threeParameterDatum->deltaX();
-      double wgs84Y = sourceY + threeParameterDatum->deltaY();
-      double wgs84Z = sourceZ + threeParameterDatum->deltaZ();
+      //ThreeParameterDatum* threeParameterDatum = ( ThreeParameterDatum* )localDatum;
+        double dx = 0;
+        double dy = 0;
+        double dz = 0;
+        getThreeParamDatum(&dx, &dy, &dz);
+      double wgs84X = sourceX + dx;
+      double wgs84Y = sourceY + dy;
+      double wgs84Z = sourceZ + dz;
 
       return new CartesianCoordinates( CoordinateType::geocentric, wgs84X, wgs84Y, wgs84Z );
     }
@@ -1728,9 +1801,13 @@ GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftFromWGS84(
     {
       if( _ellipsoidLibraryImplementation )
       {
-        _ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
-       _ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
-
+          // chuyentt Chỗ này thay để lấy tham số từ hệ thống đã lưu
+        //_ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
+        //_ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
+          
+          // chuyentt Lấy từ NSUserDefaults
+          getEllipsoidParameters(&a, &f);
+          
         long wgs84EllipsoidIndex;
         _ellipsoidLibraryImplementation->ellipsoidIndex( "WE", &wgs84EllipsoidIndex );
         _ellipsoidLibraryImplementation->ellipsoidParameters( wgs84EllipsoidIndex, &WGS84_a, &WGS84_f );
@@ -1742,6 +1819,7 @@ GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftFromWGS84(
           Geocentric geocentricFromGeodetic( WGS84_a, WGS84_f );
           CartesianCoordinates* wgs84CartesianCoordinates = geocentricFromGeodetic.convertFromGeodetic( sourceCoordinates );
 
+            // chuyentt Qua hàm này để lấy 7 tham số tính chuyển từ NSUserDefaults
           CartesianCoordinates* localCartesianCoordinates = geocentricShiftFromWGS84( wgs84CartesianCoordinates->x(), wgs84CartesianCoordinates->y(), 
                 wgs84CartesianCoordinates->z(), targetIndex );
 
@@ -1757,9 +1835,15 @@ GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftFromWGS84(
         { /* Use Molodensky's method */
           da = a - WGS84_a;
           df = f - WGS84_f;
-          dx = -( localDatum->deltaX() );
-          dy = -( localDatum->deltaY() );
-          dz = -( localDatum->deltaZ() );
+          // chuyentt
+//          dx = -( localDatum->deltaX() );
+//          dy = -( localDatum->deltaY() );
+//          dz = -( localDatum->deltaZ() );
+            
+            getThreeParamDatum(&dx, &dy, &dz);
+            dx = -dx;
+            dy = -dy;
+            dz = -dz;
 
           GeodeticCoordinates* targetGeodeticCoordinates = molodenskyShift( WGS84_a, da, WGS84_f, df, dx, dy, dz,
                            WGS84Longitude, WGS84Latitude, WGS84Height );
@@ -1831,7 +1915,7 @@ GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftToWGS84( const lon
       {
         _ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
         _ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
-
+          
         if( ( localDatum->datumType() == DatumType::sevenParamDatum ) ||
            ( sourceLatitude < (-MOLODENSKY_MAX ) ) ||
            ( sourceLatitude > MOLODENSKY_MAX ) )
@@ -2268,7 +2352,7 @@ void DatumLibraryImplementation::write3ParamFile()
       if( _3parameterDatum->userDefined() )
         fprintf( fp_3param, "*");
 
-      fprintf( fp_3param, "%-6s  %-33s%-2s %4.0f %4.0f %4.0f %4.0f %5.0f %4.0f %4.0f %4.0f %4.0f %4.0f \n",
+      fprintf( fp_3param, "%-6s  %-33s%-2s %0.8f %0.8f %0.8f %0.8f %0.8f %0.8f %0.0f %0.0f %0.0f %0.0f \n",
                _3parameterDatum->code(),
                datum_name,
                _3parameterDatum->ellipsoidCode(),
@@ -2361,7 +2445,7 @@ void DatumLibraryImplementation::write7ParamFile()
       if( _7parameterDatum->userDefined() )
         fprintf( fp_7param, "*");
 
-      fprintf( fp_7param, "%-6s  %-33s%-2s  %4.0f  %4.0f  %4.0f % 4.3f % 4.3f % 4.3f   % 4.10f \n",
+      fprintf( fp_7param, "%-6s  %-33s%-2s %0.8f %0.8f %0.8f %0.8f %0.8f %0.8f %0.14f \n",
                _7parameterDatum->code(),
                datum_name,
                _7parameterDatum->ellipsoidCode(),

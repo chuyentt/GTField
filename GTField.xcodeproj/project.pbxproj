@@ -198,6 +198,7 @@
 		DEB2268E1E64282400D27CB5 /* PlaceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB226871E64282200D27CB5 /* PlaceDetailViewController.xib */; };
 		DEB2268F1E64282400D27CB5 /* PlaceNameHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB226881E64282200D27CB5 /* PlaceNameHeader.swift */; };
 		DEB226901E64282400D27CB5 /* PlaceNameHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB226891E64282200D27CB5 /* PlaceNameHeader.xib */; };
+		DEC0BE041F585A640094BF74 /* Projection.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC0BE031F585A630094BF74 /* Projection.m */; };
 		DEC7B8581EECDAC300EE81CB /* WMSTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B8571EECDAC300EE81CB /* WMSTileLayer.swift */; };
 		DEC7B85A1EED131700EE81CB /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B8591EED131700EE81CB /* Data+Extensions.swift */; };
 		DEC7B85C1EED381400EE81CB /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B85B1EED381400EE81CB /* UIImageView+Extensions.swift */; };
@@ -205,20 +206,8 @@
 		DEDE38FD1F17D8E3000F1446 /* GPXTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE38FC1F17D8E3000F1446 /* GPXTableViewController.swift */; };
 		DEDE38FF1F17DA11000F1446 /* WayPointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE38FE1F17DA11000F1446 /* WayPointManager.swift */; };
 		DEDE39011F17DA2D000F1446 /* TrackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE39001F17DA2D000F1446 /* TrackManager.swift */; };
+		DEF2B3191F587C36004BD46D /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF2B3181F587C35004BD46D /* Package.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		DE37F8A81EF82424008EB2E7 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		12510DB04947E9A2DC308599 /* Pods-GTField.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GTField.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GTField/Pods-GTField.debug.xcconfig"; sourceTree = "<group>"; };
@@ -391,6 +380,8 @@
 		DE6781871E55F19600026C86 /* bauhauhb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bauhauhb.ttf; sourceTree = "<group>"; };
 		DE67818A1E55F25800026C86 /* bauhausm.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bauhausm.ttf; sourceTree = "<group>"; };
 		DE6781911E56F10700026C86 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		DE820A151F5DA23800E68F5F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		DE820A161F5DA23800E68F5F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DE8E41321F361B87005766B5 /* VertexView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VertexView.swift; path = GPX/VertexView.swift; sourceTree = "<group>"; };
 		DEAD15431EEA54C800BFD5CE /* SectionWayPoints.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = SectionWayPoints.plist; path = Plist/SectionWayPoints.plist; sourceTree = "<group>"; };
 		DEAD15451EEA55D000BFD5CE /* Bastions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Bastions.plist; path = Plist/Bastions.plist; sourceTree = "<group>"; };
@@ -434,6 +425,8 @@
 		DEB226871E64282200D27CB5 /* PlaceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlaceDetailViewController.xib; path = ViewControllers/PlaceDetail/PlaceDetailViewController.xib; sourceTree = "<group>"; };
 		DEB226881E64282200D27CB5 /* PlaceNameHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceNameHeader.swift; path = ViewControllers/PlaceDetail/PlaceNameHeader.swift; sourceTree = "<group>"; };
 		DEB226891E64282200D27CB5 /* PlaceNameHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlaceNameHeader.xib; path = ViewControllers/PlaceDetail/PlaceNameHeader.xib; sourceTree = "<group>"; };
+		DEC0BE021F585A630094BF74 /* Projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Projection.h; sourceTree = "<group>"; };
+		DEC0BE031F585A630094BF74 /* Projection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Projection.m; sourceTree = "<group>"; };
 		DEC7B8571EECDAC300EE81CB /* WMSTileLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WMSTileLayer.swift; path = MapViews/WMSTileLayer.swift; sourceTree = "<group>"; };
 		DEC7B8591EED131700EE81CB /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Extensions.swift"; path = "Support/Data+Extensions.swift"; sourceTree = "<group>"; };
 		DEC7B85B1EED381400EE81CB /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageView+Extensions.swift"; path = "Support/UIImageView+Extensions.swift"; sourceTree = "<group>"; };
@@ -441,6 +434,7 @@
 		DEDE38FC1F17D8E3000F1446 /* GPXTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXTableViewController.swift; path = ViewControllers/GPX/GPXTableViewController.swift; sourceTree = "<group>"; };
 		DEDE38FE1F17DA11000F1446 /* WayPointManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WayPointManager.swift; path = ViewControllers/GPX/WayPointManager.swift; sourceTree = "<group>"; };
 		DEDE39001F17DA2D000F1446 /* TrackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackManager.swift; path = ViewControllers/GPX/TrackManager.swift; sourceTree = "<group>"; };
+		DEF2B3181F587C35004BD46D /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Package.swift; path = GTField/Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -471,6 +465,7 @@
 		1628239219AB38A100D08755 = {
 			isa = PBXGroup;
 			children = (
+				DEF2B3181F587C35004BD46D /* Package.swift */,
 				1628239D19AB38A100D08755 /* GTField */,
 				164835B61C709B5D00FA7FEF /* GTField.entitlements */,
 				16827B3519F68E8E00BC6D11 /* Image.xcassets */,
@@ -581,6 +576,8 @@
 				16C675E61B94900C00EF4913 /* Global.swift */,
 				DEC7B85D1EED49BC00EE81CB /* Utilities.swift */,
 				DE35F28E1EEDAD06009EE354 /* Settings.swift */,
+				DEC0BE021F585A630094BF74 /* Projection.h */,
+				DEC0BE031F585A630094BF74 /* Projection.m */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -1013,7 +1010,6 @@
 				16549DAC1A08AC4C00C59D2E /* Resources */,
 				DCB89F0EAE041D4D687DAC69 /* [CP] Embed Pods Frameworks */,
 				DE754A0CEC6ADBB974F19AC9 /* [CP] Copy Pods Resources */,
-				DE37F8A81EF82424008EB2E7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1032,7 +1028,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Tran Trung Chuyen";
 				TargetAttributes = {
 					16549D9A1A08AC4C00C59D2E = {
@@ -1061,6 +1057,7 @@
 				vi,
 				Base,
 				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 1628239219AB38A100D08755;
 			productRefGroup = 1628239C19AB38A100D08755 /* Products */;
@@ -1272,6 +1269,7 @@
 				DE434B491F23A8B800935974 /* MBTileFileManager.swift in Sources */,
 				DEB226721E607BDB00D27CB5 /* InsetViewController.swift in Sources */,
 				DEC7B85C1EED381400EE81CB /* UIImageView+Extensions.swift in Sources */,
+				DEF2B3191F587C36004BD46D /* Package.swift in Sources */,
 				DE28C3C91F17CDDB00C3A190 /* HelpViewController.swift in Sources */,
 				16D8458D1D8D2DCB005DF780 /* DesignableLabel.swift in Sources */,
 				16D845921D8D2DCB005DF780 /* ImageLoader.swift in Sources */,
@@ -1321,6 +1319,7 @@
 				16D8459A1D8D2DCB005DF780 /* SpringAnimation.swift in Sources */,
 				DE4E7BEC1F3C56340012E317 /* UnicodeIterator.swift in Sources */,
 				DE35F2971EEEB8FA009EE354 /* ConfigMapSourceTableViewCell.swift in Sources */,
+				DEC0BE041F585A640094BF74 /* Projection.m in Sources */,
 				DE085E1E1F25E93F005DD248 /* FMDatabaseQueue.m in Sources */,
 				DE377A851F0F3E61004C87D5 /* JDJellyMainButton.swift in Sources */,
 				DEB226711E607BDB00D27CB5 /* BaseContainerViewController.swift in Sources */,
@@ -1349,6 +1348,7 @@
 				DE2645661F4EBF4D008B759B /* vi */,
 				DE3934BD1F4F3D1A00F85457 /* en */,
 				DE4098AB1F5144EE0017C2EC /* zh-Hans */,
+				DE820A151F5DA23800E68F5F /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1360,6 +1360,7 @@
 				DE2645691F4EC4B5008B759B /* Base */,
 				DE4098AA1F5141960017C2EC /* en */,
 				DE4098AC1F5144EE0017C2EC /* zh-Hans */,
+				DE820A161F5DA23800E68F5F /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1452,8 +1453,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1518,6 +1520,7 @@
 				PRODUCT_NAME = GTField;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

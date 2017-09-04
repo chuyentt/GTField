@@ -7,6 +7,10 @@
 import UIKit
 import Foundation
 import MapKit
+import GeoTrans
+
+let RAD2DEG = (180.0/Double.pi)
+let DEG2RAD = (Double.pi/180.0)
 
 // -----------------------------------------
 // Test the Template
@@ -76,13 +80,13 @@ func configMainView() {
     UINavigationBar.appearance().barTintColor = UIColor(red: (82.0/255.0), green: (172.0/255.0), blue: (238.0/255.0), alpha: 1.0)
     UINavigationBar.appearance().tintColor = UIColor.white
     
-    let font = UIFont(name: "Helvetica", size: UIFont.systemFontSize)
+    let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
     
     if let font = font {
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.white]
     }
     
-    let fontButton = UIFont(name: "Helvetica", size: UIFont.systemFontSize)
+    let fontButton = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
     
     if let fontButton = fontButton {
         UIBarButtonItem.appearance().setTitleTextAttributes(
@@ -255,4 +259,5 @@ let RADIAN_TO_DEGREE = 180.0/Double.pi
 
 let DETAIL_MAP_TYPE = MKMapType.standard
 
-
+// GeoTrans
+let geotrans = GeoTrans("WGE", "VN-2")

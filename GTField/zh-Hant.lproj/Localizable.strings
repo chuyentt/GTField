@@ -1,0 +1,141 @@
+/* 
+  Localizable.strings
+  GTField
+
+  Created by Chuyen Trung Tran on 8/24/17.
+  Copyright © 2017 Tran Trung Chuyen. All rights reserved.
+*/
+
+/* General */
+"Warning delete" = "警告刪除";
+"Warning close" = "警告關閉";
+
+/* Buttons */
+"OK" = "確定";
+"Save" = "存儲";
+"Cancel" = "取消";
+"Close" = "關閉";
+"Delete" = "刪除";
+
+/* Search box on Maps View */
+"<<Search on Google>>" = "<<谷歌搜索>>";
+"<<Search local data>>" = "<<搜索本地數據>>";
+
+/* GPX */
+"Your GPX files" = "GPX文件";
+"GPX specification" = "GPX規格";
+"Select option" = "選項";
+"Send by email" = "通過郵件發送";
+"Load in Map" = "載入地圖";
+"No Item" = "無題目";
+"No email accounts configured" = "沒有配置電子郵件帳戶";
+"Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account" = "請在設置中添加個郵件賬戶, 通過設置 > 郵件 > 賬戶 > 添加賬戶";
+"Export Waypoints & Tracks to GPX file" = "導出數據到GPX文件";
+"You can copy your files between your computer and apps on your iOS device using File Sharing." = "您可以通過ios設備的文件共享功能來複製電腦與app之間的文件";
+"Whoops" = "抱歉";
+"Sent" = "發送成功";
+
+/* PhotoMapViewController */
+"Zoom All" = "放大";
+"Export all" = "全部導出";
+"photo's location to csv" = "照片的位置到csv文件";
+"Export photo's location to CSV file" = "導出照片的位置到csv文件";
+"Map" = "地圖";
+"List" = "清單";
+"Export Offline Map" = "導出離線地圖";
+"Export photo's location to GPX file" = "導出圖片的位置到GPX文件";
+"This photo will be deleted from this app on your device" = "這張照片會從您的設備上的app中刪除";
+
+/* PhotosViewController */
+"Photos" = "照片";
+"of" = "在";
+"Edit this photo title" = "編輯照片的標題";
+"Edit this photo description" = "編輯照片的描述";
+"photo's location to GPX" = "照片的位置到GPX文件";
+"Save this photo to Camera Roll" = "把照片保存到相機膠卷";
+"Your photo was successfully saved" = "保存成功";
+"Save Error!" = "保存錯誤!";
+"Save all" = "全部保存";
+"photos to Camera Roll" = "照片到相機膠卷";
+"All your photos was successfully saved" = "全部照片已經保存";
+"Delete this photo forever" = "永久刪除這張照片";
+"Delete  all" = "全部刪除";
+"photos forever" = "永遠照片";
+"photos will be deleted from this app on your device" = "照片會刪除";
+
+/* MapViewController */
+"Search..." = "搜索...";
+"Downloading!" = "下載!";
+"Please wait while downloading the map!" = "下載地圖時請等待!";
+"You are in a route recording session. If close this map view, it will not continue recording" = "您正在記錄路線，如果關閉地圖視圖，路線記錄則會停止繼續記錄。";
+"Could not connect to GeoServer!" = "無法連接到GeoServer!";
+"Please verify GeoServer Base Url" = "請驗證GeoServer Base Url";
+"Map type" = "地圖類型";
+"Default" = "默認";
+"Satellite" = "衛星";
+"Terrain" = "地形";
+"Map source" = "地圖源";
+"Configuration..." = "配置...";
+"GeoServer" = "GeoServer";
+"Offline Map" = "離線地圖";
+"Download" = "下載";
+"Download Map" = "下載地圖";
+"Downloading" = "下載!";
+"Please wait!" = "請稍等!";
+"Type Your Download Description" = "輸入您的下載描述";
+"Description of the layer" = "層的描述";
+"There are still" = "繼續";
+"previous tiles not downloaded, would you like to try again?" = "以前的塊沒有下載，您想再試一次嗎?";
+"All tiles in the download list have been downloaded!" = "所有塊已下載!";
+"failed!" = "不成功!";
+"tiles successfull downloaded!" = "塊已下載!";
+"No offline data" = "沒有離線數據";
+"Please goto Configuration...!" = "請轉到配置...!";
+"No map source is selected" = "沒有選擇地圖源";
+"Please select GeoServer for Map source first!" = "請首先為地圖源選擇GeoServer!";
+"Type your New description or Delete this marker" = "請輸入您的新描述或者刪除這個標記";
+"current description" = "當前描述";
+"New description" = "新的描述";
+"IMPORTANT" = "重要";
+"has been denied access your location. The location services access required for embed the GPS information within the picture or display your location on the map!. To enable access, please go to app settings and turn it on." = "不能查詢您的位置.在圖片中嵌入GPS信息所需的位置服務查詢!.要啟用訪問權限，請訪問應用程序設置並打開它.";
+"Settings..." = "Settings...";
+"is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "沒有授權使用位置服務.您不能更改此應用程序的狀態,可能是由於父母控制等活動的限制";
+"Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "只有當您在你的現場工作的時候您在記錄軌道的時候，您才可以訪問所需要的位置服務.請先進入應用設置然後選擇\"始終\"選項.";
+
+/* ConfigMapSourceViewController */
+"Map Source Configuration" = "配置地圖源";
+"Select an offline data" = "選擇離線數據";
+"Type Your GeoServer Host" = "輸入您的GeoServer主機";
+"Invalid input URL" = "輸入URL無效";
+"e.g.: http://192.168.1.153:8080" = "e.g.: http://192.168.1.153:8080";
+"GeoServer Base Url" = "GeoServer Base Url";
+"WMS Layer or Layer-Group" = "WMS層或層組";
+"Offline data" = "離線數據";
+"WFS Layer" = "WFS 層";
+"Support GeoServer installed on your system, by giving ip address of system like \"http://192.168.1.52:8080\" instead of \"http://localhost:8080\"" = "支持安裝在您的系統上的GeoServer, 通過給出系統的ip地址 \"http://192.168.1.52:8080\" 代替 \"http://localhost:8080\"";
+"This is an overlay layer on your base" = "這是一個覆蓋層在您的基礎上";
+"This is layer for accessing information (require internet connection)" = "這是訪問信息的屬性數據層(需要互聯網連接)";
+"Support MBTiles file format (GTField can get mbtiles file from your Email, iCloud Drive, Google Drive, Dropbox or downloaded from the Internet)" = "支持MBTiles文件格式 (GTField 可以從您的電子郵件取下來mbtiles文件, iCloud Drive, Google Drive, Dropbox 或從網上下載的)";
+
+/* GSLayersViewController */
+"Waiting for request layers" = "稍等";
+"Select a WMS Layer or Layer-Group" = "選擇一個WMS層或層組";
+"Select a WFS Layer" = "選擇一個WFS層";
+"Active" = "已選";
+
+/* MBTileTableViewController */
+"MBTiles specification" = "MBTiles規範";
+"Edit the description" = "編輯描述";
+"Description of the offline map" = "描述的離線地圖";
+"Set default offline data" = "設置默認離線數據";
+"This format" = "這格式";
+"does not support" = "不支持";
+"Your file" = "您的文件";
+"was copied to GTField documents folder with the new name" = "將復製到GTField文件夾裡面的文件並重新命名";
+"Ooops! Something went wrong:" = "壞了，什麼出現錯誤了:";
+
+/* GPXHelper */
+"Length:" = "長度:";
+"Area:" = "範圍:";
+"Perimeter:" = "周長:";
+

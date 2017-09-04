@@ -28,6 +28,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             container.motionManager = motionManager
             //container.locationManager = locationManager
         }
+        print(Bundle.main.bundlePath)
+        print(docsURL.path)
+// Tính chuyển Lat Lon sang UTM
+//        var easting: Double = 0.0
+//        var northing: Double = 0.0
+//        let alt: Double = 0.0
+//        let lat = self.latitude*DEGREE_TO_RADIAN
+//        let lon = self.longitude*DEGREE_TO_RADIAN
+//        var zone: Int = 0
+//        var hemi: NSString? = NSString()
+//        let geotrans = GeoTrans"WGE", "WGE")
+//        //let geotrans = GeoTrans(getSourceDatumCode(), getTargetDatumCode())
+//        geotrans?.setLat(lat, lng: lon, alt: alt)
+//        geotrans?.getUTM(&zone, &hemi, &easting, &northing)
+
+// Tạo mới Datum Transformation
         
 //        //
 //        let geotrans = GeoTrans("WGE", "WGE")
