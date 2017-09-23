@@ -503,15 +503,28 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        let alert: UIAlertController
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            alert = UIAlertController(
+                title: NSLocalizedString("Sent", comment: ""),
+                message: error?.localizedDescription,
+                preferredStyle: UIAlertControllerStyle.alert
+            )
             break
         default:
-            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            alert = UIAlertController(
+                title: NSLocalizedString("Whoops", comment: ""),
+                message: error?.localizedDescription,
+                preferredStyle: UIAlertControllerStyle.alert
+            )
         }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)
     }
     

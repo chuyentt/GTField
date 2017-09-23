@@ -102,6 +102,14 @@ class GPXWaypoint: GMSMarker {
     var root: AEXMLElement {
         get { return _root }
     }
+    let dxfTextHeight = 2.5
+    var dxfBlockInsert: String {
+        get {
+            let en:[Double] = position.targetCoordinates()
+            return "0\nINSERT\n8\n0\n66\n1\n2\nGTField\n10\n\(en[0])\n20\n\(en[1])\n30\n0\n0\nATTRIB\n8\nWP_DESCRIPTION\n10\n0\n20\n0\n30\n0\n40\n\(dxfTextHeight)\n1\n\(desc)\n11\n\(en[0])\n21\n\(en[1])\n31\n0\n2\nDESCRIPTION\n70\n0\n74\n3\n0\nATTRIB\n8\nWP_ALTITUDE\n10\n\(en[0])\n20\n\(en[1])\n30\n0\n40\n\(dxfTextHeight)\n1\n0\n2\nELEVATION\n70\n0\n0\nATTRIB\n8\nWP_NAME\n10\n0\n20\n0\n30\n0\n40\n\(dxfTextHeight)\n1\n\(name)\n72\n2\n11\n\(en[0])\n21\n\(en[1])\n31\n0\n2\nNAME\n70\n0\n74\n2\n0\nSEQEND\n"
+        }
+    }
+    
     private var _name: AEXMLElement
     var name: String {
         get {
@@ -249,18 +257,17 @@ class GPXTrackPoint: NSObject {
         let attributes = xmlElement.attributes
         _lat = Double(attributes["lat"]!)!
         _lon = Double(attributes["lon"]!)!
-        if xmlElement["ele"].error == nil {
+        _ele = 0.0
+        _time = ""
+        if xmlElement["ele"].error == nil,
+            xmlElement["ele"].value != nil {
             _ele = Double(xmlElement["ele"].value!)!
-        } else {
-            _ele = 0.0
         }
         
-        if xmlElement["time"].error == nil {
+        if xmlElement["time"].error == nil,
+            xmlElement["time"].value != nil {
             _time = xmlElement["time"].value!
-        } else {
-            _time = ""
         }
-        
         super.init()
     }
     
@@ -814,6 +821,7 @@ class GPXTrackSegment: GMSOverlay {
         root.addChild(trkpt.element)
         
         _polyline = GPXTrackSegmentOverlay(path: _path)
+        _polyline?.zIndex = 100
         _polyline?.spans = spans
         _polyline?.strokeWidth = 3
         _polyline?.map = map
@@ -1245,6 +1253,7 @@ class GPXPointSegment: GMSOverlay {
         root.addChild(pt.element)
         
         _polygon = GPXPointSegmentOverlay(path: _path)
+        _polygon?.zIndex = 100
         _polygon?.strokeWidth = 3
         _polygon?.map = map
         _polygon?.isTappable = true
@@ -1495,6 +1504,7 @@ class GPX: NSObject {
                 let trackSegElements = track["trkseg"].all
                 if trackSegElements != nil {
                     for trksegElement in trackSegElements! {
+                        print("\(trksegElement.xml)\n")
                         let trkseg = GPXTrackSegment(xmlElement: trksegElement, map: _map!)
                         _trackSegments.append(trkseg)
                         updateToBound(path: trkseg.path)

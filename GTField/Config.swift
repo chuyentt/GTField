@@ -83,7 +83,7 @@ func configMainView() {
     let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
     
     if let font = font {
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.white]
     }
     
     let fontButton = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
@@ -91,8 +91,8 @@ func configMainView() {
     if let fontButton = fontButton {
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [
-                NSFontAttributeName : fontButton,
-                NSForegroundColorAttributeName : UIColor.white
+                NSAttributedStringKey.font : fontButton,
+                NSAttributedStringKey.foregroundColor : UIColor.white
             ],
             for: .normal)
     }
@@ -260,4 +260,4 @@ let RADIAN_TO_DEGREE = 180.0/Double.pi
 let DETAIL_MAP_TYPE = MKMapType.standard
 
 // GeoTrans
-let geotrans = GeoTrans("WGE", "VN-2")
+let geotrans = GeoTrans()

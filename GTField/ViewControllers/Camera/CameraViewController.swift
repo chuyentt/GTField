@@ -174,7 +174,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     @IBAction func takePhotoTapped(_ sender: AnyObject) {
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (authStatus) in
+        AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (authStatus) in
             if authStatus {
                 if UIImagePickerController.isSourceTypeAvailable(.camera) {
                     self.imagePicker.allowsEditing = false

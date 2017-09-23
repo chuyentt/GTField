@@ -101,6 +101,8 @@
 "Settings..." = "Settings...";
 "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "沒有授權使用位置服務.您不能更改此應用程序的狀態,可能是由於父母控制等活動的限制";
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "只有當您在你的現場工作的時候您在記錄軌道的時候，您才可以訪問所需要的位置服務.請先進入應用設置然後選擇\"始終\"選項.";
+"Add a marker from the map" = "從地圖添加一個標記";
+"Add a marker from coordinates" = "從坐標添加一個標記";
 
 /* ConfigMapSourceViewController */
 "Map Source Configuration" = "配置地圖源";
@@ -138,4 +140,37 @@
 "Length:" = "長度:";
 "Area:" = "範圍:";
 "Perimeter:" = "周長:";
+"Distance:" = "距離:";
 
+/* SettingsViewController */
+"Select a coordinate system" = "Select a coordinate system";
+"Select a datum transformation" = "Select a datum transformation";
+"Select an ellipsoid" = "Select an ellipsoid";
+"Select a map projection" = "Select a map projection";
+
+"Select an area unit" = "Select an area unit";
+"Select a length unit" = "Select a length unit";
+"Select a coordinates format" = "Select a coordinates format";
+"Select a datum transformation" = "Select a datum transformation";
+"Select an ellipsoid" = "Select an ellipsoid";
+
+/* MapProjectionDetailViewController */
+"centralMeridian" = "Central Meridian (deg)";
+"standardParallel" = "Standard Parallel (deg)";
+"falseEasting" = "False Easting (m)";
+"falseNorthing" = "False Northing (m)";
+"originLatitude" = "Origin Latitude (deg)";
+"scaleFactor" = "Scale Factor";
+"standardParallel1" = "First Standard Parallel (deg)";
+"standardParallel2" = "Second Standard Parallel (deg)";
+"originLongitude" = "Origin Longitude (deg)";
+"orientation" = "Orientation (deg)";
+"originHeight" = "Origin Height";
+"latitude1" = "First Latitude (deg)";
+"latitude2" = "Second Latitude (deg)";
+"longitude1" = "First Longitude (deg)";
+"longitude2" = "Second Longitude (deg)";
+
+
+"Subscribe" = "訂閱";
+"You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section." = "您正在使用免費版本的GTField應用程序。 要使用功能完整的版本，請訪問訂閱部分。";

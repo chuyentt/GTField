@@ -166,7 +166,7 @@ class PhotoAnnotation: NSObject, MKAnnotation {
     }
     
     var _altitude: CLLocationDistance
-    dynamic var altitude: CLLocationDistance {
+    @objc dynamic var altitude: CLLocationDistance {
         get { return _altitude }
         set (newAltitude) { self._altitude = newAltitude }
     }

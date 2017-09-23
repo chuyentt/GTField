@@ -45,97 +45,52 @@
 #include "UTMParameters.h"
 
 #include "BNGCoordinates.h"
-
 #include "UTMCoordinates.h"
+#include "UPSCoordinates.h"
+#include "GEOREFCoordinates.h"
+#include "GARSCoordinates.h"
+#include "CartesianCoordinates.h"
+#include "MapProjectionCoordinates.h"
 
 #include "TransverseMercator.h"
+#include "BritishNationalGrid.h"
+#include "MGRS.h"
+#include "GEOREF.h"
+#include "USNG.h"
+#include "UPS.h"
+#include "UTM.h"
+#include "GARS.h"
+#include "LocalCartesian.h"
+#include "NZMG.h"
+#include "WebMercator.h"
+#include "PolarStereographic.h"
+#include "AlbersEqualAreaConic.h"
+#include "AzimuthalEquidistant.h"
+#include "Bonne.h"
+#include "Cassini.h"
+#include "CylindricalEqualArea.h"
+#include "Eckert4.h"
+#include "Eckert6.h"
+#include "EquidistantCylindrical.h"
+#include "Gnomonic.h"
+#include "LambertConformalConic.h"
+#include "Mercator.h"
+#include "MillerCylindrical.h"
+#include "Mollweide.h"
+#include "Neys.h"
+#include "NZMG.h"
+#include "ObliqueMercator.h"
+#include "Orthographic.h"
+#include "Polyconic.h"
+#include "PolarStereographic.h"
+#include "Sinusoidal.h"
+#include "Stereographic.h"
+#include "TransverseMercator.h"
+#include "TransverseCylindricalEqualArea.h"
+#include "VanDerGrinten.h"
+#include "WebMercator.h"
 
 using namespace MSP::CCS;
-/*
- * Thiết lập theo lưới chiếu (tạm)
- */
-NS_INLINE void setParameters(char* proj4) {
-    // Chỗ này xử lý proj4, tách xâu, xác định type,
-    MSP::CCS::CoordinateType::Enum type = MSP::CCS::CoordinateType::universalTransverseMercator;
-    
-    switch (type) {
-            case MSP::CCS::CoordinateType::britishNationalGrid:
-            case MSP::CCS::CoordinateType::militaryGridReferenceSystem:
-            case MSP::CCS::CoordinateType::newZealandMapGrid:
-            case MSP::CCS::CoordinateType::usNationalGrid:
-            case MSP::CCS::CoordinateType::webMercator:
-            //=>EllipsoidParameters
-            break;
-            
-            case MSP::CCS::CoordinateType::equidistantCylindrical:
-            //=>EquidistantCylindricalParameters
-            break;
-            
-            case MSP::CCS::CoordinateType::localCartesian:
-            //=>LocalCartesianParameters
-            break;
-            
-            case MSP::CCS::CoordinateType::eckert4:
-            case MSP::CCS::CoordinateType::eckert6:
-            case MSP::CCS::CoordinateType::millerCylindrical:
-            case MSP::CCS::CoordinateType::mollweide:
-            case MSP::CCS::CoordinateType::sinusoidal:
-            case MSP::CCS::CoordinateType::vanDerGrinten:
-            //=>MapProjection3Parameters
-            break;
-            
-            case MSP::CCS::CoordinateType::azimuthalEquidistant:
-            case MSP::CCS::CoordinateType::bonne:
-            case MSP::CCS::CoordinateType::cassini:
-            case MSP::CCS::CoordinateType::cylindricalEqualArea:
-            case MSP::CCS::CoordinateType::gnomonic:
-            case MSP::CCS::CoordinateType::orthographic:
-            case MSP::CCS::CoordinateType::polyconic:
-            case MSP::CCS::CoordinateType::stereographic:
-            //=>MapProjection4Parameters
-            break;
-            
-            case MSP::CCS::CoordinateType::transverseCylindricalEqualArea:
-            case MSP::CCS::CoordinateType::transverseMercator:
-            case MSP::CCS::CoordinateType::lambertConformalConic1Parallel:
-            //=>MapProjection5Parameters
-            break;
-            case MSP::CCS::CoordinateType::lambertConformalConic2Parallels:
-            //=>MapProjection6Parameters
-            break;
-            
-            case MSP::CCS::CoordinateType::albersEqualAreaConic:
-            //=>MapProjection6Parameters
-            break;
-            
-            case MSP::CCS::CoordinateType::mercatorStandardParallel:
-            //=>MercatorStandardParallelParameters
-            break;
-            
-            case MSP::CCS::CoordinateType::mercatorScaleFactor:
-            //=>MercatorScaleFactorParameters
-            break;
-            
-            case MSP::CCS::CoordinateType::neys:
-            //=>NeysParameters
-            break;
-            
-            case MSP::CCS::CoordinateType::obliqueMercator:
-            //=>ObliqueMercatorParameters
-            break;
-            case MSP::CCS::CoordinateType::polarStereographicStandardParallel:
-            //=>PolarStereographicStandardParallelParameters
-            break;
-            case MSP::CCS::CoordinateType::polarStereographicScaleFactor:
-            //=>PolarStereographicScaleFactorParameters
-            break;
-            case MSP::CCS::CoordinateType::universalTransverseMercator:
-            //=>UTMParameters
-            break;
-        default:
-            break;
-    }
-}
 
 //#include "TestCppClass.hpp"
 
@@ -381,28 +336,45 @@ void convertGeodeticMlsEgmToTm(
     northing = targetCoordinates.northing();
 }
 
-void convertGeodeticMlsEgmToMapProjection(
-                               CoordinateConversionService& ccsGeodeticMlsEgmToMapProjection,
-                               double lat,
-                               double lon,
-                               double mslHeight,
-                               double& easting,
-                               double& northing)
+void convertGeodeticMlsEgmToMapProjection(CoordinateConversionService& ccsGeodeticMlsEgmToMapProjection,
+                                          double lat,
+                                          double lon,
+                                          double mslHeight,
+                                          double& easting,
+                                          double& northing)
 {
     Accuracy sourceAccuracy;
     Accuracy targetAccuracy;
-    GeodeticCoordinates sourceCoordinates(
-                                          CoordinateType::geodetic, lon, lat, mslHeight);
+    GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, lon, lat, mslHeight);
     MapProjectionCoordinates targetCoordinates;
     
-    ccsGeodeticMlsEgmToMapProjection.convertSourceToTarget(
-                                                           &sourceCoordinates,
+    ccsGeodeticMlsEgmToMapProjection.convertSourceToTarget(&sourceCoordinates,
                                                            &sourceAccuracy,
                                                            targetCoordinates,
                                                            targetAccuracy);
     
     easting = targetCoordinates.easting();
     northing = targetCoordinates.northing();
+}
+
+void convertMapProjectionToGeodeticMlsEgm(CoordinateConversionService& ccsMapProjectionToGeodeticMlsEgm,
+                                          CoordinateType::Enum type,
+                                          double easting,
+                                          double northing,
+                                          double &lat,
+                                          double &lon)
+{
+    Accuracy sourceAccuracy;
+    Accuracy targetAccuracy;
+    GeodeticCoordinates targetCoordinates;//(CoordinateType::geodetic, lon, lat, mslHeight);
+    MapProjectionCoordinates sourceCoordinates(type, easting, northing);
+    
+    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                           &sourceAccuracy,
+                                                           targetCoordinates,
+                                                           targetAccuracy);
+    lat = targetCoordinates.latitude();
+    lon = targetCoordinates.longitude();
 }
 
 /////Mod
@@ -561,6 +533,72 @@ std::string convertGeocentricToMgrs(
     return mgrsString;
 }
 
+std::string convertGeodeticMlsEgmToMgrs(
+                                    CoordinateConversionService& ccsGeodeticMlsEgmToMgrs,
+                                    double lat,
+                                    double lon,
+                                    double mslHeight,
+                                    Precision::Enum& precision)
+{
+    char* p;
+    std::string mgrsString;
+    
+    Accuracy sourceAccuracy;
+    Accuracy targetAccuracy;
+    CartesianCoordinates sourceCoordinates(
+                                           CoordinateType::geodetic, lon, lat, mslHeight);
+    MGRSorUSNGCoordinates targetCoordinates;
+    
+    ccsGeodeticMlsEgmToMgrs.convertSourceToTarget(
+                                                  &sourceCoordinates,
+                                                  &sourceAccuracy,
+                                                  targetCoordinates,
+                                                  targetAccuracy );
+    
+    // Returned value, 'p', points to targetCoordinate's internal character
+    // array so assign/copy the character array to mgrsString to avoid
+    // introducing memory management issues
+    p = targetCoordinates.MGRSString();
+    mgrsString = p;
+    
+    precision = targetCoordinates.precision();
+    
+    return mgrsString;
+}
+
+std::string convertGeodeticMlsEgmToBNG(
+                                        CoordinateConversionService& ccsGeodeticMlsEgmToBNG,
+                                        double lat,
+                                        double lon,
+                                        double mslHeight,
+                                        Precision::Enum& precision)
+{
+    char* p;
+    std::string bngString;
+    
+    Accuracy sourceAccuracy;
+    Accuracy targetAccuracy;
+    CartesianCoordinates sourceCoordinates(
+                                           CoordinateType::geodetic, lon, lat, mslHeight);
+    BNGCoordinates targetCoordinates;
+    
+    ccsGeodeticMlsEgmToBNG.convertSourceToTarget(
+                                                 &sourceCoordinates,
+                                                 &sourceAccuracy,
+                                                 targetCoordinates,
+                                                 targetAccuracy );
+    
+    // Returned value, 'p', points to targetCoordinate's internal character
+    // array so assign/copy the character array to mgrsString to avoid
+    // introducing memory management issues
+    p = targetCoordinates.BNGString();
+    bngString = p;
+    
+    precision = targetCoordinates.precision();
+    
+    return bngString;
+}
+
 
 @interface GeoTrans() {
     //
@@ -598,12 +636,19 @@ std::string convertGeocentricToMgrs(
     
 }
 @property (nonatomic) MSP::CCS::DatumLibrary *datumLibrary;
+@property (nonatomic, assign) double lat;
+@property (nonatomic, assign) double lng;
+@property (nonatomic, assign) double alt;
+@property (nonatomic, assign) const char* srcCode;
+@property (nonatomic, assign) const char* targetCode;
 
 @end
 
 @implementation GeoTrans
 @synthesize srcCode = _srcCode;
 @synthesize targetCode = _targetCode;
+@synthesize srcDatumCode = _srcDatumCode;
+@synthesize targetDatumCode = _targetDatumCode;
 @synthesize datumLibrary = _datumLibrary;
 @synthesize lat = _lat;
 @synthesize lng = _lng;
@@ -611,65 +656,10 @@ std::string convertGeocentricToMgrs(
 
 - (instancetype)init {
     if (self = [super init]) {
-        //
-        // Coordinate System Parameters
-        //
-        ellipsoidParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::ellipsoidHeight);
-        
-        geocentricParameters = CoordinateSystemParameters(CoordinateType::geocentric);
-        
-        
-        mslEgm84TenDegBilinearParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::EGM84TenDegBilinear);
-        
-        mslEgm84ThirtyMinBiLinearParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::EGM84ThirtyMinBiLinear);
-        
-        
-        
-        mslEgm84TenDegNaturalSplineParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::EGM84TenDegNaturalSpline);
-        
-        mslEgm96FifteenMinBilinearParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::EGM96FifteenMinBilinear);
-        
-        mslEgm96VariableNaturalSplineParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
-        
-        mslEgm2008TwoPtFiveMinBicubicSplineParameters = GeodeticParameters(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
-        
-        utmParameters = UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
-        
-        mgrsParameters = CoordinateSystemParameters(CoordinateType::militaryGridReferenceSystem);
-        
-        //tmParameters = CoordinateSystemParameters(CoordinateType::transverseMercator);
-        //MapProjection3Parameters( CoordinateType::Enum _coordinateType, double __centralMeridian, double __falseEasting, double __falseNorthing );
-        //MapProjection4Parameters( CoordinateType::Enum _coordinateType, double __centralMeridian, double __originLatitude, double __falseEasting, double __falseNorthing );
-        //MapProjection5Parameters::MapProjection5Parameters() :
-//        CoordinateSystemParameters( CoordinateType::transverseMercator ),
-//        _centralMeridian( 0 ),
-//        _originLatitude( 0 ),
-//        _scaleFactor( 1.0 ),
-//        _falseEasting( 0 ),
-//        _falseNorthing( 0 )
-//        {
-//        }
-        //MapProjection6Parameters( CoordinateType::Enum _coordinateType, double __centralMeridian, double __originLatitude, double __standardParallel1, double __standardParallel2, double __falseEasting, double __falseNorthing );
-        //
-
-        
-        //tmParameters = MapProjection5Parameters(CoordinateType::transverseMercator, 105.0*DEG2RAD, 0.0, 0.9999,500000.0,0.0);
-        
-        
         _srcCode = [@"WGE" cStringUsingEncoding:NSASCIIStringEncoding];
-        _targetCode = [@"WGE" cStringUsingEncoding:NSASCIIStringEncoding];
-        
-        sourceHeightType = HeightType::noHeight;
-        targetHeightType = HeightType::noHeight;
-        
-        sourceCoordinateType = CoordinateType::geodetic;
-        targetCoordinateType = CoordinateType::usNationalGrid;
-        
-        // Khởi tạo datumLibrary để tạo datum từ proj4
-        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
-        UTMParameters utmParams = UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
-        CoordinateConversionService ccs(_srcCode, &geodeticMlsEgmParams, _targetCode, &utmParams);
-        _datumLibrary = ccs.getDatumLibrary();
+        _targetCode = [getDatumCode() cStringUsingEncoding:NSASCIIStringEncoding];
+        _srcDatumCode = @"WGE";
+        _targetDatumCode = getDatumCode();
     }
     return self;
 }
@@ -678,6 +668,8 @@ std::string convertGeocentricToMgrs(
     if (self = [self init]) {
         _srcCode = [sourceDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
         _targetCode = [targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+        _srcDatumCode = sourceDatumCode;
+        _targetDatumCode = targetDatumCode;
     }
     return self;
 }
@@ -750,14 +742,6 @@ std::string convertGeocentricToMgrs(
     if ([proj isEqualToString:@"vandg"]) {
         coordinateType = CoordinateType::vanDerGrinten;
     }
-}
-
-- (void)setSourceDatumCode:(NSString *)sourceDatumCode {
-    _srcCode = [sourceDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
-}
-
-- (void)setTargetDatumCode:(NSString *)targetDatumCode {
-    _targetCode = [targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
 }
 
 - (void)setSourceCoordinateType:(NSInteger)index {
@@ -1066,146 +1050,6 @@ std::string convertGeocentricToMgrs(
     }
 }
 
-/*
- * Hàm lấy tham số lưới chiếu từ NSUserDefault được thiết lập từ GTField
- */
-CoordinateSystemParameters getCoordinateSystemParametersForCoordinateType(CoordinateType::Enum type) {
-    double ellipsoidSemiMajorAxis = 6378137.0;
-    double ellipsoidFlattening = 1/298.257223563;
-    double __centralMeridian;
-    double __standardParallel;
-    double __falseEasting;
-    double __falseNorthing;
-    double __longitude;
-    double __latitude;
-    double __height;
-    double __orientation;
-    double __originLatitude;
-    double __scaleFactor;
-    double __standardParallel1;
-    double __standardParallel2;
-    double __longitude1;
-    double __latitude1;
-    double __longitude2;
-    double __latitude2;
-    double __longitudeDownFromPole;
-    char __hemisphere;
-    double __latitudeOfTrueScale;
-    long __zone;
-    long __override;
-    switch (type) {
-            case MSP::CCS::CoordinateType::britishNationalGrid:
-            case MSP::CCS::CoordinateType::militaryGridReferenceSystem:
-            case MSP::CCS::CoordinateType::newZealandMapGrid:
-            case MSP::CCS::CoordinateType::usNationalGrid:
-            case MSP::CCS::CoordinateType::webMercator:
-            //=>EllipsoidParameters
-            return CoordinateSystemParameters(type);
-            break;
-            
-            case MSP::CCS::CoordinateType::equidistantCylindrical:
-            //=>EquidistantCylindricalParameters
-            getEquidistantCylindricalParameters(&__centralMeridian, &__standardParallel, &__falseEasting, &__falseNorthing);
-            return EquidistantCylindricalParameters(type, __centralMeridian, __standardParallel, __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::localCartesian:
-            //=>LocalCartesianParameters
-            getLocalCartesianParameters(&__longitude, &__latitude, &__height, &__orientation);
-            return LocalCartesianParameters(type, __longitude, __latitude, __height, __orientation);
-            break;
-            
-            case MSP::CCS::CoordinateType::eckert4:
-            case MSP::CCS::CoordinateType::eckert6:
-            case MSP::CCS::CoordinateType::millerCylindrical:
-            case MSP::CCS::CoordinateType::mollweide:
-            case MSP::CCS::CoordinateType::sinusoidal:
-            case MSP::CCS::CoordinateType::vanDerGrinten:
-            //=>MapProjection3Parameters
-            getMapProjection3Parameters(&__centralMeridian, &__falseEasting, &__falseNorthing);
-            return MapProjection3Parameters(type, __centralMeridian, __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::azimuthalEquidistant:
-            case MSP::CCS::CoordinateType::bonne:
-            case MSP::CCS::CoordinateType::cassini:
-            case MSP::CCS::CoordinateType::cylindricalEqualArea:
-            case MSP::CCS::CoordinateType::gnomonic:
-            case MSP::CCS::CoordinateType::orthographic:
-            case MSP::CCS::CoordinateType::polyconic:
-            case MSP::CCS::CoordinateType::stereographic:
-            //=>MapProjection4Parameters
-            getMapProjection4Parameters(&__centralMeridian, &__originLatitude, &__falseEasting, &__falseNorthing);
-            return MapProjection3Parameters(type, __centralMeridian, __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::transverseCylindricalEqualArea:
-            case MSP::CCS::CoordinateType::transverseMercator:
-            case MSP::CCS::CoordinateType::lambertConformalConic1Parallel: {
-                //=>MapProjection5Parameters
-                getMapProjection5Parameters(&__centralMeridian, &__originLatitude, &__scaleFactor, &__falseEasting, &__falseNorthing);
-                getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
-                
-//                char *ellipsoidCode = "99";
-//                TransverseMercator tm = TransverseMercator(ellipsoidSemiMajorAxis, ellipsoidFlattening, __centralMeridian, __originLatitude, __falseEasting, __falseNorthing, __scaleFactor, ellipsoidCode);
-//                
-//                return *tm.getParameters();
-//                
-                return MapProjection5Parameters(type, 105.0*DEG2RAD, 0.0, 0.9999, 500000.0, 0.0);
-                //return MapProjection5Parameters(type, __centralMeridian, __originLatitude, __scaleFactor, __falseEasting, __falseNorthing);
-            }
-            break;
-            case MSP::CCS::CoordinateType::lambertConformalConic2Parallels:
-            case MSP::CCS::CoordinateType::albersEqualAreaConic:
-            //=>MapProjection6Parameters
-            getMapProjection6Parameters(&__centralMeridian, &__originLatitude, &__standardParallel1, &__standardParallel2, &__falseEasting, &__falseNorthing);
-            return MapProjection6Parameters(type, __centralMeridian, __originLatitude, __standardParallel1, __standardParallel2, __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::mercatorStandardParallel:
-            //=>MercatorStandardParallelParameters
-            getMercatorStandardParallelParameters(&__centralMeridian, &__standardParallel, &__scaleFactor, &__falseEasting, &__falseNorthing);
-            return MercatorStandardParallelParameters(type, __centralMeridian, __standardParallel, __scaleFactor,  __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::mercatorScaleFactor:
-            //=>MercatorScaleFactorParameters
-            getMercatorScaleFactorParameters(&__centralMeridian, &__scaleFactor, &__falseEasting, &__falseNorthing);
-            return MercatorScaleFactorParameters(type, __centralMeridian, __scaleFactor, __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::neys:
-            //=>NeysParameters
-            getNeysParameters(&__centralMeridian, &__originLatitude, &__standardParallel1, &__falseEasting, &__falseNorthing);
-            return NeysParameters(type, __centralMeridian, __originLatitude, __standardParallel1, __falseEasting, __falseNorthing);
-            break;
-            
-            case MSP::CCS::CoordinateType::obliqueMercator:
-            //=>ObliqueMercatorParameters
-            getObliqueMercatorParameters(&__originLatitude, &__longitude1, &__latitude1, &__longitude2, &__latitude2, &__falseEasting, &__falseNorthing, &__scaleFactor);
-            return ObliqueMercatorParameters(type, __originLatitude, __longitude1, __latitude1, __longitude2, __latitude2, __falseEasting, __falseNorthing, __scaleFactor);
-            break;
-            case MSP::CCS::CoordinateType::polarStereographicStandardParallel:
-            //=>PolarStereographicStandardParallelParameters
-            getPolarStereographicStandardParallelParameters(&__longitudeDownFromPole, &__latitudeOfTrueScale, &__falseEasting, &__falseNorthing);
-            return PolarStereographicStandardParallelParameters(type, __longitudeDownFromPole, __latitudeOfTrueScale, __falseEasting, __falseNorthing);
-            break;
-            case MSP::CCS::CoordinateType::polarStereographicScaleFactor:
-            //=>PolarStereographicScaleFactorParameters
-            getPolarStereographicScaleFactorParameters(&__longitudeDownFromPole, &__scaleFactor, &__hemisphere, &__falseEasting, &__falseNorthing);
-            return PolarStereographicScaleFactorParameters(type, __longitudeDownFromPole, __scaleFactor, __hemisphere, __falseEasting, __falseNorthing);
-            break;
-            case MSP::CCS::CoordinateType::universalTransverseMercator:
-            //=>UTMParameters
-            getUTMParameters(&__zone, &__override);
-            return UTMParameters(type, __zone, __override);
-            break;
-        default:
-            break;
-    }
-    return UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
-}
-
 - (void)setLat:(double)latitude lng:(double)longitude alt:(double)altitude {
     _lat = latitude;
     _lng = longitude;
@@ -1219,164 +1063,759 @@ CoordinateSystemParameters getCoordinateSystemParametersForCoordinateType(Coordi
     _datumLibrary->defineDatum(datumType, dCode, dName, eCode, deltaX, deltaY, deltaZ, 0, 0, 0, 0, 0, 0, 0, rotationX, rotationY, rotationZ, scaleFactor);
 }
 
-- (int)getTM:(double *)easting :(double *)northing {
-    int status = 1;
-    try {
-        try {
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
-// Có thể tạo parameters theo cách này:
-// MapProjection5Parameters tmParams = MapProjection5Parameters(CoordinateType::transverseMercator,105.0*DEG2RAD, 0.0, 0.9999,500000.0,0.0);
 
-// Cũng có thể tạp parameters từ Projection class (có thể thêm ellipsoid):
-// char* eCode = "WO";
-// TransverseMercator tm = TransverseMercator(6378137.0, 1/298.257223563, 105.0*DEG2RAD, 0.0, 500000.0, 0.0, 0.9999, eCode);
-// MapProjection5Parameters *tmParams = tm.getParameters();
-
-            char* eCode = "WO";
-            TransverseMercator tm = TransverseMercator(6378137.0, 1/298.257223563, 105.0*DEG2RAD, 0.0, 500000.0, 0.0, 0.9999, eCode);
-            
-            MapProjection5Parameters *tmParams = tm.getParameters();
-            // Tao datum
-//            -191.90441429, -39.30318279, -111.45032835,0,0,0,108 -0.00928836, 0.01975479, -0.00427372, 0.25290628,
-//            EllipsoidLibrary::defineEllipsoid(<#const char *code#>, <#const char *name#>, <#double semiMajorAxis#>, <#double flattening#>)
-//            datumLibrary->defineDatum(DatumType::Enum::sevenParamDatum, "VN", "Vietnam", "WE", -191.90441429, -39.30318279, -111.45032835,0,0,0, 103.0*DEG2RAD, 114.0*DEG2RAD, 8.0*DEG2RAD, 24.0*DEG2RAD, -0.00928836, 0.01975479, -0.00427372, 0.25290628/1000000.0e0);
-            
-            const char* wgeCode = "WGE";
-            const char* weCode = "WE";
-            const char* dCode = "VN2";
-            GeodeticParameters geodeticParams(CoordinateType::geodetic);
-            CoordinateConversionService ccs(wgeCode, &geodeticParams, wgeCode, &geodeticParams);
-            _datumLibrary = ccs.getDatumLibrary();
-            long count;
-            _datumLibrary->getDatumCount(&count);
-            NSLog(@"%ld", count);
-            CoordinateTuple ct;
-            
-//            _datumLibrary->defineDatum(DatumType::Enum::sevenParamDatum, dCode, "Vietnam", weCode, -191.90441429, -39.30318279, -111.45032835,0,0,0, 103.0*DEG2RAD, 114.0*DEG2RAD, 8.0*DEG2RAD, 24.0*DEG2RAD, -0.00928836, 0.01975479, -0.00427372, 0.25290628/1000000.0e0);
-            
-            CoordinateConversionService ccsGeodeticMlsEgmToTm(_srcCode, &geodeticMlsEgmParams, _targetCode, tmParams);
-
-            
-            
-            convertGeodeticMlsEgmToTm(ccsGeodeticMlsEgmToTm,
-                                      _lat, _lng, _alt,
-                                      *easting, *northing);
-            
-            status = 0;
-        } catch(CoordinateConversionException& e) {
-            // catch and report any exceptions thrown by the Coordinate
-            // Conversion Service
-            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-        } catch(std::exception& e) {
-            // catch and report any unexpected exceptions thrown
-            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-        }
-        
-    } catch(CoordinateConversionException& e) {
-        // catch and report any exceptions thrown by the Coordinate
-        // Conversion Service
-        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-    } catch(std::exception& e) {
-        // catch and report any unexpected exceptions thrown
-        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-    }
-    return status;
-}
-
-- (int)getTMForLat:(double)lat lng:(double)lng easting:(double *)easting northing:(double *)northing {
-    int status = 1;
-    _lat = lat;
-    _lng = lng;
-    try {
-        try {
-            // Kiểm tra xem lưới chiếu hiện tại là gì
-            long coordinateType = 0; //UTM
-            getCoordinateType(&coordinateType);
-            CoordinateType::Enum type = (CoordinateType::Enum)coordinateType;
-            CoordinateSystemParameters targetParams = getCoordinateSystemParametersForCoordinateType(type);
-            
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
-            
-            // Chỉ cần đặt mặc định source là WGE và target là VN-2, chương trình sẽ định hướng đến hệ tọa độ đích
-            // sau đó, đoạn fix chuyentt sẽ đọc tham số elliosoid và datum từ NSUserDefault chứ không đọc từ file
-            CoordinateConversionService ccsGeodeticMlsEgmToTm("WGE", &geodeticMlsEgmParams, "VN-2", &targetParams);
-            
-            convertGeodeticMlsEgmToTm(ccsGeodeticMlsEgmToTm,
-                                      _lat, _lng, _alt,
-                                      *easting, *northing);
-            
-            status = 0;
-        } catch(CoordinateConversionException& e) {
-            // catch and report any exceptions thrown by the Coordinate
-            // Conversion Service
-            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-        } catch(std::exception& e) {
-            // catch and report any unexpected exceptions thrown
-            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-        }
-        
-    } catch(CoordinateConversionException& e) {
-        // catch and report any exceptions thrown by the Coordinate
-        // Conversion Service
-        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-    } catch(std::exception& e) {
-        // catch and report any unexpected exceptions thrown
-        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-    }
-    return status;
-}
 
 
 /*
- * Chuẩn hóa
+ * Thiết lập mã datum nguồn
+ */
+//- (void)setSourceDatumCode:(NSString *)code {
+//    _srcCode = [code cStringUsingEncoding:NSASCIIStringEncoding];
+//    _srcDatumCode = code;
+//}
+
+/*
+ * Thiết lập mã datum đích, nếu datum chưa có trong file dat thì để là 9999
+ * Tham số datum này sẽ được lưu vào một file riêng đồng thời lưu vào
+ * USerDefault, hệ thống sẽ đọc từ đó để tính nếu như code là 9999
+ * Nếu code khác 9999 thì sẽ đọc trong file dat
+ * Cần thông báo cho những người muốn thêm datum vào danh sách chính thức,
+ * khi đó sẽ đưa vào file dat
+ */
+//- (void)setTargetDatumCode:(NSString *)code {
+//    _targetCode = [code cStringUsingEncoding:NSASCIIStringEncoding];
+//    _targetDatumCode = code;
+//}
+
+/*
+ * Hệ đặc thù, datum OGB-7, ellipsoid AA
+ * Lưu ý: Khi chọn lưới chiếu này thì nhất định phải chọn datum 7 tham số OGB-7 "ORDNANCE GB 1936, Mean (7 Para)"
+ * nghĩa là nếu chọn lưới chiếu này thì đặt mặc định tham số ellipsoid là AA vào hệ thống, đồng thời đặt 7 tham số
+ * của hệ OGB-7 vào hệ thống
+ * Global.swift:
+ * 
  */
 - (void)getBNGCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage BNGString:(NSString **)BNGString precision:(long *)precision {
-    
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            Precision::Enum precision = Precision::tenthOfSecond;
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa toàn cầu sang tọa độ trắc địa cục bộ có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            double __lat = targetCoordinates.latitude();
+            double __lng = targetCoordinates.longitude();
+            // ========= END DATUM TRANSFORMATION ========
+            
+            // Tính chuyển tọa độ trắc địa hệ cục bộ sang tọa độ phẳng lưới chiếu BNG
+            // Hệ BNG chỉ sử dụng datum 7 tham số OGB-7 "ORDNANCE GB 1936, Mean (7 Para)"
+            char *ellipsoidCode = (char*)"AA";
+            BritishNationalGrid br = BritishNationalGrid(ellipsoidCode);
+            BNGCoordinates *bngCoordinates = br.convertFromGeodetic(new GeodeticCoordinates(CoordinateType::geodetic, __lng, __lat), precision);
+            
+            std::string bngString = bngCoordinates->BNGString();
+            *BNGString = [NSString stringWithUTF8String:bngString.c_str()];
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
 }
 
 - (void)getCartesianCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage x:(double *)x y:(double *)y z:(double *)z {
-    
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &sourceParams, _targetCode, &sourceParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            double __lat = targetCoordinates.latitude();
+            double __lng = targetCoordinates.longitude();
+            // ========= END DATUM TRANSFORMATION ========
+            
+            // Các tham số cho lưới chiếu LocalCartesian
+            double ellipsoidSemiMajorAxis;
+            double ellipsoidFlattening;
+            double originLongitude;
+            double originLatitude;
+            double originHeight;
+            double orientation;
+            
+            // Lấy tham số ellipsoid
+            getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
+            
+            // Lấy tham số lưới chiếu
+            getLocalCartesianParameters(&originLongitude, &originLatitude, &originHeight, &orientation);
+            
+            // Khởi tạo phép chiếu LocalCartesian
+            LocalCartesian lc = LocalCartesian(ellipsoidSemiMajorAxis, ellipsoidFlattening, originLongitude, originLatitude, originHeight, orientation);
+            
+            // Tính chuyển từ tọa độ trắc địa
+            CartesianCoordinates *cartesianCoordinates = lc.convertFromGeodetic(new GeodeticCoordinates(CoordinateType::geodetic, __lng, __lat));
+            
+            *x = cartesianCoordinates->x();
+            *y = cartesianCoordinates->y();
+            *z = cartesianCoordinates->z();
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
 }
 
 - (void)getGARSCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage GARSString:(NSString **)GARSString precision:(long *)precision {
-    
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Tạo tham số đích
+            CoordinateSystemParameters targetParams = CoordinateSystemParameters(CoordinateType::globalAreaReferenceSystem);
+            
+            CoordinateConversionService ccsGeodeticMlsEgmToMGRSorGARS(_srcCode, &sourceParams, _targetCode, &targetParams);
+            
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            GARSCoordinates targetCoordinates = GARSCoordinates(CoordinateType::globalAreaReferenceSystem, "361HN37", Precision::tenThousandthOfSecond);
+            
+            ccsGeodeticMlsEgmToMGRSorGARS.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *GARSString = [NSString stringWithFormat:@"%s" , targetCoordinates.GARSString()];
+            *precision = targetCoordinates.precision();
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
 }
 
 - (void)getGEOREFCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage GEOREFString:(NSString **)GEOREFString precision:(long *)precision {
-    
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Tạo tham số đích
+            CoordinateSystemParameters targetParams = CoordinateSystemParameters(CoordinateType::georef);
+            
+            CoordinateConversionService ccsGeodeticMlsEgmToMGRSorGeoref(_srcCode, &sourceParams, _targetCode, &targetParams);
+            
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            GEOREFCoordinates targetCoordinates = GEOREFCoordinates(CoordinateType::georef, "NGAA0000000000", Precision::tenThousandthOfSecond);
+            
+            ccsGeodeticMlsEgmToMGRSorGeoref.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *GEOREFString = [NSString stringWithFormat:@"%s" , targetCoordinates.GEOREFString()];
+            *precision = targetCoordinates.precision();
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+- (void)getMGRSorUSNGCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage MGRSString:(NSString **)MGRSString precision:(long *)precision {
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Tạo tham số đích
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            CoordinateSystemParameters targetParams = CoordinateSystemParameters(coordinateType);
+            
+            CoordinateConversionService ccsGeodeticMlsEgmToMGRSorUSNG(_srcCode, &sourceParams, _targetCode, &targetParams);
+            
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            
+            MGRSorUSNGCoordinates targetCoordinates;
+            
+            // = MGRSorUSNGCoordinates(CoordinateType::militaryGridReferenceSystem, "31NEA0000000000", Precision::tenThousandthOfSecond);
+            
+            ccsGeodeticMlsEgmToMGRSorUSNG.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *MGRSString = [NSString stringWithFormat:@"%s" , targetCoordinates.MGRSString()];
+            *precision = targetCoordinates.precision();
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
 }
 
 - (void)getMapProjectionCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage easting:(double *)easting northing:(double *)northing {
     _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
     try {
         try {
-            // Kiểm tra xem lưới chiếu hiện tại là gì
-            long coordinateType = 0; //UTM
-            getCoordinateType(&coordinateType);
-            CoordinateType::Enum type = (CoordinateType::Enum)coordinateType;
-            
-            double centralMeridian = 0.0;
-            double originLatitude = 0.0;
-            double scaleFactor = 1.0;
-            double falseEasting = 0.0;
-            double falseNorthing = 0.0;
-            
-            // Lấy thông số lưới chiếu đã lưu
-            getMapProjection5Parameters(&centralMeridian, &originLatitude, &scaleFactor, &falseEasting, &falseNorthing);
-            
-            // Tạo tham số lưới chiếu đích
-            MapProjection5Parameters targetParams = MapProjection5Parameters(type, centralMeridian, originLatitude, scaleFactor, falseEasting, falseNorthing);
-            
             // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Các tham số chung cho các lưới chiếu
+            double ellipsoidSemiMajorAxis = 6378137.0;
+            double ellipsoidFlattening = 1/298.257223563;
+            double centralMeridian;
+            double standardParallel;
+            double falseEasting;
+            double falseNorthing;
+            double originLatitude;
+            double scaleFactor;
+            double standardParallel1;
+            double standardParallel2;
+            double longitude1;
+            double latitude1;
+            double longitude2;
+            double latitude2;
+            
+            // Lấy tham số ellipsoid
+            getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
+            
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            switch (coordinateType) {
+                    // =>MapProjection3Parameters
+                    case CoordinateType::eckert4:
+                    case CoordinateType::eckert6:
+                    case CoordinateType::millerCylindrical:
+                    case CoordinateType::mollweide:
+                    case CoordinateType::sinusoidal:
+                    case CoordinateType::vanDerGrinten: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getMapProjection3Parameters(&centralMeridian, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        MapProjection3Parameters targetParams = MapProjection3Parameters(coordinateType, centralMeridian, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>MapProjection4Parameters
+                    case CoordinateType::azimuthalEquidistant:
+                    case CoordinateType::bonne:
+                    case CoordinateType::cassini:
+                    case CoordinateType::cylindricalEqualArea:
+                    case CoordinateType::gnomonic:
+                    case CoordinateType::orthographic:
+                    case CoordinateType::polyconic:
+                    case CoordinateType::stereographic: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getMapProjection4Parameters(&centralMeridian, &originLatitude, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        MapProjection4Parameters targetParams = MapProjection4Parameters(coordinateType, centralMeridian, originLatitude, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>MapProjection5Parameters
+                    case CoordinateType::transverseCylindricalEqualArea:
+                    case CoordinateType::transverseMercator:
+                    case CoordinateType::lambertConformalConic1Parallel: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getMapProjection5Parameters(&centralMeridian, &originLatitude, &scaleFactor, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        MapProjection5Parameters targetParams = MapProjection5Parameters(coordinateType, centralMeridian, originLatitude, scaleFactor, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>MapProjection6Parameters
+                    case CoordinateType::lambertConformalConic2Parallels:
+                    case CoordinateType::albersEqualAreaConic: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getMapProjection6Parameters(&centralMeridian, &originLatitude, &standardParallel1, &standardParallel2, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        MapProjection6Parameters targetParams = MapProjection6Parameters(coordinateType, centralMeridian, originLatitude, standardParallel1, standardParallel2, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>MercatorScaleFactorParameters
+                    case CoordinateType::mercatorScaleFactor: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getMercatorScaleFactorParameters(&centralMeridian, &scaleFactor, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        MercatorScaleFactorParameters targetParams = MercatorScaleFactorParameters(coordinateType, centralMeridian, scaleFactor, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>MercatorStandardParallelParameters
+                    case CoordinateType::mercatorStandardParallel: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getMercatorStandardParallelParameters(&centralMeridian, &standardParallel, &scaleFactor, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        MercatorStandardParallelParameters targetParams = MercatorStandardParallelParameters(coordinateType, centralMeridian, standardParallel, scaleFactor, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>EquidistantCylindricalParameters
+                    case CoordinateType::equidistantCylindrical: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getEquidistantCylindricalParameters(&centralMeridian, &standardParallel, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        EquidistantCylindricalParameters targetParams = EquidistantCylindricalParameters(coordinateType, centralMeridian, standardParallel, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>NeysParameters
+                    case CoordinateType::neys: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getNeysParameters(&centralMeridian, &originLatitude, &standardParallel, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        NeysParameters targetParams = NeysParameters(coordinateType, centralMeridian, originLatitude, standardParallel, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>
+                    case CoordinateType::newZealandMapGrid: {
+                        // ========= DATUM TRANSFORMATION ========
+                        // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+                        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+                        
+                        // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+                        CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+                        
+                        // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+                        Accuracy sourceAccuracy;
+                        Accuracy targetAccuracy;
+                        GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+                        GeodeticCoordinates targetCoordinates;
+                        
+                        // Tính chuyển tọa độ trắc địa toàn cầu sang tọa độ trắc địa cục bộ có sử sụng datum
+                        ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+                        
+                        double __lat = targetCoordinates.latitude();
+                        double __lng = targetCoordinates.longitude();
+                        // ========= END DATUM TRANSFORMATION ========
+                        
+                        NSString *ellipsoidCode = getEllipsoidCode();
+                        char* eCode = (char *)[ellipsoidCode cStringUsingEncoding:NSASCIIStringEncoding];
+                        NZMG nzmg = NZMG(eCode);
+                        MapProjectionCoordinates *mapProjectionCoordinates = nzmg.convertFromGeodetic(new GeodeticCoordinates(CoordinateType::geodetic, __lng, __lat));
+                        *easting = mapProjectionCoordinates->easting();
+                        *northing = mapProjectionCoordinates->northing();
+                    }
+                    break;
+                    
+                    //=>ObliqueMercatorParameters
+                    case CoordinateType::obliqueMercator: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getObliqueMercatorParameters(&originLatitude, &longitude1, &latitude1, &longitude2, &latitude2, &falseEasting, &falseNorthing, &scaleFactor);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        ObliqueMercatorParameters targetParams = ObliqueMercatorParameters(coordinateType, originLatitude, longitude1, latitude1, longitude2, latitude2, falseEasting, falseNorthing, scaleFactor);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>PolarStereographicScaleFactorParameters
+                    case CoordinateType::polarStereographicScaleFactor: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getPolarStereographicScaleFactorParameters(&centralMeridian, &scaleFactor, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        char hemisphere = 'N';
+                        PolarStereographicScaleFactorParameters targetParams = PolarStereographicScaleFactorParameters(coordinateType, centralMeridian, scaleFactor, hemisphere, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //=>PolarStereographicStandardParallelParameters
+                    case CoordinateType::polarStereographicStandardParallel: {
+                        // Lấy tham số lưới chiếu đã lưu
+                        getPolarStereographicStandardParallelParameters(&centralMeridian, &standardParallel, &falseEasting, &falseNorthing);
+                        
+                        // Tạo tham số lưới chiếu đích
+                        PolarStereographicStandardParallelParameters targetParams = PolarStereographicStandardParallelParameters(coordinateType, centralMeridian, standardParallel, falseEasting, falseNorthing);
+                        
+                        // Thiết lập chuyển đổi
+                        CoordinateConversionService ccsGeodeticMlsEgmToMapProjection(_srcCode, &sourceParams, _targetCode, &targetParams);
+                        convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection, _lat, _lng, _alt, *easting, *northing);
+                    }
+                    break;
+                    
+                    //
+                    case CoordinateType::webMercator: {
+                        // ========= DATUM TRANSFORMATION ========
+                        // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+                        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+                        
+                        // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+                        CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+                        
+                        // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+                        Accuracy sourceAccuracy;
+                        Accuracy targetAccuracy;
+                        GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+                        GeodeticCoordinates targetCoordinates;
+                        
+                        // Tính chuyển tọa độ trắc địa toàn cầu sang tọa độ trắc địa cục bộ có sử sụng datum
+                        ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+                        
+                        double __lat = targetCoordinates.latitude();
+                        double __lng = targetCoordinates.longitude();
+                        // ========= END DATUM TRANSFORMATION ========
+                        
+                        NSString *ellipsoidCode = @"WE"; // Luôn luôn là WE
+                        char* eCode = (char *)[ellipsoidCode cStringUsingEncoding:NSASCIIStringEncoding];
+                        WebMercator webMercator = WebMercator(eCode);
+                        MapProjectionCoordinates *mapProjectionCoordinates = webMercator.convertFromGeodetic(new GeodeticCoordinates(CoordinateType::geodetic, __lng, __lat));
+                        *easting = mapProjectionCoordinates->easting();
+                        *northing = mapProjectionCoordinates->northing();
+                    }
+                    break;
+                    
+                default:
+                    break;
+            }
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+
+/*
+ *
+ */
+- (void)getUPSCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage hemisphere:(NSString **)hemisphere easting:(double *)easting northing:(double *)northing {
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
             GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
             
-            // Chỉ cần đặt mặc định source là WGE và target là VN-2, chương trình sẽ định hướng đến hệ tọa độ đích
-            // sau đó, đoạn fix chuyentt sẽ đọc tham số elliosoid và datum từ NSUserDefault chứ không đọc từ file
-            CoordinateConversionService ccsGeodeticMlsEgmToMapProjection("WGE", &geodeticMlsEgmParams, "VN-2", &targetParams);
+            // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
             
-            convertGeodeticMlsEgmToMapProjection(ccsGeodeticMlsEgmToMapProjection,
-                                                 _lat, _lng, _alt,
-                                                 *easting, *northing);
+            // Tính chuyển tọa độ trắc địa sang tọa trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            double __lat = targetCoordinates.latitude();
+            double __lng = targetCoordinates.longitude();
+            
+            // Tính chuyển tọa độ trắc địa hệ cục bộ sang tọa độ phẳng theo lưới chiếu UPS
+            // Đọc ellipsoid từ hệ thống: Khi chọn lưới chiếu này bắt buộc phải chọn datum và ellipsoid
+            double ellipsoidSemiMajorAxis;
+            double ellipsoidFlattening;
+            getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
+            UPS ups = UPS(ellipsoidSemiMajorAxis, ellipsoidFlattening);
+            UPSCoordinates *upsCoordinates = ups.convertFromGeodetic(new GeodeticCoordinates(CoordinateType::geodetic, __lng, __lat));
+            
+            char _hemi = upsCoordinates->hemisphere();
+            *hemisphere = [NSString stringWithFormat:@"%c" , _hemi];
+            *easting = upsCoordinates->easting();
+            *northing = upsCoordinates->northing();
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+- (void)getUTMCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage zone:(long *)zone hemisphere:(NSString **)hemisphere easting:(double *)easting northing:(double *)northing {
+    _lat = lat; _lng = lng; _alt = alt;
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Tạo tham số đích
+            UTMParameters targetParams = UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
+            
+            CoordinateConversionService ccsGeodeticMlsEgmToUTM(_srcCode, &sourceParams, _targetCode, &targetParams);
+            
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+            UTMCoordinates targetCoordinates;
+            
+            ccsGeodeticMlsEgmToUTM.convertSourceToTarget(&sourceCoordinates,
+                                                         &sourceAccuracy,
+                                                         targetCoordinates,
+                                                         targetAccuracy);
+            
+            *zone = targetCoordinates.zone();
+            char _hemi = targetCoordinates.hemisphere();
+            *hemisphere = [NSString stringWithFormat:@"%c" , _hemi];
+            *easting = targetCoordinates.easting();
+            *northing = targetCoordinates.northing();
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+
+//===============================
+// Convert from local to geodetic
+- (void)getGeodeticForBNGCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type BNGString:(NSString *)BNGString precision:(long)precision height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            Precision::Enum precision = Precision::tenthOfSecond;
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ BNG sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            // Hệ BNG chỉ sử dụng datum 7 tham số OGB-7 "ORDNANCE GB 1936, Mean (7 Para)"
+            
+            BNGCoordinates *bngCoordinates = new BNGCoordinates(CoordinateType::britishNationalGrid, [BNGString cStringUsingEncoding:NSASCIIStringEncoding], precision);
+            
+            char *ellipsoidCode = (char*)"AA";
+            BritishNationalGrid br = BritishNationalGrid(ellipsoidCode);
+            
+            GeodeticCoordinates *geodeticCoordinates = br.convertToGeodetic(bngCoordinates);
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
             
         } catch(CoordinateConversionException& e) {
             // catch and report any exceptions thrown by the Coordinate
@@ -1401,445 +1840,780 @@ CoordinateSystemParameters getCoordinateSystemParametersForCoordinateType(Coordi
     }
 }
 
-- (void)getMGRSorUSNGCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage MGRS:(NSString **)MGRS precision:(long *)precision {
-    
-}
-
-- (void)getUPSCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage hemisphere:(NSString **)hemisphere easting:(double *)easting northing:(double *)northing {
-    
-}
-
-- (void)getUTMCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage zone:(long *)zone hemisphere:(NSString **)hemisphere easting:(double *)easting northing:(double *)northing {
-    
-}
-
-
-
-
-
-- (int)getUTM:(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing {
-    int status = 1;
+- (void)getGeodeticForMGRSorUSNGCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type MGRSString:(NSString *)MGRSString precision:(long)precision height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
     try {
-        // Chuyển từ lat,lng,alt sang xyz
-        double x;
-        double y;
-        double z;
         try {
-            GeodeticParameters ellipsoidParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
-            CoordinateSystemParameters geocentricParams(CoordinateType::geocentric);
-            CoordinateConversionService ccsGeodeticEllipsoidToGeocentric(_srcCode, &ellipsoidParams, _targetCode, &geocentricParams);
-            convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
-                                                 _lat, _lng, _alt,
-                                                 x, y, z);
+            Precision::Enum precision = Precision::tenthOfSecond;
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ BNG sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
             
-            UTMParameters utmParams = UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
-            CoordinateConversionService ccsGeodeticToUtm(_srcCode, &geocentricParams, _targetCode, &utmParams);
+            // Hệ BNG chỉ sử dụng datum 7 tham số OGB-7 "ORDNANCE GB 1936, Mean (7 Para)"
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            MGRSorUSNGCoordinates *mgrsOrUSNGCoordinates = new MGRSorUSNGCoordinates(coordinateType, [MGRSString cStringUsingEncoding:NSASCIIStringEncoding], precision);
             
-            char _hemi;
-            convertGeocentricToUtm(ccsGeodeticToUtm,
-                                   x, y, z,
-                                   *zone, _hemi, *easting, *northing);
+            NSString *eCode = getEllipsoidCode();
+            double a;
+            double f;
+            getEllipsoidParameters(&a, &f);
+            GeodeticCoordinates *geodeticCoordinates = nullptr;
+            switch (coordinateType) {
+                case CoordinateType::militaryGridReferenceSystem: {
+                    MGRS mgrs = MGRS(a, f, (char *)[eCode cStringUsingEncoding:NSASCIIStringEncoding]);
+                    geodeticCoordinates = mgrs.convertToGeodetic(mgrsOrUSNGCoordinates);
+                    break;
+                }
+                case CoordinateType::Enum::usNationalGrid: {
+                    USNG usng = USNG(a, f, (char *)[eCode cStringUsingEncoding:NSASCIIStringEncoding]);
+                    geodeticCoordinates = usng.convertToGeodetic(mgrsOrUSNGCoordinates);
+                    break;
+                }
+                default:
+                    break;
+            }
             
-            *hemi = [NSString stringWithFormat:@"%c" , _hemi];
-            status = 0;
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
+            
         } catch(CoordinateConversionException& e) {
             // catch and report any exceptions thrown by the Coordinate
             // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
             NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
         } catch(std::exception& e) {
             // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
             NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
         }
         
     } catch(CoordinateConversionException& e) {
         // catch and report any exceptions thrown by the Coordinate
         // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
         NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
     } catch(std::exception& e) {
         // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
         NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
     }
-    return status;
 }
 
-- (int)llh2XYZ:(double)lat :(double)lon :(double)h :(double *)x :(double *)y :(double *)z {
-    int status = 1;
-    
+- (void)getGeodeticForCartesianCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type x:(double)x y:(double)y z:(double)z {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
     try {
-        GeodeticParameters ellipsoidParams(CoordinateType::geodetic, HeightType::ellipsoidHeight);
-        CoordinateSystemParameters geocentricParams(CoordinateType::geocentric);
-        CoordinateConversionService ccsGeodeticEllipsoidToGeocentric(_srcCode, &ellipsoidParams, _targetCode, &geocentricParams);
-        convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
-                                             lat, lon, h,
-                                             *x, *y, *z);
-        status = 0;
-    } catch(CoordinateConversionException& e) {
-        // catch and report any exceptions thrown by the Coordinate
-        // Conversion Service
-        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-    } catch(std::exception& e) {
-        // catch and report any unexpected exceptions thrown
-        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-    }
-    return status;
-}
-
-//
-// Geocentric to UTM
-//
-- (int)geocentric2UTM:(double)x :(double)y :(double)z :(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing {
-    int status = 1;
-    try {
-        CoordinateConversionService ccsGeocentricToUtm(_srcCode, &geocentricParameters, _targetCode, &utmParameters);
-        char _hemi;
-        convertGeocentricToUtm(ccsGeocentricToUtm,
-                               x, y, z,
-                               *zone, _hemi, *easting, *northing);
-
-        *hemi = [NSString stringWithFormat:@"%c" , _hemi];
-        
-        NSLog(@"Convert Geocentric To UTM");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"Zone: %ld", *zone);
-        NSLog(@"Hemisphere: %@", *hemi);
-        NSLog(@"Easting: %f", *easting);
-        NSLog(@"Northing: %f", *northing);
-        status = 0;
-    } catch(CoordinateConversionException& e) {
-        // catch and report any exceptions thrown by the Coordinate
-        // Conversion Service
-        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-    } catch(std::exception& e) {
-        // catch and report any unexpected exceptions thrown
-        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-    }
-    return status;
-}
-//
-// Geocentric to MGRS
-//
-- (int)geocentric2MGRS:(double)x :(double)y :(double)z :(NSString **)mgrsStr {
-    int status = 1;
-    try {
-        std::string mgrsString;
-        Precision::Enum precision = Precision::second;
-        CoordinateConversionService ccsGeocentricToMgrs(_srcCode, &geocentricParameters, _targetCode, &mgrsParameters);
-        mgrsString = convertGeocentricToMgrs(ccsGeocentricToMgrs,
-                                             x, y, z,
-                                             precision);
-        
-        NSLog(@"Convert Geocentric To MGRS");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"MGRS: %@", [NSString stringWithUTF8String:mgrsString.c_str()]);
-        NSLog(@"Precision: %d", precision);
-        *mgrsStr = [NSString stringWithUTF8String:mgrsString.c_str()];
-        
-        status = 0;
-    } catch(CoordinateConversionException& e) {
-        // catch and report any exceptions thrown by the Coordinate
-        // Conversion Service
-        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
-    } catch(std::exception& e) {
-        // catch and report any unexpected exceptions thrown
-        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
-    }
-    return status;
-}
-
-- (int)testCoordinateConversion:(NSString *)sourceDatumCode :(NSString *)targetDatumCode {
-    // initialize status value to one, indicating an error condition
-    int status = 1;
-    
-    //
-    // Coordinate Conversion Services
-    //
-    CoordinateConversionService ccsGeodeticEllipsoidToGeocentric(_srcCode, &ellipsoidParameters, _targetCode, &geocentricParameters);
-    
-    CoordinateConversionService ccsGeocentricToGeodeticMslEgm96(_srcCode, &geocentricParameters, _targetCode, &mslEgm96FifteenMinBilinearParameters);
-    
-    CoordinateConversionService ccsMslEgm96ToEllipsoidHeight(_srcCode, &mslEgm96FifteenMinBilinearParameters, _targetCode, &ellipsoidParameters);
-    
-    CoordinateConversionService ccsEllipsoidHeightToMslEgm96(_srcCode, &ellipsoidParameters, _targetCode, &mslEgm96FifteenMinBilinearParameters);
-    
-    CoordinateConversionService ccsGeocentricToGeodeticMslEgm2008(_srcCode, &geocentricParameters, _targetCode, &mslEgm2008TwoPtFiveMinBicubicSplineParameters);
-    
-    CoordinateConversionService ccsMslEgm2008ToEllipsoidHeight(_srcCode, &mslEgm2008TwoPtFiveMinBicubicSplineParameters, _targetCode, &ellipsoidParameters);
-    
-    CoordinateConversionService ccsEllipsoidHeightToMslEgm2008(_srcCode, &ellipsoidParameters, _targetCode, &mslEgm2008TwoPtFiveMinBicubicSplineParameters);
-    
-    CoordinateConversionService ccsGeocentricToUtm(_srcCode, &geocentricParameters, _targetCode, &utmParameters);
-    
-    CoordinateConversionService ccsGeocentricToMgrs(_srcCode, &geocentricParameters, _targetCode, &mgrsParameters);
-
-    try {
-        
-        //
-        // Geodetic (Ellipsoid Height) to Geocentric
-        //
-        // Input VN2000 21.0893345504,105.7099585996; 2332898.930,573764.701 #Hanoi (0.3680783249581649,1.8449868297053373)
-        // Output WGS84 21.0883504096,105.7118423545; 2332090.939,573938.728 #UTM Zone 48 (0.3680611484609018,1.8450197074306429)
-        double lat = 0.3680611484609018;
-        double lon = 1.8450197074306429;
-        double height = -16.0;
-        
-        double x, y, z;
-        
-        convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
-                                             lat, lon, height,
-                                             x, y, z);
-        
-        NSLog(@"Convert Geodetic (Ellipsoid Height) to Geocentric");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-        NSLog(@"Output:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        
-        
-        //
-        // Geocentric to Geodetic (Ellipsoid Height)
-        //
-        
-        // function convertGeocentricToGeodeticEllipsoid() reuses the
-        // ccsGeodeticEllipsoidToGeocentric instance to perform the reverse
-        // conversion
-        convertGeocentricToGeodeticEllipsoid(ccsGeodeticEllipsoidToGeocentric,
-                                             x, y, z,
-                                             lat, lon, height);
-        
-        NSLog(@"Revert Geocentric To Geodetic (Ellipsoid Height)");
-        NSLog(@"Intput:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-        
-        
-        // reuse ccsGeodeticEllipsoidToGeocentric instance to perform another
-        // Geodetic (Ellipsoid Height) to Geocentric conversions
-        lat = 0.76388;
-        lon = 0.60566;
-        height = 11.0;
-        
-        convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
-                                             lat, lon, height,
-                                             x, y, z);
-        
-        NSLog(@"Convert Geodetic (Ellipsoid Height) to Geocentric");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-        NSLog(@"Output:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        
-        // reuse ccsGeodeticEllipsoidToGeocentric instance to perform another
-        // Geodetic (Ellipsoid Height) to Geocentric conversions
-        lat = 0.71458;
-        lon = 0.88791;
-        height = 22.0;
-        
-        convertGeodeticEllipsoidToGeocentric(ccsGeodeticEllipsoidToGeocentric,
-                                             lat, lon, height,
-                                             x, y, z);
-        
-        NSLog(@"Revert Geocentric To Geodetic (Ellipsoid Height)");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-
-        //
-        // Geocentric to Geodetic (MSL EGM96 15M)
-        //
-        x = -1612214.533495;
-        y = 5731088.483803;
-        z = 2280518.788741;
-        
-        double mslHeight;
-        
-        convertGeocentricToGeodeticMslEgm96(ccsGeocentricToGeodeticMslEgm96,
-                                            x, y, z,
-                                            lat, lon, mslHeight);
-        
-        NSLog(@"Convert Geocentric To Geodetic MSL EGM96");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"MSL EGM96 15M Height: %f", mslHeight);
-        
-        //
-        // Geodetic (MSL EGM96 15M) to Geodetic (Ellipsoid Height)
-        //
-        convertMslEgm96ToEllipsoidHeight(ccsMslEgm96ToEllipsoidHeight,
-                                         lat, lon, mslHeight,
-                                         height);
-        
-        NSLog(@"Convert Geodetic (MSL EMG96 15M Height) To Geodetic (Ellipsoid Height)");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"MSL EGM96 15M Height: %f", mslHeight);
-        NSLog(@"Output:");
-        NSLog(@"Height(m): %f", height);
-        
-        
-        //
-        // Geodetic (Ellipsoid Height) to Geodetic (MSL EMG96 15M)
-        //
-        convertEllipsoidHeightToMslEgm96(ccsEllipsoidHeightToMslEgm96,
-                                         lat, lon, height,
-                                         mslHeight);
-        
-        NSLog(@"Revert Geodetic (Ellipsoid Height) To Geodetic (MSL EGM96 15M) Height");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-        NSLog(@"Output:");
-        NSLog(@"MSL EGM96 15M Height: %f", mslHeight);
-
-        
-        
-        //////////////////////////////////////////////////////////////
-        
-        //
-        // Geocentric to Geodetic (MSL EGM2008)
-        //
-        x = -1612214.533495;
-        y = 5731088.483803;
-        z = 2280518.788741;
-        
-        convertGeocentricToGeodeticMslEgm(ccsGeocentricToGeodeticMslEgm2008,
-                                            x, y, z,
-                                            lat, lon, mslHeight);
-        
-        NSLog(@"Convert Geocentric To Geodetic MSL EGM2008");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"MSL EGM2008 Height: %f", mslHeight);
-        
-
-        //
-        // Geodetic (MSL EGM2008) to Geodetic (Ellipsoid Height)
-        //
-        convertMslEgmToEllipsoidHeight(ccsMslEgm2008ToEllipsoidHeight,
-                                         lat, lon, mslHeight,
-                                         height);
-        
-        NSLog(@"Convert Geodetic (MSL EMG2008 Height) To Geodetic (Ellipsoid Height)");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"MSL EGM2008 Height: %f", mslHeight);
-        NSLog(@"Output:");
-        NSLog(@"Height(m): %f", height);
-        
-        
-        //
-        // Geodetic (Ellipsoid Height) to Geodetic (MSL EMG2008)
-        //
-        convertEllipsoidHeightToMslEgm(ccsEllipsoidHeightToMslEgm2008,
-                                         lat, lon, height,
-                                         mslHeight);
-        
-        NSLog(@"Revert Geodetic (Ellipsoid Height) To Geodetic (MSL EGM2008) Height");
-        NSLog(@"Input:");
-        NSLog(@"Lat (radians): %f", lat);
-        NSLog(@"Lon (radians): %f", lon);
-        NSLog(@"Height(m): %f", height);
-        NSLog(@"Output:");
-        NSLog(@"MSL EGM2008 Height: %f", mslHeight);
-
-        
-        
-        
-        /////////////////////////////
-        
-        
-        
-        //
-        // Geocentric to UTM
-        //
-        long zone;
-        char hemi;
-        double easting, northing;
-        convertGeocentricToUtm(ccsGeocentricToUtm,
-                               x, y, z, 
-                               zone, hemi, easting, northing);
-        
-        NSLog(@"Convert Geocentric To UTM");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"Zone: %ld", zone);
-        NSLog(@"Hemisphere: %c", hemi);
-        NSLog(@"Easting: %f", easting);
-        NSLog(@"Northing: %f", northing);
-        
-        //
-        // Geocentric to MGRS
-        //
-        std::string mgrsString;
-        Precision::Enum precision;
-        
-        mgrsString = convertGeocentricToMgrs(ccsGeocentricToMgrs,
-                                             x, y, z, 
-                                             precision);
-        
-        NSLog(@"Convert Geocentric To MGRS");
-        NSLog(@"Input:");
-        NSLog(@"x: %f", x);
-        NSLog(@"y: %f", y);
-        NSLog(@"z: %f", z);
-        NSLog(@"Output:");
-        NSLog(@"MGRS: %@", [NSString stringWithUTF8String:mgrsString.c_str()]);
-        NSLog(@"Precision: %d", precision);
-        
-        // set status value to zero to indicate successful completion
-        status = 0;
+        try {
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ hiện thời sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            CartesianCoordinates *coordinates = new CartesianCoordinates(coordinateType, x, y, z);
+            
+            double ellipsoidSemiMajorAxis;
+            double ellipsoidFlattening;
+            getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
+            double originLongitude;
+            double originLatitude;
+            double originHeight;
+            double orientation;
+            getLocalCartesianParameters(&originLongitude, &originLatitude, &originHeight, &orientation);
+            LocalCartesian local = LocalCartesian(ellipsoidSemiMajorAxis, ellipsoidFlattening, originLongitude, originLatitude, originHeight, orientation);
+            GeodeticCoordinates *geodeticCoordinates = local.convertToGeodetic(coordinates);
+            
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
+            
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
         
     } catch(CoordinateConversionException& e) {
         // catch and report any exceptions thrown by the Coordinate
         // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
         NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
     } catch(std::exception& e) {
         // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
         NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
     }
-    
-    return status;
+}
+
+- (void)getGeodeticForGARSCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type GARSString:(NSString *)GARSString precision:(long)precision height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            Precision::Enum precision = Precision::tenthOfSecond;
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ hiện thời sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            GARSCoordinates *coordinates = new GARSCoordinates(coordinateType, [GARSString cStringUsingEncoding:NSASCIIStringEncoding], precision);
+            
+            double a;
+            double f;
+            getEllipsoidParameters(&a, &f);
+            GARS gars = GARS();
+            GeodeticCoordinates *geodeticCoordinates = gars.convertToGeodetic(coordinates);
+            
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
+            
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+- (void)getGeodeticForGEOREFCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type GEOREFString:(NSString *)GEOREFString precision:(long)precision height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            Precision::Enum precision = Precision::tenthOfSecond;
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ GEOREFF sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            GEOREFCoordinates *coordinates = new GEOREFCoordinates(coordinateType, [GEOREFString cStringUsingEncoding:NSASCIIStringEncoding], precision);
+            
+            double a;
+            double f;
+            getEllipsoidParameters(&a, &f);
+            GEOREF georef = GEOREF();
+            GeodeticCoordinates *geodeticCoordinates = georef.convertToGeodetic(coordinates);
+            
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
+            
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+- (void)getGeodeticForMapProjectionCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type easting:(double)easting northing:(double)northing height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ hiện tại sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            // Các tham số chung cho các lưới chiếu
+            double centralMeridian = 0;
+            double standardParallel = 0;
+            double falseEasting = 0;
+            double falseNorthing = 0;
+            double originLatitude = 0;
+            double scaleFactor = 1.0;
+            double standardParallel1 = 0;
+            double standardParallel2 = 0;
+            double longitude1 = 0;
+            double latitude1 = 0;
+            double longitude2 = 0;
+            double latitude2 = 0;
+            
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            MapProjectionCoordinates sourceCoordinates = MapProjectionCoordinates(coordinateType, easting, northing);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tạo tham số nguồn
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            switch (coordinateType) {
+                case CoordinateType::eckert4:
+                case CoordinateType::eckert6:
+                case CoordinateType::millerCylindrical:
+                case CoordinateType::mollweide:
+                case CoordinateType::sinusoidal:
+                case CoordinateType::vanDerGrinten: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getMapProjection3Parameters(&centralMeridian, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    MapProjection3Parameters targetParams = MapProjection3Parameters(coordinateType, centralMeridian, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::azimuthalEquidistant:
+                case CoordinateType::bonne:
+                case CoordinateType::cassini:
+                case CoordinateType::cylindricalEqualArea:
+                case CoordinateType::gnomonic:
+                case CoordinateType::orthographic:
+                case CoordinateType::polyconic:
+                case CoordinateType::stereographic: {
+
+                    // Lấy tham số lưới chiếu đã lưu
+                    getMapProjection4Parameters(&centralMeridian, &originLatitude, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    MapProjection4Parameters targetParams = MapProjection4Parameters(coordinateType, centralMeridian, originLatitude, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::transverseCylindricalEqualArea:
+                case CoordinateType::transverseMercator:
+                case CoordinateType::lambertConformalConic1Parallel: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getMapProjection5Parameters(&centralMeridian, &originLatitude, &scaleFactor, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    MapProjection5Parameters targetParams = MapProjection5Parameters(coordinateType, centralMeridian, originLatitude, scaleFactor, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::lambertConformalConic2Parallels:
+                case CoordinateType::albersEqualAreaConic: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getMapProjection6Parameters(&centralMeridian, &originLatitude, &standardParallel1, &standardParallel2, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    MapProjection6Parameters targetParams = MapProjection6Parameters(coordinateType, centralMeridian, originLatitude, standardParallel1, standardParallel2, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::mercatorScaleFactor: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getMercatorScaleFactorParameters(&centralMeridian, &scaleFactor, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    MercatorScaleFactorParameters targetParams = MercatorScaleFactorParameters(coordinateType, centralMeridian, scaleFactor, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::mercatorStandardParallel: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getMercatorStandardParallelParameters(&centralMeridian, &standardParallel, &scaleFactor, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    MercatorStandardParallelParameters targetParams = MercatorStandardParallelParameters(coordinateType, centralMeridian, standardParallel, scaleFactor, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::equidistantCylindrical: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getEquidistantCylindricalParameters(&centralMeridian, &standardParallel, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    EquidistantCylindricalParameters targetParams = EquidistantCylindricalParameters(coordinateType, centralMeridian, standardParallel, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::neys: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getNeysParameters(&centralMeridian, &originLatitude, &standardParallel, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    NeysParameters targetParams = NeysParameters(coordinateType, centralMeridian, originLatitude, standardParallel, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::newZealandMapGrid: {
+                    NSString *ellipsoidCode = getEllipsoidCode();
+                    char* eCode = (char *)[ellipsoidCode cStringUsingEncoding:NSASCIIStringEncoding];
+                    NZMG nzmg = NZMG(eCode);
+                    GeodeticCoordinates *geodeticCoordinates = nzmg.convertToGeodetic(new MapProjectionCoordinates(CoordinateType::newZealandMapGrid, easting, northing));
+                    _lat = geodeticCoordinates->latitude();
+                    _lng = geodeticCoordinates->longitude();
+                    _alt = height;//geodeticCoordinates->height();
+                    
+                    // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+                    CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_targetCode, &sourceParams, _srcCode, &sourceParams);
+                    
+                    GeodeticCoordinates targetCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+                    GeodeticCoordinates sourceCoordinates;
+                    
+                    ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy,
+                                                                      targetCoordinates, targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::obliqueMercator: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getObliqueMercatorParameters(&originLatitude, &longitude1, &latitude1, &longitude2, &latitude2, &falseEasting, &falseNorthing, &scaleFactor);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    ObliqueMercatorParameters targetParams = ObliqueMercatorParameters(coordinateType, originLatitude, longitude1, latitude1, longitude2, latitude2, falseEasting, falseNorthing, scaleFactor);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::polarStereographicScaleFactor: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getPolarStereographicScaleFactorParameters(&centralMeridian, &scaleFactor, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    char hemisphere = 'N';
+                    PolarStereographicScaleFactorParameters targetParams = PolarStereographicScaleFactorParameters(coordinateType, centralMeridian, scaleFactor, hemisphere, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::polarStereographicStandardParallel: {
+                    
+                    // Lấy tham số lưới chiếu đã lưu
+                    getPolarStereographicStandardParallelParameters(&centralMeridian, &standardParallel, &falseEasting, &falseNorthing);
+                    
+                    // Tạo tham số lưới chiếu đích
+                    PolarStereographicStandardParallelParameters targetParams = PolarStereographicStandardParallelParameters(coordinateType, centralMeridian, standardParallel, falseEasting, falseNorthing);
+                    
+                    // Thiết lập chuyển đổi
+                    CoordinateConversionService ccsMapProjectionToGeodeticMlsEgm(_targetCode, &targetParams, _srcCode, &sourceParams);
+                    
+                    ccsMapProjectionToGeodeticMlsEgm.convertSourceToTarget(&sourceCoordinates,
+                                                                           &sourceAccuracy,
+                                                                           targetCoordinates,
+                                                                           targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                case CoordinateType::webMercator: {
+                    NSString *ellipsoidCode = @"WE"; // Luôn luôn là WE
+                    char* eCode = (char *)[ellipsoidCode cStringUsingEncoding:NSASCIIStringEncoding];
+                    WebMercator webMercator = WebMercator(eCode);
+                    GeodeticCoordinates *geodeticCoordinates = webMercator.convertToGeodetic(new MapProjectionCoordinates(CoordinateType::webMercator, easting, northing));
+                    _lat = geodeticCoordinates->latitude();
+                    _lng = geodeticCoordinates->longitude();
+                    _alt = height;//geodeticCoordinates->height();
+                    
+                    // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+                    CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_targetCode, &sourceParams, _srcCode, &sourceParams);
+                    
+                    GeodeticCoordinates targetCoordinates(CoordinateType::geodetic, _lng, _lat, _alt);
+                    GeodeticCoordinates sourceCoordinates;
+                    
+                    ccsGeodeticMlsEgmToGeodetic.convertSourceToTarget(&sourceCoordinates, &sourceAccuracy,
+                                                                      targetCoordinates, targetAccuracy);
+                    *lat = targetCoordinates.latitude();
+                    *lng = targetCoordinates.longitude();
+                    *alt = height;
+                    return;
+                }
+                default:
+                    break;
+            }
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+- (void)getGeodeticForUPSCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type hemisphere:(NSString *)hemisphere easting:(double)easting northing:(double)northing height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ cục bộ sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            char hemi = [hemisphere characterAtIndex:0];
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            UPSCoordinates *coordinates = new UPSCoordinates(coordinateType, hemi, easting, northing);
+            
+            double ellipsoidSemiMajorAxis;
+            double ellipsoidFlattening;
+            getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
+            UPS ups = UPS(ellipsoidSemiMajorAxis, ellipsoidFlattening);
+            
+            GeodeticCoordinates *geodeticCoordinates = ups.convertToGeodetic(coordinates);
+            
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
+            
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
+}
+
+- (void)getGeodeticForUTMCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type zone:(long)zone hemisphere:(NSString *)hemisphere easting:(double)easting northing:(double)northing height:(double)height hType:(long)hType {
+    _srcCode = [_srcDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    _targetCode = [_targetDatumCode cStringUsingEncoding:NSASCIIStringEncoding];
+    try {
+        try {
+            *warningMessage = @"";
+            // 1. Tính chuyển từ tọa độ cục bộ sang tọa độ trắc địa trong cùng hệ
+            // 2. Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa WGS 84
+            
+            char hemi = [hemisphere characterAtIndex:0];
+            CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
+            UTMCoordinates *coordinates = new UTMCoordinates(coordinateType, zone, hemi, easting, northing);
+            
+            NSString *eCode = getEllipsoidCode();
+            char *ellipsoidCode = (char*)[eCode cStringUsingEncoding:NSASCIIStringEncoding];
+            double ellipsoidSemiMajorAxis;
+            double ellipsoidFlattening;
+            getEllipsoidParameters(&ellipsoidSemiMajorAxis, &ellipsoidFlattening);
+            UTM utm = UTM(ellipsoidSemiMajorAxis, ellipsoidFlattening, ellipsoidCode);
+            
+            GeodeticCoordinates *geodeticCoordinates = utm.convertToGeodetic(coordinates);
+            
+            double __lat = geodeticCoordinates->latitude();
+            double __lng = geodeticCoordinates->longitude();
+            double __alt = geodeticCoordinates->height();
+            
+            // ========= DATUM TRANSFORMATION ========
+            // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            
+            // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
+            CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
+            
+            // Tính chuyển tọa độ trắc địa sang tọa độ trắc địa trên hệ cục bộ
+            Accuracy sourceAccuracy;
+            Accuracy targetAccuracy;
+            
+            GeodeticCoordinates sourceCoordinates(CoordinateType::geodetic, __lng, __lat, __alt);
+            GeodeticCoordinates targetCoordinates;
+            
+            // Tính chuyển tọa độ trắc địa cục bộ sang tọa độ trắc địa toàn cầu có sử sụng datum
+            ccsGeodeticMlsEgmToGeodetic.convertTargetToSource(&sourceCoordinates, &sourceAccuracy, targetCoordinates, targetAccuracy);
+            
+            *lat = targetCoordinates.latitude();
+            *lng = targetCoordinates.longitude();
+            *alt = targetCoordinates.height();
+            
+            // ========= END DATUM TRANSFORMATION ========
+            
+        } catch(CoordinateConversionException& e) {
+            // catch and report any exceptions thrown by the Coordinate
+            // Conversion Service
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+            NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+        } catch(std::exception& e) {
+            // catch and report any unexpected exceptions thrown
+            *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+            NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+        }
+        
+    } catch(CoordinateConversionException& e) {
+        // catch and report any exceptions thrown by the Coordinate
+        // Conversion Service
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.getMessage()];
+        NSLog(@"ERROR: Coordinate Conversion Service exception encountered - %s", e.getMessage());
+    } catch(std::exception& e) {
+        // catch and report any unexpected exceptions thrown
+        *warningMessage = [NSString stringWithFormat:@"%s" , e.what()];
+        NSLog(@"ERROR: Unexpected exception encountered - %s", e.what());
+    }
 }
 
 @end

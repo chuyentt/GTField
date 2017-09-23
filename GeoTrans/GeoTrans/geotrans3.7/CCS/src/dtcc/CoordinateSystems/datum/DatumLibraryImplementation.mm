@@ -132,6 +132,7 @@
  *                               INCLUDES
  */
 
+#include <string>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -292,8 +293,7 @@ GeodeticCoordinates* molodenskyShift(
   if (targetLongitude < (- PI))
     targetLongitude += TWO_PI;
 
-  return new GeodeticCoordinates(
-     CoordinateType::geodetic, targetLongitude, targetLatitude, targetHeight );
+  return new GeodeticCoordinates(CoordinateType::geodetic, targetLongitude, targetLatitude, targetHeight );
 } 
 
 
@@ -1431,7 +1431,23 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftFromWGS84(
         double ry = 0;
         double rz = 0;
         double sf = 0;
-        getSevenParamDatum(&dx, &dy, &dz, &rx, &ry, &rz, &sf);
+        
+        std::string dCode = localDatum->code();
+        NSString *datumCode = [NSString stringWithUTF8String:dCode.c_str()];
+        
+        // Nếu không phải hệ cố định
+        if ([datumCode isEqualToString:@"9999"]) {
+            getSevenParamDatum(&dx, &dy, &dz, &rx, &ry, &rz, &sf);
+        } else {
+            SevenParameterDatum* sevenParameterDatum = ( SevenParameterDatum* )localDatum;
+            dx = sevenParameterDatum->deltaX();
+            dy = sevenParameterDatum->deltaY();
+            dz = sevenParameterDatum->deltaZ();
+            rx = sevenParameterDatum->rotationX();
+            ry = sevenParameterDatum->rotationY();
+            rz = sevenParameterDatum->rotationZ();
+            sf = sevenParameterDatum->scaleFactor();
+        }
         
         double DX = -dx;                     //0
         double DY = -dy;                     //1
@@ -1460,11 +1476,26 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftFromWGS84(
     }
     case DatumType::threeParamDatum:
     {
-      ThreeParameterDatum* threeParameterDatum = ( ThreeParameterDatum* )localDatum;
-
-      double targetX = WGS84X - threeParameterDatum->deltaX();
-      double targetY = WGS84Y - threeParameterDatum->deltaY();
-      double targetZ = WGS84Z - threeParameterDatum->deltaZ();
+        double dx = 0;
+        double dy = 0;
+        double dz = 0;
+        
+        std::string dCode = localDatum->code();
+        NSString *datumCode = [NSString stringWithUTF8String:dCode.c_str()];
+        
+        // Nếu không phải hệ cố định
+        if ([datumCode isEqualToString:@"9999"]) {
+            getThreeParamDatum(&dx, &dy, &dz);
+        } else {
+            ThreeParameterDatum* threeParameterDatum = ( ThreeParameterDatum* )localDatum;
+            dx = threeParameterDatum->deltaX();
+            dy = threeParameterDatum->deltaY();
+            dz = threeParameterDatum->deltaZ();
+        }
+        
+      double targetX = WGS84X - dx;
+      double targetY = WGS84Y - dy;
+      double targetZ = WGS84Z - dz;
 
       return new CartesianCoordinates( CoordinateType::geocentric, targetX, targetY, targetZ );
     }
@@ -1526,6 +1557,7 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftToWGS84(
 //
 //      double wgs84Z = sourceZ + sevenParameterDatum->deltaZ() + sevenParameterDatum->rotationY() * sourceX
 //                 - sevenParameterDatum->rotationX() * sourceY + sevenParameterDatum->scaleFactor() * sourceZ;
+        
 
         // Fix lại:
         double dx = 0;
@@ -1535,7 +1567,23 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftToWGS84(
         double ry = 0;
         double rz = 0;
         double sf = 0;
-        getSevenParamDatum(&dx, &dy, &dz, &rx, &ry, &rz, &sf);
+        
+        std::string dCode = localDatum->code();
+        NSString *datumCode = [NSString stringWithUTF8String:dCode.c_str()];
+        
+        // Nếu không phải hệ cố định
+        if ([datumCode isEqualToString:@"9999"]) {
+            getSevenParamDatum(&dx, &dy, &dz, &rx, &ry, &rz, &sf);
+        } else {
+            SevenParameterDatum* sevenParameterDatum = ( SevenParameterDatum* )localDatum;
+            dx = sevenParameterDatum->deltaX();
+            dy = sevenParameterDatum->deltaY();
+            dz = sevenParameterDatum->deltaZ();
+            rx = sevenParameterDatum->rotationX();
+            ry = sevenParameterDatum->rotationY();
+            rz = sevenParameterDatum->rotationZ();
+            sf = sevenParameterDatum->scaleFactor();
+        }
         
         double DX = dx;                          //0
         double DY = dy;                          //1
@@ -1556,22 +1604,34 @@ CartesianCoordinates* DatumLibraryImplementation::geocentricShiftToWGS84(
         a[3][3] = cos(RX)*cos(RY);
         
         double wgs84X = DX + (a[1][1]*sourceX + a[1][2]*sourceY + a[1][3]*sourceZ)*SF;
-        double wgs84Y = DY + (a[2][1]*sourceX + a[2][2]*sourceY + a[2][3]*sourceY)*SF;
-        double wgs84Z = DZ + (a[3][1]*sourceX + a[3][2]*sourceY + a[3][3]*sourceY)*SF;
+        double wgs84Y = DY + (a[2][1]*sourceX + a[2][2]*sourceY + a[2][3]*sourceZ)*SF;
+        double wgs84Z = DZ + (a[3][1]*sourceX + a[3][2]*sourceY + a[3][3]*sourceZ)*SF;
         // End fix
 
       return new CartesianCoordinates( CoordinateType::geocentric, wgs84X, wgs84Y, wgs84Z );
     }
     case DatumType::threeParamDatum:
     {
-      //ThreeParameterDatum* threeParameterDatum = ( ThreeParameterDatum* )localDatum;
         double dx = 0;
         double dy = 0;
         double dz = 0;
-        getThreeParamDatum(&dx, &dy, &dz);
-      double wgs84X = sourceX + dx;
-      double wgs84Y = sourceY + dy;
-      double wgs84Z = sourceZ + dz;
+        
+        std::string dCode = localDatum->code();
+        NSString *datumCode = [NSString stringWithUTF8String:dCode.c_str()];
+        
+        // Nếu không phải hệ cố định
+        if ([datumCode isEqualToString:@"9999"]) {
+            getThreeParamDatum(&dx, &dy, &dz);
+        } else {
+            ThreeParameterDatum* threeParameterDatum = ( ThreeParameterDatum* )localDatum;
+            dx = threeParameterDatum->deltaX();
+            dy = threeParameterDatum->deltaY();
+            dz = threeParameterDatum->deltaZ();
+        }
+        
+        double wgs84X = sourceX + dx;
+        double wgs84Y = sourceY + dy;
+        double wgs84Z = sourceZ + dz;
 
       return new CartesianCoordinates( CoordinateType::geocentric, wgs84X, wgs84Y, wgs84Z );
     }
@@ -1744,222 +1804,226 @@ GeodeticCoordinates* DatumLibraryImplementation::geodeticDatumShift(
 } 
 
 
-GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftFromWGS84(
-   const GeodeticCoordinates* sourceCoordinates, const long targetIndex )
-{ 
-/*
- *  The function geodeticShiftFromWGS84 shifts geodetic coordinates relative to WGS84
- *  to geodetic coordinates relative to a given local datum.
- *
- *    WGS84Longitude  : Longitude in radians relative to WGS84           (input)
- *    WGS84Latitude   : Latitude in radians relative to WGS84            (input)
- *    WGS84Height     : Height in meters  relative to WGS84              (input)
- *    targetIndex     : Index of destination datum                       (input)
- *    targetLongitude : Longitude (rad) relative to destination datum   (output)
- *    targetLatitude  : Latitude (rad) relative to destination datum    (output)
- *    targetHeight    : Height in meters relative to destination datum  (output)
- *
- */
+GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftFromWGS84(const GeodeticCoordinates* sourceCoordinates, const long targetIndex ) {
+    /*
+     *  The function geodeticShiftFromWGS84 shifts geodetic coordinates relative to WGS84
+     *  to geodetic coordinates relative to a given local datum.
+     *
+     *    WGS84Longitude  : Longitude in radians relative to WGS84           (input)
+     *    WGS84Latitude   : Latitude in radians relative to WGS84            (input)
+     *    WGS84Height     : Height in meters  relative to WGS84              (input)
+     *    targetIndex     : Index of destination datum                       (input)
+     *    targetLongitude : Longitude (rad) relative to destination datum   (output)
+     *    targetLatitude  : Latitude (rad) relative to destination datum    (output)
+     *    targetHeight    : Height in meters relative to destination datum  (output)
+     *
+     */
 
-  double WGS84_a;   /* Semi-major axis of WGS84 ellipsoid in meters */
-  double WGS84_f;   /* Flattening of WGS84 ellisoid                 */
-  double a;         /* Semi-major axis of ellipsoid in meters       */
-  double da;        /* Difference in semi-major axes                */
-  double f;         /* Flattening of ellipsoid                      */
-  double df;        /* Difference in flattening                     */
-  double dx;
-  double dy;
-  double dz;
-  long E_Index;
+    double WGS84_a;   /* Semi-major axis of WGS84 ellipsoid in meters */
+    double WGS84_f;   /* Flattening of WGS84 ellisoid                 */
+    double a;         /* Semi-major axis of ellipsoid in meters       */
+    double da;        /* Difference in semi-major axes                */
+    double f;         /* Flattening of ellipsoid                      */
+    double df;        /* Difference in flattening                     */
+    double dx;
+    double dy;
+    double dz;
+    long E_Index;
 
-  double WGS84Longitude = sourceCoordinates->longitude();
-  double WGS84Latitude = sourceCoordinates->latitude();
-  double WGS84Height = sourceCoordinates->height();
+    double WGS84Longitude = sourceCoordinates->longitude();
+    double WGS84Latitude = sourceCoordinates->latitude();
+    double WGS84Height = sourceCoordinates->height();
 
-  if( ( targetIndex < 0) || (targetIndex >= datumList.size() ) )
-    throw CoordinateConversionException( ErrorMessages::invalidIndex );
-  if(( WGS84Latitude < ( -90 * PI_OVER_180 ) ) ||
-     ( WGS84Latitude > (  90 * PI_OVER_180 ) ) )
-    throw CoordinateConversionException( ErrorMessages::latitude );
-  if( ( WGS84Longitude < ( -PI ) ) || ( WGS84Longitude > TWO_PI ) )
-    throw CoordinateConversionException( ErrorMessages::longitude );
+    if (( targetIndex < 0) || (targetIndex >= datumList.size()))
+        throw CoordinateConversionException( ErrorMessages::invalidIndex );
+    if(( WGS84Latitude < ( -90 * PI_OVER_180 ) ) ||
+       ( WGS84Latitude > (  90 * PI_OVER_180 ) ) )
+        throw CoordinateConversionException( ErrorMessages::latitude );
+    if( ( WGS84Longitude < ( -PI ) ) || ( WGS84Longitude > TWO_PI ) )
+        throw CoordinateConversionException( ErrorMessages::longitude );
 
-  Datum* localDatum = datumList[targetIndex];
-  switch( localDatum->datumType() )
-  {
-    case DatumType::wgs72Datum:
-    {
-      GeodeticCoordinates* targetGeodeticCoordinates = geodeticShiftWGS84ToWGS72( WGS84Longitude, WGS84Latitude, WGS84Height );
-      return targetGeodeticCoordinates;
-    }
-    case DatumType::wgs84Datum:
-    {
-      return new GeodeticCoordinates( CoordinateType::geodetic, WGS84Longitude, WGS84Latitude, WGS84Height );
-    }
-    case DatumType::sevenParamDatum:
-    case DatumType::threeParamDatum:
-    {
-      if( _ellipsoidLibraryImplementation )
-      {
-          // chuyentt Chỗ này thay để lấy tham số từ hệ thống đã lưu
-        //_ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
-        //_ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
-          
-          // chuyentt Lấy từ NSUserDefaults
-          getEllipsoidParameters(&a, &f);
-          
-        long wgs84EllipsoidIndex;
-        _ellipsoidLibraryImplementation->ellipsoidIndex( "WE", &wgs84EllipsoidIndex );
-        _ellipsoidLibraryImplementation->ellipsoidParameters( wgs84EllipsoidIndex, &WGS84_a, &WGS84_f );
-
-        if( ( localDatum->datumType() == DatumType::sevenParamDatum ) ||
-            ( WGS84Latitude < ( -MOLODENSKY_MAX ) ) ||
-            ( WGS84Latitude > MOLODENSKY_MAX ) )
-        { /* Use 3-step method */
-          Geocentric geocentricFromGeodetic( WGS84_a, WGS84_f );
-          CartesianCoordinates* wgs84CartesianCoordinates = geocentricFromGeodetic.convertFromGeodetic( sourceCoordinates );
-
-            // chuyentt Qua hàm này để lấy 7 tham số tính chuyển từ NSUserDefaults
-          CartesianCoordinates* localCartesianCoordinates = geocentricShiftFromWGS84( wgs84CartesianCoordinates->x(), wgs84CartesianCoordinates->y(), 
-                wgs84CartesianCoordinates->z(), targetIndex );
-
-          Geocentric geocentricToGeodetic( a, f );
-          GeodeticCoordinates* targetGeodeticCoordinates = geocentricToGeodetic.convertToGeodetic( localCartesianCoordinates );
-
-          delete localCartesianCoordinates;
-          delete wgs84CartesianCoordinates;
-
-          return targetGeodeticCoordinates;
+    Datum* localDatum = datumList[targetIndex];
+    switch( localDatum->datumType() ) {
+        case DatumType::wgs72Datum: {
+            GeodeticCoordinates* targetGeodeticCoordinates = geodeticShiftWGS84ToWGS72( WGS84Longitude, WGS84Latitude, WGS84Height );
+            return targetGeodeticCoordinates;
         }
-        else
-        { /* Use Molodensky's method */
-          da = a - WGS84_a;
-          df = f - WGS84_f;
-          // chuyentt
-//          dx = -( localDatum->deltaX() );
-//          dy = -( localDatum->deltaY() );
-//          dz = -( localDatum->deltaZ() );
-            
-            getThreeParamDatum(&dx, &dy, &dz);
-            dx = -dx;
-            dy = -dy;
-            dz = -dz;
-
-          GeodeticCoordinates* targetGeodeticCoordinates = molodenskyShift( WGS84_a, da, WGS84_f, df, dx, dy, dz,
-                           WGS84Longitude, WGS84Latitude, WGS84Height );
-
-          return targetGeodeticCoordinates;
+        case DatumType::wgs84Datum: {
+            return new GeodeticCoordinates( CoordinateType::geodetic, WGS84Longitude, WGS84Latitude, WGS84Height );
         }
-      }
-    }
-    default:
-      throw CoordinateConversionException( ErrorMessages::datumType );
-  } 
-} 
+        case DatumType::sevenParamDatum:
+        case DatumType::threeParamDatum: {
+            if( _ellipsoidLibraryImplementation ) {
+                // chuyentt Nếu không phải hệ cố định
+                std::string dCode = localDatum->code();
+                NSString *datumCode = [NSString stringWithUTF8String:dCode.c_str()];
 
+                if ([datumCode isEqualToString:@"9999"]) {
+                    getEllipsoidParameters(&a, &f);
+                } else {
+                    _ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
+                    _ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
+                }
+                
+                long wgs84EllipsoidIndex;
+                _ellipsoidLibraryImplementation->ellipsoidIndex( "WE", &wgs84EllipsoidIndex );
+                _ellipsoidLibraryImplementation->ellipsoidParameters( wgs84EllipsoidIndex, &WGS84_a, &WGS84_f );
 
-GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftToWGS84( const long sourceIndex,  const GeodeticCoordinates* sourceCoordinates )
-{ 
-/*
- *  The function geodeticShiftToWGS84 shifts geodetic coordinates relative to a given source datum
- *  to geodetic coordinates relative to WGS84.
- *
- *    sourceIndex     : Index of source datum                         (input)
- *    sourceLongitude : Longitude in radians relative to source datum (input)
- *    sourceLatitude  : Latitude in radians relative to source datum  (input)
- *    sourceHeight    : Height in meters relative to source datum     (input)
- *    WGS84Longitude  : Longitude in radians relative to WGS84        (output)
- *    WGS84Latitude   : Latitude in radians relative to WGS84         (output)
- *    WGS84Height     : Height in meters relative to WGS84            (output)
- *
- */
+                if (( localDatum->datumType() == DatumType::sevenParamDatum ) ||
+                    ( WGS84Latitude < ( -MOLODENSKY_MAX ) ) ||
+                    ( WGS84Latitude > MOLODENSKY_MAX ) ) {
+                    /* Use 3-step method */
+                    Geocentric geocentricFromGeodetic( WGS84_a, WGS84_f );
+                    CartesianCoordinates* wgs84CartesianCoordinates = geocentricFromGeodetic.convertFromGeodetic( sourceCoordinates );
 
-  double WGS84_a;   /* Semi-major axis of WGS84 ellipsoid in meters */
-  double WGS84_f;   /* Flattening of WGS84 ellisoid                 */
-  double a;         /* Semi-major axis of ellipsoid in meters       */
-  double da;        /* Difference in semi-major axes                */
-  double f;         /* Flattening of ellipsoid                      */
-  double df;        /* Difference in flattening                     */
-  double dx;
-  double dy;
-  double dz;
-  long E_Index;
-
-  double sourceLongitude = sourceCoordinates->longitude();
-  double sourceLatitude = sourceCoordinates->latitude(); 
-  double sourceHeight = sourceCoordinates->height();
-
-  if( ( sourceIndex < 0 ) || ( sourceIndex >= datumList.size() ) )
-    throw CoordinateConversionException( ErrorMessages::invalidIndex );
-  if(( sourceLatitude < ( -90 * PI_OVER_180 ) ) ||
-     ( sourceLatitude > (  90 * PI_OVER_180 ) ) )
-    throw CoordinateConversionException( ErrorMessages::latitude );
-  if( ( sourceLongitude < ( -PI ) ) || ( sourceLongitude > TWO_PI ) )
-    throw CoordinateConversionException( ErrorMessages::longitude );
-
-  Datum* localDatum = datumList[sourceIndex];
-  switch( localDatum->datumType() )
-  {
-    case DatumType::wgs72Datum:
-    { /* Special case for WGS72 */
-      return geodeticShiftWGS72ToWGS84( sourceLongitude, sourceLatitude, sourceHeight );
-    }
-    case DatumType::wgs84Datum:
-    {        /* Just  copy */
-      return new GeodeticCoordinates(CoordinateType::geodetic, sourceLongitude, sourceLatitude, sourceHeight);
-    }
-    case DatumType::sevenParamDatum:
-    case DatumType::threeParamDatum:
-    {
-      if( _ellipsoidLibraryImplementation )
-      {
-        _ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
-        _ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
-          
-        if( ( localDatum->datumType() == DatumType::sevenParamDatum ) ||
-           ( sourceLatitude < (-MOLODENSKY_MAX ) ) ||
-           ( sourceLatitude > MOLODENSKY_MAX ) )
-        { /* Use 3-step method */
-            Geocentric geocentricFromGeodetic( a, f );
-            CartesianCoordinates* localCartesianCoordinates =
-               geocentricFromGeodetic.convertFromGeodetic( sourceCoordinates );
-
-            CartesianCoordinates* wgs84CartesianCoordinates = geocentricShiftToWGS84( sourceIndex, localCartesianCoordinates->x(), localCartesianCoordinates->y(), localCartesianCoordinates->z() );
-
-            long wgs84EllipsoidIndex;
-            _ellipsoidLibraryImplementation->ellipsoidIndex( "WE", &wgs84EllipsoidIndex );
-            _ellipsoidLibraryImplementation->ellipsoidParameters( wgs84EllipsoidIndex, &WGS84_a, &WGS84_f );
-
-            Geocentric geocentricToGeodetic( WGS84_a, WGS84_f );
-            GeodeticCoordinates* wgs84GeodeticCoordinates = geocentricToGeodetic.convertToGeodetic( wgs84CartesianCoordinates );
-
-            delete wgs84CartesianCoordinates;
-            delete localCartesianCoordinates;
-
-            return wgs84GeodeticCoordinates;
-          }
-          else
-          { /* Use Molodensky's method */
-            long wgs84EllipsoidIndex;
-            _ellipsoidLibraryImplementation->ellipsoidIndex( "WE", &wgs84EllipsoidIndex );
-            _ellipsoidLibraryImplementation->ellipsoidParameters( wgs84EllipsoidIndex, &WGS84_a, &WGS84_f );
-
-            da = WGS84_a - a;
-            df = WGS84_f - f;
-            dx = localDatum->deltaX();
-            dy = localDatum->deltaY();
-            dz = localDatum->deltaZ();
-
-            GeodeticCoordinates* wgs84GeodeticCoordinates = molodenskyShift( a, da, f, df, dx, dy, dz, sourceLongitude, sourceLatitude, sourceHeight );
-
-            return wgs84GeodeticCoordinates;
-          }
+                    // chuyentt Qua hàm này để lấy 7 tham số tính chuyển từ NSUserDefaults
+                    CartesianCoordinates* localCartesianCoordinates = geocentricShiftFromWGS84(wgs84CartesianCoordinates->x(), wgs84CartesianCoordinates->y(),
+                                                                                               wgs84CartesianCoordinates->z(), targetIndex );
+                    
+                    Geocentric geocentricToGeodetic( a, f );
+                    GeodeticCoordinates* targetGeodeticCoordinates = geocentricToGeodetic.convertToGeodetic( localCartesianCoordinates );
+                    
+                    delete localCartesianCoordinates;
+                    delete wgs84CartesianCoordinates;
+                    
+                    return targetGeodeticCoordinates;
+                } else {
+                    /* Use Molodensky's method */
+                    //wgs84->local
+                    da = a - WGS84_a;
+                    df = f - WGS84_f;
+                    
+                    // chuyentt Bỏ qua nếu như datum là OGB-7 BNG, vì hệ này cố định
+                    if ([datumCode isEqualToString:@"9999"]) {
+                        getThreeParamDatum(&dx, &dy, &dz);
+                        dx = -dx;
+                        dy = -dy;
+                        dz = -dz;
+                    } else {
+                        dx = -localDatum->deltaX();
+                        dy = -localDatum->deltaY();
+                        dz = -localDatum->deltaZ();
+                    }
+                    GeodeticCoordinates* targetGeodeticCoordinates = molodenskyShift( WGS84_a, da, WGS84_f, df, dx, dy, dz, WGS84Longitude, WGS84Latitude, WGS84Height );
+                    
+                    return targetGeodeticCoordinates;
+                }
+            }
         }
+        default:
+            throw CoordinateConversionException( ErrorMessages::datumType );
     }
-    default:
-      throw CoordinateConversionException( ErrorMessages::datumType );
-  } 
-} 
+}
+
+
+GeodeticCoordinates* DatumLibraryImplementation::geodeticShiftToWGS84( const long sourceIndex,  const GeodeticCoordinates* sourceCoordinates ) {
+    /*
+    *  The function geodeticShiftToWGS84 shifts geodetic coordinates relative to a given source datum
+    *  to geodetic coordinates relative to WGS84.
+    *
+    *    sourceIndex     : Index of source datum                         (input)
+    *    sourceLongitude : Longitude in radians relative to source datum (input)
+    *    sourceLatitude  : Latitude in radians relative to source datum  (input)
+    *    sourceHeight    : Height in meters relative to source datum     (input)
+    *    WGS84Longitude  : Longitude in radians relative to WGS84        (output)
+    *    WGS84Latitude   : Latitude in radians relative to WGS84         (output)
+    *    WGS84Height     : Height in meters relative to WGS84            (output)
+    *
+    */
+
+    double WGS84_a;   /* Semi-major axis of WGS84 ellipsoid in meters */
+    double WGS84_f;   /* Flattening of WGS84 ellisoid                 */
+    double a;         /* Semi-major axis of ellipsoid in meters       */
+    double da;        /* Difference in semi-major axes                */
+    double f;         /* Flattening of ellipsoid                      */
+    double df;        /* Difference in flattening                     */
+    double dx;
+    double dy;
+    double dz;
+    long E_Index;
+
+    double sourceLongitude = sourceCoordinates->longitude();
+    double sourceLatitude = sourceCoordinates->latitude(); 
+    double sourceHeight = sourceCoordinates->height();
+
+    if ( ( sourceIndex < 0 ) || ( sourceIndex >= datumList.size() ) )
+        throw CoordinateConversionException( ErrorMessages::invalidIndex );
+    if (( sourceLatitude < ( -90 * PI_OVER_180 ) ) ||
+       ( sourceLatitude > (  90 * PI_OVER_180 ) ) )
+        throw CoordinateConversionException( ErrorMessages::latitude );
+    if ( ( sourceLongitude < ( -PI ) ) || ( sourceLongitude > TWO_PI ) )
+        throw CoordinateConversionException( ErrorMessages::longitude );
+
+    Datum* localDatum = datumList[sourceIndex];
+    switch( localDatum->datumType() ) {
+        case DatumType::wgs72Datum: {
+            /* Special case for WGS72 */
+            return geodeticShiftWGS72ToWGS84( sourceLongitude, sourceLatitude, sourceHeight );
+        }
+        case DatumType::wgs84Datum: {
+            /* Just  copy */
+            return new GeodeticCoordinates(CoordinateType::geodetic, sourceLongitude, sourceLatitude, sourceHeight);
+        }
+        case DatumType::sevenParamDatum:
+        case DatumType::threeParamDatum: {
+            if( _ellipsoidLibraryImplementation ) {
+                // chuyentt Nếu không phải hệ cố định
+                std::string dCode = localDatum->code();
+                NSString *datumCode = [NSString stringWithUTF8String:dCode.c_str()];
+
+                if ([datumCode isEqualToString:@"9999"]) {
+                    getEllipsoidParameters(&a, &f);
+                } else {
+                    _ellipsoidLibraryImplementation->ellipsoidIndex( localDatum->ellipsoidCode(), &E_Index );
+                    _ellipsoidLibraryImplementation->ellipsoidParameters( E_Index, &a, &f );
+                }
+                
+                long wgs84EllipsoidIndex;
+                _ellipsoidLibraryImplementation->ellipsoidIndex( "WE", &wgs84EllipsoidIndex );
+                _ellipsoidLibraryImplementation->ellipsoidParameters( wgs84EllipsoidIndex, &WGS84_a, &WGS84_f );
+                
+                if (( localDatum->datumType() == DatumType::sevenParamDatum ) ||
+                    (sourceLatitude < (-MOLODENSKY_MAX ) ) ||
+                    ( sourceLatitude > MOLODENSKY_MAX ) ) {
+                    /* Use 3-step method */
+                    Geocentric geocentricFromGeodetic( a, f );
+                    CartesianCoordinates* localCartesianCoordinates =
+                    geocentricFromGeodetic.convertFromGeodetic( sourceCoordinates );
+
+                    // chuyentt Qua hàm này để lấy 7 tham số tính chuyển từ NSUserDefaults
+                    CartesianCoordinates* wgs84CartesianCoordinates = geocentricShiftToWGS84(sourceIndex, localCartesianCoordinates->x(),
+                                                                                             localCartesianCoordinates->y(), localCartesianCoordinates->z() );
+                    
+                    Geocentric geocentricToGeodetic( WGS84_a, WGS84_f );
+                    GeodeticCoordinates* wgs84GeodeticCoordinates = geocentricToGeodetic.convertToGeodetic( wgs84CartesianCoordinates );
+
+                    delete wgs84CartesianCoordinates;
+                    delete localCartesianCoordinates;
+
+                    return wgs84GeodeticCoordinates;
+                } else {
+                    /* Use Molodensky's method */
+                    // local->wgs84
+                    da = WGS84_a - a;
+                    df = WGS84_f - f;
+                    if ([datumCode isEqualToString:@"9999"]) {
+                        getThreeParamDatum(&dx, &dy, &dz);
+                    } else {
+                        dx = localDatum->deltaX();
+                        dy = localDatum->deltaY();
+                        dz = localDatum->deltaZ();
+                        getThreeParamDatum(&dx, &dy, &dz);
+                    }
+                    GeodeticCoordinates* wgs84GeodeticCoordinates = molodenskyShift( a, da, f, df, dx, dy, dz, sourceLongitude, sourceLatitude, sourceHeight );
+
+                    return wgs84GeodeticCoordinates;
+                }
+            }
+        }
+        default:
+            throw CoordinateConversionException( ErrorMessages::datumType );
+    }
+}
 
 
 void DatumLibraryImplementation::retrieveDatumType(

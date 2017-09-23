@@ -36,7 +36,7 @@ class LoadingStatus : UIView {
         
         let loadingFont = UIFont.boldSystemFont(ofSize: 17.0)
         
-        let attrs: [String : AnyObject] = [NSFontAttributeName : loadingFont]
+        let attrs: [NSAttributedStringKey : Any] = [NSAttributedStringKey.font : loadingFont]
 
         let rect = loadingString.boundingRect(with: CGSize(width: frame.width, height: frame.height),
             options: [.usesLineFragmentOrigin, .usesFontLeading],

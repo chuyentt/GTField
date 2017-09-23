@@ -7,7 +7,7 @@
 */
 
 /* General */
-"Warning delete" = "警告删除"; // 警告 ?
+"Warning delete" = "警告删除";
 "Warning close" = "警告关闭";
 
 /* Buttons */
@@ -101,6 +101,8 @@
 "Settings..." = "设置...";
 "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "没有授权使用位置服务.您不能改变这个应用程序的状态,可能是由于父母控制等活动的限制";
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "只有当您在你的现场工作的时候您在记录轨道的时候，您才可以访问所需要的位置服务.请先进入应用设置然后选择\"始终\"选项.";
+"Add a marker from the map" = "从地图添加一个标记";
+"Add a marker from coordinates" = "从坐标添加一个标记";
 
 /* ConfigMapSourceViewController */
 "Map Source Configuration" = "配置地图源";
@@ -138,4 +140,37 @@
 "Length:" = "长度:";
 "Area:" = "范围:";
 "Perimeter:" = "周长:";
+"Distance:" = "距离:";
+
+/* SettingsViewController */
+"Select a coordinate system" = "Select a coordinate system";
+"Select a datum transformation" = "Select a datum transformation";
+"Select an ellipsoid" = "Select an ellipsoid";
+"Select a map projection" = "Select a map projection";
+
+"Select an area unit" = "Select an area unit";
+"Select a length unit" = "Select a length unit";
+"Select a coordinates format" = "Select a coordinates format";
+"Select a datum transformation" = "Select a datum transformation";
+"Select an ellipsoid" = "Select an ellipsoid";
+
+/* MapProjectionDetailViewController */
+"centralMeridian" = "Central Meridian (deg)";
+"standardParallel" = "Standard Parallel (deg)";
+"falseEasting" = "False Easting (m)";
+"falseNorthing" = "False Northing (m)";
+"originLatitude" = "Origin Latitude (deg)";
+"scaleFactor" = "Scale Factor";
+"standardParallel1" = "First Standard Parallel (deg)";
+"standardParallel2" = "Second Standard Parallel (deg)";
+"originLongitude" = "Origin Longitude (deg)";
+"orientation" = "Orientation (deg)";
+"originHeight" = "Origin Height";
+"latitude1" = "First Latitude (deg)";
+"latitude2" = "Second Latitude (deg)";
+"longitude1" = "First Longitude (deg)";
+"longitude2" = "Second Longitude (deg)";
+
+"Subscribe" = "订阅";
+"You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section." = "您正在使用免费版本的GTField应用程序。 要使用功能完整的版本，请访问订阅部分。";
 

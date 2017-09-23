@@ -91,7 +91,7 @@ MSP::CCS::MapProjectionCoordinates* WebMercator::convertFromGeodetic(
 
    // Always throw an error because NGA does not want to allow
    // conversions to Web Mecator
-   throw CoordinateConversionException( ErrorMessages::webmConversionTo  );
+   // throw CoordinateConversionException( ErrorMessages::webmConversionTo  );
 
   return new MapProjectionCoordinates(
      CoordinateType::webMercator, easting, northing );

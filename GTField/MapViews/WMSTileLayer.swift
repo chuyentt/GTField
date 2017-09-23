@@ -47,6 +47,7 @@ class WMSTileLayer: GMSTileLayer {
                 print("Create success: ", MB_TILES_CACHED)
             }
         }
+        
     }
     
     override var map: GMSMapView? {

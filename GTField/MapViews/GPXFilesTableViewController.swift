@@ -68,7 +68,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         }
     }
     
-    func closeGPXFilesTableViewController() {
+    @objc func closeGPXFilesTableViewController() {
         print("closeGPXFIlesTableViewController()")
         self.dismiss(animated: true, completion: { () -> Void in
         })
@@ -264,8 +264,17 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 self.present(composer, animated: true, completion: nil)
 //            }
         } else {
-            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
-            alert.show()
+            let alert = UIAlertController(
+                title: NSLocalizedString("No email accounts configured", comment: ""),
+                message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
+                preferredStyle: UIAlertControllerStyle.alert
+            )
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+//            
+//            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
+//            alert.show()
         }
     }
     
@@ -338,15 +347,28 @@ extension GPXFilesTableViewController: UIActionSheetDelegate{
 
 extension GPXFilesTableViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        let alert: UIAlertController
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            alert = UIAlertController(
+                title: NSLocalizedString("Sent", comment: ""),
+                message: error?.localizedDescription,
+                preferredStyle: UIAlertControllerStyle.alert
+            )
             break
         default:
-            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            alert = UIAlertController(
+                title: NSLocalizedString("Whoops", comment: ""),
+                message: error?.localizedDescription,
+                preferredStyle: UIAlertControllerStyle.alert
+            )
         }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)
     }
 }

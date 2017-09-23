@@ -160,16 +160,47 @@ extension MapViewController: MBTileTableViewControllerDelegate {
 
 extension MapViewController:MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        let alert: UIAlertController
         switch result.rawValue {
         case MFMailComposeResult.sent.rawValue:
-            let alert = UIAlertView(title: NSLocalizedString("Sent", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            alert = UIAlertController(
+                title: NSLocalizedString("Sent", comment: ""),
+                message: error?.localizedDescription,
+                preferredStyle: UIAlertControllerStyle.alert
+            )
             break
         default:
-            let alert = UIAlertView(title: NSLocalizedString("Whoops", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            alert = UIAlertController(
+                title: NSLocalizedString("Whoops", comment: ""),
+                message: error?.localizedDescription,
+                preferredStyle: UIAlertControllerStyle.alert
+            )
         }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension MapViewController:InputFromCoordinatesViewControllerDelegate {
+    func didFinishWithLocation(_ location: CLLocation) {
+        print(location.coordinate.latLngFormated(withTarget: true))
+        if getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+            let wpt = GPXWaypoint(position: location.coordinate)
+            wpt.iconType = ""
+            wpt.icon = #imageLiteral(resourceName: "pin")
+            gpx?.addWaypoint(wpt)
+        } else {
+            self.showSubscription()
+        }
+    }
+    
+    func didFinishWithValue(_ value: Double, _ index: Int, _ type: SelectionType) {
+        
     }
 }
 
@@ -291,13 +322,33 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     var vertexView: VertexView?
     
+    var line: GMSPolyline? // Line from my location to marker
+    
     override func loadView() {
-        UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.default, animated: false)
-        let camera = GMSCameraPosition.camera(withLatitude: 16.5, longitude: 105.5, zoom: 5)
+        let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
         mapView = GTMapView.map(withFrame: .zero, camera: camera)
         mapView?.delegate = self
         mapView?.tag = 11
         self.view = mapView
+    }
+    
+    var statusBarStyle: UIStatusBarStyle? {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle ?? super.preferredStatusBarStyle
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        
+        statusBarStyle = .default
+        
+        self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -322,11 +373,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         stopUpdateMotion()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -340,6 +386,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func showSubscription() {
+        
+        let alert = UIAlertController(
+            title: NSLocalizedString("Subscribe", comment: ""),
+            message: NSLocalizedString("You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section.", comment: ""),
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (alert) -> Void in
+            self.performSegue(withIdentifier: "segueSubscription", sender: self)
+        }))
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
     }
     
     // Bắt buôc phải có nếu dùng MotionContainer
@@ -371,7 +436,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let vc: ConfigMapSourceViewController = nav.viewControllers.first as! ConfigMapSourceViewController
             vc.mapViewController = self
         }
-
+        if segue.identifier == "segueSubscription" {
+//            let nav: UINavigationController = segue.destination as! UINavigationController
+//            let vc: SubscribeViewController = nav.viewControllers.first as! SubscribeViewController
+        }
     }
     
     func setupTrackButton() {
@@ -984,7 +1052,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.performSegue(withIdentifier: "segueCamera", sender: self)
     }
 
-    func btnTakePhoto() {
+    @objc func btnTakePhoto() {
         self.performSegue(withIdentifier: "segueCamera", sender: self)
     }
     
@@ -1130,7 +1198,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
     }
     
-    func opacitySliderValueChange(sender:UISlider!) {
+    @objc func opacitySliderValueChange(sender:UISlider!) {
         if wmsTileLayer != nil {
             wmsTileLayer?.opacity = sender.value
         } else if offlineTileLayer != nil {
@@ -1149,12 +1217,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func setupButtonRecording() {
-        buttonRecord?.MainButton.isHidden = true
-        buttonRecording?.MainButton.isHidden = false
-        buttonRecording?.MainButton.startFlashing()
-        buttonPaused?.MainButton.isHidden = true
-        buttonRecording?.MainButton.GroupIndex = 1
-        gpx?.status = .tracking
+        if getProVersion() || (gpx?.trackSegments.count)! <= 2 {
+            buttonRecord?.MainButton.isHidden = true
+            buttonRecording?.MainButton.isHidden = false
+            buttonRecording?.MainButton.startFlashing()
+            buttonPaused?.MainButton.isHidden = true
+            buttonRecording?.MainButton.GroupIndex = 1
+            gpx?.status = .tracking
+        } else {
+            self.showSubscription()
+        }
     }
     
     func setupButtonPaused() {
@@ -1182,54 +1254,95 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func btnAddGPSMarker() {
         if let location = self.mapView?.myLocation?.coordinate {
-            let ele = (self.mapView?.myLocation?.altitude)!
-            let wpt = GPXWaypoint(position: location)
-            wpt.ele = ele.toString(2)
-            gpx?.addWaypoint(wpt)
-            if ENABLE_SOUND_EFFECT {
-                SoundPlayer.play(file: "snap.mp3")
+            if getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+                let ele = (self.mapView?.myLocation?.altitude)!
+                let wpt = GPXWaypoint(position: location)
+                wpt.ele = ele.toString(2)
+                gpx?.addWaypoint(wpt)
+                if ENABLE_SOUND_EFFECT {
+                    SoundPlayer.play(file: "snap.mp3")
+                }
+            } else {
+                self.showSubscription()
             }
         }
     }
     
+    // Thêm điểm trên bản đồ và thêm điểm theo tọa độ
     func btnAddMarker() {
-        self.navigationController?.isToolbarHidden = false
-        self.navigationController?.toolbar.barStyle = .black
-        self.navigationController?.toolbar.tintColor = UIColor.white
-        self.navigationController?.toolbarItems?.removeAll()
+        // Add a marker from the map
+        // Add a marker from coordinates
+        let alert = UIAlertController(
+            title: NSLocalizedString("Select option", comment: ""),
+            message: nil,
+            preferredStyle: .alert)
         
-        hideSomeView()
-        
-        cross.center = (self.mapView?.center)!
-        self.mapView?.addSubview(cross)
-        
-        var items = [UIBarButtonItem]()
-        items.append(
-            UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didCancelAddMarker))
-        )
-        items.append(
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        )
-        items.append(
-            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didDoneAddMarker))
-        )
-        self.navigationController?.toolbar.items = items
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Add a marker from the map", comment: ""),
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                self.navigationController?.isToolbarHidden = false
+                self.navigationController?.toolbar.barStyle = .black
+                self.navigationController?.toolbar.tintColor = UIColor.white
+                self.navigationController?.toolbarItems?.removeAll()
+                
+                self.hideSomeView()
+                
+                self.cross.center = (self.mapView?.center)!
+                self.mapView?.addSubview(self.cross)
+                
+                var items = [UIBarButtonItem]()
+                items.append(
+                    UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.didCancelAddMarker))
+                )
+                items.append(
+                    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+                )
+                items.append(
+                    UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.didDoneAddMarker))
+                )
+                self.navigationController?.toolbar.items = items
+        }))
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Add a marker from coordinates", comment: ""),
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                let vc: InputFromCoordinatesViewController = InputFromCoordinatesViewController()
+                vc.delegate = self
+                vc.title = NSLocalizedString("Add a marker from coordinates", comment: "")
+                let location = self.mapView?.center
+                let coord = self.mapView?.projection.coordinate(for: location!)
+                vc.currentLocation = CLLocation(latitude: (coord?.latitude)!, longitude: (coord?.longitude)!)
+                let nav: UINavigationController = UINavigationController(rootViewController: vc)
+                self.present(nav, animated: true, completion: {
+                    
+                })
+        }))
+        present(alert, animated: true, completion: nil)
     }
     
     func btnAddPolyline() {
-        self.gpx?.newTrackSegment()
-        self.gpx?.currentTrackSegment?.actions = .editing
-        selectedOverlay = self.gpx?.currentTrackSegment?.overlay
-        didSelectOverlay()
-        didEditOverlay()
+        if getProVersion() || (gpx?.trackSegments.count)! <= 2 {
+            self.gpx?.newTrackSegment()
+            self.gpx?.currentTrackSegment?.actions = .editing
+            selectedOverlay = self.gpx?.currentTrackSegment?.overlay
+            didSelectOverlay()
+            didEditOverlay()
+        } else {
+            self.showSubscription()
+        }
     }
     
     func btnAddPolygon() {
-        self.gpx?.newPointSegment()
-        self.gpx?.currentPointSegment?.actions = .editing
-        selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
-        didSelectOverlay()
-        didEditOverlay()
+        if getProVersion() || (gpx?.pointSegments.count)! <= 2 {
+            self.gpx?.newPointSegment()
+            self.gpx?.currentPointSegment?.actions = .editing
+            selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
+            didSelectOverlay()
+            didEditOverlay()
+        } else {
+            self.showSubscription()
+        }
     }
 
     func didSelectOverlay() {
@@ -1270,7 +1383,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.hideSomeView()
     }
     
-    func didEditOverlay() {
+    @objc func didEditOverlay() {
         if selectedOverlay != nil {
             selectedOverlay?.trackSegment.actions = .editing
         } else if selectedPolygonOverlay != nil {
@@ -1298,7 +1411,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
     }
     
-    func didSaveOverlay() {
+    @objc func didSaveOverlay() {
         selectedOverlay?.trackSegment.actions = .done
         selectedPolygonOverlay?.pointSegment.actions = .done
         selectedOverlay = nil
@@ -1312,7 +1425,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    func didResetOverlay() {
+    @objc func didResetOverlay() {
         selectedOverlay?.trackSegment.actions = .none
         selectedPolygonOverlay?.pointSegment.actions = .none
         selectedOverlay = nil
@@ -1321,7 +1434,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.showSomeView()
     }
     
-    func didDeSelectOverlay() {
+    @objc func didDeSelectOverlay() {
         selectedOverlay?.trackSegment.actions = .none
         selectedPolygonOverlay?.pointSegment.actions = .none
         selectedOverlay = nil
@@ -1330,7 +1443,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.showSomeView()
     }
     
-    func didDeleteOverlay() {
+    @objc func didDeleteOverlay() {
         if selectedOverlay != nil {
             selectedOverlay?.trackSegment.delete()
             selectedOverlay = nil
@@ -1341,29 +1454,36 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    func didCancelAddMarker() {
+    @objc func didCancelAddMarker() {
         didDeSelectOverlay()
         cross.removeFromSuperview()
         showSomeView()
     }
     
-    func didDoneAddMarker() {
+    @objc func didDoneAddMarker() {
         let location = self.mapView?.center
         let coord = self.mapView?.projection.coordinate(for: location!)
-        let wpt = GPXWaypoint(position: coord!)
-        wpt.iconType = ""
-        wpt.icon = #imageLiteral(resourceName: "pin")
-        gpx?.addWaypoint(wpt)
-        didDeSelectOverlay()
-        cross.removeFromSuperview()
-        showSomeView()
+        if getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+            let wpt = GPXWaypoint(position: coord!)
+            wpt.iconType = ""
+            wpt.icon = #imageLiteral(resourceName: "pin")
+            gpx?.addWaypoint(wpt)
+            didDeSelectOverlay()
+            cross.removeFromSuperview()
+            showSomeView()
+            if ENABLE_SOUND_EFFECT {
+                SoundPlayer.play(file: "snap.mp3")
+            }
+        } else {
+            self.showSubscription()
+        }
         
         if (self.interstitial.isReady) {
             self.interstitial.present(fromRootViewController: self)
         }
     }
     
-    func removeActiveVertex() {
+    @objc func removeActiveVertex() {
         if selectedOverlay != nil {
             selectedOverlay?.trackSegment.deleteActiveVertex()
         } else if selectedPolygonOverlay != nil {
@@ -1502,7 +1622,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         tableDataSource?.sourceTextHasChanged(textField.text)
     }
     
@@ -2817,9 +2937,32 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //        self.present(alertController, animated: true, completion: nil)
     }
     
+    func trackingDistance() {
+        if let marker = mapView?.selectedMarker,
+            let location = mapView?.myLocation {
+            let distance = location.distance(from: CLLocation(latitude: marker.position.latitude, longitude: marker.position.longitude))
+            marker.snippet = "\(marker.position.latLngFormated(withTarget: true))\n\(NSLocalizedString("Distance:", comment: "")) \(distance.distanceUnit())"
+            if self.line != nil {
+                self.line?.map = nil
+            }
+            let path = GMSMutablePath()
+            path.add(location.coordinate)
+            path.add(marker.position)
+            self.line = GMSPolyline(path: path)
+            line?.map = mapView
+        }
+    }
+    
     //#pragma mark - GMSMapViewDelegate
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         return nil
+    }
+    
+    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+        if mapView.selectedMarker == nil {
+            self.line?.map = nil
+        }
+        trackingDistance()
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -2845,7 +2988,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } else {
             mapView.selectedMarker = marker
             if marker.isTappable {
-                marker.snippet = marker.position.latLngFormated(withTarget: true)
+                // Vẽ đường và tính khoảng cách từ vị trí hiện tại tới marker
+                if mapView.myLocation != nil {
+                    trackingDistance()
+                } else {
+                    marker.snippet = marker.position.latLngFormated(withTarget: true)
+                }
+                
             }
         }
         return true
@@ -2891,6 +3040,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        if let trackSegmentOverlay: GPXTrackSegmentOverlay = overlay as? GPXTrackSegmentOverlay {
+            if trackSegmentOverlay.trackSegment.actions == .editing ||
+                selectedPolygonOverlay?.pointSegment.actions == .editing {
+                return
+            }
+        }
+        if let pointSegmentOverlay: GPXPointSegmentOverlay = overlay as? GPXPointSegmentOverlay {
+            if pointSegmentOverlay.pointSegment.actions == .editing ||
+                selectedOverlay?.trackSegment.actions == .editing {
+                return
+            }
+        }
+        
         if (self.mapView?.padding.bottom != 0.0) {
             togglePaneView(0)
         }
@@ -3082,6 +3244,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
             }
             if forChecking {
+                if manager.location?.coordinate != nil {
+                    setDefaultCoordinate2D((manager.location?.coordinate)!)
+                    self.mapView?.camera = GMSCameraPosition(target: getDefaultCoordinate2D(), zoom: 15, bearing: 0, viewingAngle: 0)
+                }
                 self.stopUpdatingLocation()
             } else {
                 isUpdatingLocation = true
@@ -3224,6 +3390,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if gpx?.status == .tracking {
             gpx?.addTrackPoint(GPXTrackPoint(locations.first!), .tracking)
         }
+        trackingDistance()
     }
     
     /// Log any errors to the console.

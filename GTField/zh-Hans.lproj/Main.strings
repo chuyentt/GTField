@@ -29,6 +29,12 @@
 /* Class = "UILabel"; text = "Coordinates"; ObjectID = "9Qn-8n-fzi"; */
 "9Qn-8n-fzi.text" = "坐标";
 
+/* Class = "UILabel"; text = "Map Grid"; ObjectID = "eUQ-lE-gSu"; */
+"eUQ-lE-gSu.text" = "地图网格";
+
+/* Class = "UILabel"; text = "Format"; ObjectID = "WOx-DK-gy1"; */
+"WOx-DK-gy1.text" = "E, N";
+
 /* Class = "UITableViewSection"; headerTitle = "General Settings"; ObjectID = "9bQ-kF-0XN"; */
 "9bQ-kF-0XN.headerTitle" = "设置";
 
@@ -187,3 +193,10 @@
 
 /* Class = "UILabel"; text = "Poi Name"; ObjectID = "zcb-Dh-6Ma"; */
 "zcb-Dh-6Ma.text" = "Poi Name";
+
+"8gm-p9-CXb.title"="订阅";
+
+"NTJ-ca-ktq.text"="订阅";
+
+"qfz-pK-xkw.text"="恢复购买";
+

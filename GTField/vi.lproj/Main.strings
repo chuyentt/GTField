@@ -29,6 +29,12 @@
 /* Class = "UILabel"; text = "Tọa độ"; ObjectID = "9Qn-8n-fzi"; */
 "9Qn-8n-fzi.text" = "Tọa độ";
 
+/* Class = "UILabel"; text = "Map Grid"; ObjectID = "eUQ-lE-gSu"; */
+"eUQ-lE-gSu.text" = "Tọa độ phẳng";
+
+/* Class = "UILabel"; text = "Format"; ObjectID = "WOx-DK-gy1"; */
+"WOx-DK-gy1.text" = "E, N";
+
 /* Class = "UITableViewSection"; headerTitle = "Thiết lập chung"; ObjectID = "9bQ-kF-0XN"; */
 "9bQ-kF-0XN.headerTitle" = "Thiết lập chung";
 
@@ -187,3 +193,9 @@
 
 /* Class = "UILabel"; text = "Poi Name"; ObjectID = "zcb-Dh-6Ma"; */
 "zcb-Dh-6Ma.text" = "Poi Name";
+
+"8gm-p9-CXb.title" = "Đăng ký";
+
+"NTJ-ca-ktq.text" = "Đăng ký";
+
+"qfz-pK-xkw.text" = "Khôi phục đã mua";

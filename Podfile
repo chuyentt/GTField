@@ -5,7 +5,7 @@
 target 'GTField' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-  platform :ios, '8.0'
+  platform :ios, '9.0'
 
   pod 'GeoTrans', :path => 'GeoTrans'
 
@@ -13,7 +13,7 @@ target 'GTField' do
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'GooglePlacePicker'
-  pod 'Zip', '~> 0.7'
+  pod 'Zip'
   pod 'Firebase'
   pod 'Firebase/AdMob'
   

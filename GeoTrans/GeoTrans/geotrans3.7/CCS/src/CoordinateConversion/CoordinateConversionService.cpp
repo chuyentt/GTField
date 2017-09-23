@@ -304,8 +304,7 @@ CoordinateConversionService::CoordinateConversionService(
   strcpy(Coordinate_System_Table[11].Code, "GE");
   Coordinate_System_Table[11].coordinateSystem = CoordinateType::georef;
 
-  strcpy(Coordinate_System_Table[12].Name,
-     "Global Area Reference System (GARS)");
+  strcpy(Coordinate_System_Table[12].Name, "Global Area Reference System (GARS)");
   strcpy(Coordinate_System_Table[12].Code, "GA");
   Coordinate_System_Table[12].coordinateSystem =
      CoordinateType::globalAreaReferenceSystem;
@@ -314,14 +313,12 @@ CoordinateConversionService::CoordinateConversionService(
   strcpy(Coordinate_System_Table[13].Code, "GN");
   Coordinate_System_Table[13].coordinateSystem = CoordinateType::gnomonic;
 
-  strcpy(Coordinate_System_Table[14].Name,
-     "Lambert Conformal Conic (1 Standard Parallel)");
+  strcpy(Coordinate_System_Table[14].Name, "Lambert Conformal Conic (1 Standard Parallel)");
   strcpy(Coordinate_System_Table[14].Code, "L1");
   Coordinate_System_Table[14].coordinateSystem =
      CoordinateType::lambertConformalConic1Parallel;
 
-  strcpy(Coordinate_System_Table[15].Name,
-     "Lambert Conformal Conic (2 Standard Parallel)");
+  strcpy(Coordinate_System_Table[15].Name, "Lambert Conformal Conic (2 Standard Parallel)");
   strcpy(Coordinate_System_Table[15].Code, "L2");
   Coordinate_System_Table[15].coordinateSystem =
      CoordinateType::lambertConformalConic2Parallels;
@@ -359,8 +356,7 @@ CoordinateConversionService::CoordinateConversionService(
   Coordinate_System_Table[22].coordinateSystem =
      CoordinateType::newZealandMapGrid;
 
-  strcpy(Coordinate_System_Table[23].Name,
-     "Ney's (Modified Lambert Conformal Conic)");
+  strcpy(Coordinate_System_Table[23].Name, "Ney's (Modified Lambert Conformal Conic)");
   strcpy(Coordinate_System_Table[23].Code, "NY");
   Coordinate_System_Table[23].coordinateSystem = CoordinateType::neys;
 
@@ -373,8 +369,7 @@ CoordinateConversionService::CoordinateConversionService(
   strcpy(Coordinate_System_Table[25].Code, "OD");
   Coordinate_System_Table[25].coordinateSystem = CoordinateType::orthographic;
 
-  strcpy(Coordinate_System_Table[26].Name,
-     "Polar Stereographic (Standard Parallel)");
+  strcpy(Coordinate_System_Table[26].Name, "Polar Stereographic (Standard Parallel)");
   strcpy(Coordinate_System_Table[26].Code, "PG");
   Coordinate_System_Table[26].coordinateSystem =
      CoordinateType::polarStereographicStandardParallel;
@@ -406,20 +401,17 @@ CoordinateConversionService::CoordinateConversionService(
   Coordinate_System_Table[32].coordinateSystem =
      CoordinateType::transverseMercator;
 
-  strcpy(Coordinate_System_Table[33].Name,
-     "Universal Polar Stereographic (UPS)");
+  strcpy(Coordinate_System_Table[33].Name, "Universal Polar Stereographic (UPS)");
   strcpy(Coordinate_System_Table[33].Code, "UP");
   Coordinate_System_Table[33].coordinateSystem =
      CoordinateType::universalPolarStereographic;
 
-  strcpy(Coordinate_System_Table[34].Name,
-     "Universal Transverse Mercator (UTM)");
+  strcpy(Coordinate_System_Table[34].Name, "Universal Transverse Mercator (UTM)");
   strcpy(Coordinate_System_Table[34].Code, "UT");
   Coordinate_System_Table[34].coordinateSystem =
      CoordinateType::universalTransverseMercator;
 
-  strcpy(Coordinate_System_Table[35].Name,
-     "United States National Grid (USNG)");
+  strcpy(Coordinate_System_Table[35].Name, "United States National Grid (USNG)");
   strcpy(Coordinate_System_Table[35].Code, "US");
   Coordinate_System_Table[35].coordinateSystem =
      CoordinateType::usNationalGrid;

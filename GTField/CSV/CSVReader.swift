@@ -8,17 +8,17 @@
 
 import Foundation
 
-internal let LF: UnicodeScalar = "\n"
-internal let CR: UnicodeScalar = "\r"
-internal let DQUOTE: UnicodeScalar = "\""
+public let LF: UnicodeScalar = "\n"
+public let CR: UnicodeScalar = "\r"
+public let DQUOTE: UnicodeScalar = "\""
 
-internal let DQUOTE_STR: String = "\""
-internal let DQUOTE2_STR: String = "\"\""
+public let DQUOTE_STR: String = "\""
+public let DQUOTE2_STR: String = "\"\""
 
-internal let defaultHasHeaderRow = false
-internal let defaultTrimFields = false
-internal let defaultDelimiter: UnicodeScalar = ","
-internal let defaultWhitespaces = CharacterSet.whitespaces
+public let defaultHasHeaderRow = false
+public let defaultTrimFields = false
+public let defaultDelimiter: UnicodeScalar = ","
+public let defaultWhitespaces = CharacterSet.whitespaces
 
 /// No overview available.
 public class CSVReader {

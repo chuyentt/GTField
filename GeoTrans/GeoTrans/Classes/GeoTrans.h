@@ -14,6 +14,129 @@
 #define guard(CONDITION) if (CONDITION) {}
 
 /*
+ * Lấy CrsCode
+ */
+NS_INLINE NSString* getCrsCode() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"crsCode"]) {
+        // UTM
+        [[NSUserDefaults standardUserDefaults] setValue:@"0" forKey:@"crsCode"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"crsCode"];
+}
+
+NS_INLINE void setCrsCode(NSString *crsCode) {
+    [[NSUserDefaults standardUserDefaults] setValue:crsCode forKey:@"crsCode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy CrsName, dùng để hiển thị khi viewSetting cho nhanh
+ */
+NS_INLINE NSString* getCrsName() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"crsName"]) {
+        // UTM
+        [[NSUserDefaults standardUserDefaults] setValue:@"Universal Transverse Mercator (UTM)" forKey:@"crsName"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"crsName"];
+}
+
+NS_INLINE void setCrsName(NSString *crsName) {
+    [[NSUserDefaults standardUserDefaults] setValue:crsName forKey:@"crsName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy mã lưới chiếu
+ */
+NS_INLINE NSString* getMapProjectionCode() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"MapProjectionCode"]) {
+        // UTM
+        [[NSUserDefaults standardUserDefaults] setValue:@"34" forKey:@"MapProjectionCode"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"MapProjectionCode"];
+}
+
+NS_INLINE void setMapProjectionCode(NSString *projectionCode) {
+    [[NSUserDefaults standardUserDefaults] setValue:projectionCode forKey:@"MapProjectionCode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy tên lưới chiếu
+ */
+NS_INLINE NSString* getMapProjectionName() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"MapProjectionName"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"Universal Transverse Mercator (UTM)" forKey:@"MapProjectionName"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"MapProjectionName"];
+}
+
+NS_INLINE void setMapProjectionName(NSString *projectionName) {
+    [[NSUserDefaults standardUserDefaults] setValue:projectionName forKey:@"MapProjectionName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy targetDatumCode
+ */
+NS_INLINE NSString* getDatumCode() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"targetDatumCode"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"WGE" forKey:@"targetDatumCode"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"targetDatumCode"];
+}
+
+NS_INLINE void setDatumCode(NSString *datumCode) {
+    [[NSUserDefaults standardUserDefaults] setValue:datumCode forKey:@"targetDatumCode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy targetDatumName
+ */
+NS_INLINE NSString* getDatumName() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"targetDatumName"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"WGS 84" forKey:@"targetDatumName"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"targetDatumName"];
+}
+
+NS_INLINE void setDatumName(NSString *datumName) {
+    [[NSUserDefaults standardUserDefaults] setValue:datumName forKey:@"targetDatumName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy targetEllipsoidCode, WE
+ */
+NS_INLINE NSString* getEllipsoidCode() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"targetEllipsoidCode"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"WE" forKey:@"targetEllipsoidCode"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"targetEllipsoidCode"];
+}
+
+NS_INLINE void setEllipsoidCode(NSString *ellipsoidCode) {
+    [[NSUserDefaults standardUserDefaults] setValue:ellipsoidCode forKey:@"targetEllipsoidCode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
+ * Lấy targetEllipsoiName, WE
+ */
+NS_INLINE NSString* getEllipsoidName() {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"targetEllipsoidName"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"WGS 84" forKey:@"targetEllipsoidName"];
+    }
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"targetEllipsoidName"];
+}
+
+NS_INLINE void setEllipsoidName(NSString *ellipsoidName) {
+    [[NSUserDefaults standardUserDefaults] setValue:ellipsoidName forKey:@"targetEllipsoidName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/*
  * Lấy tham số Ellipsoid
  */
 NS_INLINE void getEllipsoidParameters(double *a, double *f) {
@@ -140,30 +263,30 @@ NS_INLINE void setEquidistantCylindricalParameters(double centralMeridian, doubl
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-NS_INLINE void getLocalCartesianParameters(double *longitude, double *latitude, double *height, double *orientation) {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"longitude"]) {
-        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"longitude"];
+NS_INLINE void getLocalCartesianParameters(double *originLongitude, double *originLatitude, double *originHeight, double *orientation) {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"originLongitude"]) {
+        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"originLongitude"];
     }
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"latitude"]) {
-        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"latitude"];
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"originLatitude"]) {
+        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"originLatitude"];
     }
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"height"]) {
-        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"height"];
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"originHeight"]) {
+        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"originHeight"];
     }
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"orientation"]) {
         [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"orientation"];
     }
     
-    *longitude = [[NSUserDefaults standardUserDefaults] doubleForKey:@"longitude"];
-    *latitude = [[NSUserDefaults standardUserDefaults] doubleForKey:@"latitude"];
-    *height = [[NSUserDefaults standardUserDefaults] doubleForKey:@"height"];
+    *originLongitude = [[NSUserDefaults standardUserDefaults] doubleForKey:@"originLongitude"];
+    *originLatitude = [[NSUserDefaults standardUserDefaults] doubleForKey:@"originLatitude"];
+    *originHeight = [[NSUserDefaults standardUserDefaults] doubleForKey:@"originHeight"];
     *orientation = [[NSUserDefaults standardUserDefaults] doubleForKey:@"orientation"];
 }
 
-NS_INLINE void setLocalCartesianParameters(double longitude, double latitude, double height, double orientation) {
-    [[NSUserDefaults standardUserDefaults] setDouble:longitude forKey:@"longitude"];
-    [[NSUserDefaults standardUserDefaults] setDouble:latitude forKey:@"latitude"];
-    [[NSUserDefaults standardUserDefaults] setDouble:height forKey:@"height"];
+NS_INLINE void setLocalCartesianParameters(double originLongitude, double originLatitude, double originHeight, double orientation) {
+    [[NSUserDefaults standardUserDefaults] setDouble:originLongitude forKey:@"originLongitude"];
+    [[NSUserDefaults standardUserDefaults] setDouble:originLatitude forKey:@"originLatitude"];
+    [[NSUserDefaults standardUserDefaults] setDouble:originHeight forKey:@"originHeight"];
     [[NSUserDefaults standardUserDefaults] setDouble:orientation forKey:@"orientation"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -432,12 +555,12 @@ NS_INLINE void setObliqueMercatorParameters(double originLatitude, double longit
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-NS_INLINE void getPolarStereographicStandardParallelParameters(double *longitudeDownFromPole, double *latitudeOfTrueScale, double *falseEasting, double *falseNorthing) {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"longitudeDownFromPole"]) {
-        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"longitudeDownFromPole"];
+NS_INLINE void getPolarStereographicStandardParallelParameters(double *centralMeridian, double *standardParallel, double *falseEasting, double *falseNorthing) {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"centralMeridian"]) {
+        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"centralMeridian"];
     }
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"latitudeOfTrueScale"]) {
-        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"latitudeOfTrueScale"];
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"standardParallel"]) {
+        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"standardParallel"];
     }
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"falseEasting"]) {
         [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseEasting"];
@@ -446,30 +569,27 @@ NS_INLINE void getPolarStereographicStandardParallelParameters(double *longitude
         [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseNorthing"];
     }
     
-    *longitudeDownFromPole = [[NSUserDefaults standardUserDefaults] doubleForKey:@"longitudeDownFromPole"];
-    *latitudeOfTrueScale = [[NSUserDefaults standardUserDefaults] doubleForKey:@"latitudeOfTrueScale"];
+    *centralMeridian = [[NSUserDefaults standardUserDefaults] doubleForKey:@"centralMeridian"];
+    *standardParallel = [[NSUserDefaults standardUserDefaults] doubleForKey:@"standardParallel"];
     *falseEasting = [[NSUserDefaults standardUserDefaults] doubleForKey:@"falseEasting"];
     *falseNorthing = [[NSUserDefaults standardUserDefaults] doubleForKey:@"falseNorthing"];
 }
 
-NS_INLINE void setPolarStereographicStandardParallelParameters(double longitudeDownFromPole, double latitudeOfTrueScale, double falseEasting, double falseNorthing) {
-    [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"longitudeDownFromPole"];
-    [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"latitudeOfTrueScale"];
-    [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseEasting"];
-    [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseNorthing"];
+NS_INLINE void setPolarStereographicStandardParallelParameters(double centralMeridian, double standardParallel, double falseEasting, double falseNorthing) {
+    [[NSUserDefaults standardUserDefaults] setDouble:centralMeridian forKey:@"centralMeridian"];
+    [[NSUserDefaults standardUserDefaults] setDouble:standardParallel forKey:@"standardParallel"];
+    [[NSUserDefaults standardUserDefaults] setDouble:falseEasting forKey:@"falseEasting"];
+    [[NSUserDefaults standardUserDefaults] setDouble:falseNorthing forKey:@"falseNorthing"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-NS_INLINE void getPolarStereographicScaleFactorParameters(double *longitudeDownFromPole, double *scaleFactor, char *hemisphere, double *falseEasting, double *falseNorthing) {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"longitudeDownFromPole"]) {
-        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"longitudeDownFromPole"];
+NS_INLINE void getPolarStereographicScaleFactorParameters(double *centralMeridian, double *scaleFactor, double *falseEasting, double *falseNorthing) {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"centralMeridian"]) {
+        [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"centralMeridian"];
     }
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"scaleFactor"]) {
         [[NSUserDefaults standardUserDefaults] setDouble:1.0 forKey:@"scaleFactor"];
     }
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"hemisphere"]) {
-        [[NSUserDefaults standardUserDefaults] setValue:@"N" forKey:@"hemisphere"];
-    }
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"falseEasting"]) {
         [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseEasting"];
     }
@@ -477,19 +597,17 @@ NS_INLINE void getPolarStereographicScaleFactorParameters(double *longitudeDownF
         [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseNorthing"];
     }
     
-    *longitudeDownFromPole = [[NSUserDefaults standardUserDefaults] doubleForKey:@"longitudeDownFromPole"];
+    *centralMeridian = [[NSUserDefaults standardUserDefaults] doubleForKey:@"centralMeridian"];
     *scaleFactor = [[NSUserDefaults standardUserDefaults] doubleForKey:@"scaleFactor"];
-    *hemisphere = [[[NSUserDefaults standardUserDefaults] valueForKey:@"hemisphere"] characterAtIndex:0];
     *falseEasting = [[NSUserDefaults standardUserDefaults] doubleForKey:@"falseEasting"];
     *falseNorthing = [[NSUserDefaults standardUserDefaults] doubleForKey:@"falseNorthing"];
 }
 
-NS_INLINE void setPolarStereographicScaleFactorParameters(double longitudeDownFromPole, double scaleFactor, char hemisphere, double falseEasting, double falseNorthing) {
-    [[NSUserDefaults standardUserDefaults] setDouble:longitudeDownFromPole forKey:@"longitudeDownFromPole"];
+NS_INLINE void setPolarStereographicScaleFactorParameters(double centralMeridian, double scaleFactor, double falseEasting, double falseNorthing) {
+    [[NSUserDefaults standardUserDefaults] setDouble:centralMeridian forKey:@"centralMeridian"];
     [[NSUserDefaults standardUserDefaults] setDouble:scaleFactor forKey:@"scaleFactor"];
-    [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%c", hemisphere] forKey:@"hemisphere"];
-    [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseEasting"];
-    [[NSUserDefaults standardUserDefaults] setDouble:0.0 forKey:@"falseNorthing"];
+    [[NSUserDefaults standardUserDefaults] setDouble:falseEasting forKey:@"falseEasting"];
+    [[NSUserDefaults standardUserDefaults] setDouble:falseEasting forKey:@"falseNorthing"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -511,13 +629,13 @@ NS_INLINE void setUTMParameters(long zone, long _override) {
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-NS_INLINE void getCoordinateType(long *type) {
+NS_INLINE long getCoordinateType() {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"coordinateType"]) {
         // UTM
         [[NSUserDefaults standardUserDefaults] setInteger:34 forKey:@"coordinateType"];
     }
     
-    *type = [[NSUserDefaults standardUserDefaults] integerForKey:@"coordinateType"];
+    return [[NSUserDefaults standardUserDefaults] integerForKey:@"coordinateType"];
 }
 
 NS_INLINE void setCoordinateType(long coordinateType) {
@@ -529,38 +647,11 @@ NS_INLINE void setCoordinateType(long coordinateType) {
 
 - (instancetype)init;
 - (instancetype)init:(NSString *)sourceDatumCode :(NSString *)targetDatumCode;
-- (void)setSourceDatumCode:(NSString *)sourceDatumCode;
-- (void)setTargetDatumCode:(NSString *)targetDatumCode;
 
-- (void)setSourceCoordinateType:(NSInteger)index;
-- (void)setTargetCoordinateType:(NSInteger)index;
-- (void)setSourceHeightType:(NSInteger)index;
-- (void)setTargetHeightType:(NSInteger)index;
-
-- (void)setLat:(double)latitude lng:(double)longitude alt:(double)altitude;
-
-- (int)testCoordinateConversion:(NSString *)sourceDatumCode :(NSString *)targetDatumCode;
-
-- (int)llh2XYZ:(double)lat :(double)lon :(double)h :(double *)x :(double *)y :(double *)z;
-
-- (int)getTM:(double *)easting :(double *)northing;
-- (int)getTMForLat:(double)lat lng:(double)lng easting:(double *)easting northing:(double *)northing;
-
-- (int)getUTM:(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing;
-
-- (int)geocentric2MGRS:(double)x :(double)y :(double)z :(NSString **)mgrsStr;
-- (int)geocentric2UTM:(double)x :(double)y :(double)z :(long *)zone :(NSString **)hemi :(double *)easting :(double *)northing;
-
-// Định nghĩa ellipsoid
-- (int)defineEllipsoid:(const char *)code name:(const char *)name a:(double)semiMajorAxis f:(double)flattening;
-- (void)defineDatum:(int)datumType dCode:(NSString *)datumCode name:(NSString *)datumName eCode:(NSString *)ellipsoidCode dx:(double)deltaX dy:(double)deltaY dz:(double)deltaZ rx:(double)rotationX ry:(double)rotationY rz:(double)rotationZ sf:(double)scaleFactor;
-
-// Thiết lập kiểu chuỗi proj4
-- (void)setProj4Str:(NSString *)parameters;
-
-
-
+// Convert from geodetic to local
 - (void)getBNGCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage BNGString:(NSString **)BNGString precision:(long *)precision;
+
+- (void)getMGRSorUSNGCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage MGRSString:(NSString **)MGRSString precision:(long *)precision;
 
 - (void)getCartesianCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage x:(double *)x y:(double *)y z:(double *)z;
 
@@ -570,42 +661,29 @@ NS_INLINE void setCoordinateType(long coordinateType) {
 
 - (void)getMapProjectionCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage easting:(double *)easting northing:(double *)northing;
 
-- (void)getMGRSorUSNGCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage MGRS:(NSString **)MGRS precision:(long *)precision;
-
 - (void)getUPSCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage hemisphere:(NSString **)hemisphere easting:(double *)easting northing:(double *)northing;
 
 - (void)getUTMCoordinatesForLat:(double)lat lng:(double)lng alt:(double)alt type:(long)type warningMessage:(NSString **)warningMessage zone:(long *)zone hemisphere:(NSString **)hemisphere easting:(double *)easting northing:(double *)northing;
 
+// Convert from local to geodetic
+- (void)getGeodeticForBNGCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type BNGString:(NSString *)BNGString precision:(long)precision height:(double)height hType:(long)hType;
+
+- (void)getGeodeticForMGRSorUSNGCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type MGRSString:(NSString *)MGRSString precision:(long)precision height:(double)height hType:(long)hType;
+
+- (void)getGeodeticForCartesianCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type x:(double)x y:(double)y z:(double)z;
+
+- (void)getGeodeticForGARSCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type GARSString:(NSString *)GARSString precision:(long)precision height:(double)height hType:(long)hType;
+
+- (void)getGeodeticForGEOREFCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type GEOREFString:(NSString *)GEOREFString precision:(long)precision height:(double)height hType:(long)hType;
+
+- (void)getGeodeticForMapProjectionCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type easting:(double)easting northing:(double)northing height:(double)height hType:(long)hType;
+
+- (void)getGeodeticForUPSCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type hemisphere:(NSString *)hemisphere easting:(double)easting northing:(double)northing height:(double)height hType:(long)hType;
+
+- (void)getGeodeticForUTMCoordinates:(double *)lat lng:(double *)lng alt:(double *)alt warningMessage:(NSString **)warningMessage type:(long)type zone:(long)zone hemisphere:(NSString *)hemisphere easting:(double)easting northing:(double)northing height:(double)height hType:(long)hType;
 
 
-@property (nonatomic, assign) double lat;
-@property (nonatomic, assign) double lng;
-@property (nonatomic, assign) double alt;
-@property (nonatomic, assign) const char* srcCode;
-@property (nonatomic, assign) const char* targetCode;
+@property (nonatomic, strong) NSString* srcDatumCode;
+@property (nonatomic, strong) NSString* targetDatumCode;
 
 @end
-
-/*
- aea : albersEqualAreaConic
- aeqd : azimuthalEquidistant
- bonne : bonne
- cass : cassini
- cea : cylindricalEqualArea
- eck4 : eckert4
- eck6 : eckert6
- geocent : geocentric
- lcc : lambertConformalConic1Parallel
- longlat : geodetic
- merc : mercatorScaleFactor
- mill : millerCylindrical
- moll : mollweide
- nzmg : newZealandMapGrid
- omerc : obliqueMercator
- poly : polyconic
- sinu : sinusoidal
- stere : stereographic
- tmerc : transverseMercator
- utm : universalTransverseMercator
- vandg : vanDerGrinten
-*/

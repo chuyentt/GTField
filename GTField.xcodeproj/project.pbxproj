@@ -101,6 +101,7 @@
 		DE2BFE301F37491400DACF78 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BFE291F37491400DACF78 /* Error.swift */; };
 		DE2BFE311F37491400DACF78 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BFE2A1F37491400DACF78 /* Options.swift */; };
 		DE2BFE321F37491400DACF78 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BFE2B1F37491400DACF78 /* Parser.swift */; };
+		DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE322AC91F643C38005E09B9 /* InputViewController.swift */; };
 		DE35F28F1EEDAD06009EE354 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE35F28E1EEDAD06009EE354 /* Settings.swift */; };
 		DE35F2911EEE2647009EE354 /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE35F2901EEE2647009EE354 /* Double+Extensions.swift */; };
 		DE35F2951EEEB75D009EE354 /* ConfigMapSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE35F2941EEEB75D009EE354 /* ConfigMapSourceViewController.swift */; };
@@ -149,6 +150,7 @@
 		DE4E7BEB1F3C56340012E317 /* Endian.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BE41F3C56320012E317 /* Endian.swift */; };
 		DE4E7BEC1F3C56340012E317 /* UnicodeIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BE51F3C56320012E317 /* UnicodeIterator.swift */; };
 		DE52C3391F0507E300DE94F5 /* TileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE52C3381F0507E200DE94F5 /* TileDownloader.swift */; };
+		DE5B331A1F7670330047A1EF /* DXFWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE24D7871F704AC3007B1B39 /* DXFWriter.swift */; };
 		DE5EB0001EEBA1D700813FCC /* Baluardo San Martino.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DE5EAFFF1EEBA1D700813FCC /* Baluardo San Martino.jpg */; };
 		DE5EB0021EEC327800813FCC /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5EB0011EEC327800813FCC /* UIImage+Extensions.swift */; };
 		DE5EB0041EEC44D900813FCC /* NSDictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5EB0031EEC44D900813FCC /* NSDictionary+Extensions.swift */; };
@@ -156,7 +158,14 @@
 		DE6781891E55F1A500026C86 /* bauhauhb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE6781871E55F19600026C86 /* bauhauhb.ttf */; };
 		DE67818B1E55F25800026C86 /* bauhausm.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE67818A1E55F25800026C86 /* bauhausm.ttf */; };
 		DE6781921E56F10800026C86 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6781911E56F10700026C86 /* MapViewController.swift */; };
+		DE7287B61F615EFD009C0860 /* CrsProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7287B51F615EFC009C0860 /* CrsProcessing.swift */; };
+		DE7287B91F62A60B009C0860 /* MapProjectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7287B81F62A60B009C0860 /* MapProjectionDetailViewController.swift */; };
+		DE77E2F01F653B3E00075185 /* InputFromCoordinatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2EF1F653B3E00075185 /* InputFromCoordinatesViewController.swift */; };
+		DE77E2F31F6ECD8400075185 /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2F21F6ECD8400075185 /* SubscribeViewController.swift */; };
+		DE77E2F51F6ED0ED00075185 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2F41F6ED0ED00075185 /* SubscriptionService.swift */; };
+		DE820A181F5FF16A00E68F5F /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE820A171F5FF16A00E68F5F /* ListItem.swift */; };
 		DE8E41331F361B87005766B5 /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8E41321F361B87005766B5 /* VertexView.swift */; };
+		DE96B8AE1F6077E70038A8C2 /* crs.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE96B8AD1F6077E70038A8C2 /* crs.plist */; };
 		DEAD15441EEA54C800BFD5CE /* SectionWayPoints.plist in Resources */ = {isa = PBXBuildFile; fileRef = DEAD15431EEA54C800BFD5CE /* SectionWayPoints.plist */; };
 		DEAD15541EEA55D000BFD5CE /* Bastions.plist in Resources */ = {isa = PBXBuildFile; fileRef = DEAD15451EEA55D000BFD5CE /* Bastions.plist */; };
 		DEAD15551EEA55D000BFD5CE /* Bikes Rental.plist in Resources */ = {isa = PBXBuildFile; fileRef = DEAD15461EEA55D000BFD5CE /* Bikes Rental.plist */; };
@@ -301,6 +310,7 @@
 		DE085E201F266839005DD248 /* MBTileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBTileTableViewController.swift; path = ViewControllers/MBTile/MBTileTableViewController.swift; sourceTree = "<group>"; };
 		DE085E231F2987A8005DD248 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebViewController.swift; path = ViewControllers/WebViews/WebViewController.swift; sourceTree = "<group>"; };
 		DE146DD21EF609C200F3C055 /* OfflineTileLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OfflineTileLayer.swift; path = MapViews/OfflineTileLayer.swift; sourceTree = "<group>"; };
+		DE24D7871F704AC3007B1B39 /* DXFWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DXFWriter.swift; path = DXF/DXFWriter.swift; sourceTree = "<group>"; };
 		DE2645641F4E9E66008B759B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DE2645651F4EBEFE008B759B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE2645661F4EBF4D008B759B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
@@ -320,6 +330,7 @@
 		DE2BFE291F37491400DACF78 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		DE2BFE2A1F37491400DACF78 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		DE2BFE2B1F37491400DACF78 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		DE322AC91F643C38005E09B9 /* InputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputViewController.swift; path = ViewControllers/Settings/InputViewController.swift; sourceTree = "<group>"; };
 		DE35F28E1EEDAD06009EE354 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		DE35F2901EEE2647009EE354 /* Double+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Double+Extensions.swift"; path = "Support/Double+Extensions.swift"; sourceTree = "<group>"; };
 		DE35F2941EEEB75D009EE354 /* ConfigMapSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfigMapSourceViewController.swift; path = MapViews/ConfigMapSourceViewController.swift; sourceTree = "<group>"; };
@@ -380,9 +391,17 @@
 		DE6781871E55F19600026C86 /* bauhauhb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bauhauhb.ttf; sourceTree = "<group>"; };
 		DE67818A1E55F25800026C86 /* bauhausm.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bauhausm.ttf; sourceTree = "<group>"; };
 		DE6781911E56F10700026C86 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		DE7287B51F615EFC009C0860 /* CrsProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrsProcessing.swift; path = ViewControllers/Settings/CrsProcessing.swift; sourceTree = "<group>"; };
+		DE7287B71F622DB4009C0860 /* tbl_srs.xls */ = {isa = PBXFileReference; lastKnownFileType = file; name = tbl_srs.xls; path = ViewControllers/Settings/tbl_srs.xls; sourceTree = "<group>"; };
+		DE7287B81F62A60B009C0860 /* MapProjectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapProjectionDetailViewController.swift; path = ViewControllers/Settings/MapProjectionDetailViewController.swift; sourceTree = "<group>"; };
+		DE77E2EF1F653B3E00075185 /* InputFromCoordinatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputFromCoordinatesViewController.swift; path = MapViews/InputFromCoordinatesViewController.swift; sourceTree = "<group>"; };
+		DE77E2F21F6ECD8400075185 /* SubscribeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscribeViewController.swift; path = ViewControllers/Subscription/SubscribeViewController.swift; sourceTree = "<group>"; };
+		DE77E2F41F6ED0ED00075185 /* SubscriptionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionService.swift; path = ViewControllers/Subscription/SubscriptionService.swift; sourceTree = "<group>"; };
 		DE820A151F5DA23800E68F5F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		DE820A161F5DA23800E68F5F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		DE820A171F5FF16A00E68F5F /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListItem.swift; path = ViewControllers/Settings/ListItem.swift; sourceTree = "<group>"; };
 		DE8E41321F361B87005766B5 /* VertexView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VertexView.swift; path = GPX/VertexView.swift; sourceTree = "<group>"; };
+		DE96B8AD1F6077E70038A8C2 /* crs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = crs.plist; path = ViewControllers/Settings/crs.plist; sourceTree = "<group>"; };
 		DEAD15431EEA54C800BFD5CE /* SectionWayPoints.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = SectionWayPoints.plist; path = Plist/SectionWayPoints.plist; sourceTree = "<group>"; };
 		DEAD15451EEA55D000BFD5CE /* Bastions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Bastions.plist; path = Plist/Bastions.plist; sourceTree = "<group>"; };
 		DEAD15461EEA55D000BFD5CE /* Bikes Rental.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Bikes Rental.plist"; path = "Plist/Bikes Rental.plist"; sourceTree = "<group>"; };
@@ -486,6 +505,7 @@
 		1628239D19AB38A100D08755 /* GTField */ = {
 			isa = PBXGroup;
 			children = (
+				DE24D7861F7042A9007B1B39 /* DXF */,
 				DE44C1041F40357300434C2E /* MKUnits */,
 				DE4E7BDD1F3C55C80012E317 /* CSV */,
 				DE2BFE231F37491400DACF78 /* AEXML */,
@@ -712,12 +732,26 @@
 			name = WebViews;
 			sourceTree = "<group>";
 		};
+		DE24D7861F7042A9007B1B39 /* DXF */ = {
+			isa = PBXGroup;
+			children = (
+				DE24D7871F704AC3007B1B39 /* DXFWriter.swift */,
+			);
+			name = DXF;
+			sourceTree = "<group>";
+		};
 		DE28C3C21F1786E300C3A190 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				DE28C3C31F17873100C3A190 /* SettingsViewController.swift */,
 				DE434B461F2368AB00935974 /* SettingsContainer.swift */,
 				DE44BE0A1F4016E000434C2E /* SelectingTableViewController.swift */,
+				DE820A171F5FF16A00E68F5F /* ListItem.swift */,
+				DE7287B51F615EFC009C0860 /* CrsProcessing.swift */,
+				DE7287B81F62A60B009C0860 /* MapProjectionDetailViewController.swift */,
+				DE322AC91F643C38005E09B9 /* InputViewController.swift */,
+				DE7287B71F622DB4009C0860 /* tbl_srs.xls */,
+				DE96B8AD1F6077E70038A8C2 /* crs.plist */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -902,9 +936,19 @@
 				DE35F2981EEF9309009EE354 /* GSLayersViewController.swift */,
 				DE146DD21EF609C200F3C055 /* OfflineTileLayer.swift */,
 				DE52C3381F0507E200DE94F5 /* TileDownloader.swift */,
+				DE77E2EF1F653B3E00075185 /* InputFromCoordinatesViewController.swift */,
 				DE434B4A1F23C16800935974 /* MBTile */,
 			);
 			name = MapViews;
+			sourceTree = "<group>";
+		};
+		DE77E2F11F6ECCC000075185 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				DE77E2F21F6ECD8400075185 /* SubscribeViewController.swift */,
+				DE77E2F41F6ED0ED00075185 /* SubscriptionService.swift */,
+			);
+			name = Subscription;
 			sourceTree = "<group>";
 		};
 		DEAD15711EEA9CA900BFD5CE /* Photos */ = {
@@ -937,6 +981,7 @@
 		DEB226631E607B4600D27CB5 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				DE77E2F11F6ECCC000075185 /* Subscription */,
 				16488C791CB583570090E120 /* Main */,
 				DEAD15781EEAF77100BFD5CE /* Camera */,
 				DE35F29D1EF26E1D009EE354 /* PhotoMap */,
@@ -1028,14 +1073,17 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Tran Trung Chuyen";
 				TargetAttributes = {
 					16549D9A1A08AC4C00C59D2E = {
 						DevelopmentTeam = 62RSNGGTGD;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
 								enabled = 1;
 							};
 							com.apple.Maps.iOS = {
@@ -1113,6 +1161,7 @@
 				DEAD155D1EEA55D000BFD5CE /* Parks.plist in Resources */,
 				16488C661CB574780090E120 /* Main.plist in Resources */,
 				DEAD156E1EEA95B600BFD5CE /* SectionTracks.plist in Resources */,
+				DE96B8AE1F6077E70038A8C2 /* crs.plist in Resources */,
 				DEAD155C1EEA55D000BFD5CE /* Parking.plist in Resources */,
 				DEAD155A1EEA55D000BFD5CE /* Museums.plist in Resources */,
 				DEAD15701EEA9CA100BFD5CE /* City Hall.jpg in Resources */,
@@ -1222,8 +1271,10 @@
 				DE44C1191F40357300434C2E /* AreaUnit.swift in Sources */,
 				DE35F2A81EF270CB009EE354 /* DataViewController.swift in Sources */,
 				16D845A21D8D2DCB005DF780 /* TransitionZoom.swift in Sources */,
+				DE7287B61F615EFD009C0860 /* CrsProcessing.swift in Sources */,
 				DE44C11E1F40357300434C2E /* MassUnit.swift in Sources */,
 				DE377A841F0F3E61004C87D5 /* JDJellyButtonView.swift in Sources */,
+				DE77E2F01F653B3E00075185 /* InputFromCoordinatesViewController.swift in Sources */,
 				DEB2268A1E64282400D27CB5 /* PlaceAttributeCell.swift in Sources */,
 				DE146DD31EF609C200F3C055 /* OfflineTileLayer.swift in Sources */,
 				DE44C1181F40357300434C2E /* AreaUnit+Imperial.swift in Sources */,
@@ -1244,6 +1295,7 @@
 				DE35F2911EEE2647009EE354 /* Double+Extensions.swift in Sources */,
 				DE35F29B1EF02A99009EE354 /* GWFViewController.swift in Sources */,
 				DE2BFE2F1F37491400DACF78 /* Element.swift in Sources */,
+				DE77E2F31F6ECD8400075185 /* SubscribeViewController.swift in Sources */,
 				16549DA11A08AC4C00C59D2E /* AppDelegate.swift in Sources */,
 				16D8459F1D8D2DCB005DF780 /* SpringTextView.swift in Sources */,
 				DEC7B85A1EED131700EE81CB /* Data+Extensions.swift in Sources */,
@@ -1265,6 +1317,7 @@
 				16D8458A1D8D2DCB005DF780 /* BlurView.swift in Sources */,
 				DE44C1241F40357300434C2E /* VolumeUnit.swift in Sources */,
 				DE4E7BEB1F3C56340012E317 /* Endian.swift in Sources */,
+				DE5B331A1F7670330047A1EF /* DXFWriter.swift in Sources */,
 				16D845A31D8D2DCB005DF780 /* UnwindSegue.swift in Sources */,
 				DE434B491F23A8B800935974 /* MBTileFileManager.swift in Sources */,
 				DEB226721E607BDB00D27CB5 /* InsetViewController.swift in Sources */,
@@ -1277,6 +1330,7 @@
 				DE4E7BE61F3C56340012E317 /* BinaryReader.swift in Sources */,
 				DEB2268D1E64282400D27CB5 /* PlaceDetailViewController.swift in Sources */,
 				16D845891D8D2DCB005DF780 /* AutoTextView.swift in Sources */,
+				DE77E2F51F6ED0ED00075185 /* SubscriptionService.swift in Sources */,
 				DEAD156C1EEA950000BFD5CE /* MapListPoiTableViewCell.swift in Sources */,
 				DE379D681F15A73300B0FEA0 /* GPXFileManager.swift in Sources */,
 				DEC7B8581EECDAC300EE81CB /* WMSTileLayer.swift in Sources */,
@@ -1297,6 +1351,7 @@
 				DEC7B85E1EED49BC00EE81CB /* Utilities.swift in Sources */,
 				DE35F2A41EF270BD009EE354 /* PhotoMapViewController.swift in Sources */,
 				DE4E7BE91F3C56340012E317 /* CSVReader.swift in Sources */,
+				DE7287B91F62A60B009C0860 /* MapProjectionDetailViewController.swift in Sources */,
 				DE5EB0041EEC44D900813FCC /* NSDictionary+Extensions.swift in Sources */,
 				DEAD15641EEA937900BFD5CE /* SectionsViewController.swift in Sources */,
 				DE434B3D1F22FA4900935974 /* GPXHelper.swift in Sources */,
@@ -1308,6 +1363,7 @@
 				DE35F2A21EF270BD009EE354 /* LoadingStatus.swift in Sources */,
 				DE44C11C1F40357300434C2E /* LengthUnit.swift in Sources */,
 				DEB2267F1E608E0A00D27CB5 /* ShadowLineView.swift in Sources */,
+				DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */,
 				DE44C1201F40357300434C2E /* TimeUnit.swift in Sources */,
 				DEB226731E607BDB00D27CB5 /* SplitPaneViewController.swift in Sources */,
 				DE44C11D1F40357300434C2E /* MassUnit+Imperial.swift in Sources */,
@@ -1324,6 +1380,7 @@
 				DE377A851F0F3E61004C87D5 /* JDJellyMainButton.swift in Sources */,
 				DEB226711E607BDB00D27CB5 /* BaseContainerViewController.swift in Sources */,
 				DE434B471F2368AC00935974 /* SettingsContainer.swift in Sources */,
+				DE820A181F5FF16A00E68F5F /* ListItem.swift in Sources */,
 				DE2BFE301F37491400DACF78 /* Error.swift in Sources */,
 				DE4E7BE81F3C56340012E317 /* CSVError.swift in Sources */,
 				16D8458C1D8D2DCB005DF780 /* DesignableImageView.swift in Sources */,
@@ -1377,14 +1434,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1409,7 +1472,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1426,14 +1489,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1451,11 +1520,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1483,14 +1552,15 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/GTField/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTField;
 				PRODUCT_NAME = GTField;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1514,14 +1584,15 @@
 					"$(PROJECT_DIR)/Pods",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/GTField/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTField;
 				PRODUCT_NAME = GTField;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

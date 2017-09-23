@@ -101,6 +101,8 @@
 "Settings..." = "Cài đặt...";
 "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "hiện không được phép sử dụng dịch vụ định vị. Bạn không thể thay đổi trạng thái của ứng dụng này, có thể do các hạn chế đang hoạt động như kiểm soát của phụ huynh đang được áp dụng";
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Yêu cầu duy trì quyền truy cập dịch vụ định vị chỉ sử dụng trong khi bạn ghi lại lộ trình ở mọi lúc trong công việc hiện trường của bạn. Để cho phép truy cập, hãy đi tới cài đặt ứng dụng và chọn tùy chọn \"Luôn luôn\".";
+"Add a marker from the map" = "Thêm mốc từ bản đồ";
+"Add a marker from coordinates" = "Thêm mốc từ tọa độ";
 
 /* ConfigMapSourceViewController */
 "Map Source Configuration" = "Cấu hình nguồn cấp bản đồ";
@@ -138,3 +140,37 @@
 "Length:" = "Chiều dài:";
 "Area:" = "Diện tích:";
 "Perimeter:" = "Chu vi:";
+"Distance:" = "Khoảng cách:";
+
+/* SettingsViewController */
+"Select a coordinate system" = "Select a coordinate system";
+"Select a datum transformation" = "Select a datum transformation";
+"Select an ellipsoid" = "Select an ellipsoid";
+"Select a map projection" = "Select a map projection";
+
+"Select an area unit" = "Select an area unit";
+"Select a length unit" = "Select a length unit";
+"Select a coordinates format" = "Select a coordinates format";
+"Select a datum transformation" = "Select a datum transformation";
+"Select an ellipsoid" = "Select an ellipsoid";
+
+/* MapProjectionDetailViewController */
+"centralMeridian" = "Central Meridian (deg)";
+"standardParallel" = "Standard Parallel (deg)";
+"falseEasting" = "False Easting (m)";
+"falseNorthing" = "False Northing (m)";
+"originLatitude" = "Origin Latitude (deg)";
+"scaleFactor" = "Scale Factor";
+"standardParallel1" = "First Standard Parallel (deg)";
+"standardParallel2" = "Second Standard Parallel (deg)";
+"originLongitude" = "Origin Longitude (deg)";
+"orientation" = "Orientation (deg)";
+"originHeight" = "Origin Height";
+"latitude1" = "First Latitude (deg)";
+"latitude2" = "Second Latitude (deg)";
+"longitude1" = "First Longitude (deg)";
+"longitude2" = "Second Longitude (deg)";
+
+"Subscribe" = "Đăng ký";
+"You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section." = "Bạn đang sử dụng phiên bản miễn phí của ứng dụng GTField. Để sử dụng phiên bản đầy đủ chức năng, hãy đi tới mục đăng ký.";
+

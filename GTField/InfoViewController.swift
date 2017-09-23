@@ -44,7 +44,7 @@ class InfoViewController: UIViewController, SKPaymentTransactionObserver, MFMail
             if transaction.payment.productIdentifier == IAP_ID
             {
                 let userDefaults = UserDefaults.standard
-                userDefaults.set(true, forKey: "proUser")
+                userDefaults.set(true, forKey: "ProVersion")
                 userDefaults.synchronize()
             }
         }

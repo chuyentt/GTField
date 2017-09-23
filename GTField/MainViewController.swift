@@ -14,7 +14,7 @@ import CloudKit
 import StoreKit
 import CoreMotion
 
-class MainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, GADBannerViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver, MotionContainer {
+class MainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, GADBannerViewDelegate, MotionContainer {
 
     var motionManager: CMMotionManager?
     
@@ -48,10 +48,13 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         //register_t(_:forCellWithReuseIdentifier:)
         
         if(SKPaymentQueue.canMakePayments()) {
-            let productID:NSSet = NSSet(objects: IAP_ID)
-            let request: SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
-            request.delegate = self
-            request.start()
+            SKPaymentQueue.default().add(self)
+            SubscriptionService.shared.loadSubscriptionOptions()
+//
+//            let productID:NSSet = NSSet(objects: IAP_ID)
+//            let request: SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
+//            request.delegate = self
+//            request.start()
         } else {
             print("IAPS are Disabled")
         }
@@ -101,7 +104,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         imgLogo.alpha = 1
 
-        if ADS_ENABLED && (userDefaults.bool(forKey: "proUser") == false) {
+        if ADS_ENABLED && !getProVersion() {
                 //heightBackground.constant = 50
                 initAdMobBanner()
         } else {
@@ -156,7 +159,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
             }
 
             let isFree = catClass["isFree"] as! Int
-            if (isFree == 0) && (userDefaults.bool(forKey: "proUser") == false) {
+            if (isFree == 0) && !getProVersion() {
                 cell.imgLock.isHidden = false
             } else {
                 cell.imgLock.isHidden = true
@@ -171,7 +174,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                 cell.imgSection.image = sectionPic
 
                 let isFree = plistDict["isFree"]!
-                if (isFree == "no") && (userDefaults.bool(forKey: "proUser") == false) {
+                if (isFree == "no") && !getProVersion() {
                     cell.imgLock.isHidden = false
                 } else {
                     cell.imgLock.isHidden = true
@@ -406,61 +409,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
 
-    
-    // MARK: -- IN APP PURCHASE
-    
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        
-        let myProduct = response.products
-        for product in myProduct { //Product Added
-            list.append(product)
-        }
-    }
-
-    
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
-        for transaction:AnyObject in transactions {
-            
-            let trans = transaction as! SKPaymentTransaction
-            switch trans.transactionState {
-                
-            case .purchased:
-                
-                let prodID = p.productIdentifier as String
-                switch prodID {
-                case "com.iap.removeads":
-                    userDefaults.set(true, forKey: "proUser")
-                    userDefaults.synchronize()
-                    SKPaymentQueue.default().remove(self)
-                    myCollectionView.reloadData()
-                default:
-                    print("IAP not setup")
-                }
-                
-                queue.finishTransaction(trans)
-                
-            case .failed:
-                queue.finishTransaction(trans)
-                
-            default:
-                print("default")
-            }
-        }
-        
-    }
-
-    
-    func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]){
-        let alert  = UIAlertView()
-        alert.message = "Your purchase was not completed"
-        alert.title = "Failure"
-        alert.addButton(withTitle: "OK")
-        alert.show()
-    }
-
-    
-
     // MARK: -- ADS
     
     // Initialize Google AdMob banner
@@ -530,4 +478,65 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     }
     
+}
+
+// MARK: - SKPaymentTransactionObserver
+
+extension MainViewController: SKPaymentTransactionObserver {
+    
+    func paymentQueue(_ queue: SKPaymentQueue,
+                      updatedTransactions transactions: [SKPaymentTransaction]) {
+        
+        for transaction in transactions {
+            switch transaction.transactionState {
+            case .purchasing:
+                handlePurchasingState(for: transaction, in: queue)
+            case .purchased:
+                handlePurchasedState(for: transaction, in: queue)
+            case .restored:
+                handleRestoredState(for: transaction, in: queue)
+            case .failed:
+                handleFailedState(for: transaction, in: queue)
+            case .deferred:
+                handleDeferredState(for: transaction, in: queue)
+            }
+        }
+    }
+    
+    func handlePurchasingState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("User is attempting to purchase product id: \(transaction.payment.productIdentifier)")
+    }
+    
+    func handlePurchasedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("User purchased product id: \(transaction.payment.productIdentifier)")
+        
+        queue.finishTransaction(transaction)
+        SubscriptionService.shared.uploadReceipt { (success) in
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: SubscriptionService.purchaseSuccessfulNotification, object: nil)
+                setProVersion(true)
+            }
+        }
+    }
+    
+    func handleRestoredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase restored for product id: \(transaction.payment.productIdentifier)")
+        queue.finishTransaction(transaction)
+        SubscriptionService.shared.uploadReceipt { (success) in
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: SubscriptionService.restoreSuccessfulNotification, object: nil)
+                setProVersion(true)
+            }
+        }
+    }
+    
+    func handleFailedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase failed for product id: \(transaction.payment.productIdentifier)")
+        setProVersion(false)
+    }
+    
+    func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase deferred for product id: \(transaction.payment.productIdentifier)")
+        setProVersion(false)
+    }
 }

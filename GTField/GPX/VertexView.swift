@@ -67,7 +67,7 @@ class VertexView: UIView {
         addGestureRecognizer(panGR)
     }
     
-    func didPan(_ panGR: UIPanGestureRecognizer) {
+    @objc func didPan(_ panGR: UIPanGestureRecognizer) {
         
         self.superview!.bringSubview(toFront: self)
         

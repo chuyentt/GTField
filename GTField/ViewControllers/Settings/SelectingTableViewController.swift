@@ -7,25 +7,90 @@
 //
 
 import UIKit
+import GeoTrans
 
 enum SelectionType: Int {
     case distanceUnit = 0
     case areaUnit = 1
     case latLngFormat = 2
+    case coordinateSystem = 3
+    case datumTransformation = 4
+    case ellipsoid = 5
+    case mapProjection = 6
+    case mapGridFormat = 7
+}
+
+protocol SelectingTableViewControllerDelegate: class {
+    func didSelectItem(_ item: ListItem, _ selectionType: SelectionType)
+}
+
+extension SelectingTableViewController: MapProjectionDetailViewControllerDelegate {
+    func didSave() {
+        self.setSelect(0)
+    }
 }
 
 class SelectingTableViewController: UITableViewController {
+    
+    weak var delegate: SelectingTableViewControllerDelegate?
+    
     var selectionType: SelectionType = .areaUnit
     var textLabel: UILabel?
     
-    var itemList:[String] = [String]()
+    var items = [ListItem]()
+    
+    var crsIndex = 0
+    var ellipsoidIndex = 0
+    var datumIndex = 0
+    var projectionIndex = 0
+    var mapGridIndex = 0
+
+    var filteredItems = [ListItem]()
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if selectionType == .coordinateSystem {
+            if crsItems.count == 0 {
+                DispatchQueue.main.async {
+                    self.view?.showLoading()
+                }
+            } else {
+                items = crsItems
+            }
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if selectionType == .coordinateSystem {
+            if crsItems.count == 0 {
+                crsItems = loadCrs()
+                items = crsItems
+                DispatchQueue.main.async() {
+                    self.view?.hideLoading()
+                }
+                tableView.reloadData()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let shareItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close(_:)))
         
-        self.navigationItem.rightBarButtonItems = [shareItem]
+        self.navigationItem.leftBarButtonItems = [shareItem]
+        
+        // Setup the Search Controller
+        searchController.searchResultsUpdater = self
+        tableView.tableHeaderView = searchController.searchBar
+        definesPresentationContext = true
+        searchController.dimsBackgroundDuringPresentation = false
+        
+        // Setup the Scope Bar
+        searchController.searchBar.delegate = self
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,34 +104,30 @@ class SelectingTableViewController: UITableViewController {
         })
     }
     
-    func setupView() {
-        switch selectionType {
-        case .areaUnit:
-            self.title = "Select Area Unit"
-            itemList.append("\(AreaUnit.squareMeter.name) (\(AreaUnit.squareMeter.symbol))")
-            itemList.append("\(AreaUnit.squareKilometer.name) (\(AreaUnit.squareKilometer.symbol))")
-            itemList.append("\(AreaUnit.hectare.name) (\(AreaUnit.hectare.symbol))")
-            itemList.append("\(AreaUnit.squareYard.name) (\(AreaUnit.squareYard.symbol))")
-            itemList.append("\(AreaUnit.squareMile.name) (\(AreaUnit.squareMile.symbol))")
-            itemList.append("\(AreaUnit.acre.name) (\(AreaUnit.acre.symbol))")
-            break;
-        case .distanceUnit:
-            self.title = "Select Distance Unit"
-            itemList.append("\(LengthUnit.meter.name) (\(LengthUnit.meter.symbol))")
-            itemList.append("\(LengthUnit.kilometer.name) (\(LengthUnit.kilometer.symbol))")
-            itemList.append("\(LengthUnit.yard.name) (\(LengthUnit.yard.symbol))")
-            itemList.append("\(LengthUnit.mile.name) (\(LengthUnit.mile.symbol))")
-            break;
-        case .latLngFormat:
-            self.title = "Select Coordinate Format"
-            itemList.append("ddd°mm'ss.ssss N/S,E/W")
-            itemList.append("ddd.dddddddddd N/S,E/W")
-            itemList.append("+/-ddd°mm'ss.ssss")
-            itemList.append("+/-ddd.dddddddddd")
-            break;
+    func loadCrs() -> [ListItem] {
+        var crsItems = [ListItem]()
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 8
+        
+        let arrayCrs = NSArray(contentsOfFile: Bundle.main.path(forResource: "crs", ofType: "plist")!)!
+        
+        for crs in arrayCrs {
+            queue.addOperation {
+                let code = (crs as AnyObject).object(forKey: "code") as! String
+                let name = (crs as AnyObject).object(forKey: "name") as! String
+                let value = (crs as AnyObject).object(forKey: "value") as! String
+                
+                let item = ListItem(code: code, name: name, value: value)
+                synchronized(crsItems as AnyObject) {
+                    crsItems.append(item)
+                }
+            }
+            queue.waitUntilAllOperationsAreFinished()
         }
-    }
 
+        return crsItems
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -74,14 +135,28 @@ class SelectingTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemList.count
+        if isFiltering() {
+            return filteredItems.count
+        } else {
+            return items.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
-        let text = itemList[indexPath.row]
-        cell.textLabel?.numberOfLines = 0
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "Cell")
+        let item: ListItem
+        if isFiltering() {
+            item = filteredItems[indexPath.row]
+        } else {
+            item = items[indexPath.row]
+        }
+        //cell.textLabel?.numberOfLines = 0
+        //cell.detailTextLabel?.numberOfLines = 0
+        let text = item.name
         cell.textLabel?.text = text
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        //cell.detailTextLabel?.text = item.value
+        cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
         var index = 0
         switch selectionType {
         case .areaUnit:
@@ -93,19 +168,79 @@ class SelectingTableViewController: UITableViewController {
         case .latLngFormat:
             index = getLatLngFormat()
             break
+        case .mapGridFormat:
+            index = getMapGridFormat()
+            break
+        case .coordinateSystem:
+            index = crsIndex
+            break
+        case .datumTransformation:
+            index = datumIndex
+            break
+        case .ellipsoid:
+            index = ellipsoidIndex
+            break
+        case .mapProjection:
+            index = projectionIndex
+            break
         }
-        if indexPath.row == index {
+        if indexPath.row == index && !isFiltering() {
             cell.accessoryType = .checkmark
         }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        setSelect(indexPath.row)
+        let item: ListItem
+        if isFiltering() {
+            item = filteredItems[indexPath.row]
+        } else {
+            item = items[indexPath.row]
+        }
+        let index = items.index(where: { (_item) -> Bool in
+            (_item.name == item.name) && (_item.code == item.code)
+        })
+        
+        if selectionType == .coordinateSystem {
+            let alert = UIAlertController(
+                title: NSLocalizedString("Select option", comment: ""),
+                message: nil,
+                preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Select", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.setSelect(index!)
+                    self.close(UIBarButtonItem())
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Detail", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    let vc: MapProjectionDetailViewController = MapProjectionDetailViewController()
+                    vc.delegate = self
+                    vc.editable = (item.code == "0")
+                    if vc.editable {
+                        vc.proj4String = getCustomCrsProj4String()
+                    } else {
+                        vc.proj4String = item.value
+                    }
+                    vc.title = item.name
+                    let nav: UINavigationController = UINavigationController(rootViewController: vc)
+                    self.present(nav, animated: true, completion: {
+                        
+                    })
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            self.setSelect(index!)
+            self.close(UIBarButtonItem())
+        }
     }
     
     func setSelect(_ index: Int) {
-        let text = itemList[index]
+        let text = items[index].name
         textLabel?.text = text
         switch selectionType {
         case .areaUnit:
@@ -120,7 +255,80 @@ class SelectingTableViewController: UITableViewController {
             setLatLngFormat(index)
             self.close(UIBarButtonItem())
             break
+        case .mapGridFormat:
+            setMapGridFormat(index)
+            self.close(UIBarButtonItem())
+            break
+        case .coordinateSystem:
+            setCrsIndex(index);
+            setCrsCode(items[index].code)
+            setCrsName(items[index].name)
+            
+            //TODO: Tách xâu lấy các tham số trong value
+            if index == 0 { // User-defined (Custom)
+                crsProcessing(items[index].name, getCustomCrsProj4String()) // Lấy proj4String User-defined (Custom)
+            } else {
+                crsProcessing(items[index].name, items[index].value) // Xử lý để chọn
+            }
+            
+            self.close(UIBarButtonItem())
+            break
+        case .datumTransformation:
+//            setDatumIndex(index)
+//            setDatumCode(items[index].code)
+//            setDatumName(items[index].name)
+            delegate?.didSelectItem(items[index], .datumTransformation)
+            self.close(UIBarButtonItem())
+            break
+        case .ellipsoid:
+//            setEllipsoidIndex(index)
+//            setEllipsoidCode(items[index].code)
+//            setEllipsoidName(items[index].name)
+            delegate?.didSelectItem(items[index], .ellipsoid)
+            self.close(UIBarButtonItem())
+            break
+        case .mapProjection:
+//            setCoordinateType(index)
+//            setMapProjectionCode(items[index].code)
+//            setMapProjectionName(items[index].name)
+            setCustomMapProjectionType(index)
+            delegate?.didSelectItem(items[index], .mapProjection)
+            self.close(UIBarButtonItem())
+            break
         }
     }
 
+    // MARK: - Private instance methods
+    
+    func filterContentForSearchText(_ searchText: String) {
+        filteredItems = items.filter({( item : ListItem) -> Bool in
+            return item.name.lowercased().contains(searchText.lowercased()) || item.value.lowercased().contains(searchText.lowercased()) || item.value.lowercased().contains(searchText.lowercased())
+        })
+        tableView.reloadData()
+    }
+    
+    func searchBarIsEmpty() -> Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func isFiltering() -> Bool {
+        let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
+        return searchController.isActive && (!searchBarIsEmpty() || searchBarScopeIsFiltering)
+    }
+}
+
+
+
+extension SelectingTableViewController: UISearchBarDelegate {
+    // MARK: - UISearchBar Delegate
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchBar.text!)
+    }
+}
+
+extension SelectingTableViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
 }

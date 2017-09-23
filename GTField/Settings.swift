@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import GoogleMaps
 //import AEXML
 
 enum CoordinateType: Int {
@@ -49,46 +50,47 @@ enum CoordinateType: Int {
     case usNationalGrid = 35
     case vanDerGrinten = 36
     case webMercator = 37
-/*
-     0	AC	Albers Equal Area Conic
-     1	AL	Azimuthal Equidistant (S)
-     2	BF	Bonne
-     3	BN	British National Grid (BNG)
-     4	CP	Equidistant Cylindrical (S)
-     5	CS	Cassini
-     6	ED	Eckert VI (S)
-     7	EF	Eckert IV (S)
-     8	GA	Global Area Reference System (GARS)
-     9	GC	Geocentric
-     10	GD	Geodetic
-     11	GE	GEOREF
-     12	GN	Gnomonic (S)
-     13	L1	Lambert Conformal Conic (1 Standard Parallel)
-     14	L2	Lambert Conformal Conic (2 Standard Parallel)
-     15	LC	Local Cartesian
-     16	LI	Cylindrical Equal Area
-     17	MC	Mercator (Standard Parallel)
-     18	MF	Mercator (Scale Factor)
-     19	MG	Military Grid Reference System (MGRS)
-     20	MH	Miller Cylindrical (S)
-     21	MP	Mollweide (S)
-     22	NT	New Zealand Map Grid (NZMG)
-     23	NY	Ney's (Modified Lambert Conformal Conic)
-     24	OC	Oblique Mercator
-     25	OD	Orthographic (S)
-     26	PF	Polar Stereographic (Scale Factor)
-     27	PG	Polar Stereographic (Standard Parallel)
-     28	PH	Polyconic
-     29	SA	Sinusoidal
-     30	SD	Stereographic (S)
-     31	TC	Transverse Mercator
-     32	TX	Transverse Cylindrical Equal Area
-     33	UP	Universal Polar Stereographic (UPS)
-     34	US	United States National Grid (USNG)
-     35	UT	Universal Transverse Mercator (UTM)
-     36	VA	Van der Grinten
-     37	WM	Web Mercator
- */
+}
+
+enum CoordinateTypeName: String {
+    case albersEqualAreaConic = "Albers Equal Area Conic"
+    case azimuthalEquidistant = "Azimuthal Equidistant (S)"
+    case bonne = "Bonne"
+    case britishNationalGrid = "British National Grid (BNG)"
+    case cassini = "Equidistant Cylindrical (S)"
+    case cylindricalEqualArea = "Cassini"
+    case eckert4 = "Eckert VI (S)"
+    case eckert6 = "Eckert IV (S)"
+    case equidistantCylindrical = "Global Area Reference System (GARS)"
+    case geocentric = "Geocentric"
+    case geodetic = "Geodetic"
+    case georef = "GEOREF"
+    case globalAreaReferenceSystem = "Gnomonic (S)"
+    case gnomonic = "Lambert Conformal Conic (1 Standard Parallel)"
+    case lambertConformalConic1Parallel = "Lambert Conformal Conic (2 Standard Parallel)"
+    case lambertConformalConic2Parallels = "Local Cartesian"
+    case localCartesian = "Cylindrical Equal Area"
+    case mercatorScaleFactor = "Mercator (Standard Parallel)"
+    case mercatorStandardParallel = "Mercator (Scale Factor)"
+    case militaryGridReferenceSystem = "Military Grid Reference System (MGRS)"
+    case millerCylindrical = "Miller Cylindrical (S)"
+    case mollweide = "Mollweide (S)"
+    case newZealandMapGrid = "New Zealand Map Grid (NZMG)"
+    case neys = "Ney's (Modified Lambert Conformal Conic)"
+    case obliqueMercator = "Oblique Mercator"
+    case orthographic = "Orthographic (S)"
+    case polarStereographicScaleFactor = "Polar Stereographic (Scale Factor)"
+    case polarStereographicStandardParallel = "Polar Stereographic (Standard Parallel)"
+    case polyconic = "Polyconic"
+    case sinusoidal = "Sinusoidal"
+    case stereographic = "Stereographic (S)"
+    case transverseCylindricalEqualArea = "Transverse Mercator"
+    case transverseMercator = "Transverse Cylindrical Equal Area"
+    case universalPolarStereographic = "Universal Polar Stereographic (UPS)"
+    case universalTransverseMercator = "United States National Grid (USNG)"
+    case usNationalGrid = "Universal Transverse Mercator (UTM)"
+    case vanDerGrinten = "Van der Grinten"
+    case webMercator = "Web Mercator"
 }
 
 enum HeightType: Int {
@@ -433,6 +435,29 @@ func createSettings() {
     print(xmlDoc.xml)
 }
 
+/*
+ * Lấy tọa độ mặc định cho mapView
+ */
+func getDefaultCoordinate2D() -> CLLocationCoordinate2D {
+    var latitude:CLLocationDegrees = 16.5
+    var longitude:CLLocationDegrees = 105.5
+    guard UserDefaults.standard.object(forKey: "DefaultLatitude") != nil else {
+        UserDefaults.standard.set(latitude, forKey: "DefaultLatitude")
+        UserDefaults.standard.set(longitude, forKey: "DefaultLongitude")
+        UserDefaults.standard.synchronize()
+        return CLLocationCoordinate2DMake(latitude, longitude)
+    }
+    latitude = UserDefaults.standard.double(forKey: "DefaultLatitude")
+    longitude = UserDefaults.standard.double(forKey: "DefaultLongitude")
+    
+    return CLLocationCoordinate2DMake(latitude, longitude)
+}
+
+func setDefaultCoordinate2D(_ location: CLLocationCoordinate2D) {
+    UserDefaults.standard.set(location.latitude, forKey: "DefaultLatitude")
+    UserDefaults.standard.set(location.longitude, forKey: "DefaultLongitude")
+    UserDefaults.standard.synchronize()
+}
 
 /************************************************
  * Datum
@@ -545,5 +570,139 @@ func getLatLngFormat() -> Int {
 
 func setLatLngFormat(_ value: Int) {
     UserDefaults.standard.set(value, forKey: "LAT_LNG_FORMAT")
+    UserDefaults.standard.synchronize()
+}
+
+func getMapGridFormat() -> Int {
+    guard UserDefaults.standard.object(forKey: "MapGridFormat") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "MapGridFormat")
+}
+
+func setMapGridFormat(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "MapGridFormat")
+    UserDefaults.standard.synchronize()
+}
+
+
+/*
+ * Lấy Index trong CrsItems
+ */
+func getCrsIndex() -> Int {
+    guard UserDefaults.standard.object(forKey: "CrsIndex") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "CrsIndex")
+}
+
+func setCrsIndex(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "CrsIndex")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy Index trong DatumItems
+ */
+func getDatumIndex() -> Int {
+    guard UserDefaults.standard.object(forKey: "DatumIndex") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "DatumIndex")
+}
+
+func setDatumIndex(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "DatumIndex")
+    UserDefaults.standard.synchronize()
+}
+
+
+/*
+ * Lấy custom crs proj4 string
+ */
+func getCustomCrsProj4String() -> String {
+    guard UserDefaults.standard.object(forKey: "CustomCrsProj4String") != nil else {
+        return "+proj_code=34 +ellps_code=WE +proj=utm +zone=48 +ellps=WGS84 +datum=WGE +units=m +no_defs"
+    }
+    return UserDefaults.standard.string(forKey: "CustomCrsProj4String")!
+}
+
+func setCustomCrsProj4String(_ value: String) {
+    UserDefaults.standard.set(value, forKey: "CustomCrsProj4String")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy custom projection: dùng trong trường hợp người dùng tự định nghĩa để thiết lập
+ */
+func getCustomMapProjectionType() -> Int {
+    guard UserDefaults.standard.object(forKey: "CustomMapProjectionType") != nil else {
+        return 34
+    }
+    return UserDefaults.standard.integer(forKey: "CustomMapProjectionType")
+}
+
+func setCustomMapProjectionType(_ value: Int) {
+    UserDefaults.standard.setValue(value, forKey: "CustomMapProjectionType")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy custom ellipsoid proj4 string
+ */
+func getCustomEllpsProj4String() -> String {
+    guard UserDefaults.standard.object(forKey: "CustomEllpsProj4String") != nil else {
+        return "+ellps_code=99 +a=6378137.0 +rf=298.257223563 +no_defs"
+    }
+    return UserDefaults.standard.string(forKey: "CustomEllpsProj4String")!
+}
+
+func setCustomEllpsProj4String(_ value: String) {
+    UserDefaults.standard.set(value, forKey: "CustomEllpsProj4String")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy custom datum proj4 string
+ */
+func getCustomDatumProj4String() -> String {
+    guard UserDefaults.standard.object(forKey: "CustomDatumProj4String") != nil else {
+        return "+datum=9999 +towgs84=0,0,0,0,0,0,0 +no_defs"
+    }
+    return UserDefaults.standard.string(forKey: "CustomDatumProj4String")!
+}
+
+func setCustomDatumProj4String(_ value: String) {
+    UserDefaults.standard.set(value, forKey: "CustomDatumProj4String")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy Index trong EllipsoidItems
+ */
+func getEllipsoidIndex() -> Int {
+    guard UserDefaults.standard.object(forKey: "EllipsoidIndex") != nil else {
+        return 0
+    }
+    return UserDefaults.standard.integer(forKey: "EllipsoidIndex")
+}
+
+func setEllipsoidIndex(_ value: Int) {
+    UserDefaults.standard.set(value, forKey: "EllipsoidIndex")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy Pro version
+ */
+func getProVersion() -> Bool {
+    guard UserDefaults.standard.object(forKey: "ProVersion") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "ProVersion")
+}
+
+func setProVersion(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "ProVersion")
     UserDefaults.standard.synchronize()
 }
