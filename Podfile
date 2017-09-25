@@ -16,5 +16,6 @@ target 'GTField' do
   pod 'Zip'
   pod 'Firebase'
   pod 'Firebase/AdMob'
+  pod 'SwiftyStoreKit'
   
 end

@@ -10,7 +10,7 @@ import UIKit
 import GoogleMobileAds
 import Firebase
 import GeoTrans
-import StoreKit
+import SwiftyStoreKit
 
 class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     
@@ -26,7 +26,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "GTField Settings"
+        self.title = NSLocalizedString("GTField Settings", comment: "")
         
         // Load settings
         ENABLE_SOUND_EFFECT = getEnableSoundEffect()
@@ -79,8 +79,20 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         case 2:
             switch cell.tag {
             case 0: // Coordinate System
-                let crsName = getCrsName();
-                cell.detailTextLabel?.text = crsName
+                let crsName = getCrsName() + "\n";
+                let crsMethodName = getMapProjectionName()
+                
+                let yourAttributes = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont.systemFont(ofSize: (cell.detailTextLabel?.font.pointSize)!)]
+                let yourOtherAttributes = [NSAttributedStringKey.foregroundColor: UIColor.darkGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: (cell.detailTextLabel?.font.pointSize)! - 2)]
+                
+                let partOne = NSMutableAttributedString(string: crsName, attributes: yourAttributes)
+                let partTwo = NSMutableAttributedString(string: crsMethodName!, attributes: yourOtherAttributes)
+                
+                let combination = NSMutableAttributedString()
+                
+                combination.append(partOne)
+                combination.append(partTwo)
+                cell.detailTextLabel?.attributedText = combination
                 break
             case 1: // Datum
                 let datumCode = getDatumCode()
@@ -259,13 +271,6 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
             case 0: // Subscribe
                 
                 break
-            case 1: // Restore Purchased
-                if(SKPaymentQueue.canMakePayments()) {
-                    SKPaymentQueue.default().add(self)
-                    SubscriptionService.shared.loadSubscriptionOptions()
-                    SKPaymentQueue.default().restoreCompletedTransactions()
-                }
-                break
             default:
                 break
             }
@@ -348,24 +353,3 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     }
 }
 
-extension SettingsViewController: SKPaymentTransactionObserver {
-    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        for transaction:SKPaymentTransaction in queue.transactions {
-            if transaction.payment.productIdentifier == IAP_ID {
-                setProVersion(true)
-            }
-        }
-
-        let alert = UIAlertView(title: "Thank You", message: "Your purchase were restored.", delegate: nil, cancelButtonTitle: "OK")
-        alert.show()
-
-    }
-
-    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        print("restoreCompletedTransactionsFailedWithError", error.localizedDescription)
-    }
-    
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        print("Buy")
-    }
-}

@@ -35,7 +35,7 @@ NS_INLINE void setCrsCode(NSString *crsCode) {
 NS_INLINE NSString* getCrsName() {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"crsName"]) {
         // UTM
-        [[NSUserDefaults standardUserDefaults] setValue:@"Universal Transverse Mercator (UTM)" forKey:@"crsName"];
+        [[NSUserDefaults standardUserDefaults] setValue:@"User-defined (Custom)" forKey:@"crsName"];
     }
     return [[NSUserDefaults standardUserDefaults] valueForKey:@"crsName"];
 }

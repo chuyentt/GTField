@@ -26,7 +26,9 @@
 "GPX specification" = "GPX specification";
 "Select option" = "Select option";
 "Send by email" = "Send by email";
-"Load in Map" = "Load in Map";
+"Send by email (dxf)" = "Send by email (dxf)";
+"Load in Map" = "Open in Map";
+"Add in Map" = "Add to current Map";
 "No Item" = "No Item";
 "No email accounts configured" = "No email accounts configured";
 "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account" = "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account";
@@ -154,6 +156,10 @@
 "Select a datum transformation" = "Select a datum transformation";
 "Select an ellipsoid" = "Select an ellipsoid";
 
+/* SelectingTableViewController */
+"Set as default"="Set as default";
+"Detail"="Detail";
+
 /* MapProjectionDetailViewController */
 "centralMeridian" = "Central Meridian (deg)";
 "standardParallel" = "Standard Parallel (deg)";
@@ -174,3 +180,5 @@
 
 "Subscribe" = "Subscribe";
 "You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section." = "You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section.";
+"You are on this plan!"="You are on this plan!";
+

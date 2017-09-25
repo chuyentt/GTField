@@ -99,6 +99,7 @@ class SelectingTableViewController: UITableViewController {
     }
 
     @IBAction func close(_ sender: UIBarButtonItem) {
+        self.searchController.isActive = false
         self.dismiss(animated: true, completion: { () -> Void in
             
         })
@@ -208,7 +209,7 @@ class SelectingTableViewController: UITableViewController {
                 preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(
-                title: NSLocalizedString("Select", comment: ""),
+                title: NSLocalizedString("Set as default", comment: ""),
                 style: .default,
                 handler: { (action: UIAlertAction!) in
                     self.setSelect(index!)

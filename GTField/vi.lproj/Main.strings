@@ -57,7 +57,7 @@
 "Fji-0X-GLK.headerTitle" = "Thiết lập đơn vị và định dạng";
 
 /* Class = "UILabel"; text = "Phép chiếu"; ObjectID = "HbX-mF-4wZ"; */
-"HbX-mF-4wZ.text" = "Phép chiếu";
+"HbX-mF-4wZ.text" = "Hệ tọa độ";
 
 /* Class = "UILabel"; text = "PlistName"; ObjectID = "Hii-Yp-8hj"; */
 "Hii-Yp-8hj.text" = "PlistName";
@@ -72,7 +72,7 @@
 "Kaa-Do-12n.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
 /* Class = "UILabel"; text = "ToWGS84"; ObjectID = "L8g-wq-zM5"; */
-"L8g-wq-zM5.text" = "Hệ chuyển đổi";
+"L8g-wq-zM5.text" = "Hệ quy chiếu";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "LXk-Yr-2QK"; */
 "LXk-Yr-2QK.text" = "Title";
@@ -198,4 +198,4 @@
 
 "NTJ-ca-ktq.text" = "Đăng ký";
 
-"qfz-pK-xkw.text" = "Khôi phục đã mua";
+"8q6-mZ-5DU.text" = "Khôi phục đã mua";

@@ -33,9 +33,19 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
         // Dispose of any resources that can be recreated.
     }
     
+    var statusBarStyle: UIStatusBarStyle? {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle ?? super.preferredStatusBarStyle
+    }
+    
     @IBAction func actionDone(_ sender: Any) {
         self.dismiss(animated: true) {
-            //UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
+            self.statusBarStyle = .lightContent
         }
     }
     

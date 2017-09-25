@@ -14,6 +14,7 @@ import CloudKit
 import StoreKit
 import CoreMotion
 
+
 class MainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, GADBannerViewDelegate, MotionContainer {
 
     var motionManager: CMMotionManager?
@@ -29,9 +30,14 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
     var list = [SKProduct]()
     var p = SKProduct()
+    
     let userDefaults = UserDefaults.standard
     var adMobBannerView = GADBannerView()
     
+    let purchaseUnlimitedSuffix = RegisteredPurchase.Unlimited
+    let subscribeYearlySuffix = RegisteredPurchase.Yearly
+    let subscribeMonthlySuffix = RegisteredPurchase.Monthly
+
     @IBOutlet var heightBackground: NSLayoutConstraint!
     
     init() {
@@ -44,21 +50,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //register_t(_:forCellWithReuseIdentifier:)
-        
-        if(SKPaymentQueue.canMakePayments()) {
-            SKPaymentQueue.default().add(self)
-            SubscriptionService.shared.loadSubscriptionOptions()
-//
-//            let productID:NSSet = NSSet(objects: IAP_ID)
-//            let request: SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
-//            request.delegate = self
-//            request.start()
-        } else {
-            print("IAPS are Disabled")
-        }
-        
         
         title = APP_FULL_NAME
         
@@ -110,13 +101,23 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         } else {
             //heightBackground.constant = 0
         }
-        
+        self.statusBarStyle = .lightContent
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         stopUpdateMotion()
+    }
+    
+    var statusBarStyle: UIStatusBarStyle? {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle ?? super.preferredStatusBarStyle
     }
 
     // Bắt buôc phải có nếu dùng MotionContainer
@@ -130,7 +131,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         guard let motionManager = motionManager, motionManager.isAccelerometerAvailable else { return }
         motionManager.stopAccelerometerUpdates()
     }
-    
+
     // ----------------------------------------------------------------------------------
     // Main Sections Collection View
     // ----------------------------------------------------------------------------------
@@ -295,22 +296,9 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                 default:
                     break
                 }
-            }
-            
-        } else { // IAP Section
-            for product in list {
-                let prodID = product.productIdentifier
-                if prodID == IAP_ID {
-                    p = product
-                    let pay = SKPayment(product: p)
-                    SKPaymentQueue.default().add(self)
-                    SKPaymentQueue.default().add(pay as SKPayment)
-                    break
-                }
-            }
+            }   
         }
     }
-
     
     @IBAction func btnReload(_ sender: AnyObject) {
         if USE_CLOUDKIT {
@@ -478,65 +466,4 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     }
     
-}
-
-// MARK: - SKPaymentTransactionObserver
-
-extension MainViewController: SKPaymentTransactionObserver {
-    
-    func paymentQueue(_ queue: SKPaymentQueue,
-                      updatedTransactions transactions: [SKPaymentTransaction]) {
-        
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                handlePurchasingState(for: transaction, in: queue)
-            case .purchased:
-                handlePurchasedState(for: transaction, in: queue)
-            case .restored:
-                handleRestoredState(for: transaction, in: queue)
-            case .failed:
-                handleFailedState(for: transaction, in: queue)
-            case .deferred:
-                handleDeferredState(for: transaction, in: queue)
-            }
-        }
-    }
-    
-    func handlePurchasingState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
-        print("User is attempting to purchase product id: \(transaction.payment.productIdentifier)")
-    }
-    
-    func handlePurchasedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
-        print("User purchased product id: \(transaction.payment.productIdentifier)")
-        
-        queue.finishTransaction(transaction)
-        SubscriptionService.shared.uploadReceipt { (success) in
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: SubscriptionService.purchaseSuccessfulNotification, object: nil)
-                setProVersion(true)
-            }
-        }
-    }
-    
-    func handleRestoredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
-        print("Purchase restored for product id: \(transaction.payment.productIdentifier)")
-        queue.finishTransaction(transaction)
-        SubscriptionService.shared.uploadReceipt { (success) in
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: SubscriptionService.restoreSuccessfulNotification, object: nil)
-                setProVersion(true)
-            }
-        }
-    }
-    
-    func handleFailedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
-        print("Purchase failed for product id: \(transaction.payment.productIdentifier)")
-        setProVersion(false)
-    }
-    
-    func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
-        print("Purchase deferred for product id: \(transaction.payment.productIdentifier)")
-        setProVersion(false)
-    }
 }

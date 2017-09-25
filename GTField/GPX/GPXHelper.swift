@@ -106,7 +106,7 @@ class GPXWaypoint: GMSMarker {
     var dxfBlockInsert: String {
         get {
             let en:[Double] = position.targetCoordinates()
-            return "0\nINSERT\n8\n0\n66\n1\n2\nGTField\n10\n\(en[0])\n20\n\(en[1])\n30\n0\n0\nATTRIB\n8\nWP_DESCRIPTION\n10\n0\n20\n0\n30\n0\n40\n\(dxfTextHeight)\n1\n\(desc)\n11\n\(en[0])\n21\n\(en[1])\n31\n0\n2\nDESCRIPTION\n70\n0\n74\n3\n0\nATTRIB\n8\nWP_ALTITUDE\n10\n\(en[0])\n20\n\(en[1])\n30\n0\n40\n\(dxfTextHeight)\n1\n0\n2\nELEVATION\n70\n0\n0\nATTRIB\n8\nWP_NAME\n10\n0\n20\n0\n30\n0\n40\n\(dxfTextHeight)\n1\n\(name)\n72\n2\n11\n\(en[0])\n21\n\(en[1])\n31\n0\n2\nNAME\n70\n0\n74\n2\n0\nSEQEND\n"
+            return "0\r\nINSERT\r\n8\r\n0\r\n66\r\n1\r\n2\r\nGTField\r\n10\r\n\(en[0])\r\n20\r\n\(en[1])\r\n30\r\n0\r\n0\r\nATTRIB\r\n8\r\nWP_DESCRIPTION\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n\(dxfTextHeight)\r\n1\r\n\(desc.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) ?? "")\r\n11\r\n\(en[0])\r\n21\r\n\(en[1])\r\n31\r\n0\r\n2\r\nDESCRIPTION\r\n70\r\n0\r\n74\r\n3\r\n0\r\nATTRIB\r\n8\r\nWP_ALTITUDE\r\n10\r\n\(en[0])\r\n20\r\n\(en[1])\r\n30\r\n0\r\n40\r\n\(dxfTextHeight)\r\n1\r\n0\r\n2\r\nELEVATION\r\n70\r\n0\r\n0\r\nATTRIB\r\n8\r\nWP_NAME\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n\(dxfTextHeight)\r\n1\r\n\(name)\r\n72\r\n2\r\n11\r\n\(en[0])\r\n21\r\n\(en[1])\r\n31\r\n0\r\n2\r\nNAME\r\n70\r\n0\r\n74\r\n2\r\n0\r\nSEQEND"
         }
     }
     
@@ -409,6 +409,20 @@ class GPXTrackSegment: GMSOverlay {
     var middlePoint: [GMSMarker] = [GMSMarker]()
     var _oldPath: GMSMutablePath?
     var _oldTrackPts: [GPXTrackPoint] = [GPXTrackPoint]()
+    
+    var dxfAcDbPolyline: String {
+        get {
+            let n:UInt = (_polyline?.path?.count())!
+            var s1 = "0\r\nLWPOLYLINE\r\n100\r\nAcDbPolyline\r\n90\r\n\(n)\r\n70\r\n0\r\n43\r\n0.0\r\n38\r\n0\r\n39\r\n0"
+            for i:UInt in 0...(path.count()-1) {
+                let coord = path.coordinate(at: i)
+                let en:[Double] = coord.targetCoordinates()
+                s1.append("\r\n10\r\n\(en[0])\r\n20\r\n\(en[1])")
+            }
+            return s1
+        }
+    }
+
     private var _activeIndex: UInt = 0
     private var _activeVertexView: VertexView? = nil
     private var _areaLabel: UILabel? = nil
@@ -897,6 +911,20 @@ class GPXPointSegment: GMSOverlay {
     var middlePoint: [GMSMarker] = [GMSMarker]()
     var _oldPath: GMSMutablePath?
     var _oldPts: [GPXPoint] = [GPXPoint]()
+    
+    var dxfAcDbPolyline: String {
+        get {
+            let n:UInt = (_polygon?.path?.count())!
+            var s1 = "0\r\nLWPOLYLINE\r\n100\r\nAcDbPolyline\r\n90\r\n\(n)\r\n70\r\n1\r\n43\r\n0.0\r\n38\r\n0\r\n39\r\n0"
+            for i:UInt in 0...(path.count()-1) {
+                let coord = path.coordinate(at: i)
+                let en:[Double] = coord.targetCoordinates()
+                s1.append("\r\n10\r\n\(en[0])\r\n20\r\n\(en[1])")
+            }
+            return s1
+        }
+    }
+
     private var _activeIndex: UInt = 0
     private var _activeVertexView: VertexView? = nil
     private var _areaLabel: UILabel? = nil
@@ -1387,6 +1415,9 @@ class GPX: NSObject {
     }
     
     private var _gpxDoc: AEXMLDocument?
+    var gpxDoc: AEXMLDocument? {
+        get { return _gpxDoc }
+    }
     
     private var _root: AEXMLElement
     var root: AEXMLElement? {
@@ -1408,6 +1439,9 @@ class GPX: NSObject {
         }
     }
     private var _tracks: [AEXMLElement] = []
+    var tracks:[AEXMLElement] {
+        get { return _tracks }
+    }
     private var _currentTrack: AEXMLElement?
     var currentTrack: AEXMLElement? {
         get {
@@ -1584,8 +1618,8 @@ class GPX: NSObject {
     }
     
     func zoomToBounds() {
-        if bounds.isValid {
-            _map?.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 15.0))
+        if _bounds.isValid {
+            _map?.animate(with: GMSCameraUpdate.fit(_bounds, withPadding: 15.0))
         }
     }
 }

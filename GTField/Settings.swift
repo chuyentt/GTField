@@ -706,3 +706,66 @@ func setProVersion(_ value: Bool) {
     UserDefaults.standard.set(value, forKey: "ProVersion")
     UserDefaults.standard.synchronize()
 }
+
+/*
+ * Lấy Donate
+ */
+func getDonated() -> Bool {
+    guard UserDefaults.standard.object(forKey: "Donated") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "Donated")
+}
+
+func setDonated(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "Donated")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * Lấy Unlimited
+ */
+func getUnlimited() -> Bool {
+    guard UserDefaults.standard.object(forKey: "Unlimited") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "Unlimited")
+}
+
+func setUnlimited(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "Unlimited")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * buttonRecordingMainButtonisHidden
+ */
+func getRecordingMainButtonisHidden() -> Bool {
+    guard UserDefaults.standard.object(forKey: "buttonRecordingMainButtonisHidden") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "buttonRecordingMainButtonisHidden")
+}
+
+func setRecordingMainButtonisHidden(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "buttonRecordingMainButtonisHidden")
+    UserDefaults.standard.synchronize()
+}
+
+/*
+ * buttonPausedMainButtonisHidden
+ */
+func getPausedMainButtonisHidden() -> Bool {
+    guard UserDefaults.standard.object(forKey: "buttonPausedMainButtonisHidden") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "buttonPausedMainButtonisHidden")
+}
+
+func setPausedMainButtonisHidden(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "buttonPausedMainButtonisHidden")
+    UserDefaults.standard.synchronize()
+}
+
+
+

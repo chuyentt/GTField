@@ -26,7 +26,9 @@
 "GPX specification" = "GPX规范";
 "Select option" = "选项";
 "Send by email" = "通过邮件发送";
+"Send by email (dxf)" = "通过邮件发送 (dxf)";
 "Load in Map" = "载入地图";
+"Add in Map" = "添加到当前地图";
 "No Item" = "无题目";
 "No email accounts configured" = "没有配置电子邮件账户";
 "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account" = "请在设置中添加个邮件账户, 通过设置 > 邮件 > 账户 > 添加账户";
@@ -154,6 +156,10 @@
 "Select a datum transformation" = "Select a datum transformation";
 "Select an ellipsoid" = "Select an ellipsoid";
 
+/* SelectingTableViewController */
+"Set as default"="设为默认值";
+"Detail"="详细信息";
+
 /* MapProjectionDetailViewController */
 "centralMeridian" = "Central Meridian (deg)";
 "standardParallel" = "Standard Parallel (deg)";
@@ -173,4 +179,5 @@
 
 "Subscribe" = "订阅";
 "You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section." = "您正在使用免费版本的GTField应用程序。 要使用功能完整的版本，请访问订阅部分。";
+"You are on this plan!"="你正在使用这个包！";
 

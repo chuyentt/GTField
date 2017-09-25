@@ -12,6 +12,7 @@ import GooglePlaces
 import CoreMotion
 //import AEXML
 import Firebase
+import SwiftyStoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -96,9 +97,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         
+        SubscriptionService.shared.loadSubscriptionOptions()
+        completeIAPTransactions()
+          
+//        NetworkActivityIndicatorManager.networkOperationStarted()
+//        SwiftyStoreKit.restorePurchases(atomically: true) { results in
+//            NetworkActivityIndicatorManager.networkOperationFinished()
+//            for purchase in results.restoredPurchases {
+//                // swiftlint:disable:next for_where
+//                switch purchase.transaction.transactionState {
+//                case .purchased, .restored:
+//                    print("Purchased ID: ", purchase.productId)
+//                default:
+//                    print("product id: ", purchase.productId)
+//                }
+//            }
+//            
+//            for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
+//                SwiftyStoreKit.finishTransaction(purchase.transaction)
+//            }
+//        }
         return true
     }
 
+    func completeIAPTransactions() {
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+            setProVersion(false)
+            for purchase in purchases {
+                // swiftlint:disable:next for_where
+                if purchase.needsFinishTransaction {
+                    // Deliver content from server, then:
+                    SwiftyStoreKit.finishTransaction(purchase.transaction)
+                }
+                if purchase.transaction.transactionState == .purchased {
+                    // Nếu mua mới: Kiểm tra xem Donate hay Unlimited
+                    if purchase.productId.contains("Unlimited") {
+                        setUnlimited(true)
+                    } else {
+                        
+                    }
+                    setProVersion(true)
+                    print("purchased: \(purchase.productId)")
+                } else if purchase.transaction.transactionState == .restored {
+                    setProVersion(true)
+                }
+            }
+        }
+    }
+    
     // Xử lý các thay đổi từ phiên bản cũ
     func migration() {
         // Phiên bản 1.0 và 1.0.1 được thiết kế thư mục cho dữ liệu GPX, nên phải chuyển các file qua thư mục gốc docsURL và xóa thư mục GPX

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GoogleMaps
 
 let kNoFiles = NSLocalizedString("No Item", comment: "")
 
@@ -19,7 +20,7 @@ protocol GPXFilesTableViewControllerDelegate: class {
     
     //GPXFilesTableView controller will be dismissed after calling this method
     //gpxFile is the name without extension
-    func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement)
+    func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool)
 }
 
 class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegate, GADBannerViewDelegate {
@@ -169,11 +170,13 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         let sheet = UIActionSheet()
         sheet.title = NSLocalizedString("Select option", comment: "")
         sheet.addButton(withTitle: NSLocalizedString("Send by email", comment: ""))
+        sheet.addButton(withTitle: NSLocalizedString("Send by email (dxf)", comment: ""))
         sheet.addButton(withTitle: NSLocalizedString("Load in Map", comment: ""))
+        sheet.addButton(withTitle: NSLocalizedString("Add in Map", comment: ""))
         sheet.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
         sheet.addButton(withTitle: NSLocalizedString("Delete", comment: ""))
-        sheet.cancelButtonIndex = 2
-        sheet.destructiveButtonIndex = 3
+        sheet.cancelButtonIndex = 4
+        sheet.destructiveButtonIndex = 5
         
         
         sheet.delegate = self
@@ -209,7 +212,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         tableView.reloadData()
     }
     
-    internal func actionLoadFileAtIndex(_ rowIndex: Int) {
+    internal func actionLoadFileAtIndex(_ rowIndex: Int, add: Bool) {
         guard let filename: String = fileList.object(at: rowIndex) as? String else {
             return
         }
@@ -227,7 +230,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             options.parserSettings.shouldReportNamespacePrefixes = false
             options.parserSettings.shouldResolveExternalEntities = false
             let gpxDoc = try! AEXMLDocument(xml: data, options: options)
-            self.delegate?.didLoadGPXFileWithName(filename, gpxRoot: gpxDoc.root)
+            self.delegate?.didLoadGPXFileWithName(filename, gpxRoot: gpxDoc.root, add: add)
         }
         self.closeGPXFilesTableViewController()
     }
@@ -269,12 +272,125 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
                 preferredStyle: UIAlertControllerStyle.alert
             )
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            self.present(alert, animated: true, completion: nil)
-//            
-//            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
-//            alert.show()
+            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+            alertWindow.rootViewController = UIViewController()
+            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            alertWindow.makeKeyAndVisible()
+            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    internal func actionSendEmailDxfWithAttachment(_ rowIndex: Int) {
+        guard let filename: String = fileList.object(at: rowIndex) as? String else {
+            return
+        }
+        
+        
+        let gpxFileURL: URL = docsURL.appendingPathComponent(filename)
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: gpxFileURL.path))
+            else {
+                return
+        }
+        var options = AEXMLOptions()
+        options.parserSettings.shouldProcessNamespaces = false
+        options.parserSettings.shouldReportNamespacePrefixes = false
+        options.parserSettings.shouldResolveExternalEntities = false
+        let gpxDoc = try! AEXMLDocument(xml: data, options: options)
+        
+        
+        let composer = MFMailComposeViewController()
+        composer.mailComposeDelegate = self
+        
+        if MFMailComposeViewController.canSendMail() {
+            // Dùng tên file gpx đổi sang dxf
+            let fileURL_: URL = docsURL.appendingPathComponent(filename).deletingPathExtension().appendingPathExtension("dxf")
+            // Lấy tên file dxf
+            let fileName = fileURL_.lastPathComponent
+            // Lấy thư mục temporary
+            let directory = NSTemporaryDirectory()
+            
+            // This returns a URL? even though it is an NSURL class method
+            let fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+            
+            let stream = OutputStream(toFileAtPath: (fileURL?.path)!, append: false)!
+            let dxf = try! CSVWriter(stream: stream)
+            
+            let dxfLayer = "0\r\nSECTION\r\n2\r\nTABLES\r\n0\r\nTABLE\r\n2\r\nLAYER\r\n70\r\n5\r\n0\r\nLAYER\r\n2\r\n0\r\n70\r\n0\r\n62\r\n7\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_NAME\r\n70\r\n0\r\n62\r\n5\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_ALTITUDE\r\n70\r\n0\r\n62\r\n1\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_DESCRIPTION\r\n70\r\n0\r\n62\r\n3\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_POINT\r\n70\r\n0\r\n62\r\n6\r\n6\r\nCONTINUOUS\r\n0\r\nENDTAB\r\n0\r\nENDSEC"
+            let dxfBlockAttribute = "0\r\nSECTION\r\n2\r\nBLOCKS\r\n0\r\nBLOCK\r\n8\r\n0\r\n2\r\nGTField\r\n70\r\n2\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n3\r\nGTField\r\n0\r\nPOINT\r\n8\r\nWP_POINT\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n0\r\nATTDEF\r\n8\r\nWP_DESCRIPTION\r\n10\r\n0\r\n20\r\n-2.5\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\nNODESCRIPTION\r\n11\r\n0\r\n21\r\n0\r\n31\r\n0\r\n3\r\nDescription\r\n2\r\nDESCRIPTION\r\n70\r\n0\r\n74\r\n3\r\n0\r\nATTDEF\r\n5\r\n211\r\n8\r\nWP_ALTITUDE\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\n0\r\n3\r\nElevation\r\n2\r\nELEVATION\r\n70\r\n0\r\n0\r\nATTDEF\r\n8\r\nWP_NAME\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\nNONAME\r\n72\r\n2\r\n11\r\n0\r\n21\r\n0\r\n31\r\n0\r\n3\r\nWPName\r\n2\r\nNAME\r\n70\r\n0\r\n74\r\n2\r\n0\r\nENDBLK\r\n8\r\n0\r\n0\r\nENDSEC"
+            let dxfEntities = "0\r\nSECTION\r\n2\r\nENTITIES"
+            let dxfEnd = "0\r\nENDSEC\r\n0\r\nEOF"
+            try! dxf.write(row: [dxfLayer])
+            try! dxf.write(row: [dxfBlockAttribute])
+            try! dxf.write(row: [dxfEntities])
+            
+            // Đọc tất cả các đối tượng
+            // Parse các điểm mốc wpt
+            let gpxRoot = gpxDoc.root
+            if let wpts = gpxRoot["wpt"].all {
+                for wpt in wpts {
+                    let w = GPXWaypoint(xmlElement: wpt)
+                    try! dxf.write(row: [w.dxfBlockInsert])
+                }
+            }
+            // Parse các polyine
+            if let trks = gpxRoot["trk"].all {
+                for track in trks {
+                    let trackSegElements = track["trkseg"].all
+                    if trackSegElements != nil {
+                        for trksegElement in trackSegElements! {
+                            let trkseg:GPXTrackSegment = GPXTrackSegment(xmlElement: trksegElement, map: GMSMapView())
+                            try! dxf.write(row: [trkseg.dxfAcDbPolyline])
+                        }
+                    }
+                }
+            }
+            // Parse các polygon
+            let pointSegElements = gpxRoot["ptseg"].all
+            if pointSegElements != nil {
+                for pointElement in pointSegElements! {
+                    let pointSeg = GPXPointSegment(xmlElement: pointElement, map: GMSMapView())
+                    try! dxf.write(row: [pointSeg.dxfAcDbPolyline])
+                }
+            }
+            try! dxf.write(row: [dxfEnd])
+            dxf.stream.close()
+
+            
+            // set the subject
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export Waypoints & Tracks to DXF file", comment: ""))
+            
+            //Add some text to the body and attach the file
+            let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
+            
+            composer.setMessageBody(body, isHTML: true)
+            do {
+                let fileData: Data = try Data(contentsOf: URL(fileURLWithPath: fileURL!.path), options: .mappedIfSafe)
+                composer.addAttachmentData(fileData, mimeType:"application/dxf", fileName: (fileURL?.lastPathComponent)!)
+                //Display the comopser view controller
+                self.present(composer, animated: true, completion: nil)
+            } catch {
+            }
+            
+            //            if let nav = self.navigationController {
+            //                nav.present(composer, animated: true, completion: nil)
+            //            } else {
+            self.present(composer, animated: true, completion: nil)
+            //            }
+        } else {
+            let alert = UIAlertController(
+                title: NSLocalizedString("No email accounts configured", comment: ""),
+                message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
+                preferredStyle: UIAlertControllerStyle.alert
+            )
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
+            
+            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+            alertWindow.rootViewController = UIViewController()
+            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            alertWindow.makeKeyAndVisible()
+            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -331,13 +447,17 @@ extension GPXFilesTableViewController: UIActionSheetDelegate{
     func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
         print("action sheet clicked button at index \(buttonIndex)")
         switch buttonIndex {
-        case 0:
+        case 0: // Email (gpx)
             self.actionSendEmailWithAttachment(self.selectedRowIndex)
-        case 1:
-            self.actionLoadFileAtIndex(self.selectedRowIndex)
-        case 2:
+        case 1: // Email (dxf)
+            self.actionSendEmailDxfWithAttachment(self.selectedRowIndex)
+        case 2: // Load in Map
+            self.actionLoadFileAtIndex(self.selectedRowIndex, add: false)
+        case 3: // Add in Map
+            self.actionLoadFileAtIndex(self.selectedRowIndex, add: true)
+        case 4: //
             print("ActionSheet: Cancel")
-        case 3: //Delete
+        case 5: //Delete
             self.actionDeleteFileAtIndex(self.selectedRowIndex)
         default: //cancel
             print("action Sheet do nothing")

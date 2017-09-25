@@ -96,8 +96,6 @@ func configMainView() {
             ],
             for: .normal)
     }
-    // Customize Status Bar
-    UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
     
     // Tạo thư mục cần thiết
     _ = createDirectoryAtURL(url: applicationDocumentsDirectory().appendingPathComponent(TILE_CACHED))

@@ -136,18 +136,58 @@ extension MapViewController:JDJellyButtonDataSource {
 // End Setup JellyButton===============================================
 
 extension MapViewController: GPXFilesTableViewControllerDelegate {
-    func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement) {
-        // Kết thúc session cũ
-        self.didDeSelectOverlay()
-        gpx?.clear()
-        self.setupButtonDone()
-        
-        // Tạo mới từ file
-        
-        gpx = GPX(self.mapView!, gpxRoot)
-        if gpx?.metadata.name != gpxFilename {
-            gpx?.metadata.name = gpxFilename
+    func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool) {
+        if !add {
+            // Kết thúc session cũ
+            self.didDeSelectOverlay()
+            gpx?.clear()
+            self.setupButtonDone()
+            
+            // Tạo mới từ file
+            
+            gpx = GPX(self.mapView!, gpxRoot)
+            if gpx?.metadata.name != gpxFilename {
+                gpx?.metadata.name = gpxFilename
+                gpx?.save()
+            }
+        } else {
+            // Parse các điểm mốc wpt
+            if let wpts = gpxRoot["wpt"].all {
+                for wpt in wpts {
+                    let w = GPXWaypoint(xmlElement: wpt)
+                    w.map = mapView
+                    gpx?.addWaypoint(w)
+                    gpx?.updateToBound(location: w.position)
+                }
+            }
+            
+            // Parse các polyine
+            if let trks = gpxRoot["trk"].all {
+                for track in trks {
+                    let trackSegElements = track["trkseg"].all
+                    if trackSegElements != nil {
+                        for trksegElement in trackSegElements! {
+                            let trkseg = GPXTrackSegment(xmlElement: trksegElement, map: mapView!)
+                            gpx?.root?.addChild(trksegElement)
+                            gpx?.updateToBound(path: trkseg.path)
+                        }
+                    }
+                }
+            }
+            
+            // Parse các polygon
+            let pointSegElements = gpxRoot["ptseg"].all
+            if pointSegElements != nil {
+                for pointElement in pointSegElements! {
+                    let pointSeg = GPXPointSegment(xmlElement: pointElement, map: mapView!)
+                    gpx?.pointSegments.append(pointSeg)
+                    gpx?.root?.addChild(pointElement)
+                    gpx?.updateToBound(path: pointSeg.path)
+                }
+            }
+            
             gpx?.save()
+            gpx?.zoomToBounds()
         }
     }
 }
@@ -346,7 +386,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         super.viewDidAppear(animated)
         
-        statusBarStyle = .default
+        self.statusBarStyle = .default
         
         self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
     }
@@ -1564,7 +1604,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.gpx?.save()
         // Thoát view
         self.dismiss(animated: true) {
-            UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
+            self.statusBarStyle = .lightContent
         }
     }
     
@@ -1636,9 +1676,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomOut?.isHidden = true
         self.buttonFolder?.isHidden = true
         self.buttonTakePhoto?.isHidden = true
-        //UserDefaults.standard.set(self.buttonRecord?.MainButton.isHidden, forKey: "buttonRecordMainButtonisHidden")
-        UserDefaults.standard.set(self.buttonRecording?.MainButton.isHidden, forKey: "buttonRecordingMainButtonisHidden")
-        UserDefaults.standard.set(self.buttonPaused?.MainButton.isHidden, forKey: "buttonPausedMainButtonisHidden")
+        setRecordingMainButtonisHidden((self.buttonRecording?.MainButton.isHidden)!)
+        setPausedMainButtonisHidden((self.buttonPaused?.MainButton.isHidden)!)
         
         self.buttonRecord?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonRecording?.MainButton.closingButtonGroup(expandagain: false)
@@ -1659,9 +1698,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonTakePhoto?.isHidden = false
         
         self.buttonRecord?.MainButton.isHidden = false
-        //self.buttonRecord?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordMainButtonisHidden") as! Bool
-        self.buttonRecording?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonRecordingMainButtonisHidden") as! Bool
-        self.buttonPaused?.MainButton.isHidden = UserDefaults.standard.value(forKey: "buttonPausedMainButtonisHidden") as! Bool
+        self.buttonRecording?.MainButton.isHidden = getRecordingMainButtonisHidden()
+        self.buttonPaused?.MainButton.isHidden = getPausedMainButtonisHidden()
         
         // Ẩn opacitySlider
         self.opacitySlider?.isHidden = true
@@ -3216,9 +3254,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         manager.stopUpdatingLocation()
         manager.stopUpdatingHeading()
         manager.delegate = nil
-        if #available(iOS 9.0, *), CLLocationManager.authorizationStatus() == .authorizedAlways {
-            manager.allowsBackgroundLocationUpdates = false
-        }
+        manager.allowsBackgroundLocationUpdates = false
         isUpdatingLocation = false
     }
     
@@ -3238,11 +3274,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             manager.headingOrientation = .landscapeLeft
             manager.startUpdatingLocation()
             manager.startUpdatingHeading()
-            if #available(iOS 9.0, *), CLLocationManager.authorizationStatus() == .authorizedAlways {
-                manager.allowsBackgroundLocationUpdates = true
-            } else {
-                
-            }
+            manager.allowsBackgroundLocationUpdates = true
+            
             if forChecking {
                 if manager.location?.coordinate != nil {
                     setDefaultCoordinate2D((manager.location?.coordinate)!)
@@ -3432,8 +3465,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.present(composer, animated: true, completion: nil)
             }
         } else {
-            let alert = UIAlertView(title: NSLocalizedString("No email accounts configured", comment: ""), message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: ""))
-            alert.show()
+            let alert = UIAlertController(title: NSLocalizedString("No email accounts configured", comment: ""),
+                                          message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+            
+            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+            alertWindow.rootViewController = UIViewController()
+            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            alertWindow.makeKeyAndVisible()
+            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         }
     }
     

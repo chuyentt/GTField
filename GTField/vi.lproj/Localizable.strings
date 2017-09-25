@@ -26,7 +26,9 @@
 "GPX specification" = "Thông tin file GPX";
 "Select option" = "Chọn phương án";
 "Send by email" = "Gửi bằng email";
-"Load in Map" = "Mở trên bản đồ";
+"Send by email (dxf)" = "Gửi bằng email (dxf)";
+"Load in Map" = "Mở mới trên bản đồ";
+"Add in Map" = "Thêm vào bản đồ";
 "No Item" = "Không có mục nào";
 "No email accounts configured" = "Chưa có tài khoản email nào được cấu hình";
 "Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account" = "Hãy thêm tài khoản thư trong Cài đặt để có thể gửi thư đi, bằng cách đi đến Cài đặt > Thư > Tài khoản > Thêm tài khoản";
@@ -154,6 +156,10 @@
 "Select a datum transformation" = "Select a datum transformation";
 "Select an ellipsoid" = "Select an ellipsoid";
 
+/* SelectingTableViewController */
+"Set as default"="Đặt mặc định";
+"Detail"="Chi tiết";
+
 /* MapProjectionDetailViewController */
 "centralMeridian" = "Central Meridian (deg)";
 "standardParallel" = "Standard Parallel (deg)";
@@ -173,4 +179,7 @@
 
 "Subscribe" = "Đăng ký";
 "You are using the free version of the GTField app. To use the fully functional version, please go to the subscribe section." = "Bạn đang sử dụng phiên bản miễn phí của ứng dụng GTField. Để sử dụng phiên bản đầy đủ chức năng, hãy đi tới mục đăng ký.";
+"You are on this plan!"="Bạn đang sử dụng gói này!";
+
+
 
