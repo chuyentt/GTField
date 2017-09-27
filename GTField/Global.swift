@@ -563,6 +563,23 @@ open class UIDistanceLabel: UILabel {
     }
 }
 
+open class UIOutlinedLabel: UILabel {
+    
+    var outlineWidth: CGFloat = 1.5
+    var outlineColor: UIColor = UIColor.white
+    
+    override open func drawText(in rect: CGRect) {
+        
+        let strokeTextAttributes = [
+            NSAttributedStringKey.strokeColor : outlineColor,
+            NSAttributedStringKey.strokeWidth : -1 * outlineWidth,
+            ] as [NSAttributedStringKey : Any]
+        
+        self.attributedText = NSAttributedString(string: self.text ?? "", attributes: strokeTextAttributes)
+        super.drawText(in: rect)
+    }
+}
+
 extension UILabel {
     
     private struct AssociatedKeys {

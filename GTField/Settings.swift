@@ -742,7 +742,7 @@ func setUnlimited(_ value: Bool) {
  */
 func getRecordingMainButtonisHidden() -> Bool {
     guard UserDefaults.standard.object(forKey: "buttonRecordingMainButtonisHidden") != nil else {
-        return false
+        return true
     }
     return UserDefaults.standard.bool(forKey: "buttonRecordingMainButtonisHidden")
 }
@@ -752,12 +752,24 @@ func setRecordingMainButtonisHidden(_ value: Bool) {
     UserDefaults.standard.synchronize()
 }
 
+func getRecordMainButtonisHidden() -> Bool {
+    guard UserDefaults.standard.object(forKey: "buttonRecordMainButtonisHidden") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "buttonRecordMainButtonisHidden")
+}
+
+func setRecordMainButtonisHidden(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "buttonRecordMainButtonisHidden")
+    UserDefaults.standard.synchronize()
+}
+
 /*
  * buttonPausedMainButtonisHidden
  */
 func getPausedMainButtonisHidden() -> Bool {
     guard UserDefaults.standard.object(forKey: "buttonPausedMainButtonisHidden") != nil else {
-        return false
+        return true
     }
     return UserDefaults.standard.bool(forKey: "buttonPausedMainButtonisHidden")
 }

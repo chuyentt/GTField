@@ -364,6 +364,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     var line: GMSPolyline? // Line from my location to marker
     
+    var markerHoangSa: GMSMarker?
+    var markerTruongSa: GMSMarker?
+    var markerPhuQuoc: GMSMarker?
+    var markerConDao: GMSMarker?
+    
     override func loadView() {
         let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
         mapView = GTMapView.map(withFrame: .zero, camera: camera)
@@ -415,7 +420,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        createIslands()
         setupView()
         createButtonRecord()
         
@@ -427,6 +432,43 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func createIslands() {
+        self.markerHoangSa = GMSMarker(position: CLLocationCoordinate2D(latitude: 16.318286, longitude: 111.747888))
+        self.markerHoangSa?.appearAnimation = .none
+        self.markerHoangSa?.title = "Hoang Sa Islands"
+        self.markerHoangSa?.icon = #imageLiteral(resourceName: "HOANGSA")
+        
+        self.markerTruongSa = GMSMarker(position: CLLocationCoordinate2D(latitude: 8.641421, longitude: 111.917360))
+        self.markerTruongSa?.appearAnimation = .none
+        self.markerTruongSa?.title = "Truong Sa Islands"
+        self.markerTruongSa?.icon = #imageLiteral(resourceName: "TRUONGSA")
+        
+        self.markerPhuQuoc = GMSMarker(position: CLLocationCoordinate2D(latitude: 10.2899, longitude: 103.9840))
+        self.markerPhuQuoc?.appearAnimation = .none
+        self.markerPhuQuoc?.title = "Phu Quoc Island"
+        self.markerPhuQuoc?.icon = #imageLiteral(resourceName: "PHUQUOC")
+        
+        self.markerConDao = GMSMarker(position: CLLocationCoordinate2D(latitude: 8.7009, longitude: 106.6114))
+        self.markerConDao?.appearAnimation = .none
+        self.markerConDao?.title = "Con Dao"
+        self.markerConDao?.icon = #imageLiteral(resourceName: "CONDAO")
+    }
+    
+    func showIslands(_ show: Bool) {
+        if show {
+            self.markerHoangSa?.map = self.mapView
+            self.markerTruongSa?.map = self.mapView
+            self.markerPhuQuoc?.map = self.mapView
+            self.markerConDao?.map = self.mapView
+        } else {
+            self.markerHoangSa?.map = nil
+            self.markerTruongSa?.map = nil
+            self.markerPhuQuoc?.map = nil
+            self.markerConDao?.map = nil
+        }
+    }
+    
     
     func showSubscription() {
         
@@ -742,7 +784,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            constant: (toolsView?.frame.width)!).isActive = true
         
         //----- CoordinateLabel -----
-        coordinateLabel = UILabel()
+        coordinateLabel = UIOutlinedLabel()
         coordinateLabel.isUserInteractionEnabled = true
         coordinateLabel?.copyable = true
         coordinateLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
@@ -787,7 +829,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.topLayoutGuide,
                            attribute: .bottom,
                            multiplier: 1.0,
-                           constant: 54).isActive = true
+                           constant: 45).isActive = true
         
         // Căn giữa so với view
         NSLayoutConstraint(item: coordinateLabel!,
@@ -1678,6 +1720,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonTakePhoto?.isHidden = true
         setRecordingMainButtonisHidden((self.buttonRecording?.MainButton.isHidden)!)
         setPausedMainButtonisHidden((self.buttonPaused?.MainButton.isHidden)!)
+        setRecordMainButtonisHidden((self.buttonRecord?.MainButton.isHidden)!)
         
         self.buttonRecord?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonRecording?.MainButton.closingButtonGroup(expandagain: false)
@@ -1697,7 +1740,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonFolder?.isHidden = false
         self.buttonTakePhoto?.isHidden = false
         
-        self.buttonRecord?.MainButton.isHidden = false
+        self.buttonRecord?.MainButton.isHidden = getRecordMainButtonisHidden()
         self.buttonRecording?.MainButton.isHidden = getRecordingMainButtonisHidden()
         self.buttonPaused?.MainButton.isHidden = getPausedMainButtonisHidden()
         
@@ -3195,6 +3238,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         if selectedPolygonOverlay != nil, selectedPolygonOverlay?.pointSegment.actions == .editing {
             selectedPolygonOverlay?.pointSegment.deActiveVertex()
+        }
+        
+        // Kiểm tra mức zoom để hiện / ẩn marker quần đảo
+        let zoomLevel = mapView.camera.zoom
+        if zoomLevel > 4 {
+            showIslands(true)
+        } else {
+            showIslands(false)
         }
     }
     

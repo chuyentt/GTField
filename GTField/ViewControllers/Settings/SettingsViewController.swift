@@ -25,8 +25,6 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.title = NSLocalizedString("GTField Settings", comment: "")
         
         // Load settings
         ENABLE_SOUND_EFFECT = getEnableSoundEffect()

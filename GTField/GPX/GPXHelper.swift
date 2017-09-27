@@ -425,19 +425,19 @@ class GPXTrackSegment: GMSOverlay {
 
     private var _activeIndex: UInt = 0
     private var _activeVertexView: VertexView? = nil
-    private var _areaLabel: UILabel? = nil
-    var areaLabel: UILabel {
+    private var _areaLabel: UIOutlinedLabel? = nil
+    var areaLabel: UIOutlinedLabel {
         get {
             if _areaLabel == nil {
-                _areaLabel = UILabel()
+                _areaLabel = UIOutlinedLabel()
                 _areaLabel?.isUserInteractionEnabled = true
                 _areaLabel?.copyable = true
                 _areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
                 _areaLabel?.translatesAutoresizingMaskIntoConstraints = false
                 _areaLabel?.textAlignment = .center
                 _areaLabel?.numberOfLines = 0
-                _areaLabel?.textColor = UIColor.brown
-                _areaLabel?.font=UIFont.boldSystemFont(ofSize: 12)
+                _areaLabel?.textColor = UIColor.orange
+                _areaLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
                 _areaLabel?.isHidden = true
                 map?.addSubview(_areaLabel!)
                 // Căn trên
@@ -526,10 +526,14 @@ class GPXTrackSegment: GMSOverlay {
                 _polyline?.strokeColor = UIColor.clear
                 _polyline?.spans = _spans
                 
+                _polyline0?.map = nil
+                
                 removeVertices()
                 if _oldPath != nil {
                     _path = _oldPath
                     _polyline?.path = _path
+                    _polyline0?.path = _path
+                    
                     _root?.children.removeAll()
                     for child in _oldTrackPts {
                         _root?.addChild(child.element)
@@ -539,11 +543,17 @@ class GPXTrackSegment: GMSOverlay {
             case .clear:
                 _polyline?.map = nil
                 _polyline = nil
+                
+                _polyline0?.map = nil
+                _polyline0 = nil
                 removeVertices()
                 break
             case .done:
                 _polyline?.strokeColor = UIColor.clear
                 _polyline?.spans = _spans
+                
+                _polyline0?.map = nil
+                
                 _oldPath = nil
                 removeVertices()
                 break
@@ -553,11 +563,23 @@ class GPXTrackSegment: GMSOverlay {
             case .selecting:
                 areaLabel.isHidden = false
                 updateLabel()
+                
+                // Tạo polyline nền trắng
+                _polyline0?.strokeColor = UIColor.white
+                _polyline0?.strokeWidth = 4.0
+                _polyline0?.zIndex = (_polyline?.zIndex)! - 1
+                _polyline0?.map = map
+                
                 _polyline?.spans = nil
                 _polyline?.strokeColor = STROKE_COLOR_SELECTING
                 _polyline?.strokeWidth = 2
                 break
             case .editing:
+                _polyline0?.strokeColor = UIColor.white
+                _polyline0?.strokeWidth = 4.0
+                _polyline0?.zIndex = (_polyline?.zIndex)! - 1
+                _polyline0?.map = map
+                
                 _polyline?.spans = nil
                 _polyline?.strokeColor = STROKE_COLOR_EDITING
                 _polyline?.strokeWidth = 2
@@ -573,6 +595,8 @@ class GPXTrackSegment: GMSOverlay {
             case .reset, .delete:
                 _polyline?.map = nil
                 _polyline = nil
+                _polyline0?.map = nil
+                _polyline0 = nil
                 root.removeFromParent()
                 removeVertices()
                 break
@@ -661,6 +685,8 @@ class GPXTrackSegment: GMSOverlay {
     func updateVertex(_ index: UInt, _ position: CLLocationCoordinate2D) {
         _path?.replaceCoordinate(at: index, with: position)
         _polyline?.path = _path
+        _polyline0?.path = _path
+        
         let trkpt: AEXMLElement = (_root?["trkpt"].all![Int(index)])!
         trkpt.attributes["lat"] = position.latitude.toString(6)
         trkpt.attributes["lon"] = position.longitude.toString(6)
@@ -729,6 +755,7 @@ class GPXTrackSegment: GMSOverlay {
         areaLabel.isHidden = true
     }
     
+    private var _polyline0: GMSPolyline? // Outline white
     private var _polyline: GPXTrackSegmentOverlay?
     var overlay: GPXTrackSegmentOverlay {
         get {
@@ -760,6 +787,8 @@ class GPXTrackSegment: GMSOverlay {
         _polyline?.strokeWidth = 3
         _polyline?.isTappable = true
         _polyline?.trackSegment = self
+        
+        _polyline0 = GMSPolyline(path: _path)
     }
     
     // Parse từ file
@@ -811,6 +840,8 @@ class GPXTrackSegment: GMSOverlay {
             _polyline?.map = map
             _polyline?.isTappable = true
             _polyline?.trackSegment = self
+            
+            _polyline0 = GMSPolyline(path: _path)
         }
     }
     
@@ -819,6 +850,8 @@ class GPXTrackSegment: GMSOverlay {
         _polyline?.map = nil
         _polyline = nil
         
+        _polyline0?.map = nil
+        _polyline0 = nil
         //_coords.append(trkpt.coord)
         _elevations.append(trkpt.ele)
         _path?.add(trkpt.coord)
@@ -841,6 +874,8 @@ class GPXTrackSegment: GMSOverlay {
         _polyline?.map = map
         _polyline?.isTappable = true
         _polyline?.trackSegment = self
+        
+        _polyline0 = GMSPolyline(path: _path)
         if _actions == .editing {
             removeVertices()
             addVertices()
@@ -856,6 +891,9 @@ class GPXTrackSegment: GMSOverlay {
         _polyline?.map = nil
         _polyline = nil
         
+        _polyline0?.map = nil
+        _polyline0 = nil
+        
         _elevations.insert(trkpt.ele, at: Int(index))
         _path?.insert(trkpt.coord, at: index)
         _root?.insertChild(trkpt.element, at: Int(index))
@@ -865,10 +903,15 @@ class GPXTrackSegment: GMSOverlay {
         _polyline?.map = map
         _polyline?.isTappable = true
         _polyline?.trackSegment = self
+        
+        _polyline0 = GMSPolyline(path: _path)
     }
     private func deleteTrackPoint(at: UInt) {
         _polyline?.map = nil
         _polyline = nil
+        
+        _polyline0?.map = nil
+        _polyline0 = nil
         
         _elevations.remove(at: Int(at))
         _path?.removeCoordinate(at: at)
@@ -879,6 +922,9 @@ class GPXTrackSegment: GMSOverlay {
         _polyline?.map = map
         _polyline?.isTappable = true
         _polyline?.trackSegment = self
+        
+        _polyline0 = GMSPolyline(path: _path)
+        
         if _actions == .editing {
             removeVertices()
             addVertices()
@@ -927,19 +973,19 @@ class GPXPointSegment: GMSOverlay {
 
     private var _activeIndex: UInt = 0
     private var _activeVertexView: VertexView? = nil
-    private var _areaLabel: UILabel? = nil
-    var areaLabel: UILabel {
+    private var _areaLabel: UIOutlinedLabel? = nil
+    var areaLabel: UIOutlinedLabel {
         get {
             if _areaLabel == nil {
-                _areaLabel = UILabel()
+                _areaLabel = UIOutlinedLabel()
                 _areaLabel?.isUserInteractionEnabled = true
                 _areaLabel?.copyable = true
                 _areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
                 _areaLabel?.translatesAutoresizingMaskIntoConstraints = false
                 _areaLabel?.textAlignment = .center
                 _areaLabel?.numberOfLines = 0
-                _areaLabel?.textColor = UIColor.brown
-                _areaLabel?.font=UIFont.boldSystemFont(ofSize: 12)
+                _areaLabel?.textColor = UIColor.orange
+                _areaLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
                 _areaLabel?.isHidden = true
                 map?.addSubview(_areaLabel!)
                 // Căn trên
@@ -1021,6 +1067,9 @@ class GPXPointSegment: GMSOverlay {
                 _polygon?.fillColor = FILL_COLOR_NONE
                 _polygon?.strokeColor = STROKE_COLOR_NONE
                 _polygon?.strokeWidth = STROKE_WIDTH_NONE
+                
+                _polygon0?.map = nil
+                
                 removeVertices()
                 if _oldPath != nil {
                     _path = _oldPath
@@ -1035,22 +1084,41 @@ class GPXPointSegment: GMSOverlay {
                 _polygon?.map = nil
                 _polygon = nil
                 _oldPath = nil
+                
+                _polygon0?.map = nil
+                _polygon0 = nil
                 break
             case .done:
                 _polygon?.fillColor = FILL_COLOR_NONE
                 _polygon?.strokeColor = STROKE_COLOR_NONE
                 _polygon?.strokeWidth = STROKE_WIDTH_NONE
+                
+                _polygon0?.map = nil
+                
                 _oldPath = nil
                 removeVertices()
                 break
             case .selecting:
                 areaLabel.isHidden = false
                 updateLabel()
+                
+                // Tạo polyline nền trắng
+                _polygon0?.strokeColor = UIColor.white
+                _polygon0?.strokeWidth = 4.0
+                _polygon0?.zIndex = (_polygon?.zIndex)! - 1
+                _polygon0?.map = map
+                
                 _polygon?.fillColor = FILL_COLOR_SELECTING
                 _polygon?.strokeColor = STROKE_COLOR_SELECTING
                 _polygon?.strokeWidth = STROKE_WIDTH_SELECTING
                 break
             case .editing:
+                // Tạo polyline nền trắng
+                _polygon0?.strokeColor = UIColor.white
+                _polygon0?.strokeWidth = 4.0
+                _polygon0?.zIndex = (_polygon?.zIndex)! - 1
+                _polygon0?.map = map
+
                 _polygon?.fillColor = FILL_COLOR_EDITING
                 _polygon?.strokeColor = STROKE_COLOR_EDITING
                 _polygon?.strokeWidth = STROKE_WIDTH_EDITING
@@ -1066,6 +1134,9 @@ class GPXPointSegment: GMSOverlay {
                 _polygon?.map = nil
                 _polygon = nil
                 _oldPath = nil
+                
+                _polygon0?.map = nil
+                _polygon0 = nil
                 root.removeFromParent()
                 removeVertices()
                 break
@@ -1163,6 +1234,9 @@ class GPXPointSegment: GMSOverlay {
     func updateVertex(_ index: UInt, _ position: CLLocationCoordinate2D) {
         _path?.replaceCoordinate(at: index, with: position)
         _polygon?.path = _path
+        
+        _polygon0?.path = _path
+        
         let pt: AEXMLElement = (_root?["pt"].all![Int(index)])!
         pt.attributes["lat"] = position.latitude.toString(6)
         pt.attributes["lon"] = position.longitude.toString(6)
@@ -1210,6 +1284,7 @@ class GPXPointSegment: GMSOverlay {
     }
 
     private var _polygon: GPXPointSegmentOverlay?
+    private var _polygon0: GMSPolygon?
     var overlay: GPXPointSegmentOverlay {
         get {
             return _polygon!
@@ -1234,6 +1309,8 @@ class GPXPointSegment: GMSOverlay {
         _polygon?.strokeWidth = 3
         _polygon?.isTappable = true
         _polygon?.pointSegment = self
+        
+        _polygon0 = GMSPolygon(path: _path)
     }
     
     // Parse từ file
@@ -1266,6 +1343,8 @@ class GPXPointSegment: GMSOverlay {
             _polygon?.isTappable = true
             _polygon?.pointSegment = self
             
+            _polygon0 = GMSPolygon(path: _path)
+            
             actions = .none
         }
     }
@@ -1274,6 +1353,12 @@ class GPXPointSegment: GMSOverlay {
         _actions = .editing
         _polygon?.map = nil
         _polygon = nil
+        
+        _polygon0?.map = nil
+        _polygon0 = nil
+        
+        _polygon0?.map = nil
+        _polygon0 = nil
         
         //_coords.append(pt.coord)
         _elevations.append(pt.ele)
@@ -1286,6 +1371,9 @@ class GPXPointSegment: GMSOverlay {
         _polygon?.map = map
         _polygon?.isTappable = true
         _polygon?.pointSegment = self
+        
+        _polygon0 = GMSPolygon(path: _path)
+        
         if _actions == .editing {
             removeVertices()
             addVertices()
@@ -1301,6 +1389,9 @@ class GPXPointSegment: GMSOverlay {
         _polygon?.map = nil
         _polygon = nil
         
+        _polygon0?.map = nil
+        _polygon0 = nil
+        
         //_coords.insert(pt.coord, at: Int(index))
         _elevations.insert(pt.ele, at: Int(index))
         _path?.insert(pt.coord, at: index)
@@ -1311,11 +1402,16 @@ class GPXPointSegment: GMSOverlay {
         _polygon?.map = map
         _polygon?.isTappable = true
         _polygon?.pointSegment = self
+        
+        _polygon0 = GMSPolygon(path: _path)
     }
     
     private func deletePoint(at: UInt) {
         _polygon?.map = nil
         _polygon = nil
+        
+        _polygon0?.map = nil
+        _polygon0 = nil
         
         _elevations.remove(at: Int(at))
         _path?.removeCoordinate(at: at)
@@ -1326,6 +1422,9 @@ class GPXPointSegment: GMSOverlay {
         _polygon?.map = map
         _polygon?.isTappable = true
         _polygon?.pointSegment = self
+        
+        _polygon0 = GMSPolygon(path: _path)
+        
         if _actions == .editing {
             removeVertices()
             addVertices()

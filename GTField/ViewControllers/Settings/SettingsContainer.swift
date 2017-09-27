@@ -16,7 +16,7 @@ class SettingsContainer: UIViewController {
         let shareItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close(_:)))
         
         self.navigationItem.rightBarButtonItems = [shareItem]
-        
+        self.title = NSLocalizedString("GTField Settings", comment: "")
     }
     
     override func didReceiveMemoryWarning() {

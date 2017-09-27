@@ -793,7 +793,7 @@ class MapProjectionDetailViewController: UITableViewController {
             
             var centralMeridian: Double = 0
             var originLatitude: Double = 0
-            var scaleFactor: Double = 0
+            var scaleFactor: Double = 1.0
             var falseEasting: Double = 0
             var falseNorthing: Double = 0
             
@@ -871,7 +871,7 @@ class MapProjectionDetailViewController: UITableViewController {
         case CoordinateType.mercatorScaleFactor:
             
             var centralMeridian: Double = 0
-            var scaleFactor: Double = 0
+            var scaleFactor: Double = 1.0
             var falseEasting: Double = 0
             var falseNorthing: Double = 0
             
@@ -905,7 +905,7 @@ class MapProjectionDetailViewController: UITableViewController {
             
             var centralMeridian: Double = 0
             var standardParallel: Double = 0
-            var scaleFactor: Double = 0
+            var scaleFactor: Double = 1.0
             var falseEasting: Double = 0
             var falseNorthing: Double = 0
             
@@ -1051,7 +1051,7 @@ class MapProjectionDetailViewController: UITableViewController {
             var longitude2: Double = 0
             var falseEasting: Double = 0
             var falseNorthing: Double = 0
-            var scaleFactor: Double = 0
+            var scaleFactor: Double = 1.0
             
             // lonc, alpha, gama => latitude1, latitude2, longitude1, longitude2
             for item in arr {
@@ -1106,7 +1106,7 @@ class MapProjectionDetailViewController: UITableViewController {
         case CoordinateType.polarStereographicScaleFactor:
             
             var centralMeridian: Double = 0 //Longitude down from pole
-            var scaleFactor: Double = 0
+            var scaleFactor: Double = 1.0
             var falseEasting: Double = 0
             var falseNorthing: Double = 0
             
