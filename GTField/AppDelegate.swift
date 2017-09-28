@@ -117,6 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                SwiftyStoreKit.finishTransaction(purchase.transaction)
 //            }
 //        }
+        
         return true
     }
 
@@ -229,12 +230,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print(metadataElement.xml)
                     do {
                         try! xmlDoc.xml.write(toFile: gpxURL.path, atomically: true, encoding: .utf8)
-                        
-                        let alert = UIAlertView(title: "Your file \"\(gpxURL.lastPathComponent)\" was copied to app's GPX folder.", message: nil, delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertController(title: "Your file \"\(gpxURL.lastPathComponent)\" was copied to app's GPX folder.", message: nil, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                         alert.show()
                     }
                 } else {
-                    let alert = UIAlertView(title: "Ooops! Something went wrong: \(error)", message: nil, delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertController(title: "Ooops! Something went wrong: \(error)", message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                     alert.show()
                 }
             }
@@ -244,7 +246,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if mbtileDB.isDBOpen {
                 let format = mbtileDB.metadataValueFor(name: "format")
                 if format.lowercased().length != 0 && (format.lowercased() != "png" && format.lowercased() != "jpg") {
-                    let alert = UIAlertView(title: NSLocalizedString("This format", comment: "")+" \"\(format)\" "+NSLocalizedString("does not support", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
+                    let alert = UIAlertController(title: NSLocalizedString("This format", comment: "")+" \"\(format)\" "+NSLocalizedString("does not support", comment: ""), message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                     alert.show()
                 } else {
                     let bounds = mbtileDB.metadataValueFor(name: "bounds")
@@ -270,10 +273,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                         do {
                             try FileManager.default.copyItem(at: url, to: mbtilesURL)
-                            let alert = UIAlertView(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(mbtilesURL.lastPathComponent)\".", message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
+                            let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(mbtilesURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                             alert.show()
                         } catch {
-                            let alert = UIAlertView(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
+                            let alert = UIAlertController(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                             alert.show()
                         }
                     }

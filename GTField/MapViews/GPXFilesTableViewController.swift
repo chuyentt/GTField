@@ -167,20 +167,48 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // self.showAlert(fileList.objectAtIndex(indexPath.row) as NSString, rowToUseInAlert: indexPath.row)
-        let sheet = UIActionSheet()
-        sheet.title = NSLocalizedString("Select option", comment: "")
-        sheet.addButton(withTitle: NSLocalizedString("Send by email", comment: ""))
-        sheet.addButton(withTitle: NSLocalizedString("Send by email (dxf)", comment: ""))
-        sheet.addButton(withTitle: NSLocalizedString("Load in Map", comment: ""))
-        sheet.addButton(withTitle: NSLocalizedString("Add in Map", comment: ""))
-        sheet.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-        sheet.addButton(withTitle: NSLocalizedString("Delete", comment: ""))
-        sheet.cancelButtonIndex = 4
-        sheet.destructiveButtonIndex = 5
+        let alert = UIAlertController(
+            title: NSLocalizedString("Select option", comment: ""),
+            message: nil,
+            preferredStyle: .alert)
         
-        
-        sheet.delegate = self
-        sheet.show(in: self.view)
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Send by email", comment: ""),
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                self.actionSendEmailWithAttachment(indexPath.row)
+        }))
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Send by email (dxf)", comment: ""),
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                self.actionSendEmailDxfWithAttachment(indexPath.row)
+        }))
+        alert.addAction(UIAlertAction(
+        title: NSLocalizedString("Load in Map", comment: ""),
+        style: .default,
+        handler: { (action: UIAlertAction!) in
+            self.actionLoadFileAtIndex(indexPath.row, add: false)
+        }))
+        alert.addAction(UIAlertAction(
+        title: NSLocalizedString("Add in Map", comment: ""),
+        style: .default,
+        handler: { (action: UIAlertAction!) in
+            self.actionLoadFileAtIndex(indexPath.row, add: true)
+        }))
+        alert.addAction(UIAlertAction(
+        title: NSLocalizedString("Cancel", comment: ""),
+        style: .cancel,
+        handler: { (action: UIAlertAction!) in
+        // Cancel
+        }))
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Delete", comment: ""),
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                self.actionDeleteFileAtIndex(indexPath.row)
+        }))
+        present(alert, animated: true, completion: nil)
         self.selectedRowIndex = (indexPath as NSIndexPath).row
     }
     
@@ -191,11 +219,6 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         // Allow editing for all rows except the initial "empty list"-placeholder row.
         // The string comparison is not optimal, but does the job.
         return gpxFilesFound
-    }
-    
-    // MARK: Action Sheet - Actions
-    internal func actionSheetCancel(_ actionSheet: UIActionSheet) {
-        print("actionsheet cancel")
     }
     
     internal func actionDeleteFileAtIndex(_ rowIndex: Int) {
@@ -440,28 +463,6 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
-    }
-}
-
-extension GPXFilesTableViewController: UIActionSheetDelegate{
-    func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
-        print("action sheet clicked button at index \(buttonIndex)")
-        switch buttonIndex {
-        case 0: // Email (gpx)
-            self.actionSendEmailWithAttachment(self.selectedRowIndex)
-        case 1: // Email (dxf)
-            self.actionSendEmailDxfWithAttachment(self.selectedRowIndex)
-        case 2: // Load in Map
-            self.actionLoadFileAtIndex(self.selectedRowIndex, add: false)
-        case 3: // Add in Map
-            self.actionLoadFileAtIndex(self.selectedRowIndex, add: true)
-        case 4: //
-            print("ActionSheet: Cancel")
-        case 5: //Delete
-            self.actionDeleteFileAtIndex(self.selectedRowIndex)
-        default: //cancel
-            print("action Sheet do nothing")
-        }
     }
 }
 

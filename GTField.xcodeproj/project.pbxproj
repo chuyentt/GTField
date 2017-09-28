@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,8 +24,7 @@
 		16488C741CB574C80090E120 /* Tools.plist in Resources */ = {isa = PBXBuildFile; fileRef = 16488C6C1CB574C80090E120 /* Tools.plist */; };
 		16488C751CB574C80090E120 /* Help.plist in Resources */ = {isa = PBXBuildFile; fileRef = 16488C6D1CB574C80090E120 /* Help.plist */; };
 		16488C761CB574C80090E120 /* About.plist in Resources */ = {isa = PBXBuildFile; fileRef = 16488C6E1CB574C80090E120 /* About.plist */; };
-		164D488D1A397B3800C669A6 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16827B3519F68E8E00BC6D11 /* Image.xcassets */; };
-		16549DA01A08AC4C00C59D2E /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169C0D3A19EA6E3700FEFE8F /* InfoViewController.swift */; };
+		164D488D1A397B3800C669A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16827B3519F68E8E00BC6D11 /* Assets.xcassets */; };
 		16549DA11A08AC4C00C59D2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162823A019AB38A100D08755 /* AppDelegate.swift */; };
 		16549DA51A08AC4C00C59D2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164457DE1A0014BE00BE45D7 /* MainViewController.swift */; };
 		16549DA71A08AC4C00C59D2E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D4914B19FA8B990021259E /* Foundation.framework */; };
@@ -151,7 +150,6 @@
 		DE4E7BEC1F3C56340012E317 /* UnicodeIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BE51F3C56320012E317 /* UnicodeIterator.swift */; };
 		DE52C3391F0507E300DE94F5 /* TileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE52C3381F0507E200DE94F5 /* TileDownloader.swift */; };
 		DE5B331A1F7670330047A1EF /* DXFWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE24D7871F704AC3007B1B39 /* DXFWriter.swift */; };
-		DE5EB0001EEBA1D700813FCC /* Baluardo San Martino.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DE5EAFFF1EEBA1D700813FCC /* Baluardo San Martino.jpg */; };
 		DE5EB0021EEC327800813FCC /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5EB0011EEC327800813FCC /* UIImage+Extensions.swift */; };
 		DE5EB0041EEC44D900813FCC /* NSDictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5EB0031EEC44D900813FCC /* NSDictionary+Extensions.swift */; };
 		DE6781881E55F1A100026C86 /* bauhausl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE6781861E55F19600026C86 /* bauhausl.ttf */; };
@@ -212,6 +210,11 @@
 		DEC7B85A1EED131700EE81CB /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B8591EED131700EE81CB /* Data+Extensions.swift */; };
 		DEC7B85C1EED381400EE81CB /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B85B1EED381400EE81CB /* UIImageView+Extensions.swift */; };
 		DEC7B85E1EED49BC00EE81CB /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B85D1EED49BC00EE81CB /* Utilities.swift */; };
+		DECB8EBD1F7CF8680064450C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DECB8EBC1F7CF8680064450C /* Launch Screen.storyboard */; };
+		DECB8ED01F7D12550064450C /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = DECB8ECD1F7D0FF40064450C /* Icon-76.png */; };
+		DECB8ED11F7D12550064450C /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = DECB8ECC1F7D0FF30064450C /* Icon-120.png */; };
+		DECB8ED21F7D12550064450C /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = DECB8ECE1F7D0FF40064450C /* Icon-152.png */; };
+		DECB8ED31F7D12550064450C /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = DECB8ECF1F7D0FF40064450C /* Icon-1024.png */; };
 		DEDE38FD1F17D8E3000F1446 /* GPXTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE38FC1F17D8E3000F1446 /* GPXTableViewController.swift */; };
 		DEDE38FF1F17DA11000F1446 /* WayPointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE38FE1F17DA11000F1446 /* WayPointManager.swift */; };
 		DEDE39011F17DA2D000F1446 /* TrackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE39001F17DA2D000F1446 /* TrackManager.swift */; };
@@ -241,7 +244,7 @@
 		16488C6E1CB574C80090E120 /* About.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = About.plist; path = Plist/About.plist; sourceTree = "<group>"; };
 		16549E061A08AC4C00C59D2E /* GTField.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GTField.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		165CCEE91BA299AE00677F88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		16827B3519F68E8E00BC6D11 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Image.xcassets; path = GTField/Image.xcassets; sourceTree = "<group>"; };
+		16827B3519F68E8E00BC6D11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = GTField/Assets.xcassets; sourceTree = "<group>"; };
 		1697D07B1D9A6D8300D773AE /* Houses6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Houses6.jpg; sourceTree = "<group>"; };
 		1697D07C1D9A6D8300D773AE /* Houses7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Houses7.jpg; sourceTree = "<group>"; };
 		1697D07D1D9A6D8300D773AE /* Houses8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Houses8.jpg; sourceTree = "<group>"; };
@@ -249,7 +252,6 @@
 		1697D07F1D9A6D8300D773AE /* Houses10.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Houses10.jpg; sourceTree = "<group>"; };
 		169B359A1B9DDBE700B83857 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		169B359C1B9DDEF000B83857 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
-		169C0D3A19EA6E3700FEFE8F /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		169DB82119BEE86D00C60E1C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		16A501BC19B4442D009BD54A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		16C675D31B948B4F00EF4913 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -450,6 +452,11 @@
 		DEC7B8591EED131700EE81CB /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Extensions.swift"; path = "Support/Data+Extensions.swift"; sourceTree = "<group>"; };
 		DEC7B85B1EED381400EE81CB /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageView+Extensions.swift"; path = "Support/UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		DEC7B85D1EED49BC00EE81CB /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		DECB8EBC1F7CF8680064450C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		DECB8ECC1F7D0FF30064450C /* Icon-120.png */ = {isa = PBXFileReference; explicitFileType = image.icns; path = "Icon-120.png"; sourceTree = "<group>"; };
+		DECB8ECD1F7D0FF40064450C /* Icon-76.png */ = {isa = PBXFileReference; explicitFileType = image.icns; path = "Icon-76.png"; sourceTree = "<group>"; };
+		DECB8ECE1F7D0FF40064450C /* Icon-152.png */ = {isa = PBXFileReference; explicitFileType = image.icns; path = "Icon-152.png"; sourceTree = "<group>"; };
+		DECB8ECF1F7D0FF40064450C /* Icon-1024.png */ = {isa = PBXFileReference; explicitFileType = image.icns; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		DEDE38FC1F17D8E3000F1446 /* GPXTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXTableViewController.swift; path = ViewControllers/GPX/GPXTableViewController.swift; sourceTree = "<group>"; };
 		DEDE38FE1F17DA11000F1446 /* WayPointManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WayPointManager.swift; path = ViewControllers/GPX/WayPointManager.swift; sourceTree = "<group>"; };
 		DEDE39001F17DA2D000F1446 /* TrackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackManager.swift; path = ViewControllers/GPX/TrackManager.swift; sourceTree = "<group>"; };
@@ -487,7 +494,7 @@
 				DEF2B3181F587C35004BD46D /* Package.swift */,
 				1628239D19AB38A100D08755 /* GTField */,
 				164835B61C709B5D00FA7FEF /* GTField.entitlements */,
-				16827B3519F68E8E00BC6D11 /* Image.xcassets */,
+				16827B3519F68E8E00BC6D11 /* Assets.xcassets */,
 				16C675E51B948C2800EF4913 /* Frameworks */,
 				1628239C19AB38A100D08755 /* Products */,
 				72C314B759D154E551456B1C /* Pods */,
@@ -530,6 +537,10 @@
 		1628239E19AB38A100D08755 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DECB8ECD1F7D0FF40064450C /* Icon-76.png */,
+				DECB8ECC1F7D0FF30064450C /* Icon-120.png */,
+				DECB8ECE1F7D0FF40064450C /* Icon-152.png */,
+				DECB8ECF1F7D0FF40064450C /* Icon-1024.png */,
 				DE44BE011F3E03E400434C2E /* geotrans_data.bundle */,
 				DE28C3C01F176BD700C3A190 /* snap.mp3 */,
 				DE28C3BE1F176AAF00C3A190 /* click.mp3 */,
@@ -591,7 +602,6 @@
 		16488C7D1CB5839F0090E120 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				169C0D3A19EA6E3700FEFE8F /* InfoViewController.swift */,
 				162823A019AB38A100D08755 /* AppDelegate.swift */,
 				16C675E61B94900C00EF4913 /* Global.swift */,
 				DEC7B85D1EED49BC00EE81CB /* Utilities.swift */,
@@ -1006,6 +1016,7 @@
 				162823A619AB38A100D08755 /* Main.storyboard */,
 				DE2645591F4E8AFA008B759B /* Localizable.strings */,
 				169B359A1B9DDBE700B83857 /* Config.swift */,
+				DECB8EBC1F7CF8680064450C /* Launch Screen.storyboard */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1097,7 +1108,7 @@
 				};
 			};
 			buildConfigurationList = 1628239619AB38A100D08755 /* Build configuration list for PBXProject "GTField" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1136,10 +1147,12 @@
 				1697D0801D9A6D8300D773AE /* Houses6.jpg in Resources */,
 				DE434B451F233A0E00935974 /* GoogleService-Info.plist in Resources */,
 				DE67818B1E55F25800026C86 /* bauhausm.ttf in Resources */,
-				164D488D1A397B3800C669A6 /* Image.xcassets in Resources */,
+				164D488D1A397B3800C669A6 /* Assets.xcassets in Resources */,
 				DE26455B1F4E8AFA008B759B /* Localizable.strings in Resources */,
+				DECB8ED21F7D12550064450C /* Icon-152.png in Resources */,
 				16D845961D8D2DCB005DF780 /* LoadingView.xib in Resources */,
 				DEAD15621EEA55D000BFD5CE /* Trash.plist in Resources */,
+				DECB8EBD1F7CF8680064450C /* Launch Screen.storyboard in Resources */,
 				DEAD15591EEA55D000BFD5CE /* Monuments.plist in Resources */,
 				DEAD15541EEA55D000BFD5CE /* Bastions.plist in Resources */,
 				DEAD15601EEA55D000BFD5CE /* Squares.plist in Resources */,
@@ -1154,6 +1167,7 @@
 				1679CCB11A386166006A9215 /* Main.storyboard in Resources */,
 				1697D0811D9A6D8300D773AE /* Houses7.jpg in Resources */,
 				DEAD155E1EEA55D000BFD5CE /* Plates.plist in Resources */,
+				DECB8ED01F7D12550064450C /* Icon-76.png in Resources */,
 				DEAD15561EEA55D000BFD5CE /* Churches.plist in Resources */,
 				DEAD155F1EEA55D000BFD5CE /* Photos.plist in Resources */,
 				DEB226901E64282400D27CB5 /* PlaceNameHeader.xib in Resources */,
@@ -1168,7 +1182,6 @@
 				16488C701CB574C80090E120 /* Photos_Old.plist in Resources */,
 				DEB2268B1E64282400D27CB5 /* PlaceAttributeCell.xib in Resources */,
 				16488C721CB574C80090E120 /* Tracks.plist in Resources */,
-				DE5EB0001EEBA1D700813FCC /* Baluardo San Martino.jpg in Resources */,
 				16D845931D8D2DCB005DF780 /* Info.plist in Resources */,
 				16488C761CB574C80090E120 /* About.plist in Resources */,
 				16349EE81A28543D00D670A7 /* GTFieldGeo.geojson in Resources */,
@@ -1179,7 +1192,9 @@
 				164381721CB3B4D4007FA14E /* Houses5.jpg in Resources */,
 				164381711CB3B4D4007FA14E /* Houses4.jpg in Resources */,
 				1697D0831D9A6D8300D773AE /* Houses9.jpg in Resources */,
+				DECB8ED11F7D12550064450C /* Icon-120.png in Resources */,
 				16488C731CB574C80090E120 /* Settings.plist in Resources */,
+				DECB8ED31F7D12550064450C /* Icon-1024.png in Resources */,
 				1643816F1CB3B4D4007FA14E /* Houses2.jpg in Resources */,
 				DEAD15571EEA55D000BFD5CE /* Doors.plist in Resources */,
 			);
@@ -1284,7 +1299,6 @@
 				DE28C3CC1F17D53F00C3A190 /* ToolsViewController.swift in Sources */,
 				16D845991D8D2DCB005DF780 /* Spring.swift in Sources */,
 				16D845971D8D2DCB005DF780 /* Misc.swift in Sources */,
-				16549DA01A08AC4C00C59D2E /* InfoViewController.swift in Sources */,
 				DEB226791E608D1500D27CB5 /* NotificationObserver.swift in Sources */,
 				DEB226801E608E0A00D27CB5 /* ShadowView.swift in Sources */,
 				16D8459B1D8D2DCB005DF780 /* SpringButton.swift in Sources */,
@@ -1561,7 +1575,6 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1593,7 +1606,6 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

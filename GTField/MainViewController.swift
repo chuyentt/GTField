@@ -330,7 +330,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                 // Error
                 }} else { DispatchQueue.main.async {
                 
-                errorAlert.show();
+                //errorAlert.show();
                 self.view.hideHUD()
                 } } }
         

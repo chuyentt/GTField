@@ -32,7 +32,8 @@ class OfflineTileLayer: GMSTileLayer {
         if offlineTileDB != nil, (offlineTileDB?.isDBOpen)! {
             let format = offlineTileDB?.metadataValueFor(name: "format")
             if format?.lowercased().length != 0 && (format?.lowercased() != "png" && format?.lowercased() != "jpg") {
-                let alert = UIAlertView(title: NSLocalizedString("This format", comment: "")+" \"\(format ?? "")\" "+NSLocalizedString("does not support", comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
+                let alert = UIAlertController(title: NSLocalizedString("This format", comment: "")+" \"\(format ?? "")\" "+NSLocalizedString("does not support", comment: ""), message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                 alert.show()
                 return nil
             }
@@ -73,7 +74,8 @@ class OfflineTileLayer: GMSTileLayer {
                             self.boundaryString = "{{\(minx),\(miny)},{\(maxx-minx),\(maxy-miny)}}"
                             self.layersBbox = CGRectFromString(self.boundaryString).insetBy(dx: -0.005, dy: -0.005)
                         } else {
-                            let alert = UIAlertView(title: "Missing metadata table or missing bounds value in metadata", message: nil, delegate: nil, cancelButtonTitle: "OK")
+                            let alert = UIAlertController(title: NSLocalizedString("Missing metadata table or missing bounds value in metadata", comment: ""), message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                             alert.show()
                         }
                     }

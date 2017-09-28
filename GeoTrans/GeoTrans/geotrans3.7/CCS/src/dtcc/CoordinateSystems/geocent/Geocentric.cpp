@@ -252,7 +252,9 @@ MSP::CCS::GeodeticCoordinates* Geocentric::convertToGeodetic(
   double X = cartesianCoordinates->x();
   double Y = cartesianCoordinates->y();
   double Z = cartesianCoordinates->z();
-  double latitude, longitude, height;
+  double latitude = 0;
+  double longitude = 0;
+  double height = 0;
 
   if( Geocent_algorithm == UNDEFINED )
   {

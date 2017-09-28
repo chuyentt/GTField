@@ -391,10 +391,6 @@ extension UIView {
         hudView.removeFromSuperview()
     }
 
-    func simpleAlert(_ mess:String) {
-        UIAlertView(title: APP_NAME, message: mess, delegate: nil, cancelButtonTitle: "OK").show()
-    }
-
     func startFlashing() {
         self.alpha = 1.0
         UIView.animate(withDuration: 0.4, delay: 0.0, options: [.curveEaseInOut, .repeat, .autoreverse, .allowUserInteraction], animations: {() -> Void in
@@ -450,14 +446,14 @@ extension String {
         guard i >= 0 && i < characters.count else { return "" }
         return String(self[index(startIndex, offsetBy: i)])
     }
-    subscript(range: Range<Int>) -> String {
-        let lowerIndex = index(startIndex, offsetBy: max(0,range.lowerBound), limitedBy: endIndex) ?? endIndex
-        return substring(with: lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound, limitedBy: endIndex) ?? endIndex))
-    }
-    subscript(range: ClosedRange<Int>) -> String {
-        let lowerIndex = index(startIndex, offsetBy: max(0,range.lowerBound), limitedBy: endIndex) ?? endIndex
-        return substring(with: lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound + 1, limitedBy: endIndex) ?? endIndex))
-    }
+//    subscript(range: Range<Int>) -> String {
+//        let lowerIndex = index(startIndex, offsetBy: max(0,range.lowerBound), limitedBy: endIndex) ?? endIndex
+//        return substring(with: lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound, limitedBy: endIndex) ?? endIndex))
+//    }
+//    subscript(range: ClosedRange<Int>) -> String {
+//        let lowerIndex = index(startIndex, offsetBy: max(0,range.lowerBound), limitedBy: endIndex) ?? endIndex
+//        return substring(with: lowerIndex..<(index(lowerIndex, offsetBy: range.upperBound - range.lowerBound + 1, limitedBy: endIndex) ?? endIndex))
+//    }
     var dateFromISO8601: Date? {
         return Formatter.iso8601.date(from: self)   // "Mar 22, 2017, 10:22 AM"
     }
@@ -545,6 +541,15 @@ class CButton : UIButton {
 //    }
 }
 
+extension UIAlertController {
+    func show() {
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(self, animated: true, completion: nil)
+    }
+}
 
 open class UIDistanceLabel: UILabel {
     open var distance: CLLocationDistance {
@@ -968,12 +973,6 @@ extension UIViewController {
 
 // ERROR ALERT
 var error = NSError(domain: APP_NAME, code: 1, userInfo: nil)
-var errorAlert = UIAlertView(title: APP_NAME,
-    message: "\(error.description)",
-    delegate: nil,
-    cancelButtonTitle: "OK" )
-
-
 
 class NetworkActivityIndicatorManager: NSObject {
     

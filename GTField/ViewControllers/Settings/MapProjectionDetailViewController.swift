@@ -1011,27 +1011,27 @@ class MapProjectionDetailViewController: UITableViewController {
         case CoordinateType.newZealandMapGrid:
             // Các tham số hệ này đã fix sẵn trong GeoTrans
             
-            var centralMeridian: Double = 0
-            var originLatitude: Double = 0
-            var falseEasting: Double = 0
-            var falseNorthing: Double = 0
-            
-            for item in arr {
-                let keyValue = item.components(separatedBy: "=")
-                if keyValue[0] == "lon_0" {
-                    centralMeridian = Double(keyValue[1])!
-                } else if keyValue[0] == "lat_0" {
-                    originLatitude = Double(keyValue[1])!
-                } else if keyValue[0] == "x_0" {
-                    falseEasting = Double(keyValue[1])!
-                } else if keyValue[0] == "y_0" {
-                    falseNorthing = Double(keyValue[1])!
-                } else if keyValue[0] == "datum" {
-                    self.datumParameters = self.datumProcessing(keyValue[1])
-                } else if keyValue[0] == "towgs84" {
-                    self.datumParameters = toWGS84Processing(keyValue)
-                }
-            }
+//            var centralMeridian: Double = 0
+//            var originLatitude: Double = 0
+//            var falseEasting: Double = 0
+//            var falseNorthing: Double = 0
+//            
+//            for item in arr {
+//                let keyValue = item.components(separatedBy: "=")
+//                if keyValue[0] == "lon_0" {
+//                    centralMeridian = Double(keyValue[1])!
+//                } else if keyValue[0] == "lat_0" {
+//                    originLatitude = Double(keyValue[1])!
+//                } else if keyValue[0] == "x_0" {
+//                    falseEasting = Double(keyValue[1])!
+//                } else if keyValue[0] == "y_0" {
+//                    falseNorthing = Double(keyValue[1])!
+//                } else if keyValue[0] == "datum" {
+//                    self.datumParameters = self.datumProcessing(keyValue[1])
+//                } else if keyValue[0] == "towgs84" {
+//                    self.datumParameters = toWGS84Processing(keyValue)
+//                }
+//            }
             prjParamItems = [ProjectionParameters]()
 //            prjParamItems = [
 //                ProjectionParameters(code: "centralMeridian", value: centralMeridian, format: 2),

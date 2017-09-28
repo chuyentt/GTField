@@ -230,7 +230,7 @@ class MapPoiViewController: UIViewController, MKMapViewDelegate, UITableViewDele
         
         let device = UIDevice.current.model
         let index = device.index(device.startIndex, offsetBy: 4)
-        let deviceType = device.substring(to: index)
+        let deviceType = String(device[..<index])//device.substring(to: index)
         
         if deviceType != "iPad" {
             

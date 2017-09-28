@@ -87,8 +87,10 @@ class InputFromCoordinatesViewController: UITableViewController {
                 
             })
         } else {
-            let alert = UIAlertView(title: NSLocalizedString(warningMessage! as String, comment: ""), message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("Close", comment: ""))
-            alert.show()
+            let alert = UIAlertController(title: NSLocalizedString(warningMessage! as String, comment: ""),
+                                          message: nil,
+                                          preferredStyle: .alert)
+            present(alert, animated: true, completion: nil)
         }
     }
     
