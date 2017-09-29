@@ -3353,7 +3353,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.btnClose(0)
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3372,7 +3372,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.btnClose(0)
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3406,7 +3406,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
             }))
             // show the alert
             present(alert, animated: true, completion: nil)
@@ -3436,7 +3436,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.btnClose(0)
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3454,7 +3455,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.btnClose(0)
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))

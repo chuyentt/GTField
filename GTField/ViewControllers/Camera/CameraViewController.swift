@@ -163,7 +163,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 )
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
-                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 }))
                 self.present(alert, animated: true, completion: nil)
                 break
@@ -233,7 +234,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 )
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
-                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 }))
                 self.present(alert, animated: true, completion: nil)
             }
@@ -411,7 +413,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 })
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -432,7 +435,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 })
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -465,7 +469,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 })
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -485,7 +490,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 })
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })

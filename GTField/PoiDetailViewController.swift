@@ -158,7 +158,7 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
         let directionUrl = "http://maps.apple.com/?daddr=\(poiLat),\(poiLon)&dirflg=\(NAV_MODE)"
         
         if (UIApplication.shared.canOpenURL(URL(string:"http://maps.apple.com")!)) {
-            UIApplication.shared.openURL(URL(string: directionUrl)!)
+            UIApplication.shared.open(URL(string: directionUrl)!, options: [:], completionHandler:nil)
         } else {
             NSLog("Can't use Apple Maps");
         }
