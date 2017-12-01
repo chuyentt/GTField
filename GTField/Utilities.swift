@@ -318,6 +318,21 @@ func sizeForLocalFilePath(filePath: String) -> String {
     return ""
 }
 
+func creationDateForLocalFilePath(filePath: String) -> Date {
+    do {
+        let fileAttributes = try FileManager.default.attributesOfItem(atPath: filePath)
+        if let fileDate = fileAttributes[FileAttributeKey.creationDate]  {
+            let date = fileDate as! Date
+            return date
+        } else {
+            print("Failed to get a size attribute from path: \(filePath)")
+        }
+    } catch {
+        print("Failed to get file attributes for local path: \(filePath) with error: \(error)")
+    }
+    return Date()
+}
+
 // Lấy danh sách các file từ thư mục docs theo
 func fileListFromDocs(subPath: String, ext: String) -> [AnyObject] {
     var Files: [String] = []

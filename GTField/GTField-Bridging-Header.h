@@ -4,3 +4,8 @@
 
 #import "FMDB.h"
 #import "Projection.h"
+
+#import "GMUMarkerClustering.h"
+#import "GMUGeometryRenderer.h"
+#import "GMUKMLParser.h"
+#import "GMUGeoJSONParser.h"

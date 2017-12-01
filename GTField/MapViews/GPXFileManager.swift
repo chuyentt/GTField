@@ -10,6 +10,9 @@ import Foundation
 
 //GPX File extension
 let kGPXFileExt = "gpx"
+let kKmlFileExt = "kml"
+let kGeoJSONExt = "json"
+let kGeoJSONExt1 = "geojson"
 
 //
 // Class to handle actions with gpx files (save, delete, etc..)
@@ -27,7 +30,10 @@ class GPXFileManager: NSObject {
                                                                                     options: FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants) {
                     
                     for url: URL in directoryURLs {
-                        if url.pathExtension == kGPXFileExt {
+                        if url.pathExtension == kGPXFileExt ||
+                            url.pathExtension == kKmlFileExt ||
+                            url.pathExtension == kGeoJSONExt ||
+                            url.pathExtension == kGeoJSONExt1 {
                             Files.append(url.lastPathComponent)
                         }
                     }

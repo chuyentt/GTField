@@ -17,6 +17,13 @@ import MessageUI
 
 let kPaneViewHeight = CGFloat(280.0)
 
+let strokeTextAttributes = [
+    NSAttributedStringKey.strokeColor : UIColor.white,
+    NSAttributedStringKey.foregroundColor : UIColor.orange,
+    NSAttributedStringKey.strokeWidth : -4.0,
+    NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
+    ] as [NSAttributedStringKey : Any]
+
 class GTMapView: GMSMapView {
     
 }
@@ -136,6 +143,27 @@ extension MapViewController:JDJellyButtonDataSource {
 // End Setup JellyButton===============================================
 
 extension MapViewController: GPXFilesTableViewControllerDelegate {
+    func didLoadKMLFileWithName(_ kmlFilename: String) {
+        
+        let url = docsURL.appendingPathComponent(kmlFilename)
+        kmlParser = GMUKMLParser(url: url)
+        kmlParser.parse()
+        
+        renderer = GMUGeometryRenderer(map: mapView!,
+                                       geometries: kmlParser.placemarks,
+                                       styles: kmlParser.styles)
+        renderer.render()
+    }
+    
+    func didLoadGeoJSONFileWithName(_ geoJSONFilename: String) {
+        let url = docsURL.appendingPathComponent(geoJSONFilename)
+        geoJsonParser = GMUGeoJSONParser(url: url)
+        geoJsonParser.parse()
+        
+        renderer = GMUGeometryRenderer(map: mapView!, geometries: geoJsonParser.features)
+        renderer.render()
+    }
+    
     func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool) {
         if !add {
             // Kết thúc session cũ
@@ -229,7 +257,7 @@ extension MapViewController:MFMailComposeViewControllerDelegate {
 extension MapViewController:InputFromCoordinatesViewControllerDelegate {
     func didFinishWithLocation(_ location: CLLocation) {
         print(location.coordinate.latLngFormated(withTarget: true))
-        if getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+        if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
             let wpt = GPXWaypoint(position: location.coordinate)
             wpt.iconType = ""
             wpt.icon = #imageLiteral(resourceName: "pin")
@@ -369,6 +397,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var markerPhuQuoc: GMSMarker?
     var markerConDao: GMSMarker?
     
+    private var renderer: GMUGeometryRenderer!
+    private var kmlParser: GMUKMLParser!
+    private var geoJsonParser: GMUGeoJSONParser!
+    
     override func loadView() {
         let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
         mapView = GTMapView.map(withFrame: .zero, camera: camera)
@@ -394,6 +426,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.statusBarStyle = .default
         
         self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -410,6 +443,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         
         startUpdateMotion()
+        
+        DispatchQueue.main.async { [weak self] in
+            if self?.gpx?.status == .tracking {
+                self?.buttonRecording?.MainButton.stopFlashing()
+                self?.buttonRecording?.MainButton.startFlashing()
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -426,6 +466,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         self.gpx = GPX(mapView!)
         
+        //NSNotification.Name.UIApplicationWillEnterForeground
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillEnterForeground(_:)),
+                                               name: NSNotification.Name.UIApplicationWillEnterForeground,
+                                               object: nil)
+    }
+    
+    @objc func applicationWillEnterForeground(_ notification: NSNotification) {
+        DispatchQueue.main.async { [weak self] in
+            if self?.gpx?.status == .tracking {
+                self?.buttonRecording?.MainButton.stopFlashing()
+                self?.buttonRecording?.MainButton.startFlashing()
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -784,7 +838,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            constant: (toolsView?.frame.width)!).isActive = true
         
         //----- CoordinateLabel -----
-        coordinateLabel = UIOutlinedLabel()
+        coordinateLabel = UILabel()
         coordinateLabel.isUserInteractionEnabled = true
         coordinateLabel?.copyable = true
         coordinateLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
@@ -1154,17 +1208,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         buttonRecord?.delegate = self
         buttonRecord?.datasource = self
-        buttonRecord?.setJellyType(type: .LeftLine)
+        buttonRecord?.setJellyType(type: .UpperLine)
         buttonRecord?.Container.translatesAutoresizingMaskIntoConstraints = false
         
-//        // Căn phải
-//        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
-//                           attribute: .trailing,
-//                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .trailingMargin,
-//                           multiplier: 1.0,
-//                           constant: -44).isActive = true
+        // Căn phải
+        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
+                           attribute: .trailing,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .trailingMargin,
+                           multiplier: 1.0,
+                           constant: -110).isActive = true
         // Căn dưới
         NSLayoutConstraint(item: buttonRecord?.Container! as Any,
                            attribute: .bottom,
@@ -1172,25 +1226,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.bottomLayoutGuide,
                            attribute: .top,
                            multiplier: 1.0,
-                           constant: -140).isActive = true
+                           constant: -54).isActive = true
         
-        // Căn giữa buttonLayer
-        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
-                           attribute: .centerX,
-                           relatedBy: .equal,
-                           toItem: buttonLayer,
-                           attribute: .centerX,
-                           multiplier: 1.0,
-                           constant: -22).isActive = true
+//        // Căn giữa buttonFolder
+//        NSLayoutConstraint(item: buttonRecord?.Container! as Any,
+//                           attribute: .centerX,
+//                           relatedBy: .equal,
+//                           toItem: toolsView,
+//                           attribute: .centerX,
+//                           multiplier: 1.0,
+//                           constant: -20).isActive = true
 
         //=====
         buttonRecording = JDJellyButton(rootView: self.view)
         buttonRecording?.attachtoView(rootView: self.view,
                                    mainbutton: #imageLiteral(resourceName: "buttonRecording"),
-                                   frame: CGRect(x: 0, y: 0, width: 54, height: 54))
+                                   frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         buttonRecording?.delegate = self
         buttonRecording?.datasource = self
-        buttonRecording?.setJellyType(type: .LeftLine)
+        buttonRecording?.setJellyType(type: .UpperLine)
         buttonRecording?.Container.translatesAutoresizingMaskIntoConstraints = false
         
         // Căn phải
@@ -1200,7 +1254,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.view,
                            attribute: .trailingMargin,
                            multiplier: 1.0,
-                           constant: -44).isActive = true
+                           constant: -110).isActive = true
         // Căn dưới
         NSLayoutConstraint(item: buttonRecording?.Container! as Any,
                            attribute: .bottom,
@@ -1208,17 +1262,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.bottomLayoutGuide,
                            attribute: .top,
                            multiplier: 1.0,
-                           constant: -140).isActive = true
+                           constant: -54).isActive = true
+        
         buttonRecording?.MainButton.isHidden = true
         
         //=====
         buttonPaused = JDJellyButton(rootView: self.view)
         buttonPaused?.attachtoView(rootView: self.view,
                                       mainbutton: #imageLiteral(resourceName: "buttonPaused"),
-                                      frame: CGRect(x: 0, y: 0, width: 54, height: 54))
+                                      frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         buttonPaused?.delegate = self
         buttonPaused?.datasource = self
-        buttonPaused?.setJellyType(type: .LeftLine)
+        buttonPaused?.setJellyType(type: .UpperLine)
         buttonPaused?.Container.translatesAutoresizingMaskIntoConstraints = false
         
         // Căn phải
@@ -1228,7 +1283,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.view,
                            attribute: .trailingMargin,
                            multiplier: 1.0,
-                           constant: -44).isActive = true
+                           constant: -110).isActive = true
         // Căn dưới
         NSLayoutConstraint(item: buttonPaused?.Container! as Any,
                            attribute: .bottom,
@@ -1236,7 +1291,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.bottomLayoutGuide,
                            attribute: .top,
                            multiplier: 1.0,
-                           constant: -140).isActive = true
+                           constant: -54).isActive = true
         buttonPaused?.MainButton.isHidden = true
     
         // opacitySlider
@@ -1299,7 +1354,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func setupButtonRecording() {
-        if getProVersion() || (gpx?.trackSegments.count)! <= 2 {
+        if isTesting || getProVersion() || (gpx?.trackSegments.count)! <= 2 {
             buttonRecord?.MainButton.isHidden = true
             buttonRecording?.MainButton.isHidden = false
             buttonRecording?.MainButton.startFlashing()
@@ -1336,7 +1391,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func btnAddGPSMarker() {
         if let location = self.mapView?.myLocation?.coordinate {
-            if getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+            if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
                 let ele = (self.mapView?.myLocation?.altitude)!
                 let wpt = GPXWaypoint(position: location)
                 wpt.ele = ele.toString(2)
@@ -1404,7 +1459,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func btnAddPolyline() {
-        if getProVersion() || (gpx?.trackSegments.count)! <= 2 {
+        if isTesting || isTesting || getProVersion() || (gpx?.trackSegments.count)! <= 2 {
             self.gpx?.newTrackSegment()
             self.gpx?.currentTrackSegment?.actions = .editing
             selectedOverlay = self.gpx?.currentTrackSegment?.overlay
@@ -1416,7 +1471,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func btnAddPolygon() {
-        if getProVersion() || (gpx?.pointSegments.count)! <= 2 {
+        if isTesting || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
             self.gpx?.newPointSegment()
             self.gpx?.currentPointSegment?.actions = .editing
             selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
@@ -1545,7 +1600,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     @objc func didDoneAddMarker() {
         let location = self.mapView?.center
         let coord = self.mapView?.projection.coordinate(for: location!)
-        if getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+        if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
             let wpt = GPXWaypoint(position: coord!)
             wpt.iconType = ""
             wpt.icon = #imageLiteral(resourceName: "pin")
@@ -3222,7 +3277,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        coordinateLabel?.text = mapView.projection.coordinate(for: mapView.center).latLngFormated(withTarget: true)
+        coordinateLabel?.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapView.center).latLngFormated(withTarget: true), attributes: strokeTextAttributes)
         let region = mapView.projection.visibleRegion()
         let bound = GMSCoordinateBounds(region: region)
         
@@ -3305,7 +3360,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         manager.stopUpdatingLocation()
         manager.stopUpdatingHeading()
         manager.delegate = nil
-        manager.allowsBackgroundLocationUpdates = false
+        if #available(iOS 9.0, *) {
+            manager.allowsBackgroundLocationUpdates = false
+        } else {
+            // Fallback on earlier versions
+        }
         isUpdatingLocation = false
     }
     
@@ -3325,7 +3384,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             manager.headingOrientation = .landscapeLeft
             manager.startUpdatingLocation()
             manager.startUpdatingHeading()
-            manager.allowsBackgroundLocationUpdates = true
+            if #available(iOS 9.0, *) {
+                manager.allowsBackgroundLocationUpdates = true
+            } else {
+                // Fallback on earlier versions
+            }
             
             if forChecking {
                 if manager.location?.coordinate != nil {
@@ -3353,7 +3416,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.btnClose(0)
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3372,7 +3439,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.btnClose(0)
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3406,7 +3477,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
             }))
             // show the alert
             present(alert, animated: true, completion: nil)
@@ -3437,7 +3512,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3456,7 +3535,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Settings...", comment: ""), style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
@@ -3702,7 +3785,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
+        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         interstitial.load(request)
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())

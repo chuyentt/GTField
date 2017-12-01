@@ -12,7 +12,7 @@ import GooglePlaces
 import CoreMotion
 //import AEXML
 import Firebase
-import SwiftyStoreKit
+import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         self.window?.makeKeyAndVisible()
+        
+        if !getAgreement() {
+            agreement()
+        }
+        
         getSettings(urlString: "http://gtfield.geomatics.com.vn/settings.xml")
         self.window?.rootViewController?.enumerateHierarchy { viewController in
             guard var container = viewController as? MotionContainer else { return }
@@ -97,8 +102,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         
+        SKPaymentQueue.default().add(self)
         SubscriptionService.shared.loadSubscriptionOptions()
-        completeIAPTransactions()
           
 //        NetworkActivityIndicatorManager.networkOperationStarted()
 //        SwiftyStoreKit.restorePurchases(atomically: true) { results in
@@ -119,31 +124,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         return true
-    }
-
-    func completeIAPTransactions() {
-        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
-            setProVersion(false)
-            for purchase in purchases {
-                // swiftlint:disable:next for_where
-                if purchase.needsFinishTransaction {
-                    // Deliver content from server, then:
-                    SwiftyStoreKit.finishTransaction(purchase.transaction)
-                }
-                if purchase.transaction.transactionState == .purchased {
-                    // Nếu mua mới: Kiểm tra xem Donate hay Unlimited
-                    if purchase.productId.contains("Unlimited") {
-                        setUnlimited(true)
-                    } else {
-                        
-                    }
-                    setProVersion(true)
-                    print("purchased: \(purchase.productId)")
-                } else if purchase.transaction.transactionState == .restored {
-                    setProVersion(true)
-                }
-            }
-        }
     }
     
     // Xử lý các thay đổi từ phiên bản cũ
@@ -180,7 +160,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kiểm tra xem xml có bị lỗi không
         let ext = url.pathExtension
         switch ext {
-        case "gpx":
+        case kGPXFileExt:
             let data = try! Data.init(contentsOf: url)
             let xml = XMLParser(data: data)
             if xml.parse() {
@@ -285,6 +265,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             break
+        case kKmlFileExt:
+            let kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
+            do {
+                try FileManager.default.copyItem(at: url, to: kmlURL)
+                let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(kmlURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                alert.show()
+            } catch {
+                let alert = UIAlertController(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                alert.show()
+            }
+            break
+        case kGeoJSONExt, kGeoJSONExt1:
+            let jsonURL = docsURL.appendingPathComponent(url.lastPathComponent)
+            do {
+                try FileManager.default.copyItem(at: url, to: jsonURL)
+                let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(jsonURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                alert.show()
+            } catch {
+                let alert = UIAlertController(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                alert.show()
+            }
+            break
         default:
             break
         }
@@ -307,6 +313,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -317,6 +326,101 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+}
+
+// Agreement
+func agreement() {
+    let alert = UIAlertController(title: NSLocalizedString("Agreement", comment: ""),
+                                  message: NSLocalizedString("Terms of Use", comment: ""),
+                                  preferredStyle: .alert)
+    
+    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .destructive, handler: { (action: UIAlertAction!) in
+        setAgreement(false)
+        exit(0)
+    }))
+    alert.addAction(UIAlertAction(title: NSLocalizedString("Agree", comment: ""), style: .default, handler: { (action: UIAlertAction!) in
+        setAgreement(true)
+    }))
+    alert.show()
+}
+// MARK: - SKPaymentTransactionObserver
+
+extension AppDelegate: SKPaymentTransactionObserver {
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        return true
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue,
+                      updatedTransactions transactions: [SKPaymentTransaction]) {
+        
+        for transaction in transactions {
+            switch transaction.transactionState {
+            case .purchasing:
+                handlePurchasingState(for: transaction, in: queue)
+            case .purchased:
+                handlePurchasedState(for: transaction, in: queue)
+            case .restored:
+                handleRestoredState(for: transaction, in: queue)
+            case .failed:
+                handleFailedState(for: transaction, in: queue)
+            case .deferred:
+                handleDeferredState(for: transaction, in: queue)
+            }
+        }
+    }
+    
+    func handlePurchasingState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("User is attempting to purchase product id: \(transaction.payment.productIdentifier)")
+    }
+    
+    func handlePurchasedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("User purchased product id: \(transaction.payment.productIdentifier)")
+        queue.finishTransaction(transaction)
+        if transaction.payment.productIdentifier.contains("Unlimited") {
+            setUnlimited(true)
+            setProVersion(true)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: SubscriptionService.activeNotification, object: nil)
+            }
+        } else {
+            SubscriptionService.shared.uploadReceipt { (success) in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: SubscriptionService.purchaseSuccessfulNotification, object: nil)
+                }
+            }
+        }
+    }
+    
+    func handleRestoredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase restored for product id: \(transaction.payment.productIdentifier)")
+        queue.finishTransaction(transaction)
+        if transaction.payment.productIdentifier.contains("Unlimited") {
+            setUnlimited(true)
+            setProVersion(true)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: SubscriptionService.activeNotification, object: nil)
+            }
+        } else {
+            SubscriptionService.shared.uploadReceipt { (success) in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: SubscriptionService.restoreSuccessfulNotification, object: nil)
+                }
+            }
+        }
+    }
+    
+    func handleFailedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase failed for product id: \(transaction.payment.productIdentifier)")
+        setProVersion(false)
+        print("setProVersion(false)")
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
+        }
+    }
+    
+    func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase deferred for product id: \(transaction.payment.productIdentifier)")
+    }
 }
 
 

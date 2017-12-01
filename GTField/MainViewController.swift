@@ -22,6 +22,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet var imgLogo: SpringImageView!
     @IBOutlet var btnRefresh: UIBarButtonItem!
     @IBOutlet var btnInfo: UIBarButtonItem!
+    @IBOutlet weak var inlineLogo: UIImageView!
     
     var mapViewController: MapViewController?
     
@@ -34,9 +35,9 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     let userDefaults = UserDefaults.standard
     var adMobBannerView = GADBannerView()
     
-    let purchaseUnlimitedSuffix = RegisteredPurchase.Unlimited
-    let subscribeYearlySuffix = RegisteredPurchase.Yearly
-    let subscribeMonthlySuffix = RegisteredPurchase.Monthly
+//    let purchaseUnlimitedSuffix = RegisteredPurchase.Unlimited
+//    let subscribeYearlySuffix = RegisteredPurchase.Yearly
+//    let subscribeMonthlySuffix = RegisteredPurchase.Monthly
 
     @IBOutlet var heightBackground: NSLayoutConstraint!
     
@@ -67,27 +68,81 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         let deviceWidth = UIScreen.main.bounds.width
         switch deviceWidth {
             
-            case 320.0: // 5
-                DEVICE_WIDTH = "320"
-            case 375.0: // 6
-                DEVICE_WIDTH = "375"
-            case 414.0: // 6+
-                DEVICE_WIDTH = "414"
-            case 768.0: // iPad
-                DEVICE_WIDTH = "768"
-            default:    //320.0
-                DEVICE_WIDTH = "320"
+        case 320.0: // 5
+            DEVICE_WIDTH = "320"
+        case 375.0: // 6
+            DEVICE_WIDTH = "375"
+        case 414.0: // 6+
+            DEVICE_WIDTH = "414"
+        case 768.0: // iPad
+            DEVICE_WIDTH = "768"
+        default:    //320.0
+            DEVICE_WIDTH = "320"
         }
-
+        
         if USE_CLOUDKIT {
             querySections() // Query CloudKit
         } else {
             queryPlist()    // Query Plist
         }
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleActive(notification:)),
+                                               name: SubscriptionService.activeNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleInactive(notification:)),
+                                               name: SubscriptionService.inactiveNotification,
+                                               object: nil)
+        
+        guard SubscriptionService.shared.currentSessionId != nil,
+            SubscriptionService.shared.hasReceiptData else {
+                SubscriptionService.shared.restorePurchases()
+                return
+        }
+//        let alert = UIAlertController(
+//            title: NSLocalizedString("Warning delete", comment: ""),
+//            message: "\(count) "+NSLocalizedString("photos will be deleted from this app on your device", comment: ""),
+//            preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(
+//            title: NSLocalizedString("Cancel", comment: ""),
+//            style: .cancel,
+//            handler: { (action: UIAlertAction!) in
+//                // Cancel
+//        }))
+//        alert.addAction(UIAlertAction(
+//            title: NSLocalizedString("OK", comment: ""),
+//            style: .default,
+//            handler: { (action: UIAlertAction!) in
+//                if count == 1 {
+//                    self.deletePhoto(nil)
+//                    return
+//                }
+//                for photo in self.photosToShow {
+//                    photo.delete(all: false)
+//                }
+//                self.navigationController?.popViewController(animated: true)
+//        }))
+//        present(alert, animated: true, completion: nil)
+        
+        
         
     }
 
-
+    @objc func handleActive(notification: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            self?.inlineLogo.image = #imageLiteral(resourceName: "Inline-Logo-Pro")
+            self?.adMobBannerView.removeFromSuperview()
+        }
+    }
+    
+    @objc func handleInactive(notification: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            self?.inlineLogo.image = #imageLiteral(resourceName: "Inline-Logo")
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -390,7 +445,20 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                 vc.title = "About Us"
                 vc.urlString = ABOUT_EN_URL
             }
+            break
+        case "segueTermsOfUse":
+            let nav: UINavigationController = segue.destination as! UINavigationController
+            let vc: WebViewController = nav.viewControllers.first as! WebViewController
+            let prefferedLanguage = Locale.preferredLanguages[0] as String
+            let arr = prefferedLanguage.lowercased().components(separatedBy: "-")
             
+            if arr.contains("vn") || arr.contains("vi") {
+                vc.title = "Terms of Use"
+                vc.urlString = TERMS_OF_USE_VI_URL
+            } else {
+                vc.title = "Terms of Use"
+                vc.urlString = TERMS_OF_USE_EN_URL
+            }
             break
         default:
             break
@@ -424,7 +492,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
+        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
     }

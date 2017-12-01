@@ -80,7 +80,7 @@ class GWFViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
+        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
     }

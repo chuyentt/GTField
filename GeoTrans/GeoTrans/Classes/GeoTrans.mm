@@ -608,18 +608,6 @@ std::string convertGeodeticMlsEgmToBNG(
     
     CoordinateSystemParameters geocentricParameters;
     
-    GeodeticParameters mslEgm84TenDegBilinearParameters;
-    
-    GeodeticParameters mslEgm84ThirtyMinBiLinearParameters;
-    
-    GeodeticParameters mslEgm84TenDegNaturalSplineParameters;
-    
-    GeodeticParameters mslEgm96FifteenMinBilinearParameters;
-    
-    GeodeticParameters mslEgm96VariableNaturalSplineParameters;
-    
-    GeodeticParameters mslEgm2008TwoPtFiveMinBicubicSplineParameters;
-    
     UTMParameters utmParameters;
     
     CoordinateSystemParameters mgrsParameters;
@@ -1010,7 +998,7 @@ std::string convertGeodeticMlsEgmToBNG(
             sourceHeightType = HeightType::EGM84ThirtyMinBiLinear;
             break;
         case 7:
-            sourceHeightType = HeightType::EGM2008TwoPtFiveMinBicubicSpline;
+            sourceHeightType = HeightType::EGM96VariableNaturalSpline;
             break;
             
         default:
@@ -1042,7 +1030,7 @@ std::string convertGeodeticMlsEgmToBNG(
             targetHeightType = HeightType::EGM84ThirtyMinBiLinear;
             break;
         case 7:
-            targetHeightType = HeightType::EGM2008TwoPtFiveMinBicubicSpline;
+            targetHeightType = HeightType::EGM96VariableNaturalSpline;
             break;
             
         default:
@@ -1105,7 +1093,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -1163,7 +1151,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &sourceParams, _targetCode, &sourceParams);
@@ -1231,7 +1219,7 @@ std::string convertGeodeticMlsEgmToBNG(
     try {
         try {
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tạo tham số đích
             CoordinateSystemParameters targetParams = CoordinateSystemParameters(CoordinateType::globalAreaReferenceSystem);
@@ -1277,7 +1265,7 @@ std::string convertGeodeticMlsEgmToBNG(
     try {
         try {
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tạo tham số đích
             CoordinateSystemParameters targetParams = CoordinateSystemParameters(CoordinateType::georef);
@@ -1323,7 +1311,7 @@ std::string convertGeodeticMlsEgmToBNG(
     try {
         try {
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tạo tham số đích
             CoordinateType::Enum coordinateType = (CoordinateType::Enum)type;
@@ -1374,7 +1362,7 @@ std::string convertGeodeticMlsEgmToBNG(
     try {
         try {
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Các tham số chung cho các lưới chiếu
             double ellipsoidSemiMajorAxis = 6378137.0;
@@ -1528,7 +1516,7 @@ std::string convertGeodeticMlsEgmToBNG(
                     case CoordinateType::newZealandMapGrid: {
                         // ========= DATUM TRANSFORMATION ========
                         // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-                        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+                        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
                         
                         // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
                         CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -1602,7 +1590,7 @@ std::string convertGeodeticMlsEgmToBNG(
                     case CoordinateType::webMercator: {
                         // ========= DATUM TRANSFORMATION ========
                         // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-                        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+                        GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
                         
                         // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
                         CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -1666,7 +1654,7 @@ std::string convertGeodeticMlsEgmToBNG(
     try {
         try {
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -1724,7 +1712,7 @@ std::string convertGeodeticMlsEgmToBNG(
     try {
         try {
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Tạo tham số đích
             UTMParameters targetParams = UTMParameters(CoordinateType::universalTransverseMercator, 1, 0);
@@ -1796,7 +1784,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -1880,7 +1868,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -1953,7 +1941,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -2022,7 +2010,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -2091,7 +2079,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -2165,7 +2153,7 @@ std::string convertGeodeticMlsEgmToBNG(
             GeodeticCoordinates targetCoordinates;
             
             // Tạo tham số nguồn
-            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters sourceParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             switch (coordinateType) {
                 case CoordinateType::eckert4:
@@ -2500,7 +2488,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);
@@ -2572,7 +2560,7 @@ std::string convertGeodeticMlsEgmToBNG(
             
             // ========= DATUM TRANSFORMATION ========
             // Tạo tham số nguồn là geodetic (tọa độ trắc địa)
-            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM2008TwoPtFiveMinBicubicSpline);
+            GeodeticParameters geodeticMlsEgmParams(CoordinateType::geodetic, HeightType::EGM96VariableNaturalSpline);
             
             // Thiết lập tính chuyển tọa độ sang hệ đích (tọa độ trắc địa)
             CoordinateConversionService ccsGeodeticMlsEgmToGeodetic(_srcCode, &geodeticMlsEgmParams, _targetCode, &geodeticMlsEgmParams);

@@ -443,7 +443,7 @@ extension Date {
 
 extension String {
     subscript(i: Int) -> String {
-        guard i >= 0 && i < characters.count else { return "" }
+        guard i >= 0 && i < count else { return "" }
         return String(self[index(startIndex, offsetBy: i)])
     }
 //    subscript(range: Range<Int>) -> String {

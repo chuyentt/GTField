@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GTFieldService
 import StoreKit
 
 class SubscriptionService: NSObject {
@@ -15,6 +16,8 @@ class SubscriptionService: NSObject {
     static let optionsLoadedNotification = Notification.Name("SubscriptionServiceOptionsLoadedNotification")
     static let restoreSuccessfulNotification = Notification.Name("SubscriptionServiceRestoreSuccessfulNotification")
     static let purchaseSuccessfulNotification = Notification.Name("SubscriptionServiceRestoreSuccessfulNotification")
+    static let activeNotification = Notification.Name("SubscriptionServiceActiveNotification")
+    static let inactiveNotification = Notification.Name("SubscriptionServiceInactiveNotification")
     
     
     static let shared = SubscriptionService()
@@ -41,13 +44,11 @@ class SubscriptionService: NSObject {
         
         let productIDPrefix = Bundle.main.bundleIdentifier!
         
-        let donate = productIDPrefix + ".Donate"
         let unlimited  = productIDPrefix + ".Unlimited"
-        
         let yearly = productIDPrefix + ".Yearly"
         let monthly  = productIDPrefix + ".Monthly"
         
-        let productIDs = Set([donate, unlimited, yearly, monthly])
+        let productIDs = Set([unlimited, yearly, monthly])
         
         let request = SKProductsRequest(productIdentifiers: productIDs)
         request.delegate = self
@@ -65,19 +66,38 @@ class SubscriptionService: NSObject {
     
     func uploadReceipt(completion: ((_ success: Bool) -> Void)? = nil) {
         if let receiptData = loadReceipt() {
-            print(receiptData.count)
-//            SelfieService.shared.upload(receipt: receiptData) { [weak self] (result) in
-//                guard let strongSelf = self else { return }
-//                switch result {
-//                case .success(let result):
-//                    strongSelf.currentSessionId = result.sessionId
-//                    strongSelf.currentSubscription = result.currentSubscription
-//                    completion?(true)
-//                case .failure(let error):
-//                    print("🚫 Receipt Upload Failed: \(error)")
-//                    completion?(false)
-//                }
-//            }
+            GTFieldService.shared.upload(receipt: receiptData) { [weak self] (result) in
+                guard let strongSelf = self else { return }
+                switch result {
+                case .success(let result):
+                    strongSelf.currentSessionId = result.sessionId
+                    strongSelf.currentSubscription = result.currentSubscription
+                    completion?(true)
+                    if let currentSubscription = result.currentSubscription {
+                        if currentSubscription.isActive {
+                            setProVersion(true)
+                            DispatchQueue.main.async {
+                                NotificationCenter.default.post(name: SubscriptionService.activeNotification, object: nil)
+                            }
+                            print("uploadReceipt success setProVersion(true)", currentSubscription.productId)
+                        } else {
+                            setProVersion(false)
+                            DispatchQueue.main.async {
+                                NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
+                            }
+                            print("uploadReceipt success setProVersion(false)", currentSubscription.productId)
+                        }
+                    }
+                case .failure(let error):
+                    print("🚫 Receipt Upload Failed: \(error)")
+                    completion?(false)
+                    setProVersion(false)
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
+                    }
+                    print("uploadReceipt failure setProVersion(false)")
+                }
+            }
         }
     }
     
@@ -96,65 +116,6 @@ class SubscriptionService: NSObject {
     }
 }
 
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss VV"
-    
-    return formatter
-}()
-
-public struct PaidSubscription {
-    
-    public enum Level {
-        case donate
-        case unlimited
-        case yearly
-        case monthly
-        
-        init?(productId: String) {
-            if productId.contains("Donate") {
-                self = .donate
-            } else if productId.contains("Unlimited") {
-                self = .unlimited
-            } else if productId.contains("Yearly") {
-                self = .yearly
-            } else if productId.contains("Monthly") {
-                self = .monthly
-            } else {
-                return nil
-            }
-        }
-    }
-    
-    public let productId: String
-    public let purchaseDate: Date
-    public let expiresDate: Date
-    public let level: Level
-    
-    public var isActive: Bool {
-        // is current date between purchaseDate and expiresDate?
-        return (purchaseDate...expiresDate).contains(Date())
-    }
-    
-    init?(json: [String: Any]) {
-        guard
-            let productId = json["product_id"] as? String,
-            let purchaseDateString = json["purchase_date"] as? String,
-            let purchaseDate = dateFormatter.date(from: purchaseDateString),
-            let expiresDateString = json["expires_date"] as? String,
-            let expiresDate = dateFormatter.date(from: expiresDateString)
-            else {
-                return nil
-        }
-        
-        self.productId = productId
-        self.purchaseDate = purchaseDate
-        self.expiresDate = expiresDate
-        self.level = Level(productId: productId) ?? .unlimited // if we've botched the productId give them all access :]
-        
-    }
-}
-
 // MARK: - SKProductsRequestDelegate
 
 extension SubscriptionService: SKProductsRequestDelegate {
@@ -169,7 +130,7 @@ extension SubscriptionService: SKProductsRequestDelegate {
             let alert = UIAlertController(title: error.localizedDescription,
                                           message: nil,
                                           preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
             let alertWindow = UIWindow(frame: UIScreen.main.bounds)
             alertWindow.rootViewController = UIViewController()

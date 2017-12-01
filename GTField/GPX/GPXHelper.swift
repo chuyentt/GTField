@@ -182,7 +182,7 @@ class GPXWaypoint: GMSMarker {
     }
     
     init(position: CLLocationCoordinate2D) {
-        let attributes = ["lat" : position.latitude.toString(6),"lon": position.longitude.toString(6)]
+        let attributes = ["lat" : position.latitude.toString(12),"lon": position.longitude.toString(12)]
         let time = Date()
         _name = AEXMLElement(name: "title", value: time.iso8601)
         _ele = AEXMLElement(name: "ele", value: "0.0")
@@ -273,7 +273,7 @@ class GPXTrackPoint: NSObject {
     
     var element: AEXMLElement {
         get {
-            let attributes = ["lat" : _lat.toString(6),"lon": _lon.toString(6)]
+            let attributes = ["lat" : _lat.toString(12),"lon": _lon.toString(12)]
             let element = AEXMLElement(name: "trkpt", attributes: attributes)
             element.addChild(AEXMLElement(name: "ele", value: _ele.toString(1)))
             element.addChild(AEXMLElement(name: "time", value: _time))
@@ -335,7 +335,7 @@ class GPXPoint: NSObject {
     
     var element: AEXMLElement {
         get {
-            let attributes = ["lat" : _lat.toString(6),"lon": _lon.toString(6)]
+            let attributes = ["lat" : _lat.toString(12),"lon": _lon.toString(12)]
             let element = AEXMLElement(name: "pt", attributes: attributes)
             element.addChild(AEXMLElement(name: "ele", value: _ele.toString(1)))
             element.addChild(AEXMLElement(name: "time", value: _time))
@@ -348,8 +348,8 @@ class GPXPoint: NSObject {
             return CLLocationCoordinate2D(latitude: _lat, longitude: _lon)
         }
         set (value) {
-            element.attributes["lat"] = coord.latitude.toString(6)
-            element.attributes["lon"] = coord.longitude.toString(6)
+            element.attributes["lat"] = coord.latitude.toString(12)
+            element.attributes["lon"] = coord.longitude.toString(12)
         }
     }
     
@@ -425,11 +425,11 @@ class GPXTrackSegment: GMSOverlay {
 
     private var _activeIndex: UInt = 0
     private var _activeVertexView: VertexView? = nil
-    private var _areaLabel: UIOutlinedLabel? = nil
-    var areaLabel: UIOutlinedLabel {
+    private var _areaLabel: UILabel? = nil
+    var areaLabel: UILabel {
         get {
             if _areaLabel == nil {
-                _areaLabel = UIOutlinedLabel()
+                _areaLabel = UILabel()
                 _areaLabel?.isUserInteractionEnabled = true
                 _areaLabel?.copyable = true
                 _areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
@@ -505,7 +505,7 @@ class GPXTrackSegment: GMSOverlay {
     }
     
     func updateLabel() {
-        areaLabel.text = NSLocalizedString("Area:", comment: "")+" \((area.areaUnit())), " + NSLocalizedString("Length:", comment: "") + " \((length.distanceUnit()))"
+        areaLabel.attributedText = NSMutableAttributedString(string: NSLocalizedString("Area:", comment: "")+" \((area.areaUnit())), " + NSLocalizedString("Length:", comment: "") + " \((length.distanceUnit()))", attributes: strokeTextAttributes)
     }
     
     private var _actions: GPXTrackSegmentActions = .none
@@ -688,8 +688,8 @@ class GPXTrackSegment: GMSOverlay {
         _polyline0?.path = _path
         
         let trkpt: AEXMLElement = (_root?["trkpt"].all![Int(index)])!
-        trkpt.attributes["lat"] = position.latitude.toString(6)
-        trkpt.attributes["lon"] = position.longitude.toString(6)
+        trkpt.attributes["lat"] = position.latitude.toString(12)
+        trkpt.attributes["lon"] = position.longitude.toString(12)
         removeVertices()
         addVertices()
     }
@@ -973,11 +973,11 @@ class GPXPointSegment: GMSOverlay {
 
     private var _activeIndex: UInt = 0
     private var _activeVertexView: VertexView? = nil
-    private var _areaLabel: UIOutlinedLabel? = nil
-    var areaLabel: UIOutlinedLabel {
+    private var _areaLabel: UILabel? = nil
+    var areaLabel: UILabel {
         get {
             if _areaLabel == nil {
-                _areaLabel = UIOutlinedLabel()
+                _areaLabel = UILabel()
                 _areaLabel?.isUserInteractionEnabled = true
                 _areaLabel?.copyable = true
                 _areaLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
@@ -1049,7 +1049,7 @@ class GPXPointSegment: GMSOverlay {
     }
     
     func updateLabel() {
-        areaLabel.text = NSLocalizedString("Area:", comment: "")+" \((area.areaUnit())), "+NSLocalizedString("Perimeter:", comment: "")+" \((length.distanceUnit()))"
+        areaLabel.attributedText = NSMutableAttributedString(string: NSLocalizedString("Area:", comment: "")+" \((area.areaUnit())), "+NSLocalizedString("Perimeter:", comment: "")+" \((length.distanceUnit()))", attributes: strokeTextAttributes)
     }
     
     private var _actions: GPXPointSegmentActions = .none
@@ -1238,8 +1238,8 @@ class GPXPointSegment: GMSOverlay {
         _polygon0?.path = _path
         
         let pt: AEXMLElement = (_root?["pt"].all![Int(index)])!
-        pt.attributes["lat"] = position.latitude.toString(6)
-        pt.attributes["lon"] = position.longitude.toString(6)
+        pt.attributes["lat"] = position.latitude.toString(12)
+        pt.attributes["lon"] = position.longitude.toString(12)
         removeVertices()
         addVertices()
     }

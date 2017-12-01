@@ -48,6 +48,13 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var lblPosition2: UILabel!
     @IBOutlet weak var lblBearing: UILabel!
     
+    let strokeTextAttributes = [
+        NSAttributedStringKey.strokeColor : UIColor.white,
+        NSAttributedStringKey.foregroundColor : UIColor.orange,
+        NSAttributedStringKey.strokeWidth : -4.0,
+        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15)
+        ] as [NSAttributedStringKey : Any]
+    
     override func loadView() {
         super.loadView()
     }
@@ -89,6 +96,13 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         lblPosition1.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: 10, y: 20)
         lblPosition2.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: lblPosition1.frame.width + lblPosition2.frame.width, y: lblPosition1.frame.height + 25 + lblPosition2.frame.height/2)
         lblBearing.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: lblPosition1.frame.width + lblPosition2.frame.width + lblBearing.frame.width*2, y: lblPosition1.frame.height + 35 + lblPosition2.frame.height + lblBearing.frame.height/2)
+        
+//        lblPosition1.shadowColor = UIColor.white
+//        lblPosition1.shadowOffset = CGSize(width: -1, height: -1)
+//        lblPosition2.shadowColor = UIColor.white
+//        lblPosition2.shadowOffset = CGSize(width: -1, height: -1)
+//        lblBearing.shadowColor = UIColor.white
+//        lblBearing.shadowOffset = CGSize(width: -1, height: -1)
         
         if ADS_ENABLED == true {
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -164,7 +178,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                     //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    } else {
+                        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    }
                 }))
                 self.present(alert, animated: true, completion: nil)
                 break
@@ -235,7 +253,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                     //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    } else {
+                        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    }
                 }))
                 self.present(alert, animated: true, completion: nil)
             }
@@ -414,7 +436,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -436,7 +462,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -470,7 +500,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -491,7 +525,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             }))
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
                 })
@@ -512,9 +550,10 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
      */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //print(locations.debugDescription)
-
-        lblPosition1.text = "\(locations.last?.coordinate.latitude.toString(6) ?? "N/A")\n\(locations.last?.coordinate.longitude.toString(6) ?? "N/A")"
-        lblPosition2.text = locations.last?.coordinate.localizedCoordinateString2()
+        
+        lblPosition1.attributedText = NSMutableAttributedString(string: "\((locations.last?.coordinate.localCoordinate(false))!)", attributes: strokeTextAttributes)
+        lblPosition2.attributedText = NSMutableAttributedString(string: (locations.last?.coordinate.localizedCoordinateString2())!, attributes: strokeTextAttributes)
+        
 //        
 //        // Kiểm tra xem orientation hiện tại để đặt lại heading
 //        if UIDevice.current.orientation.isFlat {
@@ -544,6 +583,6 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
 
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
 
-        lblBearing.text = "∡ \(manager.heading?.trueHeading.toString(1) ?? "N/A")° T"
+        lblBearing.attributedText = NSMutableAttributedString(string: "∡ \(manager.heading?.trueHeading.toString(1) ?? "N/A")° T", attributes: strokeTextAttributes)
     }
 }

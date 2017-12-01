@@ -77,6 +77,13 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     var adMobBannerView = GADBannerView()
     //
 
+    let strokeTextAttributes = [
+        NSAttributedStringKey.strokeColor : UIColor.white,
+        NSAttributedStringKey.foregroundColor : UIColor.orange,
+        NSAttributedStringKey.strokeWidth : -4.0,
+        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15)
+        ] as [NSAttributedStringKey : Any]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         map.mapType = DETAIL_MAP_TYPE
@@ -165,9 +172,9 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         map.layer.borderWidth = 1
         map.layer.borderColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.7).cgColor
         
-        lblPosition.text = "\((dataObject?._coordinate.latitude.toString(6))!)\n\((dataObject?.coordinate.longitude.toString(6))!)"
-        lblPosition1.text = dataObject?._coordinate.localizedCoordinateString2()
-        lblImageBearing.text = "∡ \(poiDestBearing.toDMSString(0)) T\n\(sizeForLocalFilePath(filePath: (dataObject?.imagePath)!))"
+        lblPosition.attributedText = NSMutableAttributedString(string: "\((dataObject?._coordinate.localCoordinate(false))!)", attributes: strokeTextAttributes)
+        lblPosition1.attributedText = NSMutableAttributedString(string: (dataObject?._coordinate.localizedCoordinateString2())!, attributes: strokeTextAttributes)
+        lblImageBearing.attributedText = NSMutableAttributedString(string: "∡ \(poiDestBearing.toDMSString(0)) T\n\(sizeForLocalFilePath(filePath: (dataObject?.imagePath)!))", attributes: strokeTextAttributes)
     }
     
     func formatView(){
@@ -269,7 +276,7 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
+        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
     }

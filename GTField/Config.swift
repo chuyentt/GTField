@@ -12,6 +12,8 @@ import GeoTrans
 let RAD2DEG = (180.0/Double.pi)
 let DEG2RAD = (Double.pi/180.0)
 
+let itcAccountSecret = "3ac723f53d704e0483bc8bf17da8a449"
+
 // -----------------------------------------
 // Test the Template
 // -----------------------------------------
@@ -64,6 +66,8 @@ var HELP_VI_URL: String = "http://gtfield.geomatics.com.vn/vi.html"
 
 var ABOUT_EN_URL: String = "http://gtfield.geomatics.com.vn/abouten.html"
 var ABOUT_VI_URL: String = "http://gtfield.geomatics.com.vn/aboutvi.html"
+var TERMS_OF_USE_EN_URL: String = "http://geomatics.vn/en/gtfield/terms-of-use"
+var TERMS_OF_USE_VI_URL: String = "http://geomatics.vn/en/gtfield/terms-of-use"
 
 let docsURL = applicationDocumentsDirectory()
 var MB_TILES_PATH: String = docsURL.appendingPathComponent("tiles.mbtiles").path
@@ -71,6 +75,7 @@ var MB_TILES_CACHED: String = docsURL.appendingPathComponent(TILE_CACHED).append
 
 let MB_TILES_VERSION = "1.2"
 var DOWNLOADING_PATH_TO_DATABASE: String = ""
+var isTesting = false
 
 // -------------------------------------------------------------------
 // Customize Navigation Bar (Main)

@@ -779,5 +779,19 @@ func setPausedMainButtonisHidden(_ value: Bool) {
     UserDefaults.standard.synchronize()
 }
 
+/*
+ * Agreement
+ */
+func getAgreement() -> Bool {
+    guard UserDefaults.standard.object(forKey: "Agree") != nil else {
+        return false
+    }
+    return UserDefaults.standard.bool(forKey: "Agree")
+}
+
+func setAgreement(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "Agree")
+    UserDefaults.standard.synchronize()
+}
 
 

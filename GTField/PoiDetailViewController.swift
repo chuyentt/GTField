@@ -158,7 +158,11 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
         let directionUrl = "http://maps.apple.com/?daddr=\(poiLat),\(poiLon)&dirflg=\(NAV_MODE)"
         
         if (UIApplication.shared.canOpenURL(URL(string:"http://maps.apple.com")!)) {
-            UIApplication.shared.open(URL(string: directionUrl)!, options: [:], completionHandler:nil)
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(URL(string: directionUrl)!, options: [:], completionHandler:nil)
+            } else {
+                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+            }
         } else {
             NSLog("Can't use Apple Maps");
         }
@@ -237,7 +241,7 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
+        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
     }

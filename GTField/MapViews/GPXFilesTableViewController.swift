@@ -21,6 +21,8 @@ protocol GPXFilesTableViewControllerDelegate: class {
     //GPXFilesTableView controller will be dismissed after calling this method
     //gpxFile is the name without extension
     func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool)
+    func didLoadKMLFileWithName(_ kmlFilename: String)
+    func didLoadGeoJSONFileWithName(_ geoJSONFilename: String)
 }
 
 class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegate, GADBannerViewDelegate {
@@ -143,22 +145,36 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         // Lấy thời gian, kích thước file...
         
         let fileURL: URL = docsURL.appendingPathComponent(filename)
+        let pathExtension = fileURL.pathExtension
         if let data = try? Data(contentsOf: URL(fileURLWithPath: fileURL.path)) {
-            var options = AEXMLOptions()
-            options.parserSettings.shouldProcessNamespaces = false
-            options.parserSettings.shouldReportNamespacePrefixes = false
-            options.parserSettings.shouldResolveExternalEntities = false
-            let gpxDoc = try! AEXMLDocument(xml: data, options: options)
-            let metadataElement = gpxDoc.root["metadata"]
-            
-            if metadataElement.error == nil {
-                let date = metadataElement["time"].value?.dateFromISO8601
+            switch pathExtension {
+            case kGPXFileExt:
+                var options = AEXMLOptions()
+                options.parserSettings.shouldProcessNamespaces = false
+                options.parserSettings.shouldReportNamespacePrefixes = false
+                options.parserSettings.shouldResolveExternalEntities = false
+                let gpxDoc = try! AEXMLDocument(xml: data, options: options)
+                let metadataElement = gpxDoc.root["metadata"]
+                
+                if metadataElement.error == nil {
+                    let date = metadataElement["time"].value?.dateFromISO8601
+                    let size = sizeForLocalFilePath(filePath: fileURL.path)
+                    //let font = cell.detailTextLabel?.font
+                    //cell.detailTextLabel?.font = font?.withSize(15)
+                    cell.detailTextLabel?.text = "\(date?.local ?? "")\n \(size)"
+                } else {
+                    cell.detailTextLabel?.text = ""
+                }
+                break
+            case kGeoJSONExt, kGeoJSONExt1:
+                let date = creationDateForLocalFilePath(filePath: fileURL.path)
                 let size = sizeForLocalFilePath(filePath: fileURL.path)
                 //let font = cell.detailTextLabel?.font
                 //cell.detailTextLabel?.font = font?.withSize(15)
-                cell.detailTextLabel?.text = "\(date?.local ?? "")\n \(size)"
-            } else {
-                cell.detailTextLabel?.text = ""
+                cell.detailTextLabel?.text = "\(date.local )\n \(size)"
+                break
+            default:
+                break
             }
         }
         
@@ -166,50 +182,128 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // self.showAlert(fileList.objectAtIndex(indexPath.row) as NSString, rowToUseInAlert: indexPath.row)
-        let alert = UIAlertController(
-            title: NSLocalizedString("Select option", comment: ""),
-            message: nil,
-            preferredStyle: .alert)
+        let filename = fileList.object(at: (indexPath as NSIndexPath).row) as? NSString as String? ?? ""
+        let fileURL: URL = docsURL.appendingPathComponent(filename)
+        let pathExtension = fileURL.pathExtension
+        switch pathExtension {
+        case kGPXFileExt:
+            // self.showAlert(fileList.objectAtIndex(indexPath.row) as NSString, rowToUseInAlert: indexPath.row)
+            let alert = UIAlertController(
+                title: NSLocalizedString("Select option", comment: ""),
+                message: nil,
+                preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Send by email", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionSendEmailWithAttachment(indexPath.row)
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Send by email (dxf)", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionSendEmailDxfWithAttachment(indexPath.row)
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Load in Map", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionLoadFileAtIndex(indexPath.row, add: false)
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Add in Map", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionLoadFileAtIndex(indexPath.row, add: true)
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Cancel", comment: ""),
+                style: .cancel,
+                handler: { (action: UIAlertAction!) in
+                    // Cancel
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Delete", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionDeleteFileAtIndex(indexPath.row)
+            }))
+            present(alert, animated: true, completion: nil)
+            self.selectedRowIndex = (indexPath as NSIndexPath).row
+            break
+        case kKmlFileExt:
+            let alert = UIAlertController(
+                title: NSLocalizedString("Select option", comment: ""),
+                message: nil,
+                preferredStyle: .alert)
+            
+//            alert.addAction(UIAlertAction(
+//                title: NSLocalizedString("Send by email", comment: ""),
+//                style: .default,
+//                handler: { (action: UIAlertAction!) in
+//                    self.actionSendEmailWithAttachment(indexPath.row)
+//            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Load in Map", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.delegate?.didLoadKMLFileWithName(filename)
+                    self.closeGPXFilesTableViewController()
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Cancel", comment: ""),
+                style: .cancel,
+                handler: { (action: UIAlertAction!) in
+                    // Cancel
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Delete", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionDeleteFileAtIndex(indexPath.row)
+            }))
+            present(alert, animated: true, completion: nil)
+            self.selectedRowIndex = (indexPath as NSIndexPath).row
+            break
+        case kGeoJSONExt, kGeoJSONExt1:
+            let alert = UIAlertController(
+                title: NSLocalizedString("Select option", comment: ""),
+                message: nil,
+                preferredStyle: .alert)
+            
+            //            alert.addAction(UIAlertAction(
+            //                title: NSLocalizedString("Send by email", comment: ""),
+            //                style: .default,
+            //                handler: { (action: UIAlertAction!) in
+            //                    self.actionSendEmailWithAttachment(indexPath.row)
+            //            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Load in Map", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.delegate?.didLoadGeoJSONFileWithName(filename)
+                    self.closeGPXFilesTableViewController()
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Cancel", comment: ""),
+                style: .cancel,
+                handler: { (action: UIAlertAction!) in
+                    // Cancel
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Delete", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionDeleteFileAtIndex(indexPath.row)
+            }))
+            present(alert, animated: true, completion: nil)
+            self.selectedRowIndex = (indexPath as NSIndexPath).row
+            break
+        default:
+            break
+        }
         
-        alert.addAction(UIAlertAction(
-            title: NSLocalizedString("Send by email", comment: ""),
-            style: .default,
-            handler: { (action: UIAlertAction!) in
-                self.actionSendEmailWithAttachment(indexPath.row)
-        }))
-        alert.addAction(UIAlertAction(
-            title: NSLocalizedString("Send by email (dxf)", comment: ""),
-            style: .default,
-            handler: { (action: UIAlertAction!) in
-                self.actionSendEmailDxfWithAttachment(indexPath.row)
-        }))
-        alert.addAction(UIAlertAction(
-        title: NSLocalizedString("Load in Map", comment: ""),
-        style: .default,
-        handler: { (action: UIAlertAction!) in
-            self.actionLoadFileAtIndex(indexPath.row, add: false)
-        }))
-        alert.addAction(UIAlertAction(
-        title: NSLocalizedString("Add in Map", comment: ""),
-        style: .default,
-        handler: { (action: UIAlertAction!) in
-            self.actionLoadFileAtIndex(indexPath.row, add: true)
-        }))
-        alert.addAction(UIAlertAction(
-        title: NSLocalizedString("Cancel", comment: ""),
-        style: .cancel,
-        handler: { (action: UIAlertAction!) in
-        // Cancel
-        }))
-        alert.addAction(UIAlertAction(
-            title: NSLocalizedString("Delete", comment: ""),
-            style: .default,
-            handler: { (action: UIAlertAction!) in
-                self.actionDeleteFileAtIndex(indexPath.row)
-        }))
-        present(alert, animated: true, completion: nil)
-        self.selectedRowIndex = (indexPath as NSIndexPath).row
     }
     
     // MARK: UITableView delegate methods
@@ -426,7 +520,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         adMobBannerView.delegate = self
         let request = GADRequest()
         interstitial.load(request)
-        //request.testDevices = ["b0363f55ef349672aa7932774e71491d",kGADSimulatorID]
+        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
     }
     
