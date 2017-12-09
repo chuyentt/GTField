@@ -11,6 +11,7 @@ import UIKit
 import CloudKit
 import CoreMotion
 import GeoTrans
+import simd
 
 var areaUnitItems: [ListItem] = [
     ListItem(code: "0", name:"\(AreaUnit.squareMeter.name) (\(AreaUnit.squareMeter.symbol))", value:""),
@@ -997,5 +998,35 @@ class NetworkActivityIndicatorManager: NSObject {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         #endif
+    }
+}
+
+/**
+ * Accelerometer data with compensation *
+ * parameters:
+ * - b is bias of accelerometer
+ * - m is inverse of m matrix (scale and non-orthogonalities)
+ */
+extension CMAccelerometerData {
+    @objc func valueWithCompensation(b: double3, m: double3x3) -> double3 {
+        var a: double3 = [self.acceleration.y, self.acceleration.x, -self.acceleration.z] * 9.80665
+        a = (a - b)*m
+        return a
+    }
+}
+
+extension CMGyroData {
+    @objc func valueWithCompensation(b: double3, m: double3x3) -> double3 {
+        var a: double3 = [self.rotationRate.y, self.rotationRate.x, -self.rotationRate.z]
+        a = (a - b)*m
+        return a
+    }
+}
+
+extension CMMagnetometerData {
+    @objc func valueWithCompensation(b: double3, m: double3x3) -> double3 {
+        var a: double3 = [self.magneticField.y, self.magneticField.x, -self.magneticField.z]
+        a = (a - b)*m
+        return a
     }
 }

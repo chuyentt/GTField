@@ -57,6 +57,7 @@ var TRACK_DISTANCE_FILTER: Double = getTrackDistanceFilter()
 let ELEVATION_COLOR_SPANS = 750.0 // Hệ số dùng để span polyline theo độ cao
 
 var ENABLE_SOUND_EFFECT: Bool = getEnableSoundEffect()
+var ENABLE_IMPROVED_PERFORMANCE: Bool = getEnableImprovedPerformance()
 
 var INTERNET_AVAILABLE: Bool = false
 var WIFI_AVAILABLE: Bool = false

@@ -99,6 +99,12 @@
 		DE377A851F0F3E61004C87D5 /* JDJellyMainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE377A821F0F3E61004C87D5 /* JDJellyMainButton.swift */; };
 		DE379D661F15A57000B0FEA0 /* GPXFilesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE379D651F15A57000B0FEA0 /* GPXFilesTableViewController.swift */; };
 		DE379D681F15A73300B0FEA0 /* GPXFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE379D671F15A73300B0FEA0 /* GPXFileManager.swift */; };
+		DE3AAD361FDA73FA00DC58DE /* CalibViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3AAD351FDA73FA00DC58DE /* CalibViewController.swift */; };
+		DE3AAD381FDA797900DC58DE /* MotionGraphContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3AAD371FDA797900DC58DE /* MotionGraphContainer.swift */; };
+		DE3AAD3A1FDA79E800DC58DE /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3AAD391FDA79E800DC58DE /* GraphView.swift */; };
+		DE3AAD3C1FDA7A0B00DC58DE /* GraphSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3AAD3B1FDA7A0B00DC58DE /* GraphSegment.swift */; };
+		DE3AAD3E1FDA7A8800DC58DE /* CGContext+GraphLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE3AAD3D1FDA7A8800DC58DE /* CGContext+GraphLines.swift */; };
+		DE3AAD401FDA870900DC58DE /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE3AAD3F1FDA870900DC58DE /* CoreMotion.framework */; };
 		DE434B341F19CE7500935974 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B331F19CE7500935974 /* Reachability.swift */; };
 		DE434B371F1B4D0A00935974 /* MotionContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B361F1B4D0A00935974 /* MotionContainer.swift */; };
 		DE434B3D1F22FA4900935974 /* GPXHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B3C1F22FA4900935974 /* GPXHelper.swift */; };
@@ -362,6 +368,12 @@
 		DE379D651F15A57000B0FEA0 /* GPXFilesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXFilesTableViewController.swift; path = MapViews/GPXFilesTableViewController.swift; sourceTree = "<group>"; };
 		DE379D671F15A73300B0FEA0 /* GPXFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXFileManager.swift; path = MapViews/GPXFileManager.swift; sourceTree = "<group>"; };
 		DE3934BD1F4F3D1A00F85457 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		DE3AAD351FDA73FA00DC58DE /* CalibViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CalibViewController.swift; path = ViewControllers/Settings/CalibViewController.swift; sourceTree = "<group>"; };
+		DE3AAD371FDA797900DC58DE /* MotionGraphContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MotionGraphContainer.swift; path = ViewControllers/Settings/MotionGraphContainer.swift; sourceTree = "<group>"; };
+		DE3AAD391FDA79E800DC58DE /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphView.swift; path = ViewControllers/Settings/GraphView.swift; sourceTree = "<group>"; };
+		DE3AAD3B1FDA7A0B00DC58DE /* GraphSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphSegment.swift; path = ViewControllers/Settings/GraphSegment.swift; sourceTree = "<group>"; };
+		DE3AAD3D1FDA7A8800DC58DE /* CGContext+GraphLines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CGContext+GraphLines.swift"; path = "ViewControllers/Settings/CGContext+GraphLines.swift"; sourceTree = "<group>"; };
+		DE3AAD3F1FDA870900DC58DE /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		DE4098AA1F5141960017C2EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DE4098AB1F5144EE0017C2EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		DE4098AC1F5144EE0017C2EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -542,6 +554,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE3AAD401FDA870900DC58DE /* CoreMotion.framework in Frameworks */,
 				DEB2261C1E5EFFDF00D27CB5 /* GoogleMobileAds.framework in Frameworks */,
 				16549DA71A08AC4C00C59D2E /* Foundation.framework in Frameworks */,
 				DEA3914F1F88E0ED00251C9A /* GTFieldService.framework in Frameworks */,
@@ -700,6 +713,7 @@
 		16C675E51B948C2800EF4913 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DE3AAD3F1FDA870900DC58DE /* CoreMotion.framework */,
 				DEB2261B1E5EFFDF00D27CB5 /* GoogleMobileAds.framework */,
 				16EC1C8D1DCF45F50078B7F4 /* GoogleMobileAds.framework */,
 				164835B71C709B6B00FA7FEF /* CloudKit.framework */,
@@ -811,6 +825,11 @@
 				DE322AC91F643C38005E09B9 /* InputViewController.swift */,
 				DE7287B71F622DB4009C0860 /* tbl_srs.xls */,
 				DE96B8AD1F6077E70038A8C2 /* crs.plist */,
+				DE3AAD351FDA73FA00DC58DE /* CalibViewController.swift */,
+				DE3AAD371FDA797900DC58DE /* MotionGraphContainer.swift */,
+				DE3AAD391FDA79E800DC58DE /* GraphView.swift */,
+				DE3AAD3B1FDA7A0B00DC58DE /* GraphSegment.swift */,
+				DE3AAD3D1FDA7A8800DC58DE /* CGContext+GraphLines.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1500,6 +1519,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE3AAD3C1FDA7A0B00DC58DE /* GraphSegment.swift in Sources */,
 				16D8458B1D8D2DCB005DF780 /* DesignableButton.swift in Sources */,
 				DEAD15681EEA942700BFD5CE /* PoiDetailViewController.swift in Sources */,
 				DE86E3361FA9614C005E5825 /* GQTPointQuadTree.m in Sources */,
@@ -1554,6 +1574,7 @@
 				DEB2267E1E608E0A00D27CB5 /* RoundedButton.swift in Sources */,
 				DE44C11B1F40357300434C2E /* LengthUnit+Imperial.swift in Sources */,
 				DE085E1B1F25E93F005DD248 /* FMDatabase.m in Sources */,
+				DE3AAD361FDA73FA00DC58DE /* CalibViewController.swift in Sources */,
 				DE52C3391F0507E300DE94F5 /* TileDownloader.swift in Sources */,
 				DE35F2AA1EF270CB009EE354 /* PhotosViewController.swift in Sources */,
 				16D8459E1D8D2DCB005DF780 /* SpringTextField.swift in Sources */,
@@ -1590,6 +1611,7 @@
 				DEC7B8581EECDAC300EE81CB /* WMSTileLayer.swift in Sources */,
 				DE86E32A1FA9614C005E5825 /* GMUStaticCluster.m in Sources */,
 				16D845901D8D2DCB005DF780 /* DesignableTextView.swift in Sources */,
+				DE3AAD3E1FDA7A8800DC58DE /* CGContext+GraphLines.swift in Sources */,
 				DE8E41331F361B87005766B5 /* VertexView.swift in Sources */,
 				16D845941D8D2DCB005DF780 /* KeyboardLayoutConstraint.swift in Sources */,
 				DEB226811E608E0A00D27CB5 /* Styles.swift in Sources */,
@@ -1617,6 +1639,7 @@
 				16D8459D1D8D2DCB005DF780 /* SpringLabel.swift in Sources */,
 				DE4E7BE71F3C56340012E317 /* CSV.swift in Sources */,
 				DE35F2A21EF270BD009EE354 /* LoadingStatus.swift in Sources */,
+				DE3AAD381FDA797900DC58DE /* MotionGraphContainer.swift in Sources */,
 				DE44C11C1F40357300434C2E /* LengthUnit.swift in Sources */,
 				DEB2267F1E608E0A00D27CB5 /* ShadowLineView.swift in Sources */,
 				DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */,
@@ -1633,6 +1656,7 @@
 				DE4E7BEC1F3C56340012E317 /* UnicodeIterator.swift in Sources */,
 				DE35F2971EEEB8FA009EE354 /* ConfigMapSourceTableViewCell.swift in Sources */,
 				DEC0BE041F585A640094BF74 /* Projection.m in Sources */,
+				DE3AAD3A1FDA79E800DC58DE /* GraphView.swift in Sources */,
 				DE085E1E1F25E93F005DD248 /* FMDatabaseQueue.m in Sources */,
 				DE377A851F0F3E61004C87D5 /* JDJellyMainButton.swift in Sources */,
 				DEB226711E607BDB00D27CB5 /* BaseContainerViewController.swift in Sources */,
@@ -1758,7 +1782,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1811,7 +1835,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
@@ -1838,7 +1862,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = GTField/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTField;
 				PRODUCT_NAME = GTField;
@@ -1864,7 +1888,7 @@
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 62RSNGGTGD;
 				INFOPLIST_FILE = GTField/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTField;
 				PRODUCT_NAME = GTField;
@@ -1893,7 +1917,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = GTFieldService/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTFieldService;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1924,7 +1948,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = GTFieldService/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTFieldService;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

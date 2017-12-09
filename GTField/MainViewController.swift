@@ -427,6 +427,12 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         case "seguePhotos":
             break
         case "segueSettings":
+            let nav: UINavigationController = segue.destination as! UINavigationController
+            let vc: SettingsContainer = nav.viewControllers.first as! SettingsContainer
+            vc.motionManager = motionManager
+            break
+        case "segueEmbed":
+            
             break
         case "segueTools":
             break

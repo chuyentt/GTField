@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import ImageIO
+import simd
 
 /**
  *
@@ -353,4 +354,137 @@ func fileListFromDocs(subPath: String, ext: String) -> [AnyObject] {
     return Files.sorted(by: { (s1, s2) -> Bool in
         s1 > s2 // Sắp xếp mới lên trên
     }) as [AnyObject]
+}
+
+// Xác định vị trí hiệu chuẩn tự động
+func getCalibPos(gravity gr: double3) -> Int {
+    let recipNorm = 1.0/norm_one(gr)
+    var g: double3 = gr
+    g[0] *= recipNorm
+    g[1] *= recipNorm
+    g[2] *= recipNorm
+    
+    let epsilon = 5.0
+    if (round(g[0] * 100.0) <= -(100.0 - epsilon))  {       // Xup
+        return 1
+    } else if (round(g[0] * 100.0) >= (100.0 - epsilon)) {  // Xdown
+        return 2
+    } else if (round(g[1] * 100.0) <= -(100.0 - epsilon)) { // Yup
+        return 3
+    } else if (round(g[1] * 100.0) >= (100.0 - epsilon)) {  // Ydown
+        return 4
+    } else if (round(g[2] * 100.0) <= -(100.0 - epsilon)) { // Zup
+        return 5
+    } else if (round(g[2] * 100.0) >= (100.0 - epsilon)) {  // Zdown
+        return 6
+    } // Cho các vị trí khác:
+    else if ((round(g[0] * 10.0) <= -7.0) && (round(g[2] * 10.0) <= -7.0)) { // Xup + Zup
+        return 7
+    } else if ((round(g[0] * 10.0) >= 7.0) && (round(g[2] * 10.0) <= -7.0)) { // Xdown + Zup
+        return 8
+    } else if ((round(g[1] * 10.0) <= -7.0) && (round(g[2] * 10.0) <= -7.0)) { // Yup + Zup
+        return 9
+    } else if ((round(g[1] * 10.0) >= 7.0) && (round(g[2] * 10.0) <= -7.0)) { // Ydown + Zup
+        return 10
+    } else if ((round(g[0] * 10.0) <= -7.0) && (round(g[2] * 10.0) >= 7.0)) { // Xup + Zdown
+        return 11
+    } else if ((round(g[0] * 10.0) >= 7.0) && (round(g[2] * 10.0) >= 7.0)) { // Xdown + Zdown
+        return 12
+    } else if ((round(g[1] * 10.0) <= -7.0) && (round(g[2] * 10.0) >= 7.0)) { // Yup + Zdown
+        return 13
+    } else if ((round(g[1] * 10.0) >= 7.0) && (round(g[2] * 10.0) >= 7.0)) { // Ydown + Zdown
+        return 14
+    }
+    return 0
+}
+
+// Kiểm tra sự ổn định
+func isStable(accelerometer a: double3) -> Bool {
+    let recipNorm = 1.0/norm_one(a)
+    var gravity: double3 = a
+    gravity[0] *= recipNorm
+    gravity[1] *= recipNorm
+    gravity[2] *= recipNorm
+    let ua = a - gravity
+    print (norm_one(ua))
+    return norm_one(ua) <= 0.07
+}
+
+func setLocation(_ location: double3) {
+    let defaults = UserDefaults.standard
+    defaults.set(Array.init(arrayLiteral: location[0],location[1],location[2]), forKey: "Location")
+}
+
+func getLocation() -> double3 {
+    let defaults = UserDefaults.standard
+    let obj = defaults.object(forKey: "Location")
+    if obj == nil {
+        return double3.init(21.07, 105.0, 10.0)
+    }
+    return double3.init(obj as! Array)
+}
+
+func setFixedBias(fixedBias b: double3, forKey key: String) {
+    let defaults = UserDefaults.standard
+    defaults.set(Array.init(arrayLiteral: b[0],b[1],b[2]), forKey: key)
+}
+
+func setFactorMatrix(factorMatrix m: double3x3, forKey key: String) {
+    // Chuyển double3x3 sang các mảng số thực theo dòng
+    let r0 = Array.init(arrayLiteral: m[0,0],m[0,1],m[0,2])
+    let r1 = Array.init(arrayLiteral: m[1,0],m[1,1],m[1,2])
+    let r2 = Array.init(arrayLiteral: m[2,0],m[2,1],m[2,2])
+    
+    // Lưu các véc-tơ dòng vào setting
+    let defaults = UserDefaults.standard
+    defaults.set(Array.init(arrayLiteral: r0,r1,r2), forKey: key)
+}
+
+func getFixedBias(forKey key: String) -> double3 {
+    let defaults = UserDefaults.standard
+    let obj = defaults.object(forKey: key)
+    if obj == nil {
+        return double3.init()
+    }
+    return double3.init(obj as! Array)
+}
+
+func getFactorMatrix(forKey key: String) -> double3x3 {
+    // Lấy ra các dòng của ma trận từ setting
+    let defaults = UserDefaults.standard
+    let obj = defaults.object(forKey: key)
+    if obj == nil {
+        return double3x3.init(diagonal: [1.0,1.0,1.0])
+    }
+    let r: [[Double]] = obj as! [[Double]]
+    if (r.count == 0) {
+        return double3x3.init(diagonal: [1.0,1.0,1.0])
+    }
+    // Khôi phục lại double3x3
+    return double3x3.init([double3.init(r[0]),double3.init(r[1]),double3.init(r[2])])
+}
+
+func RadiansToDegrees(_ radians: Double) -> Double {
+    return radians * 180.0 / Double.pi
+}
+
+func RadiansToDegrees(_ radians: double3) -> double3 {
+    let inv = 180.0/Double.pi
+    return radians * inv
+}
+
+func DegreesToRadians(_ degrees: Double) -> Double {
+    return degrees * Double.pi / 180.0
+}
+
+func DegreesToRadians(_ degrees: double3) -> double3 {
+    let inv = Double.pi / 180.0
+    return degrees * inv
+}
+
+func localGravity(_ latitude: Double,_ altitude: Double) -> Double {
+    let phi = DegreesToRadians(latitude)
+    let IGF = 9.780327*(1.0+0.0053024*sin(phi)*sin(phi)-0.0000058*sin(2.0*phi)*sin(2.0*phi))
+    let FAC = -3.086*10e-6*altitude
+    return IGF+FAC
 }

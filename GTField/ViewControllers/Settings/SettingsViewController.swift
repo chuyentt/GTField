@@ -10,10 +10,13 @@ import UIKit
 import GoogleMobileAds
 import Firebase
 import GeoTrans
+import CoreMotion
 
 class SettingsViewController: UITableViewController, GADBannerViewDelegate {
+    var motionManager: CMMotionManager?
     
     @IBOutlet weak var swEnableSoundEffects: UISwitch!
+    @IBOutlet weak var swEnableImprovedPerformance: UISwitch!
     @IBOutlet weak var lblImageCompressionQuality: UILabel!
     @IBOutlet weak var sliImageCompressionQuality: UISlider!
     @IBOutlet weak var sliTrackDistanceFilter: UISlider!
@@ -28,6 +31,10 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         // Load settings
         ENABLE_SOUND_EFFECT = getEnableSoundEffect()
         swEnableSoundEffects.isOn = ENABLE_SOUND_EFFECT
+        
+        ENABLE_IMPROVED_PERFORMANCE = getEnableImprovedPerformance()
+        swEnableImprovedPerformance.isOn = ENABLE_IMPROVED_PERFORMANCE
+        
         IMAGE_COMPRESSION_QUALITY = getImageCompressionQuality()
         sliImageCompressionQuality.value = IMAGE_COMPRESSION_QUALITY
         lblImageCompressionQuality.text = "\(IMAGE_COMPRESSION_QUALITY)"
@@ -47,9 +54,28 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let identifier:String = segue.identifier!
+        switch identifier {
+        case "segueClibration":
+            let nav: UINavigationController = segue.destination as! UINavigationController
+            let vc: CalibViewController = nav.viewControllers.first as! CalibViewController
+            vc.motionManager = motionManager
+            break
+        default:
+            break
+        }
+    }
+    
     @IBAction func soundEffectsValueChanged(_ sender: UISwitch) {
         ENABLE_SOUND_EFFECT = sender.isOn
         UserDefaults.standard.set(ENABLE_SOUND_EFFECT, forKey: "ENABLE_SOUND_EFFECT")
+        UserDefaults.standard.synchronize()
+    }
+    
+    @IBAction func improvedPerformanceValueChanged(_ sender: UISwitch) {
+        ENABLE_IMPROVED_PERFORMANCE = sender.isOn
+        UserDefaults.standard.set(ENABLE_IMPROVED_PERFORMANCE, forKey: "ENABLE_IMPROVED_PERFORMANCE")
         UserDefaults.standard.synchronize()
     }
     
@@ -74,6 +100,8 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         case 1:
             break
         case 2:
+            break
+        case 3:
             switch cell.tag {
             case 0: // Coordinate System
                 let crsName = getCrsName() + "\n";
@@ -116,7 +144,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
             }
             
             break
-        case 3:
+        case 4:
             switch cell.tag {
             case 0: // Area Unit
                 cell.detailTextLabel?.text = areaUnitItems[getAreaUnit()].name
@@ -148,6 +176,8 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         case 1:
             break
         case 2:
+            break
+        case 3:
             switch cell.tag {
             case 0:                
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -200,7 +230,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 break
             }
             break
-        case 3:
+        case 4:
             switch cell.tag {
             case 0: // Area Unit
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -263,7 +293,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 break
             }
             break
-        case 4: // Subscription
+        case 5: // Subscription
             switch cell.tag {
             case 0: // Subscribe
                 

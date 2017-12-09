@@ -156,6 +156,8 @@
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>to Save photos to Camera Roll and to Import photo to this app</string>
+	<key>NSMotionUsageDescription</key>
+	<string>$(PRODUCT_NAME) motion use.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>HeitiTC-Light.ttf</string>

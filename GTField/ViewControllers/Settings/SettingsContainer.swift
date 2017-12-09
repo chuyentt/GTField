@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import CoreMotion
 
 class SettingsContainer: UIViewController {
-
+    var motionManager: CMMotionManager?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,4 +31,17 @@ class SettingsContainer: UIViewController {
             
         })
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let identifier:String = segue.identifier!
+        switch identifier {
+        case "segueEmbed":
+            let vc: SettingsViewController = segue.destination as! SettingsViewController
+            vc.motionManager = motionManager
+            break
+        default:
+            break
+        }
+    }
+
 }

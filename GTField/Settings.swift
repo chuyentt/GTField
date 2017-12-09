@@ -369,6 +369,19 @@ func setEnableSoundEffect(_ value: Bool) {
 }
 
 /************************************************
+ * Cải thiện hiệu năng GNSS/INS
+ */
+func getEnableImprovedPerformance() -> Bool {
+    guard UserDefaults.standard.object(forKey: "ENABLE_IMPROVED_PERFORMANCE") != nil else { return false }
+    return UserDefaults.standard.bool(forKey: "ENABLE_IMPROVED_PERFORMANCE")
+}
+
+func setEnableImprovedPerformance(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "ENABLE_IMPROVED_PERFORMANCE")
+    UserDefaults.standard.synchronize()
+}
+
+/************************************************
  * Quangr caos
  */
 func getEnableADS() -> Bool {
