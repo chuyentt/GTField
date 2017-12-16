@@ -122,6 +122,10 @@
 /* Class = "UILabel"; text = "Size"; ObjectID = "bJa-N5-r8b"; */
 "bJa-N5-r8b.text" = "Size";
 
+"zBB-qE-fce.headerTitle"="Thiết lập nâng cao (thử nghiệm)";
+"Lyq-QQ-vKJ.text"="Cải thiện hiệu năng";
+"Aun-nl-HFC.text"="Hiệu chuẩn...";
+
 /* Class = "UILabel"; text = "Lọc khoảng cách (mét / điểm)"; ObjectID = "cUJ-dm-OHB"; */
 "cUJ-dm-OHB.text" = "Lọc khoảng cách (mét / điểm)";
 
@@ -194,8 +198,8 @@
 /* Class = "UILabel"; text = "Poi Name"; ObjectID = "zcb-Dh-6Ma"; */
 "zcb-Dh-6Ma.text" = "Poi Name";
 
-"8gm-p9-CXb.title" = "Đăng ký";
+"0Bs-Xf-0Jv.headerTitle" = "Đăng ký";
 
-"NTJ-ca-ktq.text" = "Đăng ký";
+"Wki-lg-aN9.text" = "Đăng ký";
 
 "8q6-mZ-5DU.text" = "Khôi phục đã mua";

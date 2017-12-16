@@ -122,6 +122,10 @@
 /* Class = "UILabel"; text = "Size"; ObjectID = "bJa-N5-r8b"; */
 "bJa-N5-r8b.text" = "Size";
 
+"zBB-qE-fce.headerTitle"="高级设置（测试）";
+"Lyq-QQ-vKJ.text"="改进的性能";
+"Aun-nl-HFC.text"="校准...";
+
 /* Class = "UILabel"; text = "距离过滤器 (米 / 点)"; ObjectID = "cUJ-dm-OHB"; */
 "cUJ-dm-OHB.text" = "距离过滤器 (米 / 点)";
 
@@ -194,9 +198,9 @@
 /* Class = "UILabel"; text = "Poi Name"; ObjectID = "zcb-Dh-6Ma"; */
 "zcb-Dh-6Ma.text" = "Poi Name";
 
-"8gm-p9-CXb.title"="订阅";
+"0Bs-Xf-0Jv.headerTitle"="订阅";
 
-"NTJ-ca-ktq.text"="订阅";
+"Wki-lg-aN9.text"="订阅";
 
 "8q6-mZ-5DU.text"="恢复购买";
 

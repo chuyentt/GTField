@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>Base</string>
 	<key>CFBundleDisplayName</key>
@@ -102,7 +100,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4.0</string>
+	<string>1.4.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -125,11 +123,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>43</string>
+	<string>44</string>
 	<key>FacebookAppID</key>
 	<string>328913314185622</string>
 	<key>FacebookDisplayName</key>
 	<string>GTField</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>googlechromes</string>
@@ -150,14 +150,16 @@
 	<string>to Take photos</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>to Use only while you are recording the route at all times in your field work</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>to Use only while you are recording the route at all times in your field work</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>to Show your location on the maps view and to embed the GPS information within the picture in your field research</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>to Save photos to Camera Roll and to Import photo to this app</string>
 	<key>NSMotionUsageDescription</key>
 	<string>$(PRODUCT_NAME) motion use.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>to Save photos to Camera Roll and to Import photo to this app</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>HeitiTC-Light.ttf</string>

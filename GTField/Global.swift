@@ -707,7 +707,7 @@ extension CLLocationCoordinate2D {
 
         let lat = self.latitude*DEGREE_TO_RADIAN
         let lon = self.longitude*DEGREE_TO_RADIAN
-        let alt: Double = 0.0
+        let alt: Double = myAltitude
         
         var warningMessage: NSString? = NSString()
         var easting: Double = 0.0
@@ -780,16 +780,16 @@ extension CLLocationCoordinate2D {
                 switch getMapGridFormat() {
                 case 0: //"Easting, Northing"
                     if symbol {
-                        txt = "\(hemi!): \(fabs(easting).toString(1))\(lonString), \(fabs(northing).toString(1))\(latString), \(fabs(alt).toString(1))\("MLS")"
+                        txt = "\(hemi!): \(fabs(easting).toString(1))\(lonString), \(fabs(northing).toString(1))\(latString) \(getMLSFormated(true))"
                     } else {
-                        txt = "\(hemi!): \(fabs(easting).toString(1)), \(fabs(northing).toString(1)), \(fabs(alt).toString(1))"
+                        txt = "\(hemi!): \(fabs(easting).toString(1)), \(fabs(northing).toString(1)) \(getMLSFormated(false))"
                     }
                     break;
                 case 1: //"Northing, Easting"
                     if symbol {
-                        txt = "\(hemi!): \(fabs(northing).toString(1))\(latString), \(fabs(easting).toString(1))\(lonString), \(fabs(alt).toString(1))\("MLS")"
+                        txt = "\(hemi!): \(fabs(northing).toString(1))\(latString), \(fabs(easting).toString(1))\(lonString) \(getMLSFormated(false))"
                     } else {
-                        txt = "\(hemi!): \(fabs(northing).toString(1)), \(fabs(easting).toString(1)), \(fabs(alt).toString(1))"
+                        txt = "\(hemi!): \(fabs(northing).toString(1)) \(getMLSFormated(false))"
                     }
                     break;
                 default:
@@ -806,16 +806,16 @@ extension CLLocationCoordinate2D {
                 switch getMapGridFormat() {
                 case 0: //"Easting, Northing"
                     if symbol {
-                        txt = "\(zone)\(hemi!): \(fabs(easting).toString(1))\(lonString), \(fabs(northing).toString(1))\(latString), \(fabs(alt).toString(1))\("MLS")"
+                        txt = "\(zone)\(hemi!): \(fabs(easting).toString(1))\(lonString), \(fabs(northing).toString(1))\(latString) \(getMLSFormated(false))"
                     } else {
-                        txt = "\(zone) \(hemi!): \(fabs(easting).toString(1)), \(fabs(northing).toString(1)), \(fabs(alt).toString(1))"
+                        txt = "\(zone) \(hemi!): \(fabs(easting).toString(1)), \(fabs(northing).toString(1)) \(getMLSFormated(false))"
                     }
                     break;
                 case 1: //"Northing, Easting"
                     if symbol {
-                        txt = "\(zone)\(hemi!): \(fabs(northing).toString(1))\(latString), \(fabs(easting).toString(1))\(lonString), \(fabs(alt).toString(1))\("MLS")"
+                        txt = "\(zone)\(hemi!): \(fabs(northing).toString(1))\(latString), \(fabs(easting).toString(1))\(lonString) \(getMLSFormated(false))"
                     } else {
-                        txt = "\(zone) \(hemi!): \(fabs(northing).toString(1)), \(fabs(easting).toString(1)), \(fabs(alt).toString(1))"
+                        txt = "\(zone) \(hemi!): \(fabs(northing).toString(1)), \(fabs(easting).toString(1)) \(getMLSFormated(false))"
                     }
                     break;
                 default:
@@ -863,16 +863,16 @@ extension CLLocationCoordinate2D {
                 switch getMapGridFormat() {
                 case 0: //"Easting, Northing"
                     if symbol {
-                        txt = "\(fabs(easting).toString(1))\(lonString), \(fabs(northing).toString(1))\(latString), \(fabs(alt).toString(1))\("MLS")"
+                        txt = "\(fabs(easting).toString(1))\(lonString), \(fabs(northing).toString(1))\(latString) \(getMLSFormated(false))"
                     } else {
-                        txt = "\(fabs(easting).toString(1)), \(fabs(northing).toString(1)), \(fabs(alt).toString(1))"
+                        txt = "\(fabs(easting).toString(1)), \(fabs(northing).toString(1)) \(getMLSFormated(false))"
                     }
                     break;
                 case 1: //"Northing, Easting"
                     if symbol {
-                        txt = "\(fabs(northing).toString(1))\(latString), \(fabs(easting).toString(1))\(lonString), \(fabs(alt).toString(1))\("MLS")"
+                        txt = "\(fabs(northing).toString(1))\(latString), \(fabs(easting).toString(1))\(lonString) \(getMLSFormated(false))"
                     } else {
-                        txt = "\(fabs(northing).toString(1)), \(fabs(easting).toString(1)), \(fabs(alt).toString(1))"
+                        txt = "\(fabs(northing).toString(1)), \(fabs(easting).toString(1)) \(getMLSFormated(false))"
                     }
                     break;
                 default:
@@ -885,6 +885,18 @@ extension CLLocationCoordinate2D {
             break
         }
         return txt!
+    }
+    
+    func getMLSFormated(_ symbol: Bool) -> String {
+        if myAltitude != 0 {
+            if symbol {
+                return ", \(fabs(myAltitude).toString(1))\("MLS")"
+            } else {
+                return ", \(fabs(myAltitude).toString(1))"
+            }
+        } else {
+            return ""
+        }
     }
     
     func latLngFormated(withTarget: Bool) -> String {

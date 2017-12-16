@@ -849,7 +849,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         coordinateLabel?.sizeToFit()
         coordinateLabel?.textColor = UIColor.orange
         coordinateLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
-        //UIFont.boldSystemFont(ofSize: 12)
+//        coordinateLabel.layer.borderWidth = 1
+//        coordinateLabel.layer.borderColor = UIColor.brown.cgColor
         self.view?.addSubview(coordinateLabel!)
         
         // Đặt chiều cao
@@ -860,22 +861,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .notAnAttribute,
                            multiplier: 1,
                            constant: 52).isActive = true
-        // Căn trái
-        NSLayoutConstraint(item: coordinateLabel!,
-                           attribute: .leading,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .leading,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
-        // Căn phải
-        NSLayoutConstraint(item: toolsView!,
-                           attribute: .trailing,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .trailingMargin,
-                           multiplier: 1.0,
-                           constant: 5).isActive = true
+//        // Căn trái
+//        NSLayoutConstraint(item: coordinateLabel!,
+//                           attribute: .leading,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .leading,
+//                           multiplier: 1.0,
+//                           constant: 5).isActive = true
+//        // Căn phải
+//        NSLayoutConstraint(item: toolsView!,
+//                           attribute: .trailing,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .trailingMargin,
+//                           multiplier: 1.0,
+//                           constant: 5).isActive = true
         // Căn trên
         NSLayoutConstraint(item: coordinateLabel!,
                            attribute: .top,
@@ -3453,7 +3454,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         default:
             //The user has not yet made a choice regarding whether this app can use location services.
             manager.delegate = self
-            manager.requestWhenInUseAuthorization()
+            manager.requestAlwaysAuthorization()
             break
         }
     }

@@ -78,6 +78,9 @@ let MB_TILES_VERSION = "1.2"
 var DOWNLOADING_PATH_TO_DATABASE: String = ""
 var isTesting = false
 
+// Độ cao mylocation
+var myAltitude = 0.0
+
 // -------------------------------------------------------------------
 // Customize Navigation Bar (Main)
 // -------------------------------------------------------------------
