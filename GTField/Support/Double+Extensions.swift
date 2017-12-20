@@ -62,4 +62,20 @@ extension Double {
         }
         return toString(3)
     }
+    
+    func courseUnit() -> String {
+        if self < 0.0 {
+            return NSLocalizedString("Unknown", comment: "")
+        } else {
+            return "\(self.toString(1))°"
+        }
+    }
+    
+    func speedUnit() -> String {
+        if self < 0.0 {
+            return NSLocalizedString("Unknown", comment: "")
+        } else {
+            return "\(self.toString(1)) m/s"
+        }
+    }
 }

@@ -49,6 +49,13 @@
 "Export Offline Map" = "Export Offline Map";
 "Export photo's location to GPX file" = "Export photo's location to GPX file";
 "This photo will be deleted from this app on your device" = "This photo will be deleted from this app on your device";
+"GPS Information"="GPS Information";
+"Coordinates: "="Coordinates: ";
+"Altitude: "="Altitude: ";
+"Horizontal Error: ±"="Horizontal Error: ±";
+"Vertical Error: ±"="Vertical Error: ±";
+"Course: "="Course: ";
+"Speed: "="Speed: ";
 
 /* PhotosViewController */
 "Photos" = "Photos";
@@ -107,6 +114,7 @@
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option.";
 "Add a marker from the map" = "Add a marker from the map";
 "Add a marker from coordinates" = "Add a marker from coordinates";
+"Unknown"="Unknown";
 
 /* ConfigMapSourceViewController */
 "Map Source Configuration" = "Map Source Configuration";

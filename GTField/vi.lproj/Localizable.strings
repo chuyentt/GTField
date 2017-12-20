@@ -49,6 +49,13 @@
 "Export Offline Map" = "Xuất bản đồ offline";
 "Export photo's location to GPX file" = "Xuất vị trí của ảnh sang tệp tin GPX";
 "This photo will be deleted from this app on your device" = "Ảnh này sẽ bị xóa khỏi ứng dụng trên thiết bị của bạn";
+"GPS Information"="Thông tin GPS";
+"Coordinates: "="Tọa độ: ";
+"Altitude: "="Độ cao thủy chuẩn: ";
+"Horizontal Error: ±"="Sai số mặt bằng: ±";
+"Vertical Error: ±"="Sai số độ cao: ±";
+"Course: "="Hướng di chuyển: ";
+"Speed: "="Tốc độ: ";
 
 /* PhotosViewController */
 "Photos" = "Ảnh";
@@ -107,6 +114,7 @@
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Yêu cầu duy trì quyền truy cập dịch vụ định vị chỉ sử dụng trong khi bạn ghi lại lộ trình ở mọi lúc trong công việc hiện trường của bạn. Để cho phép truy cập, hãy đi tới cài đặt ứng dụng và chọn tùy chọn \"Luôn luôn\".";
 "Add a marker from the map" = "Thêm mốc từ bản đồ";
 "Add a marker from coordinates" = "Thêm mốc từ tọa độ";
+"Unknown"="Không xác định";
 
 /* ConfigMapSourceViewController */
 "Map Source Configuration" = "Cấu hình nguồn cấp bản đồ";

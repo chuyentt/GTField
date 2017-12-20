@@ -49,6 +49,13 @@
 "Export Offline Map" = "導出離線地圖";
 "Export photo's location to GPX file" = "導出圖片的位置到GPX文件";
 "This photo will be deleted from this app on your device" = "這張照片會從您的設備上的app中刪除";
+"GPS Information"="GPS信息";
+"Coordinates: "="坐標: ";
+"Altitude: "="高度: ";
+"Horizontal Error: ±"="水平誤差: ±";
+"Vertical Error: ±"="垂直誤差: ±";
+"Course: "="課程: ";
+"Speed: "="速度: ";
 
 /* PhotosViewController */
 "Photos" = "照片";
@@ -107,6 +114,7 @@
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "只有當您在你的現場工作的時候您在記錄軌道的時候，您才可以訪問所需要的位置服務.請先進入應用設置然後選擇\"始終\"選項.";
 "Add a marker from the map" = "從地圖添加一個標記";
 "Add a marker from coordinates" = "從坐標添加一個標記";
+"Unknown"="不明";
 
 /* ConfigMapSourceViewController */
 "Map Source Configuration" = "配置地圖源";

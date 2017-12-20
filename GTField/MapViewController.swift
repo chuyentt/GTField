@@ -24,6 +24,16 @@ let strokeTextAttributes = [
     NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
     ] as [NSAttributedStringKey : Any]
 
+let style = NSMutableParagraphStyle()
+
+let strokeTextAttributesAlignLeft = [
+    NSAttributedStringKey.strokeColor : UIColor.white,
+    NSAttributedStringKey.foregroundColor : UIColor.orange,
+    NSAttributedStringKey.strokeWidth : -4.0,
+    NSAttributedStringKey.paragraphStyle: style,
+    NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
+    ] as [NSAttributedStringKey : Any]
+
 class GTMapView: GMSMapView {
     
 }
@@ -299,6 +309,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     // Label
     private var coordinateLabel: UILabel!
+    // Mylocation Label
+    private var myLocationLabel: UILabel!
+    //
+    private var isFollowMyLocation: Bool = false
     
     // Map Controll
     private var buttonLayer: UIButton?
@@ -492,21 +506,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.markerHoangSa?.appearAnimation = .none
         self.markerHoangSa?.title = "Hoang Sa Islands"
         self.markerHoangSa?.icon = #imageLiteral(resourceName: "HOANGSA")
+        self.markerHoangSa?.isTappable = false
         
         self.markerTruongSa = GMSMarker(position: CLLocationCoordinate2D(latitude: 8.641421, longitude: 111.917360))
         self.markerTruongSa?.appearAnimation = .none
         self.markerTruongSa?.title = "Truong Sa Islands"
         self.markerTruongSa?.icon = #imageLiteral(resourceName: "TRUONGSA")
+        self.markerTruongSa?.isTappable = false
         
         self.markerPhuQuoc = GMSMarker(position: CLLocationCoordinate2D(latitude: 10.2899, longitude: 103.9840))
         self.markerPhuQuoc?.appearAnimation = .none
         self.markerPhuQuoc?.title = "Phu Quoc Island"
         self.markerPhuQuoc?.icon = #imageLiteral(resourceName: "PHUQUOC")
+        self.markerPhuQuoc?.isTappable = false
         
         self.markerConDao = GMSMarker(position: CLLocationCoordinate2D(latitude: 8.7009, longitude: 106.6114))
         self.markerConDao?.appearAnimation = .none
         self.markerConDao?.title = "Con Dao"
         self.markerConDao?.icon = #imageLiteral(resourceName: "CONDAO")
+        self.markerConDao?.isTappable = false
     }
     
     func showIslands(_ show: Bool) {
@@ -894,7 +912,58 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .centerX,
                            multiplier: 1.0,
                            constant: 0).isActive = true
-       
+
+        //----- MyLocationLabel -----
+        myLocationLabel = UILabel()
+        myLocationLabel.isUserInteractionEnabled = true
+        myLocationLabel?.copyable = false
+        myLocationLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
+        myLocationLabel?.translatesAutoresizingMaskIntoConstraints = false
+        myLocationLabel?.textAlignment = .center
+        myLocationLabel?.numberOfLines = 0
+        myLocationLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        myLocationLabel?.sizeToFit()
+        myLocationLabel?.textColor = UIColor.orange
+        myLocationLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
+//        myLocationLabel.layer.borderWidth = 1
+//        myLocationLabel.layer.borderColor = UIColor.brown.cgColor
+        self.view?.addSubview(myLocationLabel!)
+        
+//        // Đặt chiều cao
+//        NSLayoutConstraint(item: myLocationLabel!,
+//                           attribute: .height,
+//                           relatedBy: .equal,
+//                           toItem: nil,
+//                           attribute: .notAnAttribute,
+//                           multiplier: 1,
+//                           constant: 52).isActive = true
+        // Căn trái
+        NSLayoutConstraint(item: myLocationLabel!,
+                           attribute: .leading,
+                           relatedBy: .equal,
+                           toItem: self.view,
+                           attribute: .leading,
+                           multiplier: 1.0,
+                           constant: 5).isActive = true
+        
+        // Căn dưới
+        NSLayoutConstraint(item: myLocationLabel!,
+                           attribute: .bottom,
+                           relatedBy: .equal,
+                           toItem: self.bottomLayoutGuide,
+                           attribute: .bottom,
+                           multiplier: 1.0,
+                           constant: -45).isActive = true
+        
+//        // Căn giữa so với view
+//        NSLayoutConstraint(item: coordinateLabel!,
+//                           attribute: .centerX,
+//                           relatedBy: .equal,
+//                           toItem: self.view,
+//                           attribute: .centerX,
+//                           multiplier: 1.0,
+//                           constant: 0).isActive = true
+        
         //----- Button Layer -----
         buttonLayer = UIButton(frame: CGRect.zero)
         buttonLayer?.translatesAutoresizingMaskIntoConstraints = false
@@ -1426,7 +1495,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
                 self.hideSomeView()
                 
-                self.cross.center = (self.mapView?.center)!
+                let mapCenter = self.mapView?.center
+                
+                self.cross.center = mapCenter!
                 self.mapView?.addSubview(self.cross)
                 
                 var items = [UIBarButtonItem]()
@@ -1472,15 +1543,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func btnAddPolygon() {
-        if isTesting || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
-            self.gpx?.newPointSegment()
-            self.gpx?.currentPointSegment?.actions = .editing
-            selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
-            didSelectOverlay()
-            didEditOverlay()
-        } else {
-            self.showSubscription()
-        }
+        // Tạm thời chưa dùng polygon
+        btnAddPolyline()
+//        if isTesting || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
+//            self.gpx?.newPointSegment()
+//            self.gpx?.currentPointSegment?.actions = .editing
+//            selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
+//            didSelectOverlay()
+//            didEditOverlay()
+//        } else {
+//            self.showSubscription()
+//        }
     }
 
     func didSelectOverlay() {
@@ -1778,6 +1851,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         setPausedMainButtonisHidden((self.buttonPaused?.MainButton.isHidden)!)
         setRecordMainButtonisHidden((self.buttonRecord?.MainButton.isHidden)!)
         
+        // Ẩn nhãn tọa độ
+        self.coordinateLabel.isHidden = true
+        
         self.buttonRecord?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonRecording?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonPaused?.MainButton.closingButtonGroup(expandagain: false)
@@ -1795,6 +1871,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomOut?.isHidden = false
         self.buttonFolder?.isHidden = false
         self.buttonTakePhoto?.isHidden = false
+        
+        // Hiện nhãn tọa độ
+        self.coordinateLabel.isHidden = false
         
         self.buttonRecord?.MainButton.isHidden = getRecordMainButtonisHidden()
         self.buttonRecording?.MainButton.isHidden = getRecordingMainButtonisHidden()
@@ -3137,6 +3216,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         return true
     }
     
+    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        if gesture { // Pan bằng tay
+            isFollowMyLocation = false
+            myLocationLabel?.attributedText = NSAttributedString()
+        } else { // Tự di chuyển
+            
+        }
+    }
+    
     func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
         if marker.userData != nil {
             let attributes:[String:String] = marker.userData as! [String : String]
@@ -3274,11 +3362,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
+    func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
+        isFollowMyLocation = true
+        style.alignment = .left
+        myLocationLabel?.attributedText = NSMutableAttributedString(string: (mapView.myLocation?.showMyLocationInfo())!, attributes: strokeTextAttributesAlignLeft)
+        return false
+    }
     /**
      
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        coordinateLabel?.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapView.center).latLngFormated(withTarget: true), attributes: strokeTextAttributes)
+        var mapCenter = mapView.center
+        mapCenter.y += 0.5*UIApplication.shared.statusBarFrame.height
+        
+        coordinateLabel?.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapCenter).latLngFormated(withTarget: true), attributes: strokeTextAttributes)
+        
         let region = mapView.projection.visibleRegion()
         let bound = GMSCoordinateBounds(region: region)
         
@@ -3404,6 +3502,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.mapView?.isMyLocationEnabled = true
             self.mapView?.settings.myLocationButton = true
             self.mapView?.settings.compassButton = true
+            self.mapView?.isTrafficEnabled = true
             break
         case .denied:
             //The user explicitly denied the use of location services for this app or location services are currently disabled in Settings.
@@ -3557,8 +3656,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      manager. Updates the batch count with the added locations.
      */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last
+        style.alignment = .left
+        self.myLocationLabel?.attributedText = NSMutableAttributedString(string: (mapView?.myLocation?.showMyLocationInfo())!, attributes: strokeTextAttributesAlignLeft)
+        if isFollowMyLocation {
+            self.mapView?.animate(toLocation: (location?.coordinate)!)
+        }
+        
         if gpx?.status == .tracking {
-            gpx?.addTrackPoint(GPXTrackPoint(locations.first!), .tracking)
+            gpx?.addTrackPoint(GPXTrackPoint(location!), .tracking)
         }
         trackingDistance()
     }
