@@ -43,7 +43,7 @@ extension MapViewController: JellyButtonDelegate
 {
     func JellyButtonHasBeenTap(touch: UITouch, image: UIImage, groupindex: Int, arrindex: Int) {
         print("groupindex \(groupindex) arrindex \(arrindex)")
-        if groupindex == 0 {
+        if groupindex == 0 { // Bình thường
             switch arrindex {
             case 0: // AddGPSMarker
                 self.btnAddGPSMarker()
@@ -57,14 +57,14 @@ extension MapViewController: JellyButtonDelegate
             case 3: // Add Polyline
                 self.btnAddPolyline()
                 break
-            case 4: // Add Polygon
-                self.btnAddPolygon()
+            case 4: // btnTakePhoto
+                self.btnTakePhoto()
                 break
             default:
                 break
             }
         }
-        if groupindex == 1 {
+        if groupindex == 1 { // Đang ghi
             switch arrindex {
             case 0: // AddMarker
                 self.btnAddGPSMarker()
@@ -78,20 +78,20 @@ extension MapViewController: JellyButtonDelegate
             case 3: // Pause
                 self.setupButtonPaused()
                 break
-            case 4: // AddMarker
-                self.btnAddMarker()
-                break
-            case 5: // Add Polyline
-                self.btnAddPolyline()
-                break
-            case 6: // Add Polygon
-                self.btnAddPolygon()
+//            case 4: // AddMarker
+//                self.btnAddMarker()
+//                break
+//            case 5: // Add Polyline
+//                self.btnAddPolyline()
+//                break
+            case 4: // btnTakePhoto
+                self.btnTakePhoto()
                 break
             default:
                 break
             }
         }
-        if groupindex == 2 {
+        if groupindex == 2 { // Đang tạm dừng
             switch arrindex {
             case 0: // AddMarker
                 self.btnAddGPSMarker()
@@ -105,14 +105,14 @@ extension MapViewController: JellyButtonDelegate
             case 3: // Resume
                 self.startUpdatingLocationAllowsBackground()
                 break
-            case 4: // AddMarker
-                self.btnAddMarker()
-                break
-            case 5: // Add Polyline
-                self.btnAddPolyline()
-                break
-            case 6: // Add Polygon
-                self.btnAddPolygon()
+//            case 4: // AddMarker
+//                self.btnAddMarker()
+//                break
+//            case 5: // Add Polyline
+//                self.btnAddPolyline()
+//                break
+            case 4: // btnTakePhoto
+                self.btnTakePhoto()
                 break
             default:
                 break
@@ -319,7 +319,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var buttonFeatureInfo: UIButton?
     private var buttonZoomIn: UIButton?
     private var buttonZoomOut: UIButton?
-    private var buttonTakePhoto: UIButton?
+    //private var buttonTakePhoto: UIButton?
     
     // GPX
     private var buttonFolder: UIButton?
@@ -401,6 +401,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var opacitySlider: UISlider?
     
     var cross:UIImageView = UIImageView(image: #imageLiteral(resourceName: "vertexCross"))
+    var mapFrame:UIImageView = UIImageView(image: #imageLiteral(resourceName: "MapFrame"))
     
     var vertexView: VertexView?
     
@@ -440,7 +441,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.statusBarStyle = .default
         
         self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -474,6 +474,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         createIslands()
         setupView()
         createButtonRecord()
@@ -609,6 +610,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     
     func setupView() {
+        // Thêm khung chữ thập cho bản đồ
+        self.mapFrame.translatesAutoresizingMaskIntoConstraints = false
+        self.mapView?.addSubview(self.mapFrame)
+        // Căn giữa X
+        NSLayoutConstraint(item: self.mapFrame,
+                           attribute: .centerX,
+                           relatedBy: .equal,
+                           toItem: self.mapView,
+                           attribute: .centerX,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+        // Căn giữa Y
+        NSLayoutConstraint(item: self.mapFrame,
+                           attribute: .centerY,
+                           relatedBy: .equal,
+                           toItem: self.mapView,
+                           attribute: .centerY,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+        
+        
         // Thêm view sửa đỉnh
         self.mapView?.settings.consumesGesturesInView = false
         
@@ -925,8 +947,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         myLocationLabel?.sizeToFit()
         myLocationLabel?.textColor = UIColor.orange
         myLocationLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
-//        myLocationLabel.layer.borderWidth = 1
-//        myLocationLabel.layer.borderColor = UIColor.brown.cgColor
         self.view?.addSubview(myLocationLabel!)
         
 //        // Đặt chiều cao
@@ -1190,50 +1210,42 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1.0,
                            constant: 0).isActive = true
         
-        //----- Button TakePhoto -----
-        //
-        buttonTakePhoto = UIButton(frame: CGRect.zero)
-        buttonTakePhoto?.translatesAutoresizingMaskIntoConstraints = false
-        buttonTakePhoto?.setImage(UIImage(named: "buttonTakePhoto") as UIImage?, for: .normal)
-        // Tạo bo tròn
-        buttonTakePhoto?.layer.cornerRadius = 2.0
-        // Đổ bóng
-        buttonTakePhoto?.layer.shadowColor = UIColor.black.cgColor
-        buttonTakePhoto?.layer.shadowOpacity = 0.3
-        buttonTakePhoto?.layer.shadowOffset = CGSize.zero
-        buttonTakePhoto?.layer.shadowRadius = 1
-        // Gán thẻ
-        buttonTakePhoto?.tag = 21
-        // Sự kiện chạm vào nút
-        buttonTakePhoto?.addTarget(self, action: #selector(btnTakePhoto), for: .touchUpInside)
-        // Cho vào View.
-        self.view.addSubview(buttonTakePhoto!)
-        
-//        // Căn phải
+//        //----- Button TakePhoto -----
+//        //
+//        buttonTakePhoto = UIButton(frame: CGRect.zero)
+//        buttonTakePhoto?.translatesAutoresizingMaskIntoConstraints = false
+//        buttonTakePhoto?.setImage(UIImage(named: "buttonTakePhoto") as UIImage?, for: .normal)
+//        // Tạo bo tròn
+//        buttonTakePhoto?.layer.cornerRadius = 2.0
+//        // Đổ bóng
+//        buttonTakePhoto?.layer.shadowColor = UIColor.black.cgColor
+//        buttonTakePhoto?.layer.shadowOpacity = 0.3
+//        buttonTakePhoto?.layer.shadowOffset = CGSize.zero
+//        buttonTakePhoto?.layer.shadowRadius = 1
+//        // Gán thẻ
+//        buttonTakePhoto?.tag = 21
+//        // Sự kiện chạm vào nút
+//        buttonTakePhoto?.addTarget(self, action: #selector(btnTakePhoto), for: .touchUpInside)
+//        // Cho vào View.
+//        self.view.addSubview(buttonTakePhoto!)
+//
+//        // Căn trên
 //        NSLayoutConstraint(item: buttonTakePhoto!,
-//                           attribute: .trailing,
+//                           attribute: .top,
 //                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .trailingMargin,
+//                           toItem: buttonZoomOut,
+//                           attribute: .bottom,
 //                           multiplier: 1.0,
-//                           constant: 5).isActive = true
-        // Căn trên
-        NSLayoutConstraint(item: buttonTakePhoto!,
-                           attribute: .top,
-                           relatedBy: .equal,
-                           toItem: buttonZoomOut,
-                           attribute: .bottom,
-                           multiplier: 1.0,
-                           constant: 15).isActive = true
-        
-        // Căn giữa buttonLayer
-        NSLayoutConstraint(item: buttonTakePhoto!,
-                           attribute: .centerX,
-                           relatedBy: .equal,
-                           toItem: buttonLayer,
-                           attribute: .centerX,
-                           multiplier: 1.0,
-                           constant: 0).isActive = true
+//                           constant: 15).isActive = true
+//
+//        // Căn giữa buttonLayer
+//        NSLayoutConstraint(item: buttonTakePhoto!,
+//                           attribute: .centerX,
+//                           relatedBy: .equal,
+//                           toItem: buttonLayer,
+//                           attribute: .centerX,
+//                           multiplier: 1.0,
+//                           constant: 0).isActive = true
         
         // Setup the results view controller.
         tableDataSource = GMSAutocompleteTableDataSource()
@@ -1263,9 +1275,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func createButtonRecord() {
-        let iconRecord:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonAddTrack"),#imageLiteral(resourceName: "buttonAddWaypoint"),#imageLiteral(resourceName: "buttonAddPolyline"),#imageLiteral(resourceName: "buttonAddPolygon")]
-        let iconRecording:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonPause")]
-        let iconPaused:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonResume")]
+        let iconRecord:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonAddTrack"),#imageLiteral(resourceName: "buttonAddWaypoint"),#imageLiteral(resourceName: "buttonAddPolyline"),#imageLiteral(resourceName: "buttonTakePhoto")]
+        let iconRecording:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonPause"),#imageLiteral(resourceName: "buttonTakePhoto")]
+        let iconPaused:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonResume"),#imageLiteral(resourceName: "buttonTakePhoto")]
         iconArray.append(iconRecord)
         iconArray.append(iconRecording)
         iconArray.append(iconPaused)
@@ -1498,7 +1510,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 let mapCenter = self.mapView?.center
                 
                 self.cross.center = mapCenter!
+                self.cross.translatesAutoresizingMaskIntoConstraints = false
                 self.mapView?.addSubview(self.cross)
+                // Căn giữa X
+                NSLayoutConstraint(item: self.cross,
+                                   attribute: .centerX,
+                                   relatedBy: .equal,
+                                   toItem: self.mapView,
+                                   attribute: .centerX,
+                                   multiplier: 1.0,
+                                   constant: 0).isActive = true
+                // Căn giữa Y
+                NSLayoutConstraint(item: self.cross,
+                                   attribute: .centerY,
+                                   relatedBy: .equal,
+                                   toItem: self.mapView,
+                                   attribute: .centerY,
+                                   multiplier: 1.0,
+                                   constant: 0).isActive = true
+
                 
                 var items = [UIBarButtonItem]()
                 items.append(
@@ -1846,7 +1876,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomIn?.isHidden = true
         self.buttonZoomOut?.isHidden = true
         self.buttonFolder?.isHidden = true
-        self.buttonTakePhoto?.isHidden = true
+        //self.buttonTakePhoto?.isHidden = true
         setRecordingMainButtonisHidden((self.buttonRecording?.MainButton.isHidden)!)
         setPausedMainButtonisHidden((self.buttonPaused?.MainButton.isHidden)!)
         setRecordMainButtonisHidden((self.buttonRecord?.MainButton.isHidden)!)
@@ -1870,7 +1900,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.buttonZoomIn?.isHidden = false
         self.buttonZoomOut?.isHidden = false
         self.buttonFolder?.isHidden = false
-        self.buttonTakePhoto?.isHidden = false
+        //self.buttonTakePhoto?.isHidden = false
         
         // Hiện nhãn tọa độ
         self.coordinateLabel.isHidden = false
@@ -3372,8 +3402,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        var mapCenter = mapView.center
-        mapCenter.y += 0.5*UIApplication.shared.statusBarFrame.height
+        let mapCenter = mapView.center
+        //let myLocationCenter = mapView.projection.point(for: (mapView.myLocation?.coordinate)!)
+        //mapCenter.y += 0.5*UIApplication.shared.statusBarFrame.height
+        //print(mapView.center, myLocationCenter)
         
         coordinateLabel?.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapCenter).latLngFormated(withTarget: true), attributes: strokeTextAttributes)
         
@@ -3502,6 +3534,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.mapView?.isMyLocationEnabled = true
             self.mapView?.settings.myLocationButton = true
             self.mapView?.settings.compassButton = true
+            
             self.mapView?.isTrafficEnabled = true
             break
         case .denied:
@@ -3594,8 +3627,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways: // Ghi lộ trình
-            self.startUpdatingLocation(forChecking: false)
-            self.setupButtonRecording()
+            self.startUpdatingLocation(forChecking: true)
+            //self.setupButtonRecording()
             break
         case .authorizedWhenInUse: // Nếu đồng ý
             self.startUpdatingLocation(forChecking: true)

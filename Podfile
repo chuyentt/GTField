@@ -1,7 +1,13 @@
 # Lưu ý: Sau mỗi lần pod update thì phải Pods > Development Pods > Click chuột phải vào GeoTrans
 # chọn Add Files to "Pods..." chọn geotrans37 > CCS > src [Add]
+# GADBannerViewDelegate
+# Các lỗi sau khi pod update:
+# - Use of undeclared type 'GADBannerViewDelegate'
+# - Use of undeclared type 'GADBannerView'
+# Fix:
 # Uncomment the next line to define a global platform for your project
-platform :ios, '9.0'
+use_frameworks!
+platform :ios, '10.0'
 target 'GTField' do
   # Pods for GTField
   pod 'GoogleMaps'
@@ -9,7 +15,7 @@ target 'GTField' do
   pod 'GooglePlacePicker'
   #pod 'Google-Maps-iOS-Utils'
   #pod 'Zip'
-  pod 'Firebase'
+  pod 'Firebase/Core'
   pod 'Firebase/AdMob'
   #pod 'SwiftyStoreKit'
   pod 'Surge', '~> 2.0.0'

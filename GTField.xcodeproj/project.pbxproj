@@ -190,7 +190,6 @@
 		DEAD156C1EEA950000BFD5CE /* MapListPoiTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAD156B1EEA950000BFD5CE /* MapListPoiTableViewCell.swift */; };
 		DEAD15701EEA9CA100BFD5CE /* City Hall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEAD156F1EEA9CA100BFD5CE /* City Hall.jpg */; };
 		DEAD15771EEAF76900BFD5CE /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAD15761EEAF76900BFD5CE /* CameraViewController.swift */; };
-		DEB2261C1E5EFFDF00D27CB5 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEB2261B1E5EFFDF00D27CB5 /* GoogleMobileAds.framework */; };
 		DEB226711E607BDB00D27CB5 /* BaseContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB2266D1E607BDB00D27CB5 /* BaseContainerViewController.swift */; };
 		DEB226721E607BDB00D27CB5 /* InsetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB2266E1E607BDB00D27CB5 /* InsetViewController.swift */; };
 		DEB226731E607BDB00D27CB5 /* SplitPaneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB2266F1E607BDB00D27CB5 /* SplitPaneViewController.swift */; };
@@ -555,7 +554,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE3AAD401FDA870900DC58DE /* CoreMotion.framework in Frameworks */,
-				DEB2261C1E5EFFDF00D27CB5 /* GoogleMobileAds.framework in Frameworks */,
 				16549DA71A08AC4C00C59D2E /* Foundation.framework in Frameworks */,
 				DEA3914F1F88E0ED00251C9A /* GTFieldService.framework in Frameworks */,
 				16C675EF1B94933A00EF4913 /* QuartzCore.framework in Frameworks */,
@@ -1771,7 +1769,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1786,7 +1784,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Debug;
 		};
@@ -1829,6 +1827,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1848,7 +1847,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 12510DB04947E9A2DC308599 /* Pods-GTField.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
@@ -1878,7 +1876,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6B15FECC2FED9709063760E0 /* Pods-GTField.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
