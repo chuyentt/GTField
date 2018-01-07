@@ -9,8 +9,10 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
 			<key>CFBundleTypeName</key>
-			<string>GPX MBTiles</string>
+			<string>MapBox MBTiles</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -58,6 +60,16 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>$(PRODUCT_BUNDLE_IDENTIFIER).json</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>GTField GeoJSON</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>$(PRODUCT_BUNDLE_IDENTIFIER).geojson</string>
 			</array>
 		</dict>
 	</array>
@@ -123,7 +135,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>44</string>
+	<string>45</string>
 	<key>FacebookAppID</key>
 	<string>328913314185622</string>
 	<key>FacebookDisplayName</key>
@@ -234,7 +246,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>GTField MBTiles</string>
+			<string>MapBox MBTiles</string>
 			<key>UTTypeIdentifier</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).mbtiles</string>
 			<key>UTTypeTagSpecification</key>
@@ -279,6 +291,16 @@
 				<string>application/vnd.geo+json</string>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>GTField GeoJSON</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).geojson</string>
+		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
@@ -305,7 +327,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>GTField MBTiles</string>
+			<string>MapBox MBTiles</string>
 			<key>UTTypeIdentifier</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).mbtiles</string>
 			<key>UTTypeTagSpecification</key>
@@ -335,6 +357,16 @@
 			<string>GTField GeoJSON</string>
 			<key>UTTypeIdentifier</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).json</string>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>GTField GeoJSON</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).geojson</string>
 		</dict>
 	</array>
 </dict>

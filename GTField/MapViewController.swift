@@ -233,6 +233,7 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
 extension MapViewController: MBTileTableViewControllerDelegate {
     func didLoadMBTileFilePath(_ mbtileFilePath: String) {
         setOfflineActiveTilesPath(mbtileFilePath)
+        //mapOfflineActive()
     }
 }
 
@@ -267,7 +268,7 @@ extension MapViewController:MFMailComposeViewControllerDelegate {
 extension MapViewController:InputFromCoordinatesViewControllerDelegate {
     func didFinishWithLocation(_ location: CLLocation) {
         print(location.coordinate.latLngFormated(withTarget: true))
-        if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+        if isTesting || getProVersion() || (gpx?.wayPoints.count)! < 2 {
             let wpt = GPXWaypoint(position: location.coordinate)
             wpt.iconType = ""
             wpt.icon = #imageLiteral(resourceName: "pin")
@@ -316,7 +317,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     // Map Controll
     private var buttonLayer: UIButton?
-    private var buttonFeatureInfo: UIButton?
+    //private var buttonFeatureInfo: UIButton?
     private var buttonZoomIn: UIButton?
     private var buttonZoomOut: UIButton?
     //private var buttonTakePhoto: UIButton?
@@ -345,13 +346,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     // Configuration...
     private var buttonMapSourceConfiguration: UIButton?
-    private var isRequesFeatureInfo: Bool = false
     
     private var isLocalSearch: Bool = false
     private var searchField: UITextField?
     private var resultsController: UITableViewController?
     private var tableDataSource: GMSAutocompleteTableDataSource?
     var searchResultMarker: GMSMarker?
+    var requestMarker: GMSMarker?
     var placePicker: GMSPlacePickerViewController?
     
     var didFindMyLocation = false
@@ -526,6 +527,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.markerConDao?.title = "Con Dao"
         self.markerConDao?.icon = #imageLiteral(resourceName: "CONDAO")
         self.markerConDao?.isTappable = false
+        
+        // Tạo requestMarker
+        self.requestMarker = GMSMarker()
+        self.requestMarker?.icon = #imageLiteral(resourceName: "pinRequest")
     }
     
     func showIslands(_ show: Bool) {
@@ -1075,52 +1080,44 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            multiplier: 1.0,
                            constant: 10).isActive = true
         
-        //----- Button FeatureInfo -----
-        // Nên để chế độ khi di chuyển đến đường bao WFSLayer thì mới hiện nút Info
-        // Khi chạm nút info thì hiển thị thông báo trên màn hình
-        //
-        buttonFeatureInfo = UIButton(frame: CGRect.zero)
-        buttonFeatureInfo?.translatesAutoresizingMaskIntoConstraints = false
-        buttonFeatureInfo?.setImage(UIImage(named: "buttonFeatureInfo") as UIImage?, for: .normal)
-        // Tạo bo tròn
-        buttonFeatureInfo?.layer.cornerRadius = 2.0
-        // Đổ bóng
-        buttonFeatureInfo?.layer.shadowColor = UIColor.black.cgColor
-        buttonFeatureInfo?.layer.shadowOpacity = 0.3
-        buttonFeatureInfo?.layer.shadowOffset = CGSize.zero
-        buttonFeatureInfo?.layer.shadowRadius = 1
-        // Gán thẻ
-        buttonFeatureInfo?.tag = 11
-        // Sự kiện chạm vào nút menu
-        buttonFeatureInfo?.addTarget(self, action: #selector(MapViewController.btnFeatureInfo(_:)), for: .touchUpInside)
-        // Cho vào View.
-        self.view.addSubview(buttonFeatureInfo!)
+//        //----- Button FeatureInfo -----
+//        // Nên để chế độ khi di chuyển đến đường bao WFSLayer thì mới hiện nút Info
+//        // Khi chạm nút info thì hiển thị thông báo trên màn hình
+//        //
+//        buttonFeatureInfo = UIButton(frame: CGRect.zero)
+//        buttonFeatureInfo?.translatesAutoresizingMaskIntoConstraints = false
+//        buttonFeatureInfo?.setImage(UIImage(named: "buttonFeatureInfo") as UIImage?, for: .normal)
+//        // Tạo bo tròn
+//        buttonFeatureInfo?.layer.cornerRadius = 2.0
+//        // Đổ bóng
+//        buttonFeatureInfo?.layer.shadowColor = UIColor.black.cgColor
+//        buttonFeatureInfo?.layer.shadowOpacity = 0.3
+//        buttonFeatureInfo?.layer.shadowOffset = CGSize.zero
+//        buttonFeatureInfo?.layer.shadowRadius = 1
+//        // Gán thẻ
+//        buttonFeatureInfo?.tag = 11
+//        // Sự kiện chạm vào nút menu
+//        buttonFeatureInfo?.addTarget(self, action: #selector(MapViewController.btnFeatureInfo(_:)), for: .touchUpInside)
+//        // Cho vào View.
+//        self.view.addSubview(buttonFeatureInfo!)
         
-//        // Căn phải
+//        // Căn trên
 //        NSLayoutConstraint(item: buttonFeatureInfo!,
-//                           attribute: .trailing,
+//                           attribute: .top,
 //                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .trailingMargin,
+//                           toItem: buttonLayer,
+//                           attribute: .bottom,
 //                           multiplier: 1.0,
-//                           constant: 5).isActive = true
-        // Căn trên
-        NSLayoutConstraint(item: buttonFeatureInfo!,
-                           attribute: .top,
-                           relatedBy: .equal,
-                           toItem: buttonLayer,
-                           attribute: .bottom,
-                           multiplier: 1.0,
-                           constant: 25).isActive = true
-        
-        // Căn giữa buttonLayer
-        NSLayoutConstraint(item: buttonFeatureInfo!,
-                           attribute: .centerX,
-                           relatedBy: .equal,
-                           toItem: buttonLayer,
-                           attribute: .centerX,
-                           multiplier: 1.0,
-                           constant: 0).isActive = true
+//                           constant: 25).isActive = true
+//
+//        // Căn giữa buttonLayer
+//        NSLayoutConstraint(item: buttonFeatureInfo!,
+//                           attribute: .centerX,
+//                           relatedBy: .equal,
+//                           toItem: buttonLayer,
+//                           attribute: .centerX,
+//                           multiplier: 1.0,
+//                           constant: 0).isActive = true
         
         //----- Button ZoomIn -----
         buttonZoomIn = UIButton(frame: CGRect.zero)
@@ -1436,7 +1433,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func setupButtonRecording() {
-        if isTesting || getProVersion() || (gpx?.trackSegments.count)! <= 2 {
+        if isTesting || getProVersion() || (gpx?.trackSegments.count)! < 2 {
             buttonRecord?.MainButton.isHidden = true
             buttonRecording?.MainButton.isHidden = false
             buttonRecording?.MainButton.startFlashing()
@@ -1561,7 +1558,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func btnAddPolyline() {
-        if isTesting || isTesting || getProVersion() || (gpx?.trackSegments.count)! <= 2 {
+        if isTesting || isTesting || getProVersion() || (gpx?.trackSegments.count)! < 2 {
             self.gpx?.newTrackSegment()
             self.gpx?.currentTrackSegment?.actions = .editing
             selectedOverlay = self.gpx?.currentTrackSegment?.overlay
@@ -1824,29 +1821,29 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     
-    @IBAction func btnFeatureInfo(_ sender: AnyObject) {
-        // Kiểm tra nếu không kết nối được với GeoServer thì thông báo
-        let img = self.imageViewForCheckingGeoServer.image
-        if img == #imageLiteral(resourceName: "IconBroken") {
-            // create the alert
-            let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
-            
-            // add an action (button)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
-                alert -> Void in
-                return
-            }))
-            
-            // show the alert
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            self.isRequesFeatureInfo = true
-            // Hiện thông báo trên màn map
-        }
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
-    }
+//    @IBAction func btnFeatureInfo(_ sender: AnyObject) {
+//        // Kiểm tra nếu không kết nối được với GeoServer thì thông báo
+//        let img = self.imageViewForCheckingGeoServer.image
+//        if img == #imageLiteral(resourceName: "IconBroken") {
+//            // create the alert
+//            let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
+//
+//            // add an action (button)
+//            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
+//                alert -> Void in
+//                return
+//            }))
+//
+//            // show the alert
+//            self.present(alert, animated: true, completion: nil)
+//        } else {
+//            self.isRequesFeatureInfo = true
+//            // Hiện thông báo trên màn map
+//        }
+//        if (self.interstitial.isReady) {
+//            self.interstitial.present(fromRootViewController: self)
+//        }
+//    }
     
     @IBAction func btnZoom(_ sender: AnyObject) {
         switch sender.tag {
@@ -1872,7 +1869,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         // Ẩn buttonLayer khi chạm vào map
         self.buttonLayer?.isHidden = true
-        self.buttonFeatureInfo?.isHidden = true
+        //self.buttonFeatureInfo?.isHidden = true
         self.buttonZoomIn?.isHidden = true
         self.buttonZoomOut?.isHidden = true
         self.buttonFolder?.isHidden = true
@@ -1896,7 +1893,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func showSomeView() {
         self.toolsView?.isHidden = false
         self.buttonLayer?.isHidden = false
-        self.buttonFeatureInfo?.isHidden = false
+        //self.buttonFeatureInfo?.isHidden = false
         self.buttonZoomIn?.isHidden = false
         self.buttonZoomOut?.isHidden = false
         self.buttonFolder?.isHidden = false
@@ -2900,6 +2897,44 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
+    func mapOfflineActive() {
+        wmsTileLayer?.map = nil
+        offlineTileLayer?.map = nil
+        
+        // Create the GMSTileLayer
+        let tileSize = 256
+        
+        offlineTileLayer = OfflineTileLayer(tileSize)
+        
+        // Nếu đã có map offline
+        if offlineTileLayer != nil {
+            // Display on the map at a specific zIndex
+            offlineTileLayer?.zIndex = 100
+            offlineTileLayer?.map = mapView
+            self.buttonMapSourceOffline?.pressedDown = true
+            self.buttonMapSourceWMS?.pressedDown = false
+            if self.wmsTileLayer?.map != nil {
+                self.opacitySlider?.isHidden = false
+                self.opacitySlider?.value = (self.wmsTileLayer?.opacity)!
+            } else if self.offlineTileLayer?.map != nil {
+                self.opacitySlider?.isHidden = false
+                self.opacitySlider?.value = (self.offlineTileLayer?.opacity)!
+            }
+        } else {
+            // create the alert
+            let alert = UIAlertController(title: NSLocalizedString("No offline data", comment: ""), message: NSLocalizedString("Please goto Configuration...!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
+            
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
+                alert -> Void in
+                
+            }))
+            
+            // show the alert
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func btnMapSource(_ sender: UIButton) {
         switch sender.tag {
         case 11: // GeoServer
@@ -2942,41 +2977,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             break
         case 12: // Offline
-            wmsTileLayer?.map = nil
-            offlineTileLayer?.map = nil
-            
-            // Create the GMSTileLayer
-            let tileSize = 256
-            
-            offlineTileLayer = OfflineTileLayer(tileSize)
-            
-            // Nếu đã có map offline
-            if offlineTileLayer != nil {
-                // Display on the map at a specific zIndex
-                offlineTileLayer?.zIndex = 100
-                offlineTileLayer?.map = mapView
-                self.buttonMapSourceOffline?.pressedDown = true
-                self.buttonMapSourceWMS?.pressedDown = false
-                if self.wmsTileLayer?.map != nil {
-                    self.opacitySlider?.isHidden = false
-                    self.opacitySlider?.value = (self.wmsTileLayer?.opacity)!
-                } else if self.offlineTileLayer?.map != nil {
-                    self.opacitySlider?.isHidden = false
-                    self.opacitySlider?.value = (self.offlineTileLayer?.opacity)!
-                }
-            } else {
-                // create the alert
-                let alert = UIAlertController(title: NSLocalizedString("No offline data", comment: ""), message: NSLocalizedString("Please goto Configuration...!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
-                
-                // add an action (button)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
-                    alert -> Void in
-                    
-                }))
-                
-                // show the alert
-                self.present(alert, animated: true, completion: nil)
-            }
+            mapOfflineActive()
             break
         case 13: // Download map
             
@@ -3233,14 +3234,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
         } else {
             mapView.selectedMarker = marker
-            if marker.isTappable {
+            // Nếu là requestMarker
+            if marker.icon == #imageLiteral(resourceName: "pinRequest") {
+                getGFeatureFor(coordinate: marker.position)
+            } else if marker.isTappable {
                 // Vẽ đường và tính khoảng cách từ vị trí hiện tại tới marker
                 if mapView.myLocation != nil {
                     trackingDistance()
                 } else {
                     marker.snippet = marker.position.latLngFormated(withTarget: true)
                 }
-                
             }
         }
         return true
@@ -3345,23 +3348,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (self.mapView?.padding.bottom != 0.0) {
                 togglePaneView(0)
             } else { // Nên kiểm tra điều kiện trước khi tìm kiếm
-                if self.isRequesFeatureInfo {
-                    getGFeatureFor(coordinate: coordinate)
-                } else if selectedPolygonOverlay?.pointSegment.actions == .editing {
+                let bound = GMSCoordinateBounds(path: pathOfActiveLayersBoundaryForWFS())
+                if selectedPolygonOverlay?.pointSegment.actions == .editing {
                     selectedPolygonOverlay?.pointSegment.addPoint(GPXPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601))
                 } else if selectedOverlay?.trackSegment.actions == .editing {
                     selectedOverlay?.trackSegment.addTrackPoint(GPXTrackPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601), GPXTrackSegment.GPXTrackSegmentActions.editing)
-                } else {
-                    if selectedOverlay != nil {
+                } else if selectedOverlay != nil {
                         selectedOverlay?.trackSegment.actions = .none
                         selectedOverlay = nil
                         didDeSelectOverlay()
-                    }
-                    if selectedPolygonOverlay != nil {
+                } else if selectedPolygonOverlay != nil {
                         selectedPolygonOverlay?.pointSegment.actions = .none
                         selectedPolygonOverlay = nil
                         didDeSelectOverlay()
-                    }
+                } else if bound.contains(coordinate) {
+                    self.requestMarker?.position = coordinate
+                    self.requestMarker?.map = mapView
                 }
             }
         }
@@ -3409,15 +3411,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         coordinateLabel?.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapCenter).latLngFormated(withTarget: true), attributes: strokeTextAttributes)
         
-        let region = mapView.projection.visibleRegion()
-        let bound = GMSCoordinateBounds(region: region)
-        
-        if (bound.intersects(GMSCoordinateBounds(path: pathOfActiveLayersBoundaryForWFS()))) {
-            self.buttonFeatureInfo?.isHidden = false
-        } else {
-            self.buttonFeatureInfo?.isHidden = true
-        }
-        
         // Gỡ activeVertex
         if selectedOverlay != nil, selectedOverlay?.trackSegment.actions == .editing {
             selectedOverlay?.trackSegment.deActiveVertex()
@@ -3438,12 +3431,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     // MARK: - GeoServer Feature Detail View
     // --------------------------------------------------------------------------------------------
     func getGFeatureFor(coordinate: CLLocationCoordinate2D) {
-        self.isRequesFeatureInfo = false // Xóa thông báo trên map
-        
+       
         let url = getFeatureForWFS(typeName: getWFSActiveLayers(), propertyName: getActiveLayersPropertyName(), maxFeatures: 1)
         
         // Đổi lat lon sang tile
-        let zoom: UInt = 18
+        let zoom: UInt = 25
         let x = lon2Tilex(lon: coordinate.longitude, z: zoom)
         let y = lat2Tiley(lat: coordinate.latitude, z: zoom)
         var bbox = bboxForTile(x: x, y: y, zoom: zoom)

@@ -147,7 +147,7 @@ func getFeatureForWFS(typeName: String, propertyName: String, maxFeatures: Int) 
     var urlComponents = URLComponents(string: getGeoServerBaseUrl())
     urlComponents?.path = "/geoserver/wfs"
     urlComponents?.queryItems = [URLQueryItem(name: "service", value: "WFS"),
-                                 URLQueryItem(name: "version", value: "1.3.0"),
+                                 URLQueryItem(name: "version", value: "2.0.0"),
                                  URLQueryItem(name: "request", value: "GetFeature"),
                                  URLQueryItem(name: "typeName", value: typeName),
                                  URLQueryItem(name: "propertyName", value: propertyName),

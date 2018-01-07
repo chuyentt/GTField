@@ -678,7 +678,7 @@ extension CLLocation {
         let info4 = NSLocalizedString("Vertical Error: ±", comment: "")
         let info5 = NSLocalizedString("Course: ", comment: "")
         let info6 = NSLocalizedString("Speed: ", comment: "")
-        let txt = "\(info0)\n\(info1)\n\(coordinate.localCoordinate(true))\n\(info2)\(altitude.toString(0)) m\n\(info3)\(horizontalAccuracy.toString(0)) m\n\(info4)\(verticalAccuracy.toString(0)) m\n\(info5)\(course.courseUnit())\n\(info6)\(speed.speedUnit())"
+        let txt = "\(info0)\n\(info1)\n\(coordinate.localCoordinate(true))\n\(info2)\(altitude.toString(1)) m\n\(info3)\(horizontalAccuracy.toString(1)) m\n\(info4)\(verticalAccuracy.toString(1)) m\n\(info5)\(course.courseUnit())\n\(info6)\(speed.speedUnit())"
         return txt
     }
 }

@@ -24,8 +24,8 @@
 "<<Search local data>>" = "<<搜索本地數據>>";
 
 /* GPX */
-"Your GPX files" = "GPX文件";
-"GPX specification" = "GPX規格";
+"Your GPX files" = "GTField文件";
+"GPX specification" = "GTField規格";
 "Select option" = "選項";
 "Send by email" = "通過郵件發送";
 "Send by email (dxf)" = "通過郵件發送 (dxf)";

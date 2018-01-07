@@ -298,6 +298,10 @@ extension GPXTableViewController: GPXFilesTableViewControllerDelegate {
     func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool) {
 
     }
+    
+    func didLoadMBTileFilePath(_ mbtileFilePath: String) {
+        
+    }
 }
 
 extension GPXTableViewController:MFMailComposeViewControllerDelegate {

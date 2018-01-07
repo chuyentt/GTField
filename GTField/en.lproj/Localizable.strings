@@ -24,8 +24,8 @@
 "<<Search local data>>" = "<<Search local data>>";
 
 /* GPX */
-"Your GPX files" = "Your GPX files";
-"GPX specification" = "GPX specification";
+"Your GPX files" = "Your GTField files";
+"GPX specification" = "GTField specification";
 "Select option" = "Select option";
 "Send by email" = "Send by email";
 "Send by email (dxf)" = "Send by email (dxf)";

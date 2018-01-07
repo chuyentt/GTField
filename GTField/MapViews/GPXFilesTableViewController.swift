@@ -23,6 +23,7 @@ protocol GPXFilesTableViewControllerDelegate: class {
     func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool)
     func didLoadKMLFileWithName(_ kmlFilename: String)
     func didLoadGeoJSONFileWithName(_ geoJSONFilename: String)
+    func didLoadMBTileFilePath(_ mbtileFilePath: String)
 }
 
 class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegate, GADBannerViewDelegate {
@@ -284,6 +285,32 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 handler: { (action: UIAlertAction!) in
                     self.delegate?.didLoadGeoJSONFileWithName(filename)
                     self.closeGPXFilesTableViewController()
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Cancel", comment: ""),
+                style: .cancel,
+                handler: { (action: UIAlertAction!) in
+                    // Cancel
+            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Delete", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionDeleteFileAtIndex(indexPath.row)
+            }))
+            present(alert, animated: true, completion: nil)
+            self.selectedRowIndex = (indexPath as NSIndexPath).row
+            break
+        case kMBTileFileExt:
+            let alert = UIAlertController(
+                title: NSLocalizedString("Select option", comment: ""),
+                message: nil,
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Set default offline data", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.delegate?.didLoadMBTileFilePath(filename)
             }))
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Cancel", comment: ""),

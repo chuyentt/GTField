@@ -33,7 +33,8 @@ class GPXFileManager: NSObject {
                         if url.pathExtension == kGPXFileExt ||
                             url.pathExtension == kKmlFileExt ||
                             url.pathExtension == kGeoJSONExt ||
-                            url.pathExtension == kGeoJSONExt1 {
+                            url.pathExtension == kGeoJSONExt1 ||
+                            url.pathExtension == kMBTileFileExt {
                             Files.append(url.lastPathComponent)
                         }
                     }

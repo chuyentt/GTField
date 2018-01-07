@@ -24,8 +24,8 @@
 "<<Search local data>>" = "<<Tìm dữ liệu nội bộ>>";
 
 /* GPX */
-"Your GPX files" = "Dữ liệu GPX";
-"GPX specification" = "Thông tin file GPX";
+"Your GPX files" = "Dữ liệu GTField";
+"GPX specification" = "Thông tin file GTField";
 "Select option" = "Chọn phương án";
 "Send by email" = "Gửi bằng email";
 "Send by email (dxf)" = "Gửi bằng email (dxf)";
