@@ -249,7 +249,9 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 title: NSLocalizedString("Load in Map", comment: ""),
                 style: .default,
                 handler: { (action: UIAlertAction!) in
-                    self.delegate?.didLoadKMLFileWithName(filename)
+                    DispatchQueue.main.async() {
+                        self.delegate?.didLoadKMLFileWithName(filename)
+                    }
                     self.closeGPXFilesTableViewController()
             }))
             alert.addAction(UIAlertAction(
@@ -283,7 +285,9 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 title: NSLocalizedString("Load in Map", comment: ""),
                 style: .default,
                 handler: { (action: UIAlertAction!) in
-                    self.delegate?.didLoadGeoJSONFileWithName(filename)
+                    DispatchQueue.main.async() {
+                        self.delegate?.didLoadGeoJSONFileWithName(filename)
+                    }
                     self.closeGPXFilesTableViewController()
             }))
             alert.addAction(UIAlertAction(

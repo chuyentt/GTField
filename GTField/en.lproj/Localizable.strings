@@ -39,6 +39,9 @@
 "Whoops" = "Whoops";
 "Sent" = "Sent";
 
+/* GWFViewController */
+"Feature Information" = "Feature Information";
+
 /* PhotoMapViewController */
 "Zoom All" = "Zoom All";
 "Export all" = "Export all";

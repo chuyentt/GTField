@@ -154,24 +154,88 @@ extension MapViewController:JDJellyButtonDataSource {
 
 extension MapViewController: GPXFilesTableViewControllerDelegate {
     func didLoadKMLFileWithName(_ kmlFilename: String) {
-        
-        let url = docsURL.appendingPathComponent(kmlFilename)
-        kmlParser = GMUKMLParser(url: url)
-        kmlParser.parse()
-        
-        renderer = GMUGeometryRenderer(map: mapView!,
-                                       geometries: kmlParser.placemarks,
-                                       styles: kmlParser.styles)
-        renderer.render()
+        self.mapView?.showLoading()
+        DispatchQueue.main.async() {
+            let url = docsURL.appendingPathComponent(kmlFilename)
+            self.kmlParser = GMUKMLParser(url: url)
+            self.kmlParser.parse()
+            
+            // Nếu chưa có layer nào
+            if self.kmlRenderer1 == nil {
+                // Load layer1
+                self.kmlRenderer1 = GMUGeometryRenderer(map: self.mapView!,
+                                                   geometries: self.kmlParser.placemarks,
+                                                   styles: self.kmlParser.styles)
+                self.kmlRenderer1.render()
+                if self.mapView != nil {
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer1.bounds()))
+                }
+            } else if self.kmlRenderer2 == nil {
+                self.kmlRenderer2 = GMUGeometryRenderer(map: self.mapView!,
+                                                   geometries: self.kmlParser.placemarks,
+                                                   styles: self.kmlParser.styles)
+                self.kmlRenderer2.render()
+                if self.mapView != nil {
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer2.bounds()))
+                }
+            } else { // Đã mở 2 layers thì xóa hết để mở layer 1
+                self.kmlRenderer1.clear()
+                self.kmlRenderer2.clear()
+                self.kmlRenderer1 = nil
+                self.kmlRenderer2 = nil
+                
+                // Load layer1
+                self.kmlRenderer1 = GMUGeometryRenderer(map: self.mapView!,
+                                                   geometries: self.kmlParser.placemarks,
+                                                   styles: self.kmlParser.styles)
+                self.kmlRenderer1.render()
+                if self.mapView != nil {
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer1.bounds()))
+                }
+            }
+            self.mapView?.hideLoading()
+        }
     }
     
     func didLoadGeoJSONFileWithName(_ geoJSONFilename: String) {
-        let url = docsURL.appendingPathComponent(geoJSONFilename)
-        geoJsonParser = GMUGeoJSONParser(url: url)
-        geoJsonParser.parse()
-        
-        renderer = GMUGeometryRenderer(map: mapView!, geometries: geoJsonParser.features)
-        renderer.render()
+        self.mapView?.showLoading()
+        DispatchQueue.main.async() {
+            let url = docsURL.appendingPathComponent(geoJSONFilename)
+            self.geoJsonParser = GMUGeoJSONParser(url: url)
+            self.geoJsonParser.parse()
+            
+            // Nếu chưa có layer nào
+            if self.geoJSONRenderer1 == nil {
+                // Load layer1
+                self.geoJSONRenderer1 = GMUGeometryRenderer(map: self.mapView!,
+                                                       geometries: self.geoJsonParser.features)
+                self.geoJSONRenderer1.render()
+                if self.mapView != nil {
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.bounds()))
+                }
+            } else if self.geoJSONRenderer2 == nil {
+                self.geoJSONRenderer2 = GMUGeometryRenderer(map: self.mapView!,
+                                                       geometries: self.geoJsonParser.features)
+                self.geoJSONRenderer2.render()
+                if self.mapView != nil {
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer2.bounds()))
+                }
+            } else { // Đã mở 2 layers thì xóa hết để mở layer 1
+                self.geoJSONRenderer1.clear()
+                self.geoJSONRenderer2.clear()
+                self.geoJSONRenderer1 = nil
+                self.geoJSONRenderer2 = nil
+                
+                // Load layer1
+                self.geoJSONRenderer1 = GMUGeometryRenderer(map: self.mapView!,
+                                                       geometries: self.geoJsonParser.features)
+                self.geoJSONRenderer1.render()
+                if self.mapView != nil {
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.bounds()))
+                }
+            }
+            self.mapView?.hideLoading()
+        }
     }
     
     func didLoadGPXFileWithName(_ gpxFilename: String, gpxRoot: AEXMLElement, add: Bool) {
@@ -353,6 +417,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var tableDataSource: GMSAutocompleteTableDataSource?
     var searchResultMarker: GMSMarker?
     var requestMarker: GMSMarker?
+    var markerGlow = UIImageView(image: #imageLiteral(resourceName: "pinRequest"))
     var placePicker: GMSPlacePickerViewController?
     
     var didFindMyLocation = false
@@ -413,8 +478,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var markerPhuQuoc: GMSMarker?
     var markerConDao: GMSMarker?
     
-    private var renderer: GMUGeometryRenderer!
+    private var kmlRenderer1: GMUGeometryRenderer!
+    private var kmlRenderer2: GMUGeometryRenderer!
     private var kmlParser: GMUKMLParser!
+    private var geoJSONRenderer1: GMUGeometryRenderer!
+    private var geoJSONRenderer2: GMUGeometryRenderer!
     private var geoJsonParser: GMUGeoJSONParser!
     
     override func loadView() {
@@ -527,10 +595,39 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.markerConDao?.title = "Con Dao"
         self.markerConDao?.icon = #imageLiteral(resourceName: "CONDAO")
         self.markerConDao?.isTappable = false
-        
+    }
+    
+    func addRequestMarker(_ position: CLLocationCoordinate2D) {
         // Tạo requestMarker
-        self.requestMarker = GMSMarker()
-        self.requestMarker?.icon = #imageLiteral(resourceName: "pinRequest")
+        var oldBound = CGRect()
+        if self.requestMarker != nil {
+            self.requestMarker?.position = position
+        } else {
+            self.requestMarker = GMSMarker()
+            self.requestMarker?.position = position
+            self.requestMarker?.iconView = UIImageView(image: #imageLiteral(resourceName: "pinRequest"))
+            self.requestMarker?.iconView?.contentMode = .center
+            oldBound = (self.requestMarker?.iconView?.bounds)!
+            var bound = oldBound
+            bound.size.width *= 2
+            bound.size.height *= 2
+            self.requestMarker?.iconView?.bounds = bound
+            self.requestMarker?.groundAnchor = CGPoint(x: 0.5, y: 0.75)
+            self.requestMarker?.infoWindowAnchor = CGPoint(x: 0.5, y: 0.25)
+            markerGlow.layer.shadowColor = UIColor.white.cgColor
+            markerGlow.layer.shadowOffset = CGSize()
+            markerGlow.layer.shadowRadius = 8.0
+            markerGlow.layer.shadowOpacity = 1.0
+            markerGlow.layer.opacity = 0.0
+            markerGlow.center = CGPoint(x: oldBound.size.width, y: oldBound.size.height)
+            self.requestMarker?.iconView?.addSubview(markerGlow)
+            self.requestMarker?.map = mapView
+            UIView.animate(withDuration: 1.0, delay: 0.0, options:[.curveEaseInOut, .autoreverse, .repeat], animations: {
+                self.markerGlow.layer.opacity = 1.0;
+            }, completion: { (finised) in
+                self.requestMarker?.tracksViewChanges = false
+            })
+        }
     }
     
     func showIslands(_ show: Bool) {
@@ -3196,6 +3293,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             path.add(location.coordinate)
             path.add(marker.position)
             self.line = GMSPolyline(path: path)
+            self.line?.zIndex = 200
             line?.map = mapView
         }
     }
@@ -3235,7 +3333,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } else {
             mapView.selectedMarker = marker
             // Nếu là requestMarker
-            if marker.icon == #imageLiteral(resourceName: "pinRequest") {
+            if marker == self.requestMarker {
                 getGFeatureFor(coordinate: marker.position)
             } else if marker.isTappable {
                 // Vẽ đường và tính khoảng cách từ vị trí hiện tại tới marker
@@ -3362,8 +3460,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         selectedPolygonOverlay = nil
                         didDeSelectOverlay()
                 } else if bound.contains(coordinate) {
-                    self.requestMarker?.position = coordinate
-                    self.requestMarker?.map = mapView
+                    addRequestMarker(coordinate)
+//                    self.requestMarker?.position = coordinate
+//                    self.requestMarker?.map = mapView
                 }
             }
         }

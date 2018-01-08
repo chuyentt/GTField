@@ -39,6 +39,9 @@
 "Whoops" = "Rất tiếc";
 "Sent" = "Đã gửi";
 
+/* GWFViewController */
+"Feature Information" = "Thông tin đối tượng";
+
 /* PhotoMapViewController */
 "Zoom All" = "Tất cả";
 "Export all" = "Xuất tất cả";

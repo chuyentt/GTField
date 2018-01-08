@@ -21,7 +21,7 @@ class GWFViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Feature Information"
+        self.title = NSLocalizedString("Feature Information", comment: "")
         // Do any additional setup after loading the view.
         
     }

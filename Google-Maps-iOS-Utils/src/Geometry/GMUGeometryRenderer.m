@@ -26,6 +26,8 @@
 
 @implementation GMUGeometryRenderer {
   NSMutableArray<GMSOverlay *> *_mapOverlays;
+    // Bổ sung bounds
+    GMSCoordinateBounds *_bounds;
 
   /**
    * The Google Map to render the placemarks onto.
@@ -66,6 +68,10 @@
     _geometryContainers = geometries;
     _styles = [[self class] stylesDictionaryFromArray:styles];
     _mapOverlays = [[NSMutableArray alloc] init];
+      
+      // Bổ sung bounds
+      _bounds = [[GMSCoordinateBounds alloc] init];
+      
     _queue = dispatch_queue_create("com.google.gmsutils", DISPATCH_QUEUE_CONCURRENT);
   }
   return self;
@@ -82,10 +88,18 @@
     overlay.map = nil;
   }
   [_mapOverlays removeAllObjects];
+    
+    // Bổ sung bounds
+    _bounds = [[GMSCoordinateBounds alloc] init];
 }
 
 - (NSArray<GMSOverlay *> *)mapOverlays {
   return _mapOverlays;
+}
+
+// Bổ sung bounds
+- (GMSCoordinateBounds *)bounds {
+    return _bounds;
 }
 
 + (NSDictionary<NSString *, GMUStyle *> *)stylesDictionaryFromArray:(NSArray<GMUStyle *> *)styles {
@@ -184,6 +198,10 @@
   } else {
     marker.map = _map;
   }
+    
+    // Bổ sung bounds
+    _bounds = [_bounds includingCoordinate:marker.position];
+    
   [_mapOverlays addObject:marker];
 }
 
@@ -202,6 +220,10 @@
     line.title = placemark.title;
   }
   line.map = _map;
+    
+    // Bổ sung bounds
+    _bounds = [_bounds includingPath:line.path];
+    
   [_mapOverlays addObject:line];
 }
 
@@ -238,6 +260,10 @@
     poly.title = placemark.title;
   }
   poly.map = _map;
+    
+    // Bổ sung bounds
+    _bounds = [_bounds includingPath:poly.path];
+    
   [_mapOverlays addObject:poly];
 }
 
@@ -277,6 +303,10 @@
       }
     });
   });
+    
+//    // Bổ sung bounds
+//    _bounds = [_bounds includingCoordinate:marker.position];
+    
   [_mapOverlays addObject:groundOverlay];
 }
 

@@ -39,6 +39,9 @@
 "Whoops" = "抱歉";
 "Sent" = "發送成功";
 
+/* GWFViewController */
+"Feature Information" = "信息對象";
+
 /* PhotoMapViewController */
 "Zoom All" = "放大";
 "Export all" = "全部導出";

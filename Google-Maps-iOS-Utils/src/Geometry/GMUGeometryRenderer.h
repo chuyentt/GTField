@@ -58,6 +58,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)clear;
 
+- (NSArray<GMSOverlay *> *)mapOverlays;
+
+// Bổ sung bounds
+- (GMSCoordinateBounds *)bounds;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -9,3 +9,4 @@
 #import "GMUGeometryRenderer.h"
 #import "GMUKMLParser.h"
 #import "GMUGeoJSONParser.h"
+#import "GMUGeometryRenderer+Testing.h"
