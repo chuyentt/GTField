@@ -3435,7 +3435,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let url = getFeatureForWFS(typeName: getWFSActiveLayers(), propertyName: getActiveLayersPropertyName(), maxFeatures: 1)
         
         // Đổi lat lon sang tile
-        let zoom: UInt = 25
+        let zoom: UInt = 30
         let x = lon2Tilex(lon: coordinate.longitude, z: zoom)
         let y = lat2Tiley(lat: coordinate.latitude, z: zoom)
         var bbox = bboxForTile(x: x, y: y, zoom: zoom)
