@@ -116,7 +116,7 @@ class GPXTableViewController: UITableViewController {
                 } else {
                     cell.detailTextLabel?.text = ""
                 }
-            case kKmlFileExt, kGeoJSONExt, kGeoJSONExt1:
+            case kKmlFileExt, kGeoJSONExt, kGeoJSONExt1, kMBTileFileExt:
                 let date = creationDateForLocalFilePath(filePath: fileURL.path)
                 let size = sizeForLocalFilePath(filePath: fileURL.path)
                 //let font = cell.detailTextLabel?.font

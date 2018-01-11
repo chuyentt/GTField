@@ -36,48 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         print(Bundle.main.bundlePath)
         print(docsURL.path)
-// Tính chuyển Lat Lon sang UTM
-//        var easting: Double = 0.0
-//        var northing: Double = 0.0
-//        let alt: Double = 0.0
-//        let lat = self.latitude*DEGREE_TO_RADIAN
-//        let lon = self.longitude*DEGREE_TO_RADIAN
-//        var zone: Int = 0
-//        var hemi: NSString? = NSString()
-//        let geotrans = GeoTrans"WGE", "WGE")
-//        //let geotrans = GeoTrans(getSourceDatumCode(), getTargetDatumCode())
-//        geotrans?.setLat(lat, lng: lon, alt: alt)
-//        geotrans?.getUTM(&zone, &hemi, &easting, &northing)
 
-// Tạo mới Datum Transformation
-        
-//        //
-//        let geotrans = GeoTrans("WGE", "WGE")
-//        var x: Double = 0.0
-//        var y: Double = 0.0
-//        var z: Double = 0.0
-//        let lat = 21.0*DEGREE_TO_RADIAN
-//        let lon = 105.0*DEGREE_TO_RADIAN
-//        let height = 0.0
-//
-//        geotrans?.llh2XYZ(lat, lon, height, &x, &y, &z)
-//        geotrans?.setTargetDatumCode("VN-2")
-//        print(x,y,z)
-//        var zone: CLong = 0
-//        var hemi: NSString? = nil
-//        var easting: Double = 0.0
-//        var northing: Double = 0.0
-//        geotrans?.geocentric2UTM(x, y, z, &zone, &hemi, &easting, &northing)
-//        print(zone, hemi!, easting, northing)
-//        
-////        -1612214.53349457 5731088.48380319 2280518.7887406
-////        -1204283.11169226 4281699.65429547 1703872.61206855
-////        let wrapperItem = GeoTrans()
-////        wrapperItem.sayHello()
-////        
-////        wrapperItem.testCoordinateConversion()
-////        let s = wrapperItem.datumName(for: "WGE")
-////        print(s!)
         // Xử lý các thay đổi từ phiên bản cũ
         migration()
         
@@ -104,24 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         SKPaymentQueue.default().add(self)
         SubscriptionService.shared.loadSubscriptionOptions()
-          
-//        NetworkActivityIndicatorManager.networkOperationStarted()
-//        SwiftyStoreKit.restorePurchases(atomically: true) { results in
-//            NetworkActivityIndicatorManager.networkOperationFinished()
-//            for purchase in results.restoredPurchases {
-//                // swiftlint:disable:next for_where
-//                switch purchase.transaction.transactionState {
-//                case .purchased, .restored:
-//                    print("Purchased ID: ", purchase.productId)
-//                default:
-//                    print("product id: ", purchase.productId)
-//                }
-//            }
-//            
-//            for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
-//                SwiftyStoreKit.finishTransaction(purchase.transaction)
-//            }
-//        }
         
         return true
     }

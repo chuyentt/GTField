@@ -25,6 +25,15 @@ class WMSTileLayer: GMSTileLayer {
     
     init(_ tileSize: Int = 256) {
         super.init()
+        
+        // Fix lỗi nhãn nhỏ do tỷ lệ tile
+        // Lưu ý: TileSize nên lấy 256*Tỉ lệ màn hình thiết bị để nhãn chữ đủ lớn, load nhanh.
+        // vì số lượng tile load ít
+        // Nếu muốn chất lượng ảnh tốt thì lấy tham số width và height bằng với TileSize
+        // Tuy nhiên, dung lượng tải về từ mày chủ sẽ lớn
+        // Nếu muốn giảm độ phân giải thì giảm width và height xuống 1/2
+        
+        self.tileSize = 256*Int(UIScreen.main.scale)
 
         // Cách này có vẻ nhanh hơn
         //self.tileSize = Int(256*3)
@@ -35,8 +44,8 @@ class WMSTileLayer: GMSTileLayer {
 
         // Tạo url chuẩn
         self.urlComponents = URLComponents(string: (getGeoServerTilesUrl()?.absoluteString)!)!
-        self.urlComponents.queryItems?.append(URLQueryItem(name: "width", value: "\(tileSize)"))
-        self.urlComponents.queryItems?.append(URLQueryItem(name: "height", value: "\(tileSize)"))
+        self.urlComponents.queryItems?.append(URLQueryItem(name: "width", value: "\(256)"))
+        self.urlComponents.queryItems?.append(URLQueryItem(name: "height", value: "\(256)"))
         
         // Tạo cached.mbtiles nếu chưa có
         cacheTileDB = MBTileDB(path: MB_TILES_CACHED)
@@ -64,7 +73,7 @@ class WMSTileLayer: GMSTileLayer {
     
     override func requestTileFor(x: UInt, y: UInt, zoom: UInt, receiver: GMSTileReceiver) {
         let flippedY = (1 << zoom) - y - 1
-        if self.layersBbox.contains(x: x, y: y, zoom: zoom) {
+        //if self.layersBbox.contains(x: x, y: y, zoom: zoom) {
             if let tileData = cacheTileDB?.tile(z: zoom, x: x, y: flippedY) {
                 receiver.receiveTileWith(x: x, y: y, zoom: zoom, image: UIImage(data: tileData))
             } else {
@@ -89,9 +98,9 @@ class WMSTileLayer: GMSTileLayer {
                     })
                 }).resume()
             }
-        } else {
-            receiver.receiveTileWith(x: x, y: y, zoom: zoom, image: kGMSTileLayerNoTile)
-        }
+//        } else { 1119689.18,445343.47
+//            receiver.receiveTileWith(x: x, y: y, zoom: zoom, image: kGMSTileLayerNoTile)
+//        }
     }
     
     func urlFor(x: UInt, y: UInt, zoom: UInt) -> URL {

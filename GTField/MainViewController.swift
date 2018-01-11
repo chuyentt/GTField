@@ -35,10 +35,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     let userDefaults = UserDefaults.standard
     var adMobBannerView = GADBannerView()
     
-//    let purchaseUnlimitedSuffix = RegisteredPurchase.Unlimited
-//    let subscribeYearlySuffix = RegisteredPurchase.Yearly
-//    let subscribeMonthlySuffix = RegisteredPurchase.Monthly
-
     @IBOutlet var heightBackground: NSLayoutConstraint!
     
     init() {
@@ -64,22 +60,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
             btnInfo.isEnabled = false
         }
         
-        // Detect the screen width (format purpose)
-        let deviceWidth = UIScreen.main.bounds.width
-        switch deviceWidth {
-            
-        case 320.0: // 5
-            DEVICE_WIDTH = "320"
-        case 375.0: // 6
-            DEVICE_WIDTH = "375"
-        case 414.0: // 6+
-            DEVICE_WIDTH = "414"
-        case 768.0: // iPad
-            DEVICE_WIDTH = "768"
-        default:    //320.0
-            DEVICE_WIDTH = "320"
-        }
-        
         if USE_CLOUDKIT {
             querySections() // Query CloudKit
         } else {
@@ -100,34 +80,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                 SubscriptionService.shared.restorePurchases()
                 return
         }
-//        let alert = UIAlertController(
-//            title: NSLocalizedString("Warning delete", comment: ""),
-//            message: "\(count) "+NSLocalizedString("photos will be deleted from this app on your device", comment: ""),
-//            preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(
-//            title: NSLocalizedString("Cancel", comment: ""),
-//            style: .cancel,
-//            handler: { (action: UIAlertAction!) in
-//                // Cancel
-//        }))
-//        alert.addAction(UIAlertAction(
-//            title: NSLocalizedString("OK", comment: ""),
-//            style: .default,
-//            handler: { (action: UIAlertAction!) in
-//                if count == 1 {
-//                    self.deletePhoto(nil)
-//                    return
-//                }
-//                for photo in self.photosToShow {
-//                    photo.delete(all: false)
-//                }
-//                self.navigationController?.popViewController(animated: true)
-//        }))
-//        present(alert, animated: true, completion: nil)
-        
-        
-        
     }
 
     @objc func handleActive(notification: Notification) {
@@ -163,6 +115,22 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         super.viewDidDisappear(animated)
         
         stopUpdateMotion()
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        /*
+         Các thiết bị hỗ trợ iOS 10
+         *iPhone 640×1136
+         *iPhone 750×1334
+         *iPhone 1080×1920
+         *iPhone 1125×2436
+         *iPad 1536×2048
+         *iPad 1668×2224
+         *iPad 2048×2732
+         */
+        myCollectionView.reloadData()
+        myCollectionView.collectionViewLayout.invalidateLayout()
     }
     
     var statusBarStyle: UIStatusBarStyle? {
@@ -211,7 +179,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
             let imageFile = catClass["pic"] as? CKAsset
             if imageFile != nil {
-            cell.imgSection.image = UIImage(contentsOfFile: imageFile!.fileURL.path)
+                cell.imgSection.image = UIImage(contentsOfFile: imageFile!.fileURL.path)
             }
 
             let isFree = catClass["isFree"] as! Int
@@ -239,33 +207,41 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
         }
 
-
-        switch DEVICE_WIDTH {
-
-            case "320": // 5
-                cell.heightCellPic.constant = 46
-                cell.widthCellPic.constant = 46
-            
-            case "375": // 6
-                cell.heightCellPic.constant = 54
-                cell.widthCellPic.constant = 54
-
-            case "414": //6+
-                cell.heightCellPic.constant = 59
-                cell.widthCellPic.constant = 59
-            
-            case "768": // iPad
-                cell.heightCellPic.constant = 110
-                cell.widthCellPic.constant = 110
-            
-            default:
-                
-                cell.heightCellPic.constant = 46
-                cell.widthCellPic.constant = 46
-
+        // Thiết lập kích thước icon theo màn hình
+        // Lưu ý: UIScreen.main.bounds là kích thước màn hình ở dạng point, có thể thay đổi khi xoay ngang
+        let deviceWidth = Int(UIScreen.main.bounds.width)
+        let deviceHeight = Int(UIScreen.main.bounds.height)
+        var height = deviceHeight
+        if deviceHeight < deviceWidth {
+            // Landscape
+            height = deviceWidth
         }
-
-        
+        switch height {
+        case 568: // 320x568pt, 640×1136 iPhone 5, 5C, 5S, SE, iPod Touch 6
+            cell.heightCellPic.constant = 32
+            cell.widthCellPic.constant = 32
+        case 667: // 375x667pt, 750×1334 iPhone 6, 6S, 7, 8
+            cell.heightCellPic.constant = 54
+            cell.widthCellPic.constant = 54
+        case 736: // 414x736pt, 1080×1920 iPhone 6+, 6S+, 7+, 8+
+            cell.heightCellPic.constant = 59
+            cell.widthCellPic.constant = 59
+        case 812: // 375x812pt, 1125×2436 iPhone X
+            cell.heightCellPic.constant = 64
+            cell.widthCellPic.constant = 64
+        case 1024: // 768x1024pt, 1536×2048 iPad 4, Air, Air 2, 2017, mini 2, mini 3, mini 4
+            cell.heightCellPic.constant = 90
+            cell.widthCellPic.constant = 90
+        case 1112: // 834x1112pt, 1668×2224 iPad Pro (10.5-inch)
+            cell.heightCellPic.constant = 110
+            cell.widthCellPic.constant = 110
+        case 1366: // 1024x1366pt, 2048×2732 iPad Pro (9.7-inch), (12.9-inch)
+            cell.heightCellPic.constant = 110
+            cell.widthCellPic.constant = 110
+        default: // iPhone 6, 6S, 7, 8
+            cell.heightCellPic.constant = 54
+            cell.widthCellPic.constant = 54
+        }
         // UI Formatting
         cell.clipsToBounds = true
         cell.layer.cornerRadius = 5
@@ -274,33 +250,42 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
 
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        switch DEVICE_WIDTH {
-            case "320": //5,SE
-                return CGSize(width: 84, height: 88)
-            
-            case "375": //6,7
-                return CGSize(width: 99, height: 119)
-            
-            case "414": //6+,7+
-                return CGSize(width: 109, height: 139)
-                
-            case "768": //iPad
-                return CGSize(width: 202, height: 222)
-
-            default:
-                return CGSize(width: 84, height: 104)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let deviceWidth = Int(UIScreen.main.bounds.width)
+        let deviceHeight = Int(UIScreen.main.bounds.height)
+        var height = deviceHeight
+        if deviceHeight < deviceWidth {
+            // Landscape
+            height = deviceWidth
+        }
+        switch height {
+        case 568: // 320x568pt, 640×1136 iPhone 5, 5C, 5S, SE, iPod Touch 6
+            return CGSize(width: 90, height: 98)
+        case 667: // 375x667pt, 750×1334 iPhone 6, 6S, 7, 8
+            return CGSize(width: 99, height: 119)
+        case 736: // 414x736pt, 1080×1920 iPhone 6+, 6S+, 7+, 8+
+            return CGSize(width: 119, height: 142)
+        case 812: // 375x812pt, 1125×2436 iPhone X
+            return CGSize(width: 106, height: 148)
+        case 1024: // 768x1024pt, 1536×2048 iPad 4, Air, Air 2, 2017, mini 2, mini 3, mini 4
+            return CGSize(width: 164, height: 210)
+        case 1112: // 834x1112pt, 1668×2224 iPad Pro (10.5-inch)
+            return CGSize(width: 185, height: 235)
+        case 1366: // 1024x1366pt, 2048×2732 iPad Pro (9.7-inch), (12.9-inch)
+            return CGSize(width: 232, height: 282)
+        default: // iPhone 6, 6S, 7, 8
+            return CGSize(width: 99, height: 119)
         }
     }
 
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets
-    {
-        return UIEdgeInsetsMake(10, 18, 10, 18); //top,left,bottom,right
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return UIEdgeInsetsMake(10, 14, 44, 14); //top,left,bottom,right
+        } else {
+            return UIEdgeInsetsMake(50, 64, 64, 64); //top,left,bottom,right
+        }
     }
-
-    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

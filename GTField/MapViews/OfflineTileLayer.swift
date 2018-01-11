@@ -24,6 +24,7 @@ class OfflineTileLayer: GMSTileLayer {
     // Khởi tạo với đường dẫn mặc định
     init?(_ tileSize: Int = 256) {
         super.init()
+        self.tileSize = 256*Int(UIScreen.main.scale)
         if getOfflineActiveTilesPath() == "" {
             return nil
         }

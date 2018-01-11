@@ -36,7 +36,7 @@ import UIKit
             completion: nil
         )
     }
-
+    
     public class func springEaseIn(duration: TimeInterval, animations: (() -> Void)!) {
         UIView.animate(
             withDuration: duration,

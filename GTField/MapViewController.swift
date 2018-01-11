@@ -35,7 +35,19 @@ let strokeTextAttributesAlignLeft = [
     ] as [NSAttributedStringKey : Any]
 
 class GTMapView: GMSMapView {
-    
+
+}
+
+class DownloadTileLayer: GMSSyncTileLayer {
+    override func tileFor(x: UInt, y: UInt, zoom: UInt) -> UIImage? {
+        // On every odd tile, render an image.
+        return UIImage(named: "buttonDownloadTile")
+//        if (x % 2 == 0) {
+//            return UIImage(named: "buttonDownloadTile")
+//        } else {
+//            return kGMSTileLayerNoTile
+//        }
+    }
 }
 
 // Begin Setup JellyButton===============================================
@@ -417,7 +429,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var tableDataSource: GMSAutocompleteTableDataSource?
     var searchResultMarker: GMSMarker?
     var requestMarker: GMSMarker?
-    var markerGlow = UIImageView(image: #imageLiteral(resourceName: "pinRequest"))
     var placePicker: GMSPlacePickerViewController?
     
     var didFindMyLocation = false
@@ -485,6 +496,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var geoJSONRenderer2: GMUGeometryRenderer!
     private var geoJsonParser: GMUGeoJSONParser!
     
+    private var scaleBarView: ScaleBarView!
+    
     override func loadView() {
         let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
         mapView = GTMapView.map(withFrame: .zero, camera: camera)
@@ -543,10 +556,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let layer = DownloadTileLayer()
+        layer.tileSize = 512
+        layer.zIndex = 1000
+        //layer.map = mapView
         
         createIslands()
         setupView()
         createButtonRecord()
+        
+        //self.scaleBarView.mapView = mapView
+        self.mapView?.showScaleBar()
         
         self.gpx = GPX(mapView!)
         
@@ -601,9 +621,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Tạo requestMarker
         var oldBound = CGRect()
         if self.requestMarker != nil {
+            self.requestMarker?.map = mapView
+            self.requestMarker?.iconView?.showHighlight()
             self.requestMarker?.position = position
         } else {
             self.requestMarker = GMSMarker()
+            self.requestMarker?.map = mapView
             self.requestMarker?.position = position
             self.requestMarker?.iconView = UIImageView(image: #imageLiteral(resourceName: "pinRequest"))
             self.requestMarker?.iconView?.contentMode = .center
@@ -612,21 +635,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             bound.size.width *= 2
             bound.size.height *= 2
             self.requestMarker?.iconView?.bounds = bound
+            self.requestMarker?.iconView?.showHighlight()
             self.requestMarker?.groundAnchor = CGPoint(x: 0.5, y: 0.75)
             self.requestMarker?.infoWindowAnchor = CGPoint(x: 0.5, y: 0.25)
-            markerGlow.layer.shadowColor = UIColor.white.cgColor
-            markerGlow.layer.shadowOffset = CGSize()
-            markerGlow.layer.shadowRadius = 8.0
-            markerGlow.layer.shadowOpacity = 1.0
-            markerGlow.layer.opacity = 0.0
-            markerGlow.center = CGPoint(x: oldBound.size.width, y: oldBound.size.height)
-            self.requestMarker?.iconView?.addSubview(markerGlow)
-            self.requestMarker?.map = mapView
-            UIView.animate(withDuration: 1.0, delay: 0.0, options:[.curveEaseInOut, .autoreverse, .repeat], animations: {
-                self.markerGlow.layer.opacity = 1.0;
-            }, completion: { (finised) in
-                self.requestMarker?.tracksViewChanges = false
-            })
         }
     }
     
@@ -3334,7 +3345,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             mapView.selectedMarker = marker
             // Nếu là requestMarker
             if marker == self.requestMarker {
+                // Tắt highlight
+                self.requestMarker?.iconView?.hideHighlight()
                 getGFeatureFor(coordinate: marker.position)
+                self.requestMarker?.map = nil
             } else if marker.isTappable {
                 // Vẽ đường và tính khoảng cách từ vị trí hiện tại tới marker
                 if mapView.myLocation != nil {
@@ -3503,6 +3517,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        // Xóa requestMarker
+        self.requestMarker?.map = nil
+        
+        // Thêm ScaleBarView
+        mapView.updateScaleBar()
+        
         let mapCenter = mapView.center
         //let myLocationCenter = mapView.projection.point(for: (mapView.myLocation?.coordinate)!)
         //mapCenter.y += 0.5*UIApplication.shared.statusBarFrame.height
@@ -3520,11 +3540,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         // Kiểm tra mức zoom để hiện / ẩn marker quần đảo
         let zoomLevel = mapView.camera.zoom
-        if zoomLevel > 4 {
+        if (zoomLevel > 4 && zoomLevel < 16) {
             showIslands(true)
         } else {
             showIslands(false)
         }
+        print("Zoom level: ", zoomLevel)
     }
     
     // MARK: - GeoServer Feature Detail View
@@ -3561,6 +3582,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         })
                         self.arrRes = layersAll
                         if self.arrRes.count > 0 {
+                            // Hiện view thuộc tính
                             self.performSegue(withIdentifier: "segueGWFView", sender: self)
                         }
                     } catch {

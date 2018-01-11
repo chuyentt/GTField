@@ -176,6 +176,8 @@
 		DE86E3371FA9614C005E5825 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E31E1FA9614C005E5825 /* GQTPointQuadTreeChild.m */; };
 		DE8E41331F361B87005766B5 /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8E41321F361B87005766B5 /* VertexView.swift */; };
 		DE96B8AE1F6077E70038A8C2 /* crs.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE96B8AD1F6077E70038A8C2 /* crs.plist */; };
+		DEA2EE6B2004684100577616 /* HighlightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEA2EE692004684100577616 /* HighlightView.xib */; };
+		DEA2EE6C2004684100577616 /* HighlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA2EE6A2004684100577616 /* HighlightView.swift */; };
 		DEA3914C1F88E0ED00251C9A /* GTFieldService.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA3914A1F88E0ED00251C9A /* GTFieldService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEA3914F1F88E0ED00251C9A /* GTFieldService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEA391481F88E0ED00251C9A /* GTFieldService.framework */; };
 		DEA391501F88E0ED00251C9A /* GTFieldService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DEA391481F88E0ED00251C9A /* GTFieldService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -230,6 +232,8 @@
 		DEDEC5CC1F7F35DD00F5CE0F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = DEDEC5BE1F7F35D800F5CE0F /* Icon-Small.png */; };
 		DEDEC5CE1F7F35DD00F5CE0F /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEDEC5B71F7F35D700F5CE0F /* Icon-Small@2x.png */; };
 		DEDEC5CF1F7F35DD00F5CE0F /* Icon-Small@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEDEC5B01F7F35D600F5CE0F /* Icon-Small@3x.png */; };
+		DEE708662005F2D300C31843 /* ScaleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE708652005F2D300C31843 /* ScaleBarView.swift */; };
+		DEE708682005F2F500C31843 /* ScaleBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEE708672005F2F500C31843 /* ScaleBarView.xib */; };
 		DEF2B3191F587C36004BD46D /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF2B3181F587C35004BD46D /* Package.swift */; };
 /* End PBXBuildFile section */
 
@@ -486,6 +490,8 @@
 		DE86E3221FA9614C005E5825 /* GQTBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTBounds.h; sourceTree = "<group>"; };
 		DE8E41321F361B87005766B5 /* VertexView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VertexView.swift; path = GPX/VertexView.swift; sourceTree = "<group>"; };
 		DE96B8AD1F6077E70038A8C2 /* crs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = crs.plist; path = ViewControllers/Settings/crs.plist; sourceTree = "<group>"; };
+		DEA2EE692004684100577616 /* HighlightView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HighlightView.xib; path = GTField/Highlight/HighlightView.xib; sourceTree = SOURCE_ROOT; };
+		DEA2EE6A2004684100577616 /* HighlightView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighlightView.swift; path = GTField/Highlight/HighlightView.swift; sourceTree = SOURCE_ROOT; };
 		DEA391481F88E0ED00251C9A /* GTFieldService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GTFieldService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEA3914A1F88E0ED00251C9A /* GTFieldService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GTFieldService.h; sourceTree = "<group>"; };
 		DEA3914B1F88E0ED00251C9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -544,6 +550,8 @@
 		DEDEC5BC1F7F35D700F5CE0F /* Icon-Small-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-60@2x.png"; path = "Assets.xcassets/AppIcon.appiconset/Icon-Small-60@2x.png"; sourceTree = "<group>"; };
 		DEDEC5BD1F7F35D800F5CE0F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "Assets.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		DEDEC5BE1F7F35D800F5CE0F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Assets.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
+		DEE708652005F2D300C31843 /* ScaleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScaleBarView.swift; path = GTField/ScaleBarView/ScaleBarView.swift; sourceTree = SOURCE_ROOT; };
+		DEE708672005F2F500C31843 /* ScaleBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScaleBarView.xib; sourceTree = "<group>"; };
 		DEF2B3181F587C35004BD46D /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Package.swift; path = GTField/Package.swift; sourceTree = "<group>"; };
 		F776653B7D08AA7BA409CC33 /* Pods_GTField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GTField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -624,6 +632,8 @@
 				16C6519F1CB259D0000BCF75 /* Plist Files */,
 				164381741CB3B4E3007FA14E /* Section Pics */,
 				DEAD15711EEA9CA900BFD5CE /* Photos */,
+				DEA0244E2005BB4B00B18CF4 /* ScaleBarView */,
+				DEA2EE66200466AB00577616 /* Highlight */,
 				16D845681D8D2DCB005DF780 /* Spring */,
 				DE377A7F1F0F3E61004C87D5 /* JDJellyButton */,
 				1628239E19AB38A100D08755 /* Supporting Files */,
@@ -1147,6 +1157,26 @@
 			path = QuadTree;
 			sourceTree = "<group>";
 		};
+		DEA0244E2005BB4B00B18CF4 /* ScaleBarView */ = {
+			isa = PBXGroup;
+			children = (
+				DEE708652005F2D300C31843 /* ScaleBarView.swift */,
+				DEE708672005F2F500C31843 /* ScaleBarView.xib */,
+			);
+			name = ScaleBarView;
+			path = GTField/ScaleBarView;
+			sourceTree = SOURCE_ROOT;
+		};
+		DEA2EE66200466AB00577616 /* Highlight */ = {
+			isa = PBXGroup;
+			children = (
+				DEA2EE6A2004684100577616 /* HighlightView.swift */,
+				DEA2EE692004684100577616 /* HighlightView.xib */,
+			);
+			name = Highlight;
+			path = Spring/Highlight;
+			sourceTree = "<group>";
+		};
 		DEA391491F88E0ED00251C9A /* GTFieldService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1410,6 +1440,7 @@
 				DEDEC5C11F7F35DD00F5CE0F /* Icon-20@2x-2.png in Resources */,
 				DEDEC5CE1F7F35DD00F5CE0F /* Icon-Small@2x.png in Resources */,
 				16D845961D8D2DCB005DF780 /* LoadingView.xib in Resources */,
+				DEE708682005F2F500C31843 /* ScaleBarView.xib in Resources */,
 				DECB8EBD1F7CF8680064450C /* Launch Screen.storyboard in Resources */,
 				DE2648171F0DAE9000CC324D /* Track.json in Resources */,
 				DE6781891E55F1A500026C86 /* bauhauhb.ttf in Resources */,
@@ -1425,6 +1456,7 @@
 				DE96B8AE1F6077E70038A8C2 /* crs.plist in Resources */,
 				DEDEC5CC1F7F35DD00F5CE0F /* Icon-Small.png in Resources */,
 				DEAD15701EEA9CA100BFD5CE /* City Hall.jpg in Resources */,
+				DEA2EE6B2004684100577616 /* HighlightView.xib in Resources */,
 				DE43F9BC1F861C8D00362F45 /* ProductIds.plist in Resources */,
 				DEB2268B1E64282400D27CB5 /* PlaceAttributeCell.xib in Resources */,
 				16D845931D8D2DCB005DF780 /* Info.plist in Resources */,
@@ -1634,6 +1666,7 @@
 				DE379D661F15A57000B0FEA0 /* GPXFilesTableViewController.swift in Sources */,
 				16D845A01D8D2DCB005DF780 /* SpringView.swift in Sources */,
 				DEDE39011F17DA2D000F1446 /* TrackManager.swift in Sources */,
+				DEE708662005F2D300C31843 /* ScaleBarView.swift in Sources */,
 				16D8459D1D8D2DCB005DF780 /* SpringLabel.swift in Sources */,
 				DE4E7BE71F3C56340012E317 /* CSV.swift in Sources */,
 				DE35F2A21EF270BD009EE354 /* LoadingStatus.swift in Sources */,
@@ -1641,6 +1674,7 @@
 				DE44C11C1F40357300434C2E /* LengthUnit.swift in Sources */,
 				DEB2267F1E608E0A00D27CB5 /* ShadowLineView.swift in Sources */,
 				DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */,
+				DEA2EE6C2004684100577616 /* HighlightView.swift in Sources */,
 				DE44C1201F40357300434C2E /* TimeUnit.swift in Sources */,
 				DEB226731E607BDB00D27CB5 /* SplitPaneViewController.swift in Sources */,
 				DE44C11D1F40357300434C2E /* MassUnit+Imperial.swift in Sources */,

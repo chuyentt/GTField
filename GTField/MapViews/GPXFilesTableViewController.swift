@@ -167,7 +167,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                     cell.detailTextLabel?.text = ""
                 }
                 break
-            case kGeoJSONExt, kGeoJSONExt1:
+            case kGeoJSONExt, kGeoJSONExt1, kKmlFileExt, kMBTileFileExt:
                 let date = creationDateForLocalFilePath(filePath: fileURL.path)
                 let size = sizeForLocalFilePath(filePath: fileURL.path)
                 //let font = cell.detailTextLabel?.font
