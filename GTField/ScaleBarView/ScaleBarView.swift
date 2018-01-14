@@ -93,26 +93,6 @@ public class ScaleBarView: UIView {
         let scaleBarWidth =  scaleWidth * scaleRatio
         return CGFloat(scaleBarWidth)
     }
-    
-    private func getDistanceInOneCentimeter(_ mapView: GMSMapView) -> CGFloat {
-        let centerPoint = mapView.center
-        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
-        var rightPoint = centerPoint
-        rightPoint.x += (basePointsPI/25.4) * 10.0 // 1cm
-        let latLngRight = mapView.projection.coordinate(for: rightPoint)
-        let screenDistance = centerLatLng.distance(from: latLngRight)
-        return screenDistance
-    }
-    
-    private func getDistanceInOneInch(_ mapView: GMSMapView) -> CGFloat {
-        let centerPoint = mapView.center
-        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
-        var rightPoint = centerPoint
-        rightPoint.x += basePointsPI
-        let latLngRight = mapView.projection.coordinate(for: rightPoint)
-        let screenDistance = centerLatLng.distance(from: latLngRight)
-        return screenDistance
-    }
 }
 
 public extension GMSMapView {

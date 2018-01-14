@@ -3526,6 +3526,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         // Thêm ScaleBarView
         mapView.updateScaleBar()
+        mapView.updateRulerBarLabel()
         
         let mapCenter = mapView.center
         //let myLocationCenter = mapView.projection.point(for: (mapView.myLocation?.coordinate)!)

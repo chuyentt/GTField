@@ -11,6 +11,9 @@ import UIKit
 public class RulerBarView: UIView {
     private var basePointsPI: CGFloat = 154.0
     public var isShowRuler: Bool = true
+    private var strokeTextAttributes:[NSAttributedStringKey : Any]?
+    @IBOutlet weak var scaleLabel: UILabel!
+    @IBOutlet weak var scaleLabelBottomConstant: NSLayoutConstraint!
     
     public override func awakeFromNib() {
         
@@ -24,6 +27,24 @@ public class RulerBarView: UIView {
 
     fileprivate func commonSetup() {
         basePointsPI = UIScreen.pixelsPerInch!/UIScreen.main.nativeScale
+        scaleLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+        let unit = getDistanceUnit()
+        switch unit {
+        case 0, 1:
+            scaleLabelBottomConstant.constant = CGFloat((basePointsPI/25.4)*15)
+        default:
+            scaleLabelBottomConstant.constant = CGFloat(basePointsPI/2)
+        }
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .right
+        strokeTextAttributes = [
+            NSAttributedStringKey.strokeColor : UIColor.white,
+            NSAttributedStringKey.foregroundColor : UIColor.black,
+            NSAttributedStringKey.strokeWidth : -5.0,
+            NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11),
+            NSAttributedStringKey.paragraphStyle : paragraphStyle
+        ]
         // UIScreen.main.nativeScale là tỷ lệ vật lý (<= scale)
         // Lưu ý: Ví dụ đối với iPhone 6 Plus:
         // - Simulator thì UIScreen.main.scale và UIScreen.main.nativeScale đều = 3
@@ -31,8 +52,43 @@ public class RulerBarView: UIView {
         // Như vậy, việc đo thước cm trên simulator và thiết bị vật lý là khác nhau
         // Để đảm bảo đúng với thiết bị thật thì nên sử dụng nativeScale
         print(UIScreen.main.scale, UIScreen.main.nativeScale)
+        
+        
     }
     
+    // Cập nhật nhãn 1 đơn vị thước đo bằng số đơn vị thực tế
+    // Giống như tỷ lệ bản đồ
+    public func updateScaleLabel() {
+        guard let mapView: GMSMapView = self.superview as? GMSMapView else { return }
+        if isShowRuler {
+            let unit = getDistanceUnit()
+            switch unit {
+            case 0, 1:
+                let scaleDist: CGFloat = getDistanceInOneCentimeter(mapView)
+                var scaleText: String = ""
+                if scaleDist < 1000.0 {
+                    scaleText = "1 cm ≈ " + Double(scaleDist).toString(1) + " m"
+                } else {
+                    scaleText = "1 cm ≈ " + Double(scaleDist/1000.0).toString(1) + " km"
+                }
+                scaleLabel.attributedText = NSAttributedString(
+                    string: scaleText,
+                    attributes: strokeTextAttributes)
+            default:
+                let scaleDist: CGFloat = getDistanceInOneInch(mapView)
+                var scaleText: String = ""
+                if scaleDist < 5280 {
+                    scaleText = "1 inch ≈ " + Double(scaleDist).toString(1) + " ft"
+                } else {
+                    scaleText = "1 inch ≈ " + Double(scaleDist/5280).toString(1) + " mi"
+                }
+                scaleLabel.attributedText = NSAttributedString(
+                    string: scaleText,
+                    attributes: strokeTextAttributes)
+            }
+        }
+    }
+        
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
         if isShowRuler {
@@ -84,7 +140,7 @@ public class RulerBarView: UIView {
                 let linesHalfInch: CGFloat = 6.0
                 let linesFullInch: CGFloat = 8.0
                 
-                for tickMark:CGFloat in stride(from: 0, through: screenHeight, by: linesDist) {
+                for tickMark:CGFloat in stride(from: screenHeight, through: 0, by: -linesDist) {
                     let linesWidth = (count % 16 == 0) ? linesFullInch : (count % 8 == 0) ? linesHalfInch : (count % 4 == 0) ? linesQuarterInch : (count % 2 == 0) ? linesEighthInch : linesSixteenthInch
                     let fillColor = (count % 16 == 0) ? UIColor.brown : (count % 8 == 0) ? UIColor.darkGray : (count % 4 == 0) ? UIColor.gray : (count % 2 == 0) ? UIColor.lightGray : UIColor.lightGray
                     fillColor.setFill()
@@ -114,6 +170,26 @@ public class RulerBarView: UIView {
             
         }
     }
+    
+    private func getDistanceInOneCentimeter(_ mapView: GMSMapView) -> CGFloat {
+        let centerPoint = mapView.center
+        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
+        var rightPoint = centerPoint
+        rightPoint.x += (basePointsPI/25.4) * 10.0 // 1cm
+        let latLngRight = mapView.projection.coordinate(for: rightPoint)
+        let screenDistance = centerLatLng.distance(from: latLngRight)
+        return screenDistance
+    }
+    
+    private func getDistanceInOneInch(_ mapView: GMSMapView) -> CGFloat {
+        let centerPoint = mapView.center
+        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
+        var rightPoint = centerPoint
+        rightPoint.x += basePointsPI
+        let latLngRight = mapView.projection.coordinate(for: rightPoint)
+        let screenDistance = centerLatLng.distance(from: latLngRight)
+        return CGFloat(screenDistance.meter().converted(LengthUnit.foot).amount.floatValue)
+    }
 }
 
 public extension GMSMapView {
@@ -121,6 +197,13 @@ public extension GMSMapView {
     struct RulerBarViewConstants {
         // cần quản lý các tag cho đỡ bị trùng nhau
         static let Tag = 200
+    }
+    
+    public func updateRulerBarLabel() {
+        if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
+            // Nếu tồn tại
+            rulerBarXibView.updateScaleLabel()
+        }
     }
     
     public func showRulerBar(_ show: Bool) {

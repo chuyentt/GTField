@@ -14,7 +14,27 @@
         <view userInteractionEnabled="NO" contentMode="redraw" id="iN0-l3-epB" customClass="RulerBarView" customModule="GTField" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iI8-pG-MhA">
+                    <rect key="frame" x="-35" y="651" width="100" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="5Ow-0W-M8U"/>
+                        <constraint firstAttribute="width" constant="100" id="BR5-Xx-vq0"/>
+                    </constraints>
+                    <attributedString key="attributedText"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="iI8-pG-MhA" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-35" id="NIm-Fd-kDo"/>
+                <constraint firstAttribute="bottom" secondItem="iI8-pG-MhA" secondAttribute="bottom" id="aAa-W5-GFB"/>
+            </constraints>
+            <connections>
+                <outlet property="scaleLabel" destination="iI8-pG-MhA" id="mwg-LG-Gks"/>
+                <outlet property="scaleLabelBottomConstant" destination="aAa-W5-GFB" id="eFk-dr-MIt"/>
+            </connections>
+            <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>
 </document>

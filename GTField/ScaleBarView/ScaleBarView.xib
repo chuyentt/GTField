@@ -227,7 +227,7 @@
                 <outlet property="trailingViewMiConstant" destination="I4F-HB-ccj" id="EB8-iw-C1x"/>
                 <outlet property="zoomLevelLabel" destination="cEm-NG-WXB" id="Yyu-eQ-nqX"/>
             </connections>
-            <point key="canvasLocation" x="-17" y="-4.5"/>
+            <point key="canvasLocation" x="-17.5" y="-4.5"/>
         </view>
     </objects>
 </document>
