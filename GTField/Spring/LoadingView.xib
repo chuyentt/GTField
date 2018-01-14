@@ -35,7 +35,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="centerY" secondItem="19J-d9-rcw" secondAttribute="centerY" id="DlX-dJ-y4A"/>
                 <constraint firstAttribute="centerX" secondItem="19J-d9-rcw" secondAttribute="centerX" id="iTf-dQ-2Ho"/>

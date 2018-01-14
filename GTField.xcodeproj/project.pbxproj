@@ -174,6 +174,10 @@
 		DE86E3351FA9614C005E5825 /* GMUGeoJSONParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E3191FA9614C005E5825 /* GMUGeoJSONParser.m */; };
 		DE86E3361FA9614C005E5825 /* GQTPointQuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E31C1FA9614C005E5825 /* GQTPointQuadTree.m */; };
 		DE86E3371FA9614C005E5825 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E31E1FA9614C005E5825 /* GQTPointQuadTreeChild.m */; };
+		DE8847792007DA4D003A619F /* ScaleBarView1.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE8847782007DA4D003A619F /* ScaleBarView1.xib */; };
+		DE88479A2008AFD5003A619F /* RulerBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8847992008AFD5003A619F /* RulerBarView.swift */; };
+		DE88479C2008AFE3003A619F /* RulerBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE88479B2008AFE3003A619F /* RulerBarView.xib */; };
+		DE88492320090AA4003A619F /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE88492220090AA4003A619F /* UIScreenExtension.swift */; };
 		DE8E41331F361B87005766B5 /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8E41321F361B87005766B5 /* VertexView.swift */; };
 		DE96B8AE1F6077E70038A8C2 /* crs.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE96B8AD1F6077E70038A8C2 /* crs.plist */; };
 		DEA2EE6B2004684100577616 /* HighlightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEA2EE692004684100577616 /* HighlightView.xib */; };
@@ -488,6 +492,10 @@
 		DE86E3201FA9614C005E5825 /* GQTPointQuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTree.h; sourceTree = "<group>"; };
 		DE86E3211FA9614C005E5825 /* GQTPointQuadTreeChild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeChild.h; sourceTree = "<group>"; };
 		DE86E3221FA9614C005E5825 /* GQTBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTBounds.h; sourceTree = "<group>"; };
+		DE8847782007DA4D003A619F /* ScaleBarView1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ScaleBarView1.xib; path = ../../../../Downloads/ScaleBarView/ScaleBarView1.xib; sourceTree = "<group>"; };
+		DE8847992008AFD5003A619F /* RulerBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RulerBarView.swift; path = GTField/RulerBarView/RulerBarView.swift; sourceTree = SOURCE_ROOT; };
+		DE88479B2008AFE3003A619F /* RulerBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RulerBarView.xib; path = GTField/RulerBarView/RulerBarView.xib; sourceTree = SOURCE_ROOT; };
+		DE88492220090AA4003A619F /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
 		DE8E41321F361B87005766B5 /* VertexView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VertexView.swift; path = GPX/VertexView.swift; sourceTree = "<group>"; };
 		DE96B8AD1F6077E70038A8C2 /* crs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = crs.plist; path = ViewControllers/Settings/crs.plist; sourceTree = "<group>"; };
 		DEA2EE692004684100577616 /* HighlightView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HighlightView.xib; path = GTField/Highlight/HighlightView.xib; sourceTree = SOURCE_ROOT; };
@@ -632,6 +640,8 @@
 				16C6519F1CB259D0000BCF75 /* Plist Files */,
 				164381741CB3B4E3007FA14E /* Section Pics */,
 				DEAD15711EEA9CA900BFD5CE /* Photos */,
+				DE88492120090A60003A619F /* UIScreenExtension */,
+				DE8847982008AFB8003A619F /* RulerBarView */,
 				DEA0244E2005BB4B00B18CF4 /* ScaleBarView */,
 				DEA2EE66200466AB00577616 /* Highlight */,
 				16D845681D8D2DCB005DF780 /* Spring */,
@@ -651,6 +661,7 @@
 				DE28C3BC1F17673600C3A190 /* beep.mp3 */,
 				DEB226221E5F22B600D27CB5 /* GTField-Bridging-Header.h */,
 				DE6781861E55F19600026C86 /* bauhausl.ttf */,
+				DE8847782007DA4D003A619F /* ScaleBarView1.xib */,
 				DE6781871E55F19600026C86 /* bauhauhb.ttf */,
 				DE67818A1E55F25800026C86 /* bauhausm.ttf */,
 				165CCEE91BA299AE00677F88 /* Info.plist */,
@@ -1157,6 +1168,24 @@
 			path = QuadTree;
 			sourceTree = "<group>";
 		};
+		DE8847982008AFB8003A619F /* RulerBarView */ = {
+			isa = PBXGroup;
+			children = (
+				DE8847992008AFD5003A619F /* RulerBarView.swift */,
+				DE88479B2008AFE3003A619F /* RulerBarView.xib */,
+			);
+			path = RulerBarView;
+			sourceTree = SOURCE_ROOT;
+		};
+		DE88492120090A60003A619F /* UIScreenExtension */ = {
+			isa = PBXGroup;
+			children = (
+				DE88492220090AA4003A619F /* UIScreenExtension.swift */,
+			);
+			name = UIScreenExtension;
+			path = GTField/UIScreenExtension;
+			sourceTree = SOURCE_ROOT;
+		};
 		DEA0244E2005BB4B00B18CF4 /* ScaleBarView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1435,6 +1464,7 @@
 				DE2648191F0DF38C00CC324D /* Track.gpx in Resources */,
 				DE434B451F233A0E00935974 /* GoogleService-Info.plist in Resources */,
 				DE67818B1E55F25800026C86 /* bauhausm.ttf in Resources */,
+				DE88479C2008AFE3003A619F /* RulerBarView.xib in Resources */,
 				164D488D1A397B3800C669A6 /* Assets.xcassets in Resources */,
 				DE26455B1F4E8AFA008B759B /* Localizable.strings in Resources */,
 				DEDEC5C11F7F35DD00F5CE0F /* Icon-20@2x-2.png in Resources */,
@@ -1465,6 +1495,7 @@
 				DEDEC5BF1F7F35DD00F5CE0F /* Icon-20.png in Resources */,
 				DEDEC5C41F7F35DD00F5CE0F /* Icon-60@3x.png in Resources */,
 				DE28C3BF1F176AAF00C3A190 /* click.mp3 in Resources */,
+				DE8847792007DA4D003A619F /* ScaleBarView1.xib in Resources */,
 				DEDEC5C01F7F35DD00F5CE0F /* Icon-20@2x-1.png in Resources */,
 				162F1F2C1CA92CC600400C56 /* GTField.entitlements in Resources */,
 			);
@@ -1648,6 +1679,7 @@
 				DE44C1221F40357300434C2E /* VolumeUnit+Imperial.swift in Sources */,
 				DEDE38FF1F17DA11000F1446 /* WayPointManager.swift in Sources */,
 				DE35F2991EEF9309009EE354 /* GSLayersViewController.swift in Sources */,
+				DE88479A2008AFD5003A619F /* RulerBarView.swift in Sources */,
 				DE434B4F1F23C9D700935974 /* MBTilesDB.swift in Sources */,
 				DE5EB0021EEC327800813FCC /* UIImage+Extensions.swift in Sources */,
 				DE86E3251FA9614C005E5825 /* GMUWrappingDictionaryKey.m in Sources */,
@@ -1689,6 +1721,7 @@
 				DE35F2971EEEB8FA009EE354 /* ConfigMapSourceTableViewCell.swift in Sources */,
 				DEC0BE041F585A640094BF74 /* Projection.m in Sources */,
 				DE3AAD3A1FDA79E800DC58DE /* GraphView.swift in Sources */,
+				DE88492320090AA4003A619F /* UIScreenExtension.swift in Sources */,
 				DE085E1E1F25E93F005DD248 /* FMDatabaseQueue.m in Sources */,
 				DE377A851F0F3E61004C87D5 /* JDJellyMainButton.swift in Sources */,
 				DEB226711E607BDB00D27CB5 /* BaseContainerViewController.swift in Sources */,

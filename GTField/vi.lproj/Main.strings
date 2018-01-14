@@ -192,6 +192,8 @@
 /* Class = "UILabel"; text = "Cho phép hiệu ứng âm thanh"; ObjectID = "wtV-Fm-Xr0"; */
 "wtV-Fm-Xr0.text" = "Cho phép hiệu ứng âm thanh";
 
+"w5C-nd-oiN.text" = "Cho phép hiện thước trên bản đồ";
+
 /* Class = "UILabel"; text = "Meter (m)"; ObjectID = "zR6-5z-w4D"; */
 "zR6-5z-w4D.text" = "Meter (m)";
 

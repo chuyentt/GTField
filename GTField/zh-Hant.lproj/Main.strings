@@ -192,6 +192,8 @@
 /* Class = "UILabel"; text = "聲音效果激活"; ObjectID = "wtV-Fm-Xr0"; */
 "wtV-Fm-Xr0.text" = "聲音效果激活";
 
+"w5C-nd-oiN.text" = "在地圖上啟用標尺";
+
 /* Class = "UILabel"; text = "米 (m)"; ObjectID = "zR6-5z-w4D"; */
 "zR6-5z-w4D.text" = "米 (m)";
 

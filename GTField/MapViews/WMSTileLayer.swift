@@ -33,7 +33,7 @@ class WMSTileLayer: GMSTileLayer {
         // Tuy nhiên, dung lượng tải về từ mày chủ sẽ lớn
         // Nếu muốn giảm độ phân giải thì giảm width và height xuống 1/2
         
-        self.tileSize = 256*Int(UIScreen.main.scale)
+        self.tileSize = 256*Int(UIScreen.main.nativeScale)
 
         // Cách này có vẻ nhanh hơn
         //self.tileSize = Int(256*3)

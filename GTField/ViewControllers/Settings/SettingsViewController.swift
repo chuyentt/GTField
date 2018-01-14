@@ -16,6 +16,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     var motionManager: CMMotionManager?
     
     @IBOutlet weak var swEnableSoundEffects: UISwitch!
+    @IBOutlet weak var swEnableRulerBar: UISwitch!
     @IBOutlet weak var swEnableImprovedPerformance: UISwitch!
     @IBOutlet weak var lblImageCompressionQuality: UILabel!
     @IBOutlet weak var sliImageCompressionQuality: UISlider!
@@ -31,6 +32,9 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         // Load settings
         ENABLE_SOUND_EFFECT = getEnableSoundEffect()
         swEnableSoundEffects.isOn = ENABLE_SOUND_EFFECT
+        
+        ENABLE_RULER_BAR = getEnableRulerBar()
+        swEnableRulerBar.isOn = ENABLE_RULER_BAR
         
         ENABLE_IMPROVED_PERFORMANCE = getEnableImprovedPerformance()
         swEnableImprovedPerformance.isOn = ENABLE_IMPROVED_PERFORMANCE
@@ -70,6 +74,12 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     @IBAction func soundEffectsValueChanged(_ sender: UISwitch) {
         ENABLE_SOUND_EFFECT = sender.isOn
         UserDefaults.standard.set(ENABLE_SOUND_EFFECT, forKey: "ENABLE_SOUND_EFFECT")
+        UserDefaults.standard.synchronize()
+    }
+    
+    @IBAction func rulerBarValueChanged(_ sender: UISwitch) {
+        ENABLE_RULER_BAR = sender.isOn
+        UserDefaults.standard.set(ENABLE_RULER_BAR, forKey: "ENABLE_RULER_BAR")
         UserDefaults.standard.synchronize()
     }
     

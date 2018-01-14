@@ -34,7 +34,7 @@ let strokeTextAttributesAlignLeft = [
     NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
     ] as [NSAttributedStringKey : Any]
 
-class GTMapView: GMSMapView {
+public class GTMapView: GMSMapView {
 
 }
 
@@ -568,6 +568,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //self.scaleBarView.mapView = mapView
         self.mapView?.showScaleBar()
         
+        // Kiểm tra thiết lập hiển thị ruler
+        self.mapView?.showRulerBar(getEnableRulerBar())
+
         self.gpx = GPX(mapView!)
         
         //NSNotification.Name.UIApplicationWillEnterForeground
@@ -3518,6 +3521,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         // Xóa requestMarker
+        self.requestMarker?.iconView?.hideHighlight()
         self.requestMarker?.map = nil
         
         // Thêm ScaleBarView
@@ -3545,7 +3549,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } else {
             showIslands(false)
         }
-        print("Zoom level: ", zoomLevel)
     }
     
     // MARK: - GeoServer Feature Detail View

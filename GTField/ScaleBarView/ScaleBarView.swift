@@ -10,7 +10,9 @@ import UIKit
 import GoogleMaps
 
 public class ScaleBarView: UIView {
-    private var defaultWidth: CGFloat = 100.0
+    private var basePointsPI: CGFloat = 154.0
+    private var defaultWidth: CGFloat = 279
+    private var defaultScaleBarConstant: CGFloat = 30
     @IBOutlet weak var scaleBarKmConstant: NSLayoutConstraint!
     @IBOutlet weak var scaleBarMiConstant: NSLayoutConstraint!
     @IBOutlet weak var trailingViewKmConstant: NSLayoutConstraint!
@@ -19,10 +21,16 @@ public class ScaleBarView: UIView {
     @IBOutlet weak var bottomViewMiConstant: NSLayoutConstraint!
     @IBOutlet weak var distanceLabelKm: UILabel!
     @IBOutlet weak var distanceLabelMi: UILabel!
+    @IBOutlet weak var zoomLevelLabel: UILabel!
     private var strokeTextAttributes:[NSAttributedStringKey : Any]?
     
     override public func awakeFromNib() {
         super.awakeFromNib()
+        basePointsPI = UIScreen.pixelsPerInch!/UIScreen.main.nativeScale
+        // defaultScaleBarConstant => thước = 0
+        // (basePointsPI/25.4) * 5 => thước = 0.5cm
+        scaleBarKmConstant.constant = defaultScaleBarConstant
+        scaleBarMiConstant.constant = defaultScaleBarConstant
         trailingViewKmConstant.constant = 150
         bottomViewKmConstant.constant = 16
         trailingViewMiConstant.constant = 150
@@ -43,56 +51,67 @@ public class ScaleBarView: UIView {
         super.layoutSubviews()
         guard let mapView: GMSMapView = self.superview as? GMSMapView else { return }
         
-        let projection = mapView.projection
-        let screenWidth: CGFloat = defaultWidth//mapView.frame.width / 2
-        let barWidth: CGFloat = defaultWidth//self.frame.width / 2
+        let barWidth: CGFloat = (basePointsPI/25.4)*15.0 // Kích thước nhỏ nhất 15mm
+        //km: 5, 10, 20,50,100,200,500,1,2,5,10,20,50,100,200,500,1000,2000
+        //mi: 20, 50, 100,200,500,1000,2000,1,2,5,10,20,50,100,200,500,1000
         
-        self.scaleBarKmConstant.constant = scaledBarWidth(projection: projection, scaleWidth: barWidth, screenWidth: screenWidth, unit: LengthUnit.meter)
-        let txtKm = roundedDistanceFormatted(projection: projection, scaleWidth: barWidth, screenWidth: screenWidth, unit: LengthUnit.meter)
+        self.scaleBarKmConstant.constant = defaultScaleBarConstant + scaledBarWidth(mapView, barWidth, LengthUnit.meter)
+        let txtKm = roundedDistanceFormatted(mapView, barWidth, LengthUnit.meter)
         distanceLabelKm.attributedText = NSAttributedString(string: txtKm, attributes: strokeTextAttributes)
         
-        self.scaleBarMiConstant.constant = scaledBarWidth(projection: projection, scaleWidth: barWidth, screenWidth: screenWidth, unit: LengthUnit.foot)
+        self.scaleBarMiConstant.constant = defaultScaleBarConstant + scaledBarWidth(mapView, barWidth, LengthUnit.foot)
         
-        let txtMi = roundedDistanceFormatted(projection: projection, scaleWidth: barWidth, screenWidth: screenWidth, unit: LengthUnit.foot)
+        let txtMi = roundedDistanceFormatted(mapView, barWidth, LengthUnit.foot)
         
         distanceLabelMi.attributedText = NSAttributedString(string: txtMi, attributes: strokeTextAttributes)
+        
+        let zoomLevel = Double(mapView.camera.zoom)
+        zoomLevelLabel.attributedText = NSAttributedString(string: zoomLevel.toString(1), attributes: strokeTextAttributes)
+        // z:
+        //zoomLevelLabel.attributedText = NSAttributedString(string: getDistanceInOneCentimeter(mapView).formatMapScaleLabel(unit: LengthUnit.meter), attributes: strokeTextAttributes)
     }
     
-    private func roundedDistanceFormatted(projection: GMSProjection, scaleWidth: CGFloat, screenWidth: CGFloat, unit: Unit) -> String {
-        let latLngLeft = projection.visibleRegion().farLeft
-        let latLngRight = projection.visibleRegion().farRight
-        let screenDistance = latLngLeft.distance(from: latLngRight).meter().converted(unit).amount.floatValue
-        let scaleDistance = scaleWidth/screenWidth * CGFloat(screenDistance)
-        let roundedDistance = scaleDistance.roundAsDistance()
-        return formatDistance(distance: roundedDistance, unit: unit)
+    private func roundedDistanceFormatted(_ mapView: GMSMapView,_ scaleWidth: CGFloat,_ unit: Unit) -> String {
+        let centerPoint = mapView.center
+        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
+        var rightPoint = centerPoint
+        rightPoint.x += scaleWidth
+        let latLngRight = mapView.projection.coordinate(for: rightPoint)
+        let screenDistance = centerLatLng.distance(from: latLngRight).meter().converted(unit).amount.floatValue
+        return CGFloat(screenDistance).formatMapScaleLabel(unit: unit)
     }
     
-    private func scaledBarWidth(projection: GMSProjection, scaleWidth: CGFloat, screenWidth: CGFloat, unit: Unit) -> CGFloat {
-        let latLngLeft = projection.visibleRegion().farLeft
-        let latLngRight = projection.visibleRegion().farRight
-        let screenDistance = latLngLeft.distance(from: latLngRight).meter().converted(unit).amount.floatValue
-        let scaleDistance = scaleWidth/screenWidth * CGFloat(screenDistance)
-        let roundedDistance = scaleDistance.roundAsDistance()
+    private func scaledBarWidth(_ mapView: GMSMapView,_ scaleWidth: CGFloat,_ unit: Unit) -> CGFloat {
+        let centerPoint = mapView.center
+        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
+        var rightPoint = centerPoint
+        rightPoint.x += scaleWidth
+        let latLngRight = mapView.projection.coordinate(for: rightPoint)
+        let screenDistance = centerLatLng.distance(from: latLngRight).meter().converted(unit).amount.floatValue
+        let roundedDistance = CGFloat(screenDistance).roundAsDistance()
         let scaleRatio = CGFloat(roundedDistance) / CGFloat(screenDistance)
         let scaleBarWidth =  scaleWidth * scaleRatio
         return CGFloat(scaleBarWidth)
     }
     
+    private func getDistanceInOneCentimeter(_ mapView: GMSMapView) -> CGFloat {
+        let centerPoint = mapView.center
+        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
+        var rightPoint = centerPoint
+        rightPoint.x += (basePointsPI/25.4) * 10.0 // 1cm
+        let latLngRight = mapView.projection.coordinate(for: rightPoint)
+        let screenDistance = centerLatLng.distance(from: latLngRight)
+        return screenDistance
+    }
     
-    private func formatDistance(distance: Int, unit: Unit) -> String {
-        if unit == LengthUnit.meter { // Km
-            if distance < 1000 {
-                return distance.meter().description
-            } else {
-                return (distance/1000).kilometer().description
-            }
-        } else { // Mi
-            if distance < 5280 {
-                return distance.foot().description
-            } else {
-                return (distance/5280).mile().description
-            }
-        }
+    private func getDistanceInOneInch(_ mapView: GMSMapView) -> CGFloat {
+        let centerPoint = mapView.center
+        let centerLatLng = mapView.projection.coordinate(for: centerPoint)
+        var rightPoint = centerPoint
+        rightPoint.x += basePointsPI
+        let latLngRight = mapView.projection.coordinate(for: rightPoint)
+        let screenDistance = centerLatLng.distance(from: latLngRight)
+        return screenDistance
     }
 }
 
@@ -149,6 +168,25 @@ extension CGFloat {
             i+=1
         }
         return roundedDistance
+    }
+    
+    func formatMapScaleLabel(unit: Unit) -> String {
+        let distance = self.roundAsDistance()
+        if unit == LengthUnit.meter { // Km <-> m
+            if distance < 1000 {
+                return distance.meter().description
+            } else {
+                let distance = (self/1000).roundAsDistance()
+                return (distance).kilometer().description
+            }
+        } else { // Mi <-> Yard
+            if distance < 5000 {
+                return distance.foot().description
+            } else {
+                let distance = (self/5280).roundAsDistance()
+                return (distance).mile().description
+            }
+        }
     }
 }
 

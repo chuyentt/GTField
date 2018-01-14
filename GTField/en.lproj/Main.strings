@@ -192,6 +192,8 @@
 /* Class = "UILabel"; text = "Enable sound effects"; ObjectID = "wtV-Fm-Xr0"; */
 "wtV-Fm-Xr0.text" = "Enable sound effects";
 
+"w5C-nd-oiN.text" = "Enable ruler on the map";
+
 /* Class = "UILabel"; text = "Meter (m)"; ObjectID = "zR6-5z-w4D"; */
 "zR6-5z-w4D.text" = "Meter (m)";
 

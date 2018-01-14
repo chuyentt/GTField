@@ -369,6 +369,19 @@ func setEnableSoundEffect(_ value: Bool) {
 }
 
 /************************************************
+ * Thước trên bản đồ
+ */
+func getEnableRulerBar() -> Bool {
+    guard UserDefaults.standard.object(forKey: "ENABLE_RULER_BAR") != nil else { return false }
+    return UserDefaults.standard.bool(forKey: "ENABLE_RULER_BAR")
+}
+
+func setEnableRulerBar(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "ENABLE_RULER_BAR")
+    UserDefaults.standard.synchronize()
+}
+
+/************************************************
  * Cải thiện hiệu năng GNSS/INS
  */
 func getEnableImprovedPerformance() -> Bool {
