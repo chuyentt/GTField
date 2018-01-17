@@ -19,6 +19,8 @@
 
 #import "GMUGeometryContainer.h"
 
+#import "GeoJSONStyle.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -30,11 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
  * The identifier of the feature.
  */
 @property(nonatomic, nullable, readonly) NSString *identifier;
-
-/**
- * The properties of the geometry in the feature.
- */
-@property(nonatomic, nullable, readonly) NSDictionary<NSString *, NSString *> *properties;
 
 /**
  * The bounding box of the geometry in the feature.

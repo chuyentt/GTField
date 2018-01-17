@@ -10,3 +10,7 @@
 #import "GMUKMLParser.h"
 #import "GMUGeoJSONParser.h"
 #import "GMUGeometryRenderer+Testing.h"
+#import "GMUHeatmapTileLayer.h"
+#import "GMUGradient.h"
+#import "GMUWeightedLatLng.h"
+

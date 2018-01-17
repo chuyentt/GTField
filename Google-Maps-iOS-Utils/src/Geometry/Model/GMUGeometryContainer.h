@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, nullable) GMUStyle *style;
 
+/**
+ * The properties object in the container.
+ */
+@property(nonatomic, nullable) NSDictionary<NSString *, NSString *> *properties;
+
 @end
 
 NS_ASSUME_NONNULL_END

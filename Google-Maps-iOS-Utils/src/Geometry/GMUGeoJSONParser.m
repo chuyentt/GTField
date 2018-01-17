@@ -44,6 +44,8 @@ static NSString *const kGMUMultiPolygonValue = @"MultiPolygon";
 static NSString *const kGMUGeometryCollectionValue = @"GeometryCollection";
 static NSString *const kGMUGeometryRegex =
     @"^(Point|MultiPoint|LineString|MultiLineString|Polygon|MultiPolygon|GeometryCollection)$";
+static NSString *const kGeoJSONStyleAttributeRegex =
+    @"^(stroke|stroke-width|stroke-opacity|fill|fill-opacity|marker-color|marker-size|marker-symbol)$";
 
 @implementation GMUGeoJSONParser {
   /**

@@ -23,11 +23,12 @@
 #import "GMUPoint.h"
 #import "GMUPolygon.h"
 #import "GMUStyle.h"
+#import "GeoJSONStyle.h"
 
 @implementation GMUGeometryRenderer {
   NSMutableArray<GMSOverlay *> *_mapOverlays;
     // Bổ sung bounds
-    GMSCoordinateBounds *_bounds;
+    GMSCoordinateBounds *_boundingBox;
 
   /**
    * The Google Map to render the placemarks onto.
@@ -70,7 +71,7 @@
     _mapOverlays = [[NSMutableArray alloc] init];
       
       // Bổ sung bounds
-      _bounds = [[GMSCoordinateBounds alloc] init];
+      _boundingBox = [[GMSCoordinateBounds alloc] init];
       
     _queue = dispatch_queue_create("com.google.gmsutils", DISPATCH_QUEUE_CONCURRENT);
   }
@@ -90,7 +91,7 @@
   [_mapOverlays removeAllObjects];
     
     // Bổ sung bounds
-    _bounds = [[GMSCoordinateBounds alloc] init];
+    _boundingBox = [[GMSCoordinateBounds alloc] init];
 }
 
 - (NSArray<GMSOverlay *> *)mapOverlays {
@@ -98,8 +99,8 @@
 }
 
 // Bổ sung bounds
-- (GMSCoordinateBounds *)bounds {
-    return _bounds;
+- (GMSCoordinateBounds *)boundingBox {
+    return _boundingBox;
 }
 
 + (NSDictionary<NSString *, GMUStyle *> *)stylesDictionaryFromArray:(NSArray<GMUStyle *> *)styles {
@@ -200,7 +201,7 @@
   }
     
     // Bổ sung bounds
-    _bounds = [_bounds includingCoordinate:marker.position];
+    _boundingBox = [_boundingBox includingCoordinate:marker.position];
     
   [_mapOverlays addObject:marker];
 }
@@ -209,12 +210,20 @@
                container:(id<GMUGeometryContainer>)container
                    style:(GMUStyle *)style {
   GMSPolyline *line = [GMSPolyline polylineWithPath:lineString.path];
-  if (style.width) {
-    line.strokeWidth = style.width;
-  }
-  if (style.strokeColor) {
-    line.strokeColor = style.strokeColor;
-  }
+    if (style) {
+        if (style.width) {
+            line.strokeWidth = style.width;
+        }
+        if (style.strokeColor) {
+            line.strokeColor = style.strokeColor;
+        }
+    } else {
+        if (container.properties) {
+            GeoJSONStyle *geoJSONStyle = [[GeoJSONStyle alloc] initWithProperties:container.properties];
+            line.strokeWidth = geoJSONStyle.strokeWidth;
+            line.strokeColor = geoJSONStyle.strokeColor;
+        }
+    }
   if ([container isKindOfClass:[GMUPlacemark class]]) {
     GMUPlacemark *placemark = container;
     line.title = placemark.title;
@@ -222,7 +231,7 @@
   line.map = _map;
     
     // Bổ sung bounds
-    _bounds = [_bounds includingPath:line.path];
+    _boundingBox = [_boundingBox includingPath:line.path];
     
   [_mapOverlays addObject:line];
 }
@@ -241,17 +250,27 @@
     [holes addObject:hole];
   }
   GMSPolygon *poly = [GMSPolygon polygonWithPath:outerBoundaries];
-  if (style.hasFill && style.fillColor) {
-    poly.fillColor = style.fillColor;
+  if (style) {
+      if (style.hasFill && style.fillColor) {
+          poly.fillColor = style.fillColor;
+      }
+      if (style.hasStroke) {
+          if (style.strokeColor) {
+              poly.strokeColor = style.strokeColor;
+          }
+          if (style.width) {
+              poly.strokeWidth = style.width;
+          }
+      }
+  } else { // Bổ sung GeoJSON Style
+      if (container.properties) {
+          GeoJSONStyle *geoJSONStyle = [[GeoJSONStyle alloc] initWithProperties:container.properties];
+          poly.strokeWidth = geoJSONStyle.strokeWidth;
+          poly.strokeColor = geoJSONStyle.strokeColor;
+          poly.fillColor = geoJSONStyle.fillColor;
+      }
   }
-  if (style.hasStroke) {
-    if (style.strokeColor) {
-      poly.strokeColor = style.strokeColor;
-    }
-    if (style.width) {
-      poly.strokeWidth = style.width;
-    }
-  }
+  
   if (holes.count) {
     poly.holes = holes;
   }
@@ -262,7 +281,7 @@
   poly.map = _map;
     
     // Bổ sung bounds
-    _bounds = [_bounds includingPath:poly.path];
+    _boundingBox = [_boundingBox includingPath:poly.path];
     
   [_mapOverlays addObject:poly];
 }

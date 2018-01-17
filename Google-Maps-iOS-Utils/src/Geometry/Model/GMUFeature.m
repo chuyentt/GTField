@@ -17,8 +17,11 @@
 
 @implementation GMUFeature
 
-@synthesize geometry = _geometry;
 @synthesize style = _style;
+@synthesize geometry = _geometry;
+@synthesize identifier = _identifier;
+@synthesize boundingBox = _boundingBox;
+@synthesize properties = _properties;
 
 - (instancetype)initWithGeometry:(id<GMUGeometry>)geometry
                       identifier:(NSString * _Nullable)identifier

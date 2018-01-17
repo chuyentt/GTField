@@ -40,6 +40,7 @@ public class GTMapView: GMSMapView {
 
 class DownloadTileLayer: GMSSyncTileLayer {
     override func tileFor(x: UInt, y: UInt, zoom: UInt) -> UIImage? {
+        tileSize = 256*Int(UIScreen.main.nativeScale)
         // On every odd tile, render an image.
         return UIImage(named: "buttonDownloadTile")
 //        if (x % 2 == 0) {
@@ -180,7 +181,7 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
                                                    styles: self.kmlParser.styles)
                 self.kmlRenderer1.render()
                 if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer1.bounds()))
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer1.boundingBox()))
                 }
             } else if self.kmlRenderer2 == nil {
                 self.kmlRenderer2 = GMUGeometryRenderer(map: self.mapView!,
@@ -188,7 +189,7 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
                                                    styles: self.kmlParser.styles)
                 self.kmlRenderer2.render()
                 if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer2.bounds()))
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer2.boundingBox()))
                 }
             } else { // Đã mở 2 layers thì xóa hết để mở layer 1
                 self.kmlRenderer1.clear()
@@ -202,7 +203,7 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
                                                    styles: self.kmlParser.styles)
                 self.kmlRenderer1.render()
                 if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer1.bounds()))
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.kmlRenderer1.boundingBox()))
                 }
             }
             self.mapView?.hideLoading()
@@ -223,14 +224,14 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
                                                        geometries: self.geoJsonParser.features)
                 self.geoJSONRenderer1.render()
                 if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.bounds()))
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
                 }
             } else if self.geoJSONRenderer2 == nil {
                 self.geoJSONRenderer2 = GMUGeometryRenderer(map: self.mapView!,
                                                        geometries: self.geoJsonParser.features)
                 self.geoJSONRenderer2.render()
                 if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer2.bounds()))
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer2.boundingBox()))
                 }
             } else { // Đã mở 2 layers thì xóa hết để mở layer 1
                 self.geoJSONRenderer1.clear()
@@ -243,7 +244,7 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
                                                        geometries: self.geoJsonParser.features)
                 self.geoJSONRenderer1.render()
                 if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.bounds()))
+                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
                 }
             }
             self.mapView?.hideLoading()
@@ -557,7 +558,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     override func viewDidLoad() {
         super.viewDidLoad()
         let layer = DownloadTileLayer()
-        layer.tileSize = 512
+        //layer.tileSize *= U
         layer.zIndex = 1000
         //layer.map = mapView
         
