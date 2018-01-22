@@ -17,6 +17,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     
     @IBOutlet weak var swEnableSoundEffects: UISwitch!
     @IBOutlet weak var swEnableRulerBar: UISwitch!
+    @IBOutlet weak var swEnableMapCenterCoordinate: UISwitch!
     @IBOutlet weak var swEnableImprovedPerformance: UISwitch!
     @IBOutlet weak var lblImageCompressionQuality: UILabel!
     @IBOutlet weak var sliImageCompressionQuality: UISlider!
@@ -35,6 +36,9 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         
         ENABLE_RULER_BAR = getEnableRulerBar()
         swEnableRulerBar.isOn = ENABLE_RULER_BAR
+        
+        ENABLE_MAP_CENTER_COORDINATE = getEnableMapCenterCoordinate()
+        swEnableMapCenterCoordinate.isOn = ENABLE_MAP_CENTER_COORDINATE
         
         ENABLE_IMPROVED_PERFORMANCE = getEnableImprovedPerformance()
         swEnableImprovedPerformance.isOn = ENABLE_IMPROVED_PERFORMANCE
@@ -82,7 +86,13 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         UserDefaults.standard.set(ENABLE_RULER_BAR, forKey: "ENABLE_RULER_BAR")
         UserDefaults.standard.synchronize()
     }
-    
+
+    @IBAction func mapCenterCoordinateValueChanged(_ sender: UISwitch) {
+        ENABLE_MAP_CENTER_COORDINATE = sender.isOn
+        UserDefaults.standard.set(ENABLE_MAP_CENTER_COORDINATE, forKey: "ENABLE_MAP_CENTER_COORDINATE")
+        UserDefaults.standard.synchronize()
+    }
+
     @IBAction func improvedPerformanceValueChanged(_ sender: UISwitch) {
         ENABLE_IMPROVED_PERFORMANCE = sender.isOn
         UserDefaults.standard.set(ENABLE_IMPROVED_PERFORMANCE, forKey: "ENABLE_IMPROVED_PERFORMANCE")

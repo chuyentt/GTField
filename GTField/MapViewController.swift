@@ -385,8 +385,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var buttonSearch: UIButton?
     private var buttonSearchLocal: UIButton?
     
-    // Label
-    private var coordinateLabel: UILabel!
     // Mylocation Label
     private var myLocationLabel: UILabel!
     //
@@ -478,9 +476,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     var opacitySlider: UISlider?
     
-    var cross:UIImageView = UIImageView(image: #imageLiteral(resourceName: "vertexCross"))
-    var mapFrame:UIImageView = UIImageView(image: #imageLiteral(resourceName: "MapFrame"))
-    
     var vertexView: VertexView?
     
     var line: GMSPolyline? // Line from my location to marker
@@ -500,11 +495,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var scaleBarView: ScaleBarView!
     
     override func loadView() {
-        let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
-        mapView = GTMapView.map(withFrame: .zero, camera: camera)
-        mapView?.delegate = self
-        mapView?.tag = 11
-        self.view = mapView
+        super.loadView()
     }
     
     var statusBarStyle: UIStatusBarStyle? {
@@ -518,16 +509,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
         super.viewDidAppear(animated)
-        
-        self.statusBarStyle = .default
         
         self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if self.mapView?.mapType == GMSMapViewType.normal || self.mapView?.mapType == GMSMapViewType.terrain {
+            UIApplication.shared.statusBarStyle = .default
+        } else {
+            UIApplication.shared.statusBarStyle = .lightContent
+        }
+        
+        UIApplication.shared.statusBarStyle = .default
+        
         if ADS_ENABLED == true {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 //bottomTableView.constant = 62
@@ -557,6 +553,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
+        mapView = GTMapView.map(withFrame: .zero, camera: camera)
+        mapView?.delegate = self
+        mapView?.tag = 11
+        mapView?.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(mapView!)
+        
         let layer = DownloadTileLayer()
         //layer.tileSize *= U
         layer.zIndex = 1000
@@ -727,23 +730,37 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     
     func setupView() {
-        // Thêm khung chữ thập cho bản đồ
-        self.mapFrame.translatesAutoresizingMaskIntoConstraints = false
-        self.mapView?.addSubview(self.mapFrame)
-        // Căn giữa X
-        NSLayoutConstraint(item: self.mapFrame,
-                           attribute: .centerX,
+        
+        // Căn trái
+        NSLayoutConstraint(item: self.mapView!,
+                           attribute: .leading,
                            relatedBy: .equal,
-                           toItem: self.mapView,
-                           attribute: .centerX,
+                           toItem: self.view,
+                           attribute: .leading,
                            multiplier: 1.0,
                            constant: 0).isActive = true
-        // Căn giữa Y
-        NSLayoutConstraint(item: self.mapFrame,
-                           attribute: .centerY,
+        // Căn phải
+        NSLayoutConstraint(item: self.mapView!,
+                           attribute: .trailing,
                            relatedBy: .equal,
-                           toItem: self.mapView,
-                           attribute: .centerY,
+                           toItem: self.view,
+                           attribute: .trailing,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+        // Căn trên
+        NSLayoutConstraint(item: self.mapView!,
+                           attribute: .top,
+                           relatedBy: .equal,
+                           toItem: self.topLayoutGuide,
+                           attribute: .top,
+                           multiplier: 1.0,
+                           constant: 0).isActive = true
+        // Căn dưới
+        NSLayoutConstraint(item: self.mapView!,
+                           attribute: .bottom,
+                           relatedBy: .equal,
+                           toItem: self.bottomLayoutGuide,
+                           attribute: .bottom,
                            multiplier: 1.0,
                            constant: 0).isActive = true
         
@@ -993,64 +1010,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .notAnAttribute,
                            multiplier: 1,
                            constant: (toolsView?.frame.width)!).isActive = true
-        
-        //----- CoordinateLabel -----
-        coordinateLabel = UILabel()
-        coordinateLabel.isUserInteractionEnabled = true
-        coordinateLabel?.copyable = true
-        coordinateLabel?.frame = CGRect(x: 0, y: 0, width: 320, height: 24)
-        coordinateLabel?.translatesAutoresizingMaskIntoConstraints = false
-        coordinateLabel?.textAlignment = .center
-        coordinateLabel?.numberOfLines = 0
-        coordinateLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
-        coordinateLabel?.sizeToFit()
-        coordinateLabel?.textColor = UIColor.orange
-        coordinateLabel?.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize-1)
-//        coordinateLabel.layer.borderWidth = 1
-//        coordinateLabel.layer.borderColor = UIColor.brown.cgColor
-        self.view?.addSubview(coordinateLabel!)
-        
-        // Đặt chiều cao
-        NSLayoutConstraint(item: coordinateLabel!,
-                           attribute: .height,
-                           relatedBy: .equal,
-                           toItem: nil,
-                           attribute: .notAnAttribute,
-                           multiplier: 1,
-                           constant: 52).isActive = true
-//        // Căn trái
-//        NSLayoutConstraint(item: coordinateLabel!,
-//                           attribute: .leading,
-//                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .leading,
-//                           multiplier: 1.0,
-//                           constant: 5).isActive = true
-//        // Căn phải
-//        NSLayoutConstraint(item: toolsView!,
-//                           attribute: .trailing,
-//                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .trailingMargin,
-//                           multiplier: 1.0,
-//                           constant: 5).isActive = true
-        // Căn trên
-        NSLayoutConstraint(item: coordinateLabel!,
-                           attribute: .top,
-                           relatedBy: .equal,
-                           toItem: self.topLayoutGuide,
-                           attribute: .bottom,
-                           multiplier: 1.0,
-                           constant: 45).isActive = true
-        
-        // Căn giữa so với view
-        NSLayoutConstraint(item: coordinateLabel!,
-                           attribute: .centerX,
-                           relatedBy: .equal,
-                           toItem: self.view,
-                           attribute: .centerX,
-                           multiplier: 1.0,
-                           constant: 0).isActive = true
 
         //----- MyLocationLabel -----
         myLocationLabel = UILabel()
@@ -1081,7 +1040,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            toItem: self.view,
                            attribute: .leading,
                            multiplier: 1.0,
-                           constant: 5).isActive = true
+                           constant: 10).isActive = true
         
         // Căn dưới
         NSLayoutConstraint(item: myLocationLabel!,
@@ -1091,15 +1050,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: -45).isActive = true
-        
-//        // Căn giữa so với view
-//        NSLayoutConstraint(item: coordinateLabel!,
-//                           attribute: .centerX,
-//                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .centerX,
-//                           multiplier: 1.0,
-//                           constant: 0).isActive = true
         
         //----- Button Layer -----
         buttonLayer = UIButton(frame: CGRect.zero)
@@ -1616,28 +1566,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
                 self.hideSomeView()
                 
-                let mapCenter = self.mapView?.center
-                
-                self.cross.center = mapCenter!
-                self.cross.translatesAutoresizingMaskIntoConstraints = false
-                self.mapView?.addSubview(self.cross)
-                // Căn giữa X
-                NSLayoutConstraint(item: self.cross,
-                                   attribute: .centerX,
-                                   relatedBy: .equal,
-                                   toItem: self.mapView,
-                                   attribute: .centerX,
-                                   multiplier: 1.0,
-                                   constant: 0).isActive = true
-                // Căn giữa Y
-                NSLayoutConstraint(item: self.cross,
-                                   attribute: .centerY,
-                                   relatedBy: .equal,
-                                   toItem: self.mapView,
-                                   attribute: .centerY,
-                                   multiplier: 1.0,
-                                   constant: 0).isActive = true
-
+                self.mapView?.showCrossMarker(true)
                 
                 var items = [UIBarButtonItem]()
                 items.append(
@@ -1658,7 +1587,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 let vc: InputFromCoordinatesViewController = InputFromCoordinatesViewController()
                 vc.delegate = self
                 vc.title = NSLocalizedString("Add a marker from coordinates", comment: "")
-                let location = self.mapView?.center
+                let location = self.mapView?.getFixedMapCenter()
                 let coord = self.mapView?.projection.coordinate(for: location!)
                 vc.currentLocation = CLLocation(latitude: (coord?.latitude)!, longitude: (coord?.longitude)!)
                 let nav: UINavigationController = UINavigationController(rootViewController: vc)
@@ -1806,12 +1735,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     @objc func didCancelAddMarker() {
         didDeSelectOverlay()
-        cross.removeFromSuperview()
+        
+        self.mapView?.showCrossMarker(false)
+        
         showSomeView()
     }
     
     @objc func didDoneAddMarker() {
-        let location = self.mapView?.center
+        let location = self.mapView?.getFixedMapCenter()
         let coord = self.mapView?.projection.coordinate(for: location!)
         if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
             let wpt = GPXWaypoint(position: coord!)
@@ -1819,7 +1750,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             wpt.icon = #imageLiteral(resourceName: "pin")
             gpx?.addWaypoint(wpt)
             didDeSelectOverlay()
-            cross.removeFromSuperview()
+            
+            self.mapView?.showCrossMarker(false)
+            
             showSomeView()
             if ENABLE_SOUND_EFFECT {
                 SoundPlayer.play(file: "snap.mp3")
@@ -1991,7 +1924,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         setRecordMainButtonisHidden((self.buttonRecord?.MainButton.isHidden)!)
         
         // Ẩn nhãn tọa độ
-        self.coordinateLabel.isHidden = true
+        self.mapView?.hideCoordinateLabel(true)
         
         self.buttonRecord?.MainButton.closingButtonGroup(expandagain: false)
         self.buttonRecording?.MainButton.closingButtonGroup(expandagain: false)
@@ -2012,7 +1945,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //self.buttonTakePhoto?.isHidden = false
         
         // Hiện nhãn tọa độ
-        self.coordinateLabel.isHidden = false
+        self.mapView?.hideCoordinateLabel(false)
         
         self.buttonRecord?.MainButton.isHidden = getRecordMainButtonisHidden()
         self.buttonRecording?.MainButton.isHidden = getRecordingMainButtonisHidden()
@@ -2760,18 +2693,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.buttonMapTypeDefault?.pressedDown = true
             self.buttonMapTypeSatellite?.pressedDown = false
             self.buttonMapTypeTerrain?.pressedDown = false
+            UIApplication.shared.statusBarStyle = .default
             break
         case 2:
             mapView?.mapType = GMSMapViewType.satellite
             self.buttonMapTypeDefault?.pressedDown = false
             self.buttonMapTypeSatellite?.pressedDown = true
             self.buttonMapTypeTerrain?.pressedDown = false
+            UIApplication.shared.statusBarStyle = .lightContent
             break
         case 3:
             mapView?.mapType = GMSMapViewType.terrain
             self.buttonMapTypeDefault?.pressedDown = false
             self.buttonMapTypeSatellite?.pressedDown = false
             self.buttonMapTypeTerrain?.pressedDown = true
+            UIApplication.shared.statusBarStyle = .default
             break
         default:
             break
@@ -3358,7 +3294,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if mapView.myLocation != nil {
                     trackingDistance()
                 } else {
-                    marker.snippet = marker.position.latLngFormated(withTarget: true)
+                    if marker.snippet?.length == 0 {
+                        marker.snippet = marker.position.latLngFormated(withTarget: true)
+                    }
                 }
             }
         }
@@ -3528,13 +3466,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Thêm ScaleBarView
         mapView.updateScaleBar()
         mapView.updateRulerBarLabel()
-        
-        let mapCenter = mapView.center
-        //let myLocationCenter = mapView.projection.point(for: (mapView.myLocation?.coordinate)!)
-        //mapCenter.y += 0.5*UIApplication.shared.statusBarFrame.height
-        //print(mapView.center, myLocationCenter)
-        
-        coordinateLabel?.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapCenter).latLngFormated(withTarget: true), attributes: strokeTextAttributes)
         
         // Gỡ activeVertex
         if selectedOverlay != nil, selectedOverlay?.trackSegment.actions == .editing {

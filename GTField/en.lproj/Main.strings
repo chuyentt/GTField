@@ -194,6 +194,8 @@
 
 "w5C-nd-oiN.text" = "Enable ruler on the map";
 
+"PQD-zq-KIx.text" = "Display map center coordinate";
+
 /* Class = "UILabel"; text = "Meter (m)"; ObjectID = "zR6-5z-w4D"; */
 "zR6-5z-w4D.text" = "Meter (m)";
 

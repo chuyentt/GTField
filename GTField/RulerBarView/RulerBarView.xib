@@ -15,6 +15,9 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" image="MapFrame" translatesAutoresizingMaskIntoConstraints="NO" id="uTX-hf-Sk3">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iI8-pG-MhA">
                     <rect key="frame" x="-35" y="651" width="100" height="16"/>
                     <constraints>
@@ -24,17 +27,49 @@
                     <attributedString key="attributedText"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZh-E0-Rbl">
+                    <rect key="frame" x="168" y="10" width="39.5" height="54"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="54" id="PvJ-cB-oZM"/>
+                    </constraints>
+                    <attributedString key="attributedText">
+                        <fragment content="Label">
+                            <attributes>
+                                <color key="NSColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="16" name=".AppleSystemUIFont"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="uTX-hf-Sk3" secondAttribute="trailing" id="32A-oU-kiW"/>
+                <constraint firstItem="uTX-hf-Sk3" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ADA-qi-3H9"/>
                 <constraint firstItem="iI8-pG-MhA" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-35" id="NIm-Fd-kDo"/>
+                <constraint firstItem="uTX-hf-Sk3" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Pj9-ws-OUq"/>
                 <constraint firstAttribute="bottom" secondItem="iI8-pG-MhA" secondAttribute="bottom" id="aAa-W5-GFB"/>
+                <constraint firstItem="HZh-E0-Rbl" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="djU-mu-dow"/>
+                <constraint firstItem="uTX-hf-Sk3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="eDD-mh-4s9"/>
+                <constraint firstItem="uTX-hf-Sk3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="q49-eN-uRW"/>
+                <constraint firstItem="iI8-pG-MhA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="651" id="tsd-7l-mry"/>
+                <constraint firstAttribute="bottom" secondItem="uTX-hf-Sk3" secondAttribute="bottom" id="xoU-5S-Gj7"/>
+                <constraint firstItem="HZh-E0-Rbl" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="yhz-Qt-0wE"/>
             </constraints>
             <connections>
+                <outlet property="coordinateLabel" destination="HZh-E0-Rbl" id="7Jf-gn-JjJ"/>
+                <outlet property="coordinateLabelVerticalSpaceConstant" destination="yhz-Qt-0wE" id="jfG-Ha-Qy9"/>
+                <outlet property="crossLine" destination="uTX-hf-Sk3" id="Og5-mH-yK0"/>
+                <outlet property="mapFrameVerticalSpaceConstant" destination="eDD-mh-4s9" id="csi-uU-XLL"/>
                 <outlet property="scaleLabel" destination="iI8-pG-MhA" id="mwg-LG-Gks"/>
                 <outlet property="scaleLabelBottomConstant" destination="aAa-W5-GFB" id="eFk-dr-MIt"/>
             </connections>
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="MapFrame" width="91" height="91"/>
+    </resources>
 </document>

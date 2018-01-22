@@ -11,9 +11,25 @@ import UIKit
 public class RulerBarView: UIView {
     private var basePointsPI: CGFloat = 154.0
     public var isShowRuler: Bool = true
-    private var strokeTextAttributes:[NSAttributedStringKey : Any]?
+    private var strokeTextAttributes = [
+        NSAttributedStringKey.strokeColor : UIColor.white,
+        NSAttributedStringKey.foregroundColor : UIColor.black,
+        NSAttributedStringKey.strokeWidth : -5.0,
+        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11)
+        ] as [NSAttributedStringKey : Any]
+    private var coordinateLabelStrokeTextAttributes = [
+        NSAttributedStringKey.strokeColor : UIColor.white,
+        NSAttributedStringKey.foregroundColor : UIColor.orange,
+        NSAttributedStringKey.strokeWidth : -4.0,
+        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
+        ] as [NSAttributedStringKey : Any]
     @IBOutlet weak var scaleLabel: UILabel!
     @IBOutlet weak var scaleLabelBottomConstant: NSLayoutConstraint!
+    
+    @IBOutlet weak var coordinateLabelVerticalSpaceConstant: NSLayoutConstraint!
+    @IBOutlet weak var coordinateLabel: UILabel!
+    @IBOutlet weak var crossLine: UIImageView!
+    @IBOutlet weak var mapFrameVerticalSpaceConstant: NSLayoutConstraint!
     
     public override func awakeFromNib() {
         
@@ -35,16 +51,13 @@ public class RulerBarView: UIView {
         default:
             scaleLabelBottomConstant.constant = CGFloat(basePointsPI/2)
         }
+
+        crossLine.isHidden = !ENABLE_MAP_CENTER_COORDINATE
+        coordinateLabel.isHidden = !ENABLE_MAP_CENTER_COORDINATE
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .right
-        strokeTextAttributes = [
-            NSAttributedStringKey.strokeColor : UIColor.white,
-            NSAttributedStringKey.foregroundColor : UIColor.black,
-            NSAttributedStringKey.strokeWidth : -5.0,
-            NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11),
-            NSAttributedStringKey.paragraphStyle : paragraphStyle
-        ]
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.alignment = .right
+        
         // UIScreen.main.nativeScale là tỷ lệ vật lý (<= scale)
         // Lưu ý: Ví dụ đối với iPhone 6 Plus:
         // - Simulator thì UIScreen.main.scale và UIScreen.main.nativeScale đều = 3
@@ -87,10 +100,30 @@ public class RulerBarView: UIView {
                     attributes: strokeTextAttributes)
             }
         }
+        
+        // Cập nhật tọa độ tâm bản đồ
+        let mapCenter = crossLine.center
+        self.coordinateLabel.attributedText = NSMutableAttributedString(string: mapView.projection.coordinate(for: mapCenter).latLngFormated(withTarget: true), attributes: coordinateLabelStrokeTextAttributes)
+    }
+    
+    public func hideCoordinateLabel(_ hidden: Bool) {
+        if ENABLE_MAP_CENTER_COORDINATE {
+            coordinateLabel.isHidden = hidden
+        }
+    }
+    
+    public func showCrossMarker(_ show: Bool) {
+        if show {
+            crossLine.showHighlight()
+        } else {
+            crossLine.hideHighlight()
+        }
     }
         
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
+        mapFrameVerticalSpaceConstant.constant = UIApplication.shared.statusBarFrame.height
+        coordinateLabelVerticalSpaceConstant.constant = UIApplication.shared.statusBarFrame.height + 54
         if isShowRuler {
             let unit = getDistanceUnit()
             let screenWidth = UIScreen.main.bounds.width
@@ -203,6 +236,25 @@ public extension GMSMapView {
         if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
             // Nếu tồn tại
             rulerBarXibView.updateScaleLabel()
+        }
+    }
+    
+    public func hideCoordinateLabel(_ hidden: Bool) {
+        if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
+            rulerBarXibView.hideCoordinateLabel(hidden)
+        }
+    }
+    
+    public func getFixedMapCenter() -> CGPoint {
+        if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
+            return rulerBarXibView.crossLine.center
+        }
+        return self.center
+    }
+    
+    public func showCrossMarker(_ show: Bool) {
+        if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
+            rulerBarXibView.showCrossMarker(show)
         }
     }
     

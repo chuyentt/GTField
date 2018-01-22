@@ -194,6 +194,8 @@
 
 "w5C-nd-oiN.text" = "在地图上启用标尺";
 
+"PQD-zq-KIx.text" = "显示地图中心坐标";
+
 /* Class = "UILabel"; text = "米 (m)"; ObjectID = "zR6-5z-w4D"; */
 "zR6-5z-w4D.text" = "米 (m)";
 

@@ -58,6 +58,7 @@ let ELEVATION_COLOR_SPANS = 750.0 // Hệ số dùng để span polyline theo đ
 
 var ENABLE_SOUND_EFFECT: Bool = getEnableSoundEffect()
 var ENABLE_RULER_BAR: Bool = getEnableRulerBar()
+var ENABLE_MAP_CENTER_COORDINATE: Bool = getEnableMapCenterCoordinate()
 
 var ENABLE_IMPROVED_PERFORMANCE: Bool = getEnableImprovedPerformance()
 

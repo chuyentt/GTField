@@ -382,6 +382,19 @@ func setEnableRulerBar(_ value: Bool) {
 }
 
 /************************************************
+ * Display map center coordinate
+ */
+func getEnableMapCenterCoordinate() -> Bool {
+    guard UserDefaults.standard.object(forKey: "ENABLE_MAP_CENTER_COORDINATE") != nil else { return false }
+    return UserDefaults.standard.bool(forKey: "ENABLE_MAP_CENTER_COORDINATE")
+}
+
+func setEnableMapCenterCoordinate(_ value: Bool) {
+    UserDefaults.standard.set(value, forKey: "ENABLE_MAP_CENTER_COORDINATE")
+    UserDefaults.standard.synchronize()
+}
+
+/************************************************
  * Cải thiện hiệu năng GNSS/INS
  */
 func getEnableImprovedPerformance() -> Bool {

@@ -25,6 +25,11 @@
 #import "GMUStyle.h"
 #import "GeoJSONStyle.h"
 
+static NSString *const kGeoJSONPropertyName = @"name";
+static NSString *const kGeoJSONPropertyTitle = @"title";
+static NSString *const kGeoJSONPropertyDesc = @"desc";
+
+
 @implementation GMUGeometryRenderer {
   NSMutableArray<GMSOverlay *> *_mapOverlays;
     // Bổ sung bounds
@@ -166,6 +171,7 @@
               style:(GMUStyle *)style {
   CLLocationCoordinate2D coordinate = point.coordinate;
   GMSMarker *marker = [GMSMarker markerWithPosition:coordinate];
+ 
   if ([container isKindOfClass:[GMUPlacemark class]]) {
     GMUPlacemark *placemark = container;
     marker.title = style.title ?: placemark.title;
@@ -197,9 +203,29 @@
       });
     });
   } else {
+      if (container.properties) {
+          NSString *title = @"";
+          if ([container.properties objectForKey:kGeoJSONPropertyName]) {
+              title = [container.properties objectForKey:kGeoJSONPropertyName];
+          } else if ([container.properties objectForKey:kGeoJSONPropertyTitle]) {
+              title = [container.properties objectForKey:kGeoJSONPropertyTitle];
+          }
+          NSString *desc = @"";
+          if ([container.properties objectForKey:kGeoJSONPropertyDesc]) {
+              desc = [container.properties objectForKey:kGeoJSONPropertyDesc];
+          }
+          GeoJSONStyle *geoJSONStyle = [[GeoJSONStyle alloc] initWithProperties:container.properties];
+          UIImage *icon = [UIImage imageNamed:geoJSONStyle.markerSymbol];
+          if (icon != nil) {
+              marker.icon = icon;
+          } else {
+              marker.icon = [UIImage imageNamed:[NSString stringWithFormat:@"pin-%@", geoJSONStyle.markerSize]];
+          }
+          marker.title = title;
+          marker.snippet = title;
+      }
     marker.map = _map;
   }
-    
     // Bổ sung bounds
     _boundingBox = [_boundingBox includingCoordinate:marker.position];
     
@@ -268,6 +294,18 @@
           poly.strokeWidth = geoJSONStyle.strokeWidth;
           poly.strokeColor = geoJSONStyle.strokeColor;
           poly.fillColor = geoJSONStyle.fillColor;
+          
+          NSString *title = @"";
+          if ([container.properties objectForKey:kGeoJSONPropertyName]) {
+              title = [container.properties objectForKey:kGeoJSONPropertyName];
+          } else if ([container.properties objectForKey:kGeoJSONPropertyTitle]) {
+              title = [container.properties objectForKey:kGeoJSONPropertyTitle];
+          }
+          NSString *desc = @"";
+          if ([container.properties objectForKey:kGeoJSONPropertyDesc]) {
+              desc = [container.properties objectForKey:kGeoJSONPropertyDesc];
+          }
+          poly.title = title;
       }
   }
   
