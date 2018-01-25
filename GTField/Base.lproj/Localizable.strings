@@ -115,6 +115,7 @@
 "Settings..." = "Settings...";
 "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place";
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option.";
+"Add a marker from GPS" = "Add a marker from GPS";
 "Add a marker from the map" = "Add a marker from the map";
 "Add a marker from coordinates" = "Add a marker from coordinates";
 "Unknown"="Unknown";

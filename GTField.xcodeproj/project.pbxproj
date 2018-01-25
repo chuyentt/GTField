@@ -132,6 +132,9 @@
 		DE44C1221F40357300434C2E /* VolumeUnit+Imperial.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44C1131F40357300434C2E /* VolumeUnit+Imperial.swift */; };
 		DE44C1231F40357300434C2E /* VolumeUnit+US.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44C1141F40357300434C2E /* VolumeUnit+US.swift */; };
 		DE44C1241F40357300434C2E /* VolumeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44C1151F40357300434C2E /* VolumeUnit.swift */; };
+		DE4601DF2018F42500760599 /* MagnifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DC2018F42400760599 /* MagnifyView.swift */; };
+		DE4601E02018F42500760599 /* PointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DD2018F42400760599 /* PointView.swift */; };
+		DE4601E12018F42500760599 /* CPolylineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DE2018F42400760599 /* CPolylineView.swift */; };
 		DE4E7BDC1F3B6CA30012E317 /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDB1F3B6CA30012E317 /* PhotoTableViewCell.swift */; };
 		DE4E7BE61F3C56340012E317 /* BinaryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDE1F3C56320012E317 /* BinaryReader.swift */; };
 		DE4E7BE71F3C56340012E317 /* CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDF1F3C56320012E317 /* CSV.swift */; };
@@ -419,6 +422,9 @@
 		DE44C1131F40357300434C2E /* VolumeUnit+Imperial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VolumeUnit+Imperial.swift"; sourceTree = "<group>"; };
 		DE44C1141F40357300434C2E /* VolumeUnit+US.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VolumeUnit+US.swift"; sourceTree = "<group>"; };
 		DE44C1151F40357300434C2E /* VolumeUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VolumeUnit.swift; sourceTree = "<group>"; };
+		DE4601DC2018F42400760599 /* MagnifyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagnifyView.swift; sourceTree = "<group>"; };
+		DE4601DD2018F42400760599 /* PointView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointView.swift; sourceTree = "<group>"; };
+		DE4601DE2018F42400760599 /* CPolylineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPolylineView.swift; sourceTree = "<group>"; };
 		DE4E7BDB1F3B6CA30012E317 /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoTableViewCell.swift; path = ViewControllers/PhotoMap/PhotoTableViewCell.swift; sourceTree = "<group>"; };
 		DE4E7BDE1F3C56320012E317 /* BinaryReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BinaryReader.swift; path = CSV/BinaryReader.swift; sourceTree = "<group>"; };
 		DE4E7BDF1F3C56320012E317 /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CSV.swift; path = CSV/CSV.swift; sourceTree = "<group>"; };
@@ -653,6 +659,7 @@
 				164381741CB3B4E3007FA14E /* Section Pics */,
 				DEAD15711EEA9CA900BFD5CE /* Photos */,
 				DE88492120090A60003A619F /* UIScreenExtension */,
+				DE4601DB2018F42400760599 /* CPolylineView */,
 				DE8847982008AFB8003A619F /* RulerBarView */,
 				DEA0244E2005BB4B00B18CF4 /* ScaleBarView */,
 				DEA2EE66200466AB00577616 /* Highlight */,
@@ -1027,6 +1034,16 @@
 				DE44C1151F40357300434C2E /* VolumeUnit.swift */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		DE4601DB2018F42400760599 /* CPolylineView */ = {
+			isa = PBXGroup;
+			children = (
+				DE4601DC2018F42400760599 /* MagnifyView.swift */,
+				DE4601DD2018F42400760599 /* PointView.swift */,
+				DE4601DE2018F42400760599 /* CPolylineView.swift */,
+			);
+			path = CPolylineView;
 			sourceTree = "<group>";
 		};
 		DE4E7BDD1F3C55C80012E317 /* CSV */ = {
@@ -1674,6 +1691,7 @@
 				DEB2268C1E64282400D27CB5 /* PlaceDetailTableViewDataSource.swift in Sources */,
 				DE44C11F1F40357300434C2E /* Quantity.swift in Sources */,
 				DE35F2951EEEB75D009EE354 /* ConfigMapSourceViewController.swift in Sources */,
+				DE4601DF2018F42500760599 /* MagnifyView.swift in Sources */,
 				16D845951D8D2DCB005DF780 /* LoadingView.swift in Sources */,
 				DE86E3311FA9614C005E5825 /* GMUGroundOverlay.m in Sources */,
 				169B359B1B9DDBE700B83857 /* Config.swift in Sources */,
@@ -1702,6 +1720,7 @@
 				DE379D681F15A73300B0FEA0 /* GPXFileManager.swift in Sources */,
 				DEC7B8581EECDAC300EE81CB /* WMSTileLayer.swift in Sources */,
 				DE86E32A1FA9614C005E5825 /* GMUStaticCluster.m in Sources */,
+				DE4601E02018F42500760599 /* PointView.swift in Sources */,
 				16D845901D8D2DCB005DF780 /* DesignableTextView.swift in Sources */,
 				DE3AAD3E1FDA7A8800DC58DE /* CGContext+GraphLines.swift in Sources */,
 				DE8E41331F361B87005766B5 /* VertexView.swift in Sources */,
@@ -1739,6 +1758,7 @@
 				DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */,
 				DEA2EE6C2004684100577616 /* HighlightView.swift in Sources */,
 				DE44C1201F40357300434C2E /* TimeUnit.swift in Sources */,
+				DE4601E12018F42500760599 /* CPolylineView.swift in Sources */,
 				DEB226731E607BDB00D27CB5 /* SplitPaneViewController.swift in Sources */,
 				DE44C11D1F40357300434C2E /* MassUnit+Imperial.swift in Sources */,
 				16D845871D8D2DCB005DF780 /* AsyncButton.swift in Sources */,

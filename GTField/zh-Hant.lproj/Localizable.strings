@@ -115,6 +115,7 @@
 "Settings..." = "Settings...";
 "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "沒有授權使用位置服務.您不能更改此應用程序的狀態,可能是由於父母控制等活動的限制";
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "只有當您在你的現場工作的時候您在記錄軌道的時候，您才可以訪問所需要的位置服務.請先進入應用設置然後選擇\"始終\"選項.";
+"Add a marker from GPS" = "從GPS添加一個標記";
 "Add a marker from the map" = "從地圖添加一個標記";
 "Add a marker from coordinates" = "從坐標添加一個標記";
 "Unknown"="不明";

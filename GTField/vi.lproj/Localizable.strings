@@ -115,6 +115,7 @@
 "Settings..." = "Cài đặt...";
 "is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place" = "hiện không được phép sử dụng dịch vụ định vị. Bạn không thể thay đổi trạng thái của ứng dụng này, có thể do các hạn chế đang hoạt động như kiểm soát của phụ huynh đang được áp dụng";
 "Alway access to the location services required for use only while you are recording the track at all times in your field work. To enable Alway access, please go to app settings and select \"Alway\" option." = "Yêu cầu duy trì quyền truy cập dịch vụ định vị chỉ sử dụng trong khi bạn ghi lại lộ trình ở mọi lúc trong công việc hiện trường của bạn. Để cho phép truy cập, hãy đi tới cài đặt ứng dụng và chọn tùy chọn \"Luôn luôn\".";
+"Add a marker from GPS" = "Thêm mốc từ GPS";
 "Add a marker from the map" = "Thêm mốc từ bản đồ";
 "Add a marker from coordinates" = "Thêm mốc từ tọa độ";
 "Unknown"="Không xác định";

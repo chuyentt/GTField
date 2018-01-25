@@ -34,9 +34,10 @@ let strokeTextAttributesAlignLeft = [
     NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
     ] as [NSAttributedStringKey : Any]
 
-public class GTMapView: GMSMapView {
+open class GTMapView: GMSMapView, GMSMapViewDelegate {
 
 }
+
 
 class DownloadTileLayer: GMSSyncTileLayer {
     override func tileFor(x: UInt, y: UInt, zoom: UInt) -> UIImage? {
@@ -58,17 +59,18 @@ extension MapViewController: JellyButtonDelegate
         print("groupindex \(groupindex) arrindex \(arrindex)")
         if groupindex == 0 { // Bình thường
             switch arrindex {
-            case 0: // AddGPSMarker
-                self.btnAddGPSMarker()
+            case 0: // AddMarker
+                self.btnAddMarker()
+                //self.btnAddGPSMarker()
                 break
             case 1: // Record Track
                 self.startUpdatingLocationAllowsBackground()
                 break
-            case 2: // AddMarker
-                self.btnAddMarker()
-                break
-            case 3: // Add Polyline
+            case 2: // Add Polyline
                 self.btnAddPolyline()
+                break
+            case 3:// Add Polyline
+                self.btnAddPolygon()
                 break
             case 4: // btnTakePhoto
                 self.btnTakePhoto()
@@ -80,7 +82,7 @@ extension MapViewController: JellyButtonDelegate
         if groupindex == 1 { // Đang ghi
             switch arrindex {
             case 0: // AddMarker
-                self.btnAddGPSMarker()
+                self.btnAddMarker()
                 break
             case 1: // Done
                 self.setupButtonDone()
@@ -91,12 +93,6 @@ extension MapViewController: JellyButtonDelegate
             case 3: // Pause
                 self.setupButtonPaused()
                 break
-//            case 4: // AddMarker
-//                self.btnAddMarker()
-//                break
-//            case 5: // Add Polyline
-//                self.btnAddPolyline()
-//                break
             case 4: // btnTakePhoto
                 self.btnTakePhoto()
                 break
@@ -107,7 +103,7 @@ extension MapViewController: JellyButtonDelegate
         if groupindex == 2 { // Đang tạm dừng
             switch arrindex {
             case 0: // AddMarker
-                self.btnAddGPSMarker()
+                self.btnAddMarker()
                 break
             case 1: // Done
                 self.setupButtonDone()
@@ -118,12 +114,6 @@ extension MapViewController: JellyButtonDelegate
             case 3: // Resume
                 self.startUpdatingLocationAllowsBackground()
                 break
-//            case 4: // AddMarker
-//                self.btnAddMarker()
-//                break
-//            case 5: // Add Polyline
-//                self.btnAddPolyline()
-//                break
             case 4: // btnTakePhoto
                 self.btnTakePhoto()
                 break
@@ -362,7 +352,7 @@ extension MapViewController:InputFromCoordinatesViewControllerDelegate {
 
 import CoreMotion
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, UITextFieldDelegate, GMSAutocompleteTableDataSourceDelegate, GADBannerViewDelegate, MotionContainer {
+class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, UITextFieldDelegate, GMSAutocompleteTableDataSourceDelegate, GADBannerViewDelegate, MotionContainer, CPolylineViewDelegate {
     
     // Định nghĩa từ Motion Container
     var motionManager: CMMotionManager?
@@ -494,6 +484,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     private var scaleBarView: ScaleBarView!
     
+    //private var cPolylineView: CPolylineView!
+    
     override func loadView() {
         super.loadView()
     }
@@ -576,6 +568,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.mapView?.showRulerBar(getEnableRulerBar())
 
         self.gpx = GPX(mapView!)
+        
+//        // Thêm cPolylineView để thêm và sửa geometry
+//        cPolylineView = CPolylineView(frame: self.view.frame)
+//        cPolylineView.drawingMode = .fillStroke
+//        cPolylineView.polylineMode = .editing
+//        cPolylineView.delegate = self
+//        mapView?.addSubview(cPolylineView)
         
         //NSNotification.Name.UIApplicationWillEnterForeground
         NotificationCenter.default.addObserver(self,
@@ -1334,9 +1333,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func createButtonRecord() {
-        let iconRecord:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonAddTrack"),#imageLiteral(resourceName: "buttonAddWaypoint"),#imageLiteral(resourceName: "buttonAddPolyline"),#imageLiteral(resourceName: "buttonTakePhoto")]
-        let iconRecording:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonPause"),#imageLiteral(resourceName: "buttonTakePhoto")]
-        let iconPaused:[UIImage] = [#imageLiteral(resourceName: "buttonAddGPS"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonResume"),#imageLiteral(resourceName: "buttonTakePhoto")]
+        let iconRecord:[UIImage] = [#imageLiteral(resourceName: "buttonAddWaypoint"),#imageLiteral(resourceName: "buttonAddTrack"),#imageLiteral(resourceName: "buttonAddPolyline"),#imageLiteral(resourceName: "buttonAddPolygon"),#imageLiteral(resourceName: "buttonTakePhoto")]
+        let iconRecording:[UIImage] = [#imageLiteral(resourceName: "buttonAddWaypoint"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonPause"),#imageLiteral(resourceName: "buttonTakePhoto")]
+        let iconPaused:[UIImage] = [#imageLiteral(resourceName: "buttonAddWaypoint"),#imageLiteral(resourceName: "buttonDone"),#imageLiteral(resourceName: "buttonReset"),#imageLiteral(resourceName: "buttonResume"),#imageLiteral(resourceName: "buttonTakePhoto")]
         iconArray.append(iconRecord)
         iconArray.append(iconRecording)
         iconArray.append(iconPaused)
@@ -1554,7 +1553,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             title: NSLocalizedString("Select option", comment: ""),
             message: nil,
             preferredStyle: .alert)
-        
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Add a marker from GPS", comment: ""),
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                self.btnAddGPSMarker()
+        }))
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("Add a marker from the map", comment: ""),
             style: .default,
@@ -1595,6 +1599,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 })
         }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (alert) -> Void in
+            
+        }))
         present(alert, animated: true, completion: nil)
     }
     
@@ -1612,16 +1619,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func btnAddPolygon() {
         // Tạm thời chưa dùng polygon
-        btnAddPolyline()
-//        if isTesting || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
-//            self.gpx?.newPointSegment()
-//            self.gpx?.currentPointSegment?.actions = .editing
-//            selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
-//            didSelectOverlay()
-//            didEditOverlay()
-//        } else {
-//            self.showSubscription()
-//        }
+        // btnAddPolyline()
+        if isTesting || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
+            self.gpx?.newPointSegment()
+            self.gpx?.currentPointSegment?.actions = .editing
+            selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
+            didSelectOverlay()
+            didEditOverlay()
+        } else {
+            self.showSubscription()
+        }
     }
 
     func didSelectOverlay() {

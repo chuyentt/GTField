@@ -404,6 +404,7 @@ extension GPXTrackSegment: VertexViewTouchDelegate {
     }
 }
 
+// Polyline
 class GPXTrackSegment: GMSOverlay {
     var vertices: [GMSMarker] = [GMSMarker]()
     var middlePoint: [GMSMarker] = [GMSMarker]()
@@ -612,7 +613,7 @@ class GPXTrackSegment: GMSOverlay {
             let coord = path.coordinate(at: i)
             let vertex = GMSMarker(position: coord)
             //vertex.isDraggable = true
-            let markerImage = UIImage(named: "vertex")!.withRenderingMode(.alwaysTemplate)
+            let markerImage = UIImage(named: "Vertex")!.withRenderingMode(.alwaysTemplate)
             vertex.icon = markerImage
             vertex.userData =  ["type":"vertex","id": "\(i)"]
             vertex.groundAnchor = CGPoint(x: 0.5, y: 0.5)
@@ -623,7 +624,7 @@ class GPXTrackSegment: GMSOverlay {
                 let coord1 = path.coordinate(at: i)
                 let middle = GMSMarker(position: (coord0.middleLocationWith(location: coord1)))
                 middle.isDraggable = true
-                let markerImage = UIImage(named: "middle")!.withRenderingMode(.alwaysTemplate)
+                let markerImage = UIImage(named: "Midpoint")!.withRenderingMode(.alwaysTemplate)
                 middle.icon = markerImage
                 middle.userData =  ["type":"middle","id": "\(i)"]
                 middle.groundAnchor = CGPoint(x: 0.5, y: 0.5)
@@ -1152,7 +1153,7 @@ class GPXPointSegment: GMSOverlay {
             let coord = path.coordinate(at: i)
             let vertex = GMSMarker(position: coord)
             vertex.isDraggable = true
-            let markerImage = UIImage(named: "vertex")!.withRenderingMode(.alwaysTemplate)
+            let markerImage = UIImage(named: "Vertex")!.withRenderingMode(.alwaysTemplate)
             vertex.icon = markerImage
             vertex.userData = ["type":"vertex","id": "\(i)"]
             vertex.groundAnchor = CGPoint(x: 0.5, y: 0.5)
@@ -1163,7 +1164,7 @@ class GPXPointSegment: GMSOverlay {
                 let coord1 = path.coordinate(at: i)
                 let middle = GMSMarker(position: (coord0.middleLocationWith(location: coord1)))
                 middle.isDraggable = true
-                let markerImage = UIImage(named: "middle")!.withRenderingMode(.alwaysTemplate)
+                let markerImage = UIImage(named: "Midpoint")!.withRenderingMode(.alwaysTemplate)
                 middle.icon = markerImage
                 middle.userData =  ["type":"middle","id": "\(i)"]
                 middle.groundAnchor = CGPoint(x: 0.5, y: 0.5)
@@ -1175,7 +1176,7 @@ class GPXPointSegment: GMSOverlay {
                 let coord1 = path.coordinate(at: 0)
                 let middle = GMSMarker(position: (coord0.middleLocationWith(location: coord1)))
                 middle.isDraggable = true
-                let markerImage = UIImage(named: "middle")!.withRenderingMode(.alwaysTemplate)
+                let markerImage = UIImage(named: "Midpoint")!.withRenderingMode(.alwaysTemplate)
                 middle.icon = markerImage
                 middle.userData = ["type":"middle","id": "\(i)"]
                 middle.groundAnchor = CGPoint(x: 0.5, y: 0.5)
