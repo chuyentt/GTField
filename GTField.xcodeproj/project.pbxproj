@@ -134,7 +134,7 @@
 		DE44C1241F40357300434C2E /* VolumeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44C1151F40357300434C2E /* VolumeUnit.swift */; };
 		DE4601DF2018F42500760599 /* MagnifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DC2018F42400760599 /* MagnifyView.swift */; };
 		DE4601E02018F42500760599 /* PointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DD2018F42400760599 /* PointView.swift */; };
-		DE4601E12018F42500760599 /* CPolylineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DE2018F42400760599 /* CPolylineView.swift */; };
+		DE4601E12018F42500760599 /* CPolyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4601DE2018F42400760599 /* CPolyline.swift */; };
 		DE4E7BDC1F3B6CA30012E317 /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDB1F3B6CA30012E317 /* PhotoTableViewCell.swift */; };
 		DE4E7BE61F3C56340012E317 /* BinaryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDE1F3C56320012E317 /* BinaryReader.swift */; };
 		DE4E7BE71F3C56340012E317 /* CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4E7BDF1F3C56320012E317 /* CSV.swift */; };
@@ -424,7 +424,7 @@
 		DE44C1151F40357300434C2E /* VolumeUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VolumeUnit.swift; sourceTree = "<group>"; };
 		DE4601DC2018F42400760599 /* MagnifyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagnifyView.swift; sourceTree = "<group>"; };
 		DE4601DD2018F42400760599 /* PointView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointView.swift; sourceTree = "<group>"; };
-		DE4601DE2018F42400760599 /* CPolylineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPolylineView.swift; sourceTree = "<group>"; };
+		DE4601DE2018F42400760599 /* CPolyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CPolyline.swift; sourceTree = "<group>"; };
 		DE4E7BDB1F3B6CA30012E317 /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoTableViewCell.swift; path = ViewControllers/PhotoMap/PhotoTableViewCell.swift; sourceTree = "<group>"; };
 		DE4E7BDE1F3C56320012E317 /* BinaryReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BinaryReader.swift; path = CSV/BinaryReader.swift; sourceTree = "<group>"; };
 		DE4E7BDF1F3C56320012E317 /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CSV.swift; path = CSV/CSV.swift; sourceTree = "<group>"; };
@@ -1041,7 +1041,7 @@
 			children = (
 				DE4601DC2018F42400760599 /* MagnifyView.swift */,
 				DE4601DD2018F42400760599 /* PointView.swift */,
-				DE4601DE2018F42400760599 /* CPolylineView.swift */,
+				DE4601DE2018F42400760599 /* CPolyline.swift */,
 			);
 			path = CPolylineView;
 			sourceTree = "<group>";
@@ -1758,7 +1758,7 @@
 				DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */,
 				DEA2EE6C2004684100577616 /* HighlightView.swift in Sources */,
 				DE44C1201F40357300434C2E /* TimeUnit.swift in Sources */,
-				DE4601E12018F42500760599 /* CPolylineView.swift in Sources */,
+				DE4601E12018F42500760599 /* CPolyline.swift in Sources */,
 				DEB226731E607BDB00D27CB5 /* SplitPaneViewController.swift in Sources */,
 				DE44C11D1F40357300434C2E /* MassUnit+Imperial.swift in Sources */,
 				16D845871D8D2DCB005DF780 /* AsyncButton.swift in Sources */,

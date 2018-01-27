@@ -352,7 +352,7 @@ extension MapViewController:InputFromCoordinatesViewControllerDelegate {
 
 import CoreMotion
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, UITextFieldDelegate, GMSAutocompleteTableDataSourceDelegate, GADBannerViewDelegate, MotionContainer, CPolylineViewDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, UITextFieldDelegate, GMSAutocompleteTableDataSourceDelegate, GADBannerViewDelegate, MotionContainer {
     
     // Định nghĩa từ Motion Container
     var motionManager: CMMotionManager?
@@ -484,7 +484,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     private var scaleBarView: ScaleBarView!
     
-    //private var cPolylineView: CPolylineView!
+    private var cPolyline: CPolyline!
     
     override func loadView() {
         super.loadView()
@@ -504,6 +504,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         super.viewDidAppear(animated)
         
         self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
+        
+        let pl = GMSPolyline(path: GMSPath(fromEncodedPath: "ehc{Byw`gSzPi]vAnXuHoXnA|Y`IyNsCtRxEgJ^_COxN"))
+        //pl.map = mapView
+        // Thêm cPolyline để thêm và sửa geometry
+        cPolyline = CPolyline(gmsPolyline: pl)
+        cPolyline.map = mapView
+        cPolyline.visibleMode = .editing
+        
+//        let when = DispatchTime.now() + 5
+//        // change 2 to desired number of seconds
+//        DispatchQueue.main.asyncAfter(deadline: when) {
+//            let pl = self.cPolyline.gpsPolyline()
+//            
+//            self.cPolyline.map = nil
+//            self.cPolyline = nil
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -569,18 +585,32 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         self.gpx = GPX(mapView!)
         
-//        // Thêm cPolylineView để thêm và sửa geometry
-//        cPolylineView = CPolylineView(frame: self.view.frame)
-//        cPolylineView.drawingMode = .fillStroke
-//        cPolylineView.polylineMode = .editing
-//        cPolylineView.delegate = self
-//        mapView?.addSubview(cPolylineView)
-        
         //NSNotification.Name.UIApplicationWillEnterForeground
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillEnterForeground(_:)),
                                                name: NSNotification.Name.UIApplicationWillEnterForeground,
                                                object: nil)
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillChangeStatusBarOrientation,
+                                               object: nil,
+                                               queue: OperationQueue.main) { (notifi) in
+                                                if self.cPolyline != nil && self.cPolyline.visibleMode == .editing {
+                                                    // Tạm thời ẩn các đỉnh
+                                                    self.cPolyline.visibleVertices(false)
+                                                }
+        }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIDeviceOrientationDidChange,
+                                               object: nil,
+                                               queue: OperationQueue.main) { (notifi) in
+                                                let when = DispatchTime.now() + 1
+                                                // change 2 to desired number of seconds
+                                                DispatchQueue.main.asyncAfter(deadline: when) {
+                                                    if self.cPolyline != nil && self.cPolyline.visibleMode == .editing {
+                                                        self.cPolyline.updateVertex()
+                                                        self.cPolyline.visibleVertices(true)
+                                                    }
+                                                }
+        }
     }
     
     @objc func applicationWillEnterForeground(_ notification: NSNotification) {
@@ -1980,7 +2010,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.paneView?.frame = CGRect(x: 0, y: (size.height - kPaneViewHeight), width: size.width, height: kPaneViewHeight)
                 self.paneView?.layer.zPosition = 100
                 self.mapView?.padding = UIEdgeInsets(top: 0, left: 0, bottom: kPaneViewHeight, right: 0)
-                
+
                 self.hideSomeView()
                 
                 // Hiện opacitySlider
@@ -2636,7 +2666,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } // Kết thúc hiện pane
         self.paneView?.layoutIfNeeded()
         
-        
     }
     
     class PaneView: UIView {
@@ -3261,13 +3290,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         return nil
     }
     
-    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-        if mapView.selectedMarker == nil {
-            self.line?.map = nil
-        }
-        trackingDistance()
-    }
-    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         if marker.userData != nil {
             let attributes:[String:String] = marker.userData as! [String : String]
@@ -3308,15 +3330,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
         }
         return true
-    }
-    
-    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
-        if gesture { // Pan bằng tay
-            isFollowMyLocation = false
-            myLocationLabel?.attributedText = NSAttributedString()
-        } else { // Tự di chuyển
-            
-        }
     }
     
     func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
@@ -3402,6 +3415,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+//        if cPolyline.visibleMode == .normal {
+//            cPolyline.visibleMode = .selecting
+//        } else if cPolyline.visibleMode == .selecting {
+//            cPolyline.visibleMode = .editing
+//        } else {
+//            cPolyline.visibleMode = .normal
+//        }
+        
         if (searchField?.isEditing)! {
             
         } else {
@@ -3409,6 +3430,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (self.mapView?.padding.bottom != 0.0) {
                 togglePaneView(0)
             } else { // Nên kiểm tra điều kiện trước khi tìm kiếm
+                if cPolyline.visibleMode == .editing {
+                    cPolyline.addPointFor(mapView.projection.point(for: coordinate))
+                }
+                
                 let bound = GMSCoordinateBounds(path: pathOfActiveLayersBoundaryForWFS())
                 if selectedPolygonOverlay?.pointSegment.actions == .editing {
                     selectedPolygonOverlay?.pointSegment.addPoint(GPXPoint(coordinate.latitude, coordinate.longitude, 0, Date().iso8601))
@@ -3462,10 +3487,30 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         myLocationLabel?.attributedText = NSMutableAttributedString(string: (mapView.myLocation?.showMyLocationInfo())!, attributes: strokeTextAttributesAlignLeft)
         return false
     }
+    
+    /*
+     * Bắt đầu những thay đổi trên bản đồ
+     */
+    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        print("willMove")
+        if cPolyline != nil && cPolyline.visibleMode == .editing {
+            // Tạm thời ẩn các đỉnh
+            cPolyline.visibleVertices(false)
+        }
+        if gesture { // Pan bằng tay
+            isFollowMyLocation = false
+            myLocationLabel?.attributedText = NSAttributedString()
+        } else { // Tự di chuyển
+            
+        }
+    }
+    
     /**
      
     */
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        print("didChange position")
+        
         // Xóa requestMarker
         self.requestMarker?.iconView?.hideHighlight()
         self.requestMarker?.map = nil
@@ -3489,6 +3534,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } else {
             showIslands(false)
         }
+    }
+    
+    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+        if cPolyline != nil && cPolyline.visibleMode == .editing {
+            cPolyline.updateVertex()
+            cPolyline.visibleVertices(true)
+        }
+        print("idleAt position")
+        if mapView.selectedMarker == nil {
+            self.line?.map = nil
+        }
+        trackingDistance()
     }
     
     // MARK: - GeoServer Feature Detail View
