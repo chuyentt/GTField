@@ -13,7 +13,6 @@ let kNoFiles = NSLocalizedString("No Item", comment: "")
 
 import UIKit
 import MessageUI
-//import AEXML
 import Firebase
 
 protocol GPXFilesTableViewControllerDelegate: class {
@@ -28,7 +27,7 @@ protocol GPXFilesTableViewControllerDelegate: class {
 
 class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegate, GADBannerViewDelegate {
     
-    var fileList: NSMutableArray = [kNoFiles]
+    var fileList: NSMutableArray = []
     var gpxFilesFound = false;
     var selectedRowIndex = -1
     weak var delegate: GPXFilesTableViewControllerDelegate?
@@ -51,11 +50,14 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         self.navigationItem.rightBarButtonItems = [shareItem]
         
         //get gpx files
-        let list: NSArray = GPXFileManager.fileList as NSArray
-        if list.count != 0 {
-            self.fileList.removeAllObjects()
-            self.fileList.addObjects(from: list as [AnyObject])
-            self.gpxFilesFound = true
+        self.view.showLoading()
+        DispatchQueue.main.async() {
+            let list: NSArray = GPXFileManager.fileList as NSArray
+            if list.count != 0 {
+                self.fileList.removeAllObjects()
+                self.fileList.addObjects(from: list as [AnyObject])
+                self.gpxFilesFound = true
+            }
         }
         
         if ADS_ENABLED == true {
@@ -88,6 +90,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         if (self.interstitial.isReady) {
             self.interstitial.present(fromRootViewController: self)
         }
+        self.view.hideLoading()
     }
     
     override func didReceiveMemoryWarning() {
@@ -146,38 +149,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         // Lấy thời gian, kích thước file...
         
         let fileURL: URL = docsURL.appendingPathComponent(filename)
-        let pathExtension = fileURL.pathExtension
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: fileURL.path)) {
-            switch pathExtension {
-            case kGPXFileExt:
-                var options = AEXMLOptions()
-                options.parserSettings.shouldProcessNamespaces = false
-                options.parserSettings.shouldReportNamespacePrefixes = false
-                options.parserSettings.shouldResolveExternalEntities = false
-                let gpxDoc = try! AEXMLDocument(xml: data, options: options)
-                let metadataElement = gpxDoc.root["metadata"]
-                
-                if metadataElement.error == nil {
-                    let date = metadataElement["time"].value?.dateFromISO8601
-                    let size = sizeForLocalFilePath(filePath: fileURL.path)
-                    //let font = cell.detailTextLabel?.font
-                    //cell.detailTextLabel?.font = font?.withSize(15)
-                    cell.detailTextLabel?.text = "\(date?.local ?? "")\n \(size)"
-                } else {
-                    cell.detailTextLabel?.text = ""
-                }
-                break
-            case kGeoJSONExt, kGeoJSONExt1, kKmlFileExt, kMBTileFileExt:
-                let date = creationDateForLocalFilePath(filePath: fileURL.path)
-                let size = sizeForLocalFilePath(filePath: fileURL.path)
-                //let font = cell.detailTextLabel?.font
-                //cell.detailTextLabel?.font = font?.withSize(15)
-                cell.detailTextLabel?.text = "\(date.local )\n \(size)"
-                break
-            default:
-                break
-            }
-        }
+        cell.detailTextLabel?.text = fileInfoDetail(filePath: fileURL.path)
         
         return cell
     }
@@ -198,7 +170,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 title: NSLocalizedString("Send by email", comment: ""),
                 style: .default,
                 handler: { (action: UIAlertAction!) in
-                    self.actionSendEmailWithAttachment(indexPath.row)
+                    self.actionSendEmailWithAttachment(indexPath.row, "application/gpx+xml")
             }))
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Send by email (dxf)", comment: ""),
@@ -239,12 +211,13 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 message: nil,
                 preferredStyle: .alert)
             
-//            alert.addAction(UIAlertAction(
-//                title: NSLocalizedString("Send by email", comment: ""),
-//                style: .default,
-//                handler: { (action: UIAlertAction!) in
-//                    self.actionSendEmailWithAttachment(indexPath.row)
-//            }))
+            alert.addAction(UIAlertAction(
+                title: NSLocalizedString("Send by email", comment: ""),
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    self.actionSendEmailWithAttachment(indexPath.row, "application/vnd.google-earth.kml+xml")
+            }))
+            
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Load in Map", comment: ""),
                 style: .default,
@@ -275,12 +248,12 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
                 message: nil,
                 preferredStyle: .alert)
             
-            //            alert.addAction(UIAlertAction(
-            //                title: NSLocalizedString("Send by email", comment: ""),
-            //                style: .default,
-            //                handler: { (action: UIAlertAction!) in
-            //                    self.actionSendEmailWithAttachment(indexPath.row)
-            //            }))
+                alert.addAction(UIAlertAction(
+                    title: NSLocalizedString("Send by email", comment: ""),
+                    style: .default,
+                    handler: { (action: UIAlertAction!) in
+                        self.actionSendEmailWithAttachment(indexPath.row, "application/geo+json")
+                }))
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Load in Map", comment: ""),
                 style: .default,
@@ -383,7 +356,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         self.closeGPXFilesTableViewController()
     }
     
-    internal func actionSendEmailWithAttachment(_ rowIndex: Int) {
+    internal func actionSendEmailWithAttachment(_ rowIndex: Int,_ mimeType: String) {
         guard let filename: String = fileList.object(at: rowIndex) as? String else {
             return
         }
@@ -395,7 +368,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             let fileURL: URL = docsURL.appendingPathComponent(filename)
             
             // set the subject
-            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export Waypoints & Tracks to GPX file", comment: ""))
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export to a file", comment: ""))
             
             //Add some text to the body and attach the file
             let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
@@ -403,7 +376,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             composer.setMessageBody(body, isHTML: true)
             do {
                 let fileData: Data = try Data(contentsOf: URL(fileURLWithPath: fileURL.path), options: .mappedIfSafe)
-                composer.addAttachmentData(fileData, mimeType:"application/gpx+xml", fileName: fileURL.lastPathComponent)
+                composer.addAttachmentData(fileData, mimeType: mimeType, fileName: fileURL.lastPathComponent)
                 //Display the comopser view controller
                 self.present(composer, animated: true, completion: nil)
             } catch {

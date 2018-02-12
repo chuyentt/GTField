@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeatureActionView" customModule="GTField" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB" customClass="FeatureActionView" customModule="GTField" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Uq2-iT-J4g">
+                    <rect key="frame" x="0.0" y="250" width="375" height="417"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="iN0-l3-epB" id="jT7-er-Whe"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jye-F9-IdN" customClass="SpringButton" customModule="GTField" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="60" height="83"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="buttonClose"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="animation" value="slideRight"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="duration">
+                            <real key="value" value="1.2"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="btnClose:" destination="iN0-l3-epB" eventType="touchUpInside" id="v7z-lx-208"/>
+                    </connections>
+                </button>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Olx-mk-oeA">
+                    <rect key="frame" x="18" y="250" width="339" height="29"/>
+                    <segments>
+                        <segment title="Properties"/>
+                        <segment title="Info"/>
+                        <segment title="Style"/>
+                    </segments>
+                    <color key="tintColor" red="0.32156862745098036" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
+                </segmentedControl>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Olx-mk-oeA" firstAttribute="top" secondItem="Uq2-iT-J4g" secondAttribute="top" id="8PJ-Nb-Ql4"/>
+                <constraint firstItem="Uq2-iT-J4g" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="250" id="RKZ-ID-eO1"/>
+                <constraint firstItem="Uq2-iT-J4g" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ZNz-zb-zEm"/>
+                <constraint firstAttribute="bottom" secondItem="Uq2-iT-J4g" secondAttribute="bottom" id="eVs-pV-MaL"/>
+                <constraint firstItem="Olx-mk-oeA" firstAttribute="leading" secondItem="Uq2-iT-J4g" secondAttribute="leading" constant="18" id="o6s-fQ-YcW"/>
+                <constraint firstAttribute="trailing" secondItem="Uq2-iT-J4g" secondAttribute="trailing" id="qXo-VC-4q3"/>
+                <constraint firstItem="Olx-mk-oeA" firstAttribute="trailing" secondItem="Uq2-iT-J4g" secondAttribute="trailing" constant="-18" id="z98-nR-Y0f"/>
+            </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="autostart" value="YES"/>
+                <userDefinedRuntimeAttribute type="string" keyPath="animation" value="slideUp"/>
+                <userDefinedRuntimeAttribute type="number" keyPath="duration">
+                    <real key="value" value="1.2"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="segmentedControl" destination="Olx-mk-oeA" id="hCB-KM-87U"/>
+                <outlet property="tableView" destination="Uq2-iT-J4g" id="fqy-IG-EQC"/>
+            </connections>
+            <point key="canvasLocation" x="24.5" y="52.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="buttonClose" width="44" height="44"/>
+    </resources>
+</document>

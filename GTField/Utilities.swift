@@ -334,6 +334,23 @@ func creationDateForLocalFilePath(filePath: String) -> Date {
     return Date()
 }
 
+func fileInfoDetail(filePath: String) -> String {
+    do {
+        let fileAttributes = try FileManager.default.attributesOfItem(atPath: filePath) as [FileAttributeKey : Any]
+        let fileDate: Date = fileAttributes[FileAttributeKey.creationDate] as! Date
+        var fileSize = Double((fileAttributes[FileAttributeKey.size] as! NSNumber).uint64Value)
+        var multiplyFactor = 0
+        let tokens = ["bytes", "KB", "MB", "GB", "TB", "PB",  "EB",  "ZB", "YB"]
+        while fileSize > 1024 {
+            fileSize /= 1024
+            multiplyFactor += 1
+        }
+        return String(format: "%@\n%4.2f %@", fileDate.local, fileSize, tokens[multiplyFactor])
+    } catch {
+        return String()
+    }
+}
+
 // Lấy danh sách các file từ thư mục docs theo
 func fileListFromDocs(subPath: String, ext: String) -> [AnyObject] {
     var Files: [String] = []
@@ -487,4 +504,8 @@ func localGravity(_ latitude: Double,_ altitude: Double) -> Double {
     let IGF = 9.780327*(1.0+0.0053024*sin(phi)*sin(phi)-0.0000058*sin(2.0*phi)*sin(2.0*phi))
     let FAC = -3.086*10e-6*altitude
     return IGF+FAC
+}
+
+func calculateMidPoint(_ p1 : CGPoint, _ p2 : CGPoint) -> CGPoint {
+    return CGPoint(x: (p1.x + p2.x) * 0.5, y: (p1.y + p2.y) * 0.5);
 }

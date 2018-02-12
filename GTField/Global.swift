@@ -469,6 +469,9 @@ extension String {
     var html2String: String {
         return html2AttributedString?.string ?? ""
     }
+    var floatValue: CGFloat {
+        return CGFloat((self as NSString).doubleValue)
+    }
 }
 
 class CButton : UIButton {
@@ -680,6 +683,100 @@ extension CLLocation {
         let info6 = NSLocalizedString("Speed: ", comment: "")
         let txt = "\(info0)\n\(info1)\n\(coordinate.localCoordinate(true))\n\(info2)\(altitude.toString(1)) m\n\(info3)\(horizontalAccuracy.toString(1)) m\n\(info4)\(verticalAccuracy.toString(1)) m\n\(info5)\(course.courseUnit())\n\(info6)\(speed.speedUnit())"
         return txt
+    }
+}
+
+extension GMSPath {
+    func toNSArray(altitudes:[CGFloat]) -> NSArray {
+        var alts = altitudes
+        if altitudes.count+1 == self.count() {
+            alts.append(altitudes.first!)
+        } else if altitudes.count == 0 {
+            alts = Array(repeatElement(0.0, count: Int(self.count())))
+        }
+        let arrays: NSMutableArray = NSMutableArray()
+        for i in 0..<self.count() {
+            arrays.add(self.coordinate(at: i).toNSArray(altitude: alts[Int(i)]))
+        }
+        return arrays
+    }
+}
+
+extension GMSCoordinateBounds {
+    func fit(map: GMSMapView, padding: CGFloat) -> GMSCoordinateBounds {
+        let northWest = CLLocationCoordinate2D(latitude: northEast.latitude, longitude: southWest.longitude)
+        let pNW = map.projection.point(for: northWest)
+        var pNE = map.projection.point(for: northEast)
+        var pSW = map.projection.point(for: southWest)
+        
+        let len1 = pNE.x - pNW.x
+        let len2 = pSW.y - pNW.y
+        let factor = fabs(len1 - len2) / 2.0 + padding
+        if len1 > len2 {
+            pNE.y = pNE.y - factor
+            pSW.y = pSW.y + factor
+            let sw = map.projection.coordinate(for: pSW)
+            let ne = map.projection.coordinate(for: pNE)
+            return GMSCoordinateBounds(coordinate: sw, coordinate: ne)
+        } else {
+            pNE.x = pNE.x + factor
+            pSW.x = pSW.x - factor
+            let sw = map.projection.coordinate(for: pSW)
+            let ne = map.projection.coordinate(for: pNE)
+            return GMSCoordinateBounds(coordinate: sw, coordinate: ne)
+        }
+    }
+}
+
+extension Dictionary {
+    var json: String {
+        let invalidJson = "Not a valid JSON"
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            return String(bytes: jsonData, encoding: String.Encoding.utf8) ?? invalidJson
+        } catch {
+            return invalidJson
+        }
+    }
+}
+
+extension NSArray {
+    func toCLLocationCoordinate2D() -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: self[1] as! CLLocationDegrees, longitude: self[0] as! CLLocationDegrees)
+    }
+    func toAltitude() -> CGFloat {
+        guard self.count > 2 else {
+            return 0.0
+        }
+        return self[2] as! CGFloat
+    }
+    func toGMSPath(_ removeClosedVertex: Bool) -> GMSPath {
+        let path: GMSMutablePath = GMSMutablePath()
+        for array in self {
+            let arr: NSArray = array as! NSArray
+            path.add(CLLocationCoordinate2D(latitude: arr[1] as! CLLocationDegrees, longitude: arr[0] as! CLLocationDegrees))
+        }
+        if removeClosedVertex {
+            if path.coordinate(at: path.count()-1).distance(from: path.coordinate(at: 0)) == 0 {
+                path.removeCoordinate(at: path.count()-1)
+            }
+        }
+        return path
+    }
+    func toAltitudes(_ removeClosedVertex: Bool) -> [CGFloat] {
+        var altitudes: [CGFloat] = [CGFloat]()
+        for array in self {
+            let arr: NSArray = array as! NSArray
+            if arr.count <= 2 {
+                altitudes.append(0)
+            } else {
+                altitudes.append(arr[2] as! CGFloat)
+            }
+        }
+        if removeClosedVertex {
+            altitudes.removeLast()
+        }
+        return altitudes
     }
 }
 
@@ -981,6 +1078,10 @@ extension CLLocationCoordinate2D {
         
         let center:CLLocationCoordinate2D = CLLocationCoordinate2DMake(lat3 * 180 / .pi, lon3 * 180 / .pi)
         return center
+    }
+    
+    func toNSArray(altitude: CGFloat) -> NSArray {
+        return NSArray(array: [longitude, latitude, altitude])
     }
 }
 

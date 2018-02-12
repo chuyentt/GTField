@@ -52,6 +52,9 @@ static NSString *const kGeoJSONStyleAttributeRegex =
    * The data object containing the GeoJSON to be parsed.
    */
   NSData *_data;
+    
+    NSURL *_url;
+    NSMutableDictionary *_geoJSONDict;
 
   /**
    * The stream containing the GeoJSON to be parsed.
@@ -109,6 +112,13 @@ static NSString *const kGeoJSONStyleAttributeRegex =
 - (instancetype)initWithURL:(NSURL *)url {
   if (self = [super init]) {
     _data = [[NSData alloc] initWithContentsOfURL:url];
+      NSString *fileName = url.lastPathComponent.stringByDeletingPathExtension;
+      NSString *extension = url.pathExtension;
+      _url = url.URLByDeletingLastPathComponent;
+      
+      _url = [_url URLByAppendingPathComponent:[NSString stringWithFormat:@"%@1", fileName]];
+      _url = [_url URLByAppendingPathExtension:extension];
+      
     [self sharedInit];
   }
   return self;
@@ -123,6 +133,9 @@ static NSString *const kGeoJSONStyleAttributeRegex =
 
 - (NSArray<GMUFeature *> *)features {
   return _features;
+}
+- (NSDictionary *)geoJSONDict {
+    return _geoJSONDict;
 }
 
 - (void)parse {
@@ -164,6 +177,145 @@ static NSString *const kGeoJSONStyleAttributeRegex =
   }
   _isParsed = true;
 }
+
+- (void)save {
+    [self saveGeometryContainers:_features];
+}
+
+- (void)saveGeometryContainers:(NSArray<id<GMUGeometryContainer>> *)containers {
+    for (id<GMUGeometryContainer> container in containers) {
+        GMUStyle *style = container.style;
+        [self saveGeometryContainer:container style:style];
+    }
+}
+- (void)saveGeometryContainer:(id<GMUGeometryContainer>)container style:(GMUStyle *)style {
+    id<GMUGeometry> geometry = container.geometry;
+    if ([geometry isKindOfClass:[GMUGeometryCollection class]]) {
+        [self saveMultiGeometry:geometry container:container style:style];
+    } else {
+        [self saveGeometry:geometry container:container style:style];
+    }
+}
+- (void)saveMultiGeometry:(id<GMUGeometry>)geometry container:(id<GMUGeometryContainer>)container style:(GMUStyle *)style {
+    GMUGeometryCollection *multiGeometry = geometry;
+    for (id<GMUGeometry> singleGeometry in multiGeometry.geometries) {
+        [self saveGeometry:singleGeometry container:container style:style];
+    }
+}
+- (void)saveGeometry:(id<GMUGeometry>)geometry container:(id<GMUGeometryContainer>)container style:(GMUStyle *)style {
+    if ([geometry isKindOfClass:[GMUPoint class]]) {
+        [self savePoint:geometry container:container style:style];
+    } else if ([geometry isKindOfClass:[GMULineString class]]) {
+        [self saveLineString:geometry container:container style:style];
+    } else if ([geometry isKindOfClass:[GMUPolygon class]]) {
+        [self savePolygon:geometry container:container style:style];
+    }
+}
+- (void)savePoint:(GMUPoint *)point container:(id<GMUGeometryContainer>)container style:(GMUStyle *)style {
+    CLLocationCoordinate2D coordinate = point.coordinate;
+    GMSMarker *marker = [GMSMarker markerWithPosition:coordinate];
+    
+//    if (container.properties) {
+//        NSString *title = @"";
+//        if ([container.properties objectForKey:kGeoJSONPropertyName]) {
+//            title = [container.properties objectForKey:kGeoJSONPropertyName];
+//        } else if ([container.properties objectForKey:kGeoJSONPropertyTitle]) {
+//            title = [container.properties objectForKey:kGeoJSONPropertyTitle];
+//        }
+//        NSString *desc = @"";
+//        if ([container.properties objectForKey:kGeoJSONPropertyDesc]) {
+//            desc = [container.properties objectForKey:kGeoJSONPropertyDesc];
+//        }
+//        GeoJSONStyle *geoJSONStyle = [[GeoJSONStyle alloc] initWithProperties:container.properties];
+//        UIImage *icon = [UIImage imageNamed:geoJSONStyle.markerSymbol];
+//        if (icon != nil) {
+//            marker.icon = icon;
+//        } else {
+//            marker.icon = [UIImage imageNamed:[NSString stringWithFormat:@"pin-%@", geoJSONStyle.markerSize]];
+//        }
+//        marker.title = title;
+//        marker.snippet = title;
+//    }
+//    marker.map = _map;
+//    // Bổ sung bounds
+//    _boundingBox = [_boundingBox includingCoordinate:marker.position];
+//
+//    [_mapOverlays addObject:marker];
+}
+- (void)saveLineString:(GMULineString *)lineString container:(id<GMUGeometryContainer>)container style:(GMUStyle *)style {
+    GMSPolyline *line = [GMSPolyline polylineWithPath:lineString.path];
+//    if (container.properties) {
+//        GeoJSONStyle *geoJSONStyle = [[GeoJSONStyle alloc] initWithProperties:container.properties];
+//        line.strokeWidth = geoJSONStyle.strokeWidth;
+//        line.strokeColor = geoJSONStyle.strokeColor;
+//    }
+//    line.map = _map;
+//
+//    // Bổ sung bounds
+//    _boundingBox = [_boundingBox includingPath:line.path];
+//
+//    [_mapOverlays addObject:line];
+}
+- (void)savePolygon:(GMUPolygon *)polygon container:(id<GMUGeometryContainer>)container style:(GMUStyle *)style {
+//    GMSPath *outerBoundaries = polygon.paths.firstObject;
+//    NSArray *innerBoundaries = [[NSArray alloc] init];
+//    if (polygon.paths.count > 1) {
+//        innerBoundaries =
+//        [polygon.paths subarrayWithRange:NSMakeRange(1, polygon.paths.count - 1)];
+//    }
+//    NSMutableArray<GMSPath *> *holes = [[NSMutableArray alloc] init];
+//    for (GMSPath *hole in innerBoundaries) {
+//        [holes addObject:hole];
+//    }
+//    GMSPolygon *poly = [GMSPolygon polygonWithPath:outerBoundaries];
+//    if (style) {
+//        if (style.hasFill && style.fillColor) {
+//            poly.fillColor = style.fillColor;
+//        }
+//        if (style.hasStroke) {
+//            if (style.strokeColor) {
+//                poly.strokeColor = style.strokeColor;
+//            }
+//            if (style.width) {
+//                poly.strokeWidth = style.width;
+//            }
+//        }
+//    } else { // Bổ sung GeoJSON Style
+//        if (container.properties) {
+//            GeoJSONStyle *geoJSONStyle = [[GeoJSONStyle alloc] initWithProperties:container.properties];
+//            poly.strokeWidth = geoJSONStyle.strokeWidth;
+//            poly.strokeColor = geoJSONStyle.strokeColor;
+//            poly.fillColor = geoJSONStyle.fillColor;
+//
+//            NSString *title = @"";
+//            if ([container.properties objectForKey:kGeoJSONPropertyName]) {
+//                title = [container.properties objectForKey:kGeoJSONPropertyName];
+//            } else if ([container.properties objectForKey:kGeoJSONPropertyTitle]) {
+//                title = [container.properties objectForKey:kGeoJSONPropertyTitle];
+//            }
+//            NSString *desc = @"";
+//            if ([container.properties objectForKey:kGeoJSONPropertyDesc]) {
+//                desc = [container.properties objectForKey:kGeoJSONPropertyDesc];
+//            }
+//            poly.title = title;
+//        }
+//    }
+//
+//    if (holes.count) {
+//        poly.holes = holes;
+//    }
+//    if ([container isKindOfClass:[GMUPlacemark class]]) {
+//        GMUPlacemark *placemark = container;
+//        poly.title = placemark.title;
+//    }
+//    poly.map = _map;
+//
+//    // Bổ sung bounds
+//    _boundingBox = [_boundingBox includingPath:poly.path];
+//
+//    [_mapOverlays addObject:poly];
+}
+
 
 - (GMUFeature *)featureFromDict:(NSDictionary *)feature {
   id<GMUGeometry> geometry;

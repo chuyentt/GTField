@@ -47,6 +47,10 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        //setAgreement(false)
+        if !getAgreement() {
+            self.performSegue(withIdentifier: "segueTermsOfUse", sender: self)
+        }
         
         title = APP_FULL_NAME
         
@@ -444,11 +448,13 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
             let arr = prefferedLanguage.lowercased().components(separatedBy: "-")
             
             if arr.contains("vn") || arr.contains("vi") {
-                vc.title = "Terms of Use"
+                vc.title = NSLocalizedString("Terms of Use", comment: "")
                 vc.urlString = TERMS_OF_USE_VI_URL
+                vc.webViewContent = .agreement
             } else {
-                vc.title = "Terms of Use"
+                vc.title = NSLocalizedString("Terms of Use", comment: "")
                 vc.urlString = TERMS_OF_USE_EN_URL
+                vc.webViewContent = .agreement
             }
             break
         default:

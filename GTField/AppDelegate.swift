@@ -24,9 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         self.window?.makeKeyAndVisible()
         
-        if !getAgreement() {
-            agreement()
-        }
+//        if !getAgreement() {
+//            agreement()
+//        }
         
         getSettings(urlString: "http://gtfield.geomatics.com.vn/settings.xml")
         self.window?.rootViewController?.enumerateHierarchy { viewController in
@@ -83,8 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Xóa thư mục GPX nếu có
         do {
             try FileManager.default.removeItem(atPath: gpxURL.path)
-        }
-        catch {
+        } catch {
             
         }
         
@@ -207,7 +206,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             break
         case kKmlFileExt:
-            let kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
+            var kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
+            let fileName = kmlURL.deletingPathExtension().lastPathComponent
+            let pathExtension = kmlURL.pathExtension
+            var counter = 0
+            while FileManager.default.fileExists(atPath: kmlURL.path) {
+                counter += 1
+                kmlURL = kmlURL.deletingLastPathComponent().appendingPathComponent("\(fileName)(\(counter))").appendingPathExtension(pathExtension)
+            }
             do {
                 try FileManager.default.copyItem(at: url, to: kmlURL)
                 let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(kmlURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
@@ -220,7 +226,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             break
         case kGeoJSONExt, kGeoJSONExt1:
-            let jsonURL = docsURL.appendingPathComponent(url.lastPathComponent)
+            var jsonURL = docsURL.appendingPathComponent(url.lastPathComponent)
+            let fileName = jsonURL.deletingPathExtension().lastPathComponent
+            let pathExtension = jsonURL.pathExtension
+            var counter = 0
+            while FileManager.default.fileExists(atPath: jsonURL.path) {
+                counter += 1
+                jsonURL = jsonURL.deletingLastPathComponent().appendingPathComponent("\(fileName)(\(counter))").appendingPathExtension(pathExtension)
+            }
+            
             do {
                 try FileManager.default.copyItem(at: url, to: jsonURL)
                 let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(jsonURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
@@ -323,7 +337,8 @@ extension AppDelegate: SKPaymentTransactionObserver {
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: SubscriptionService.activeNotification, object: nil)
             }
-        } else {
+        } else if transaction.payment.productIdentifier.contains("Yearly") || transaction.payment.productIdentifier.contains("Monthly") {
+            setProVersion(true)
             SubscriptionService.shared.uploadReceipt { (success) in
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: SubscriptionService.purchaseSuccessfulNotification, object: nil)
@@ -341,7 +356,8 @@ extension AppDelegate: SKPaymentTransactionObserver {
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: SubscriptionService.activeNotification, object: nil)
             }
-        } else {
+        } else if transaction.payment.productIdentifier.contains("Yearly") || transaction.payment.productIdentifier.contains("Monthly") {
+            setProVersion(true)
             SubscriptionService.shared.uploadReceipt { (success) in
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: SubscriptionService.restoreSuccessfulNotification, object: nil)

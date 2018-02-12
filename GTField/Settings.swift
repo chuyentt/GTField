@@ -408,6 +408,19 @@ func setEnableImprovedPerformance(_ value: Bool) {
 }
 
 /************************************************
+ * Đường dẫn geoJSON gần đây
+ */
+func getRecentGeoJSONPath() -> URL! {
+    guard UserDefaults.standard.object(forKey: "RECENT_GEOJSON_PATH") != nil else { return nil }
+    return UserDefaults.standard.url(forKey: "RECENT_GEOJSON_PATH")!
+}
+
+func setRecentGeoJSONPath(_ value: URL!) {
+    UserDefaults.standard.set(value, forKey: "RECENT_GEOJSON_PATH")
+    UserDefaults.standard.synchronize()
+}
+
+/************************************************
  * Quangr caos
  */
 func getEnableADS() -> Bool {

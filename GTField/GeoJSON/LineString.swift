@@ -1,16 +1,18 @@
 //
-//  CPolylineView.swift
+//  LineString.swift
+//  GTField
 //
-//  Created by Chuyen Trung Tran on 1/21/18.
-//  Copyright © 2018 Walzy. All rights reserved.
+//  Created by Chuyen Trung Tran on 1/30/18.
+//  Copyright © 2018 Tran Trung Chuyen. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class CPolyline: GMSPolyline, PointViewDelegate {
-    /////////////////////////////////////////////////
-    // Các sự kiện PointViewDelegate từ PointView
-    /////////////////////////////////////////////////
+class LineString: GMSPolyline, Geometry, PointViewDelegate {
+    
+//////////////////////////////////////////////////////
+// Bắt đầu các sự kiện PointViewDelegate từ PointView
+//////////////////////////////////////////////////////
     
     // Chạm vào point (chạm xuống)
     func pointTouchBegan(touch: UITouch) {
@@ -110,8 +112,8 @@ class CPolyline: GMSPolyline, PointViewDelegate {
         pointMoved = false
     }
     
-
-
+    
+    
     // Màu của polyline: đường chính giữa ở mode normal
     private var color: UIColor = UIColor(red: 99/255, green: 131/255, blue: 178/255, alpha: 1.0) {
         didSet(prevValue) {
@@ -130,8 +132,8 @@ class CPolyline: GMSPolyline, PointViewDelegate {
         }
     }
     
-    private var selecting_color = UIColor(red: 99/255, green: 131/255, blue: 178/255, alpha: 1.0)
-    private var selecting_width: CGFloat = 3.0
+    private var selecting_color = UIColor.white
+    private var selecting_width: CGFloat = 1.0
     private var editing_color = UIColor(red: 99/255, green: 131/255, blue: 178/255, alpha: 1.0)
     private var editing_width: CGFloat = 1.0
     
@@ -153,6 +155,9 @@ class CPolyline: GMSPolyline, PointViewDelegate {
     // Kính lúp
     private var magnifyView: MagnifyView!
     
+    // Border outline
+    private var border: GMSPolyline = GMSPolyline()
+    
     // Mode của polyline dùng để render: normal, selecting, editing
     var visibleMode: VisibleMode = VisibleMode.normal {
         didSet(prevValue){
@@ -163,18 +168,30 @@ class CPolyline: GMSPolyline, PointViewDelegate {
                     strokeColor = color
                     strokeWidth = width
                     removePointsFromMap()
+                    
+                    border.map = nil
                     break
                 case .selecting:
                     // Vẽ kiểu selecting
                     strokeColor = selecting_color
                     strokeWidth = selecting_width
                     removePointsFromMap()
+                    
+                    // Vẽ border outline
+                    border.strokeColor = UIColor.orange
+                    border.strokeWidth = 3
+                    border.map = map
                     break
                 case .editing:
                     // Vẽ kiểu editing
                     strokeColor = editing_color
                     strokeWidth = editing_width
                     addPointsToMap()
+                    
+                    // Vẽ border outline
+                    border.strokeColor = UIColor.white
+                    border.strokeWidth = 3
+                    border.map = map
                     break
                 }
             }
@@ -196,13 +213,14 @@ class CPolyline: GMSPolyline, PointViewDelegate {
     override var path: GMSPath? {
         didSet(prevValue) {
             if prevValue != path {
-                
+                border.path = path
             }
         }
     }
     
     override init() {
         super.init()
+        border.zIndex = zIndex - 1
     }
     
     // Chuyển GMSPolyline qua
@@ -237,7 +255,7 @@ class CPolyline: GMSPolyline, PointViewDelegate {
             let newPoint = PointView(frame: CGRect.zero)
             newPoint.center = midPoint.center
             newPoint.delegate = self
-
+            
             // Tính lại tọa độ cho midPoint
             midPoint.center = calculateMidPoint(midPoint.center, points[i].center)
             
@@ -247,10 +265,10 @@ class CPolyline: GMSPolyline, PointViewDelegate {
             newMidPoint.center = mp
             newMidPoint.pointMode = .midpoint
             newMidPoint.delegate = self
-
+            
             points.insert(newPoint, at: i+1)
             midPoints.insert(newMidPoint, at: i+1)
-
+            
             // Thêm và đỉnh mới vào map
             map?.addSubview(newMidPoint)
             map?.addSubview(newPoint)
@@ -451,6 +469,60 @@ class CPolyline: GMSPolyline, PointViewDelegate {
             midPoints[Int(i)].center = mp
         }
         midPoints.last?.center = (points.last?.center)!
+    }
+//////////////////////////////////////////////////////
+// Kết thúc các sự kiện PointViewDelegate từ PointView
+//////////////////////////////////////////////////////
+    required init(jsonDict: Dictionary<String, Any>) {
+        super.init()
+        let arrays: NSArray = jsonDict[GeoJSONMember.coordinates.rawValue] as! NSArray
+        let _path: GMSMutablePath = GMSMutablePath()
+        for array in arrays {
+            _path.add((array as! NSArray).toCLLocationCoordinate2D())
+        }
+        path = _path
+    }
+
+    func style(properties: [String : Any]?) {
+        guard properties != nil else {
+            return
+        }
+        var titleStr = String()
+        if let name = (properties![PropMember.name.rawValue]) {
+            titleStr = name as! String
+        } else if let name = (properties![PropMember.title.rawValue]) {
+            titleStr = name as! String
+        }
+        if let strokeStr = (properties![PropMember.stroke.rawValue]) {
+            color = UIColor(hex: strokeStr as! String)
+        }
+        if let sw = (properties![PropMember.strokeWidth.rawValue]) {
+            width = CGFloat((sw as AnyObject).floatValue)
+        }
+        title = titleStr
+        strokeColor = color
+        strokeWidth = width
+        isTappable = true
+    }
+    
+    func renderer(map: GMSMapView) {
+        self.map = map
+    }
+    
+    var type: GeoJSONValue = .lineString
+    var member: Dictionary<String, Any> {
+        set {
+            let arrays: NSArray = newValue[GeoJSONMember.coordinates.rawValue] as! NSArray
+            let _path: GMSMutablePath = GMSMutablePath()
+            for array in arrays {
+                _path.add((array as! NSArray).toCLLocationCoordinate2D())
+            }
+            path = _path
+        }
+        get {
+            return Dictionary(dictionaryLiteral: (GeoJSONMember.type.rawValue, type.rawValue),
+                              (GeoJSONMember.coordinates.rawValue, (path?.toNSArray())!))
+        }
     }
 }
 

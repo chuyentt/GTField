@@ -67,10 +67,12 @@ extension MapViewController: JellyButtonDelegate
                 self.startUpdatingLocationAllowsBackground()
                 break
             case 2: // Add Polyline
-                self.btnAddPolyline()
+                //self.btnAddPolyline()
+                self.btnAddCLineString()
                 break
             case 3:// Add Polyline
-                self.btnAddPolygon()
+                //self.btnAddPolygon()
+                self.btnAddCPolygon()
                 break
             case 4: // btnTakePhoto
                 self.btnTakePhoto()
@@ -204,39 +206,46 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
         self.mapView?.showLoading()
         DispatchQueue.main.async() {
             let url = docsURL.appendingPathComponent(geoJSONFilename)
-            self.geoJsonParser = GMUGeoJSONParser(url: url)
-            self.geoJsonParser.parse()
-            
-            // Nếu chưa có layer nào
-            if self.geoJSONRenderer1 == nil {
-                // Load layer1
-                self.geoJSONRenderer1 = GMUGeometryRenderer(map: self.mapView!,
-                                                       geometries: self.geoJsonParser.features)
-                self.geoJSONRenderer1.render()
-                if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
-                }
-            } else if self.geoJSONRenderer2 == nil {
-                self.geoJSONRenderer2 = GMUGeometryRenderer(map: self.mapView!,
-                                                       geometries: self.geoJsonParser.features)
-                self.geoJSONRenderer2.render()
-                if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer2.boundingBox()))
-                }
-            } else { // Đã mở 2 layers thì xóa hết để mở layer 1
-                self.geoJSONRenderer1.clear()
-                self.geoJSONRenderer2.clear()
-                self.geoJSONRenderer1 = nil
-                self.geoJSONRenderer2 = nil
-                
-                // Load layer1
-                self.geoJSONRenderer1 = GMUGeometryRenderer(map: self.mapView!,
-                                                       geometries: self.geoJsonParser.features)
-                self.geoJSONRenderer1.render()
-                if self.mapView != nil {
-                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
-                }
+            if self.geoJSON != nil {
+                self.geoJSON?.renderer(map: nil)
             }
+            self.geoJSON = CGeoJSONKit(url: url)
+            self.geoJSON?.renderer(map: self.mapView!)
+            self.mapView?.moveCamera(GMSCameraUpdate.fit((self.geoJSON?.featureCollection.boundingBox)!))
+//
+//            self.geoJsonParser = GMUGeoJSONParser(url: url)
+//            self.geoJsonParser.parse()
+//
+//            // Nếu chưa có layer nào
+//            if self.geoJSONRenderer1 == nil {
+//                // Load layer1
+//                self.geoJSONRenderer1 = GMUGeometryRenderer(map: self.mapView!,
+//                                                       geometries: self.geoJsonParser.features)
+//                self.geoJSONRenderer1.render()
+//                if self.mapView != nil {
+//                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
+//                }
+//            } else if self.geoJSONRenderer2 == nil {
+//                self.geoJSONRenderer2 = GMUGeometryRenderer(map: self.mapView!,
+//                                                       geometries: self.geoJsonParser.features)
+//                self.geoJSONRenderer2.render()
+//                if self.mapView != nil {
+//                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer2.boundingBox()))
+//                }
+//            } else { // Đã mở 2 layers thì xóa hết để mở layer 1
+//                self.geoJSONRenderer1.clear()
+//                self.geoJSONRenderer2.clear()
+//                self.geoJSONRenderer1 = nil
+//                self.geoJSONRenderer2 = nil
+//
+//                // Load layer1
+//                self.geoJSONRenderer1 = GMUGeometryRenderer(map: self.mapView!,
+//                                                       geometries: self.geoJsonParser.features)
+//                self.geoJSONRenderer1.render()
+//                if self.mapView != nil {
+//                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
+//                }
+//            }
             self.mapView?.hideLoading()
         }
     }
@@ -335,11 +344,21 @@ extension MapViewController:MFMailComposeViewControllerDelegate {
 extension MapViewController:InputFromCoordinatesViewControllerDelegate {
     func didFinishWithLocation(_ location: CLLocation) {
         print(location.coordinate.latLngFormated(withTarget: true))
-        if isTesting || getProVersion() || (gpx?.wayPoints.count)! < 2 {
-            let wpt = GPXWaypoint(position: location.coordinate)
-            wpt.iconType = ""
-            wpt.icon = #imageLiteral(resourceName: "pin")
-            gpx?.addWaypoint(wpt)
+        if isDebug || getProVersion() || (gpx?.wayPoints.count)! < 2 {
+//            let wpt = GPXWaypoint(position: location.coordinate)
+//            wpt.iconType = ""
+//            wpt.icon = #imageLiteral(resourceName: "pin")
+//            gpx?.addWaypoint(wpt)
+            let pt = CPoint(position: location.coordinate)
+            pt.altitude = CGFloat(location.altitude)
+            let ft = CFeature(geometry: pt, properties: ["marker-symbol":"pin",
+                                                         "name":"Marker",
+                                                         "desc":Date().local])
+            addGeoJSONFeature(ft)
+            
+            self.mapView?.showCrossMarker(false)
+            didDeSelectOverlay()
+            showSomeView()
         } else {
             self.showSubscription()
         }
@@ -347,6 +366,273 @@ extension MapViewController:InputFromCoordinatesViewControllerDelegate {
     
     func didFinishWithValue(_ value: Double, _ index: Int, _ type: SelectionType) {
         
+    }
+}
+
+extension MapViewController: CGeoJSONDelegate {
+    func visibleModeNormal(featue: CFeature) {
+        print("visibleModeNormal")
+        // Ẩn toolbar
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        self.toolbarItems = [spacer, spacer]
+        self.navigationController?.setToolbarHidden(true, animated: true)
+        self.navigationController?.toolbar.barStyle = UIBarStyle.default
+        self.navigationController?.toolbar.isTranslucent = true
+        self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
+        showSomeView()
+        
+        if selectedPoint != nil {
+            if selectedPoint.selectedPoint != nil {
+                selectedPoint.selectedPoint.pointMode = .normal
+                selectedPoint.selectedPoint = nil
+            }
+            selectedPoint.visibleMode = .normal
+            selectedPoint = nil
+        }
+        if selectedLineString != nil {
+            if selectedLineString.selectedPoint != nil {
+                selectedLineString.selectedPoint.pointMode = .normal
+                selectedLineString.selectedPoint = nil
+            }
+            selectedLineString.visibleMode = .normal
+            selectedLineString = nil
+        }
+        if selectedPolygon != nil {
+            if selectedPolygon.selectedPoint != nil {
+                selectedPolygon.selectedPoint.pointMode = .normal
+                selectedPolygon.selectedPoint = nil
+            }
+            selectedPolygon.visibleMode = .normal
+            selectedPolygon = nil
+        }
+    }
+    
+    func visibleModeSelecting(featue: CFeature) {
+        print("visibleModeSelecting")
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        self.navigationController?.setToolbarHidden(false, animated: true)
+        self.navigationController?.toolbar.barStyle = UIBarStyle.default
+        self.navigationController?.toolbar.isTranslucent = true
+        self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
+        hideSomeView()
+        
+        let btnCancel = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelFeatureAction))
+        let btnEditGeometry = UIBarButtonItem(title: NSLocalizedString("Edit geometry", comment: ""), style: .plain, target: self, action: #selector(editGeometryAction))
+        let btnFeatureDetail = UIBarButtonItem(title: NSLocalizedString("Feature detail »", comment: ""), style: .done, target: self, action: #selector(featureDetailAction))
+        self.toolbarItems = [btnEditGeometry, spacer, btnFeatureDetail]
+        // Hiện toolbar với chế độ slecting.
+        // + Nút edit (icon) để sửa geometry => chuyển sang mod editing
+        // + Nút close/cancel nếu chạm vào sẽ chuyển sang chế độ normal
+        // + Nút Detail >>> để xem thuộc tính
+        
+        switch featue.geometry.type {
+        case .point:
+            break
+        case .multiPoint:
+            break
+        case .lineString:
+            break
+        case .multiLineString:
+            break
+        case .polygon:
+            break
+        case .multiPolygon:
+            break
+        case .geometryCollection:
+            break
+        }
+    }
+    
+    func visibleModeEditing(featue: CFeature) {
+        print("visibleModeEditing")
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        self.navigationController?.setToolbarHidden(false, animated: false)
+        self.navigationController?.toolbar.barStyle = UIBarStyle.default
+        self.navigationController?.toolbar.isTranslucent = true
+        self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
+        //hideSomeView()
+        // Hiện toolbar với chế độ edit
+        
+        // + Nút cancel/close để đóng
+        // + Nút Done để kết thúc => chuyển sang chế độ selecting
+        
+        let btnCancel = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelFeatureAction))
+        let btnDone = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(editGeometryDoneAction))
+        self.toolbarItems = [spacer, btnDone]
+    }
+    
+    func btnAddCPolygon() {
+        // Tạo 4 điểm mặc định
+        let p1: CGPoint = (mapView?.center.applying(CGAffineTransform(translationX: -(mapView?.frame.width)! / 4, y: 0)))!
+        let p2: CGPoint = (mapView?.center.applying(CGAffineTransform(translationX: 0, y: -(mapView?.frame.height)! / 4)))!
+        let p3: CGPoint = (mapView?.center.applying(CGAffineTransform(translationX: (mapView?.frame.width)! / 4, y: 0)))!
+        let p4: CGPoint = (mapView?.center.applying(CGAffineTransform(translationX: 0, y: (mapView?.frame.height)! / 4)))!
+        let path = GMSMutablePath()
+        path.add((mapView?.projection.coordinate(for: p1))!)
+        path.add((mapView?.projection.coordinate(for: p2))!)
+        path.add((mapView?.projection.coordinate(for: p3))!)
+        path.add((mapView?.projection.coordinate(for: p4))!)
+        selectedPolygon = CPolygon(path: path)
+        selectedPolygon.map = mapView
+        selectedPolygon.delegate = self
+        let feature = CFeature(geometry: selectedPolygon, properties: [:])
+        selectedPolygon.feature = feature
+        addGeoJSONFeature(feature)
+        selectedPolygon.visibleMode = .selecting
+        selectedPolygon.visibleMode = .editing
+        let when = DispatchTime.now() + 0.3
+        // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.selectedPolygon.updateVertex()
+        }
+    }
+
+    func btnAddCLineString() {
+        // Tạo 2 điểm mặc định
+        let p1: CGPoint = (mapView?.center.applying(CGAffineTransform(translationX: -(mapView?.frame.width)! / 8, y: (mapView?.frame.height)! / 8)))!
+        let p2: CGPoint = (mapView?.center.applying(CGAffineTransform(translationX: (mapView?.frame.width)! / 8, y: -(mapView?.frame.height)! / 8)))!
+        
+        let path = GMSMutablePath()
+        path.add((mapView?.projection.coordinate(for: p1))!)
+        path.add((mapView?.projection.coordinate(for: p2))!)
+        selectedLineString = CLineString(path: path)
+        selectedLineString.map = mapView
+        selectedLineString.delegate = self
+        let feature = CFeature(geometry: selectedLineString, properties: [:])
+        selectedLineString.feature = feature
+        addGeoJSONFeature(feature)
+        selectedLineString.visibleMode = .selecting
+        selectedLineString.visibleMode = .editing
+        let when = DispatchTime.now() + 0.3
+        // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.selectedLineString.updateVertex()
+        }
+    }
+    /*
+     * Thêm điểm từ GPS
+     */
+    func btnAddCPointGPSMarker() {
+        if let location = self.mapView?.myLocation?.coordinate {
+            if isDebug || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+                let ele = (self.mapView?.myLocation?.altitude)!
+                let cPoint = CPoint(position: location)
+                cPoint.altitude = CGFloat(ele)
+                self.addGeoJSONFeature(CFeature(geometry: cPoint,
+                                                properties: ["marker-symbol":"pinWaypoint",
+                                                             "name":"GPS Marker",
+                                                             "desc":Date().local]))
+                
+                if ENABLE_SOUND_EFFECT {
+                    SoundPlayer.play(file: "snap.mp3")
+                }
+            } else {
+                self.showSubscription()
+            }
+        }
+    }
+    
+    /*
+     * Thêm đối tượng GeoJSON
+     */
+    func addGeoJSONFeature(_ feature: CFeature) {
+        if self.geoJSON != nil {
+            self.geoJSON?.featureCollection.addFeature(feature)
+            feature.geometry.style(properties: feature.properties)
+            feature.geometry.renderer(map: mapView)
+            if ENABLE_SOUND_EFFECT {
+                SoundPlayer.play(file: "snap.mp3")
+            }
+        } else {
+            var fileUrl = docsURL.appendingPathComponent(getFileNameByGPSTime(ext: "geojson", date: Date()))
+            
+            let alertController = UIAlertController(title: NSLocalizedString("Create New GeoJSON", comment: ""), message: nil, preferredStyle: .alert)
+            
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Save", comment: ""), style: .default, handler: {
+                alert -> Void in
+                let textField = alertController.textFields![0] as UITextField
+                let fileName: String = (textField.text?.removingPercentEncoding)!
+                if fileName.length != 0 {
+                    var url = docsURL.appendingPathComponent(fileName)
+                    if url.pathExtension != "geojson" {
+                        url = url.appendingPathExtension("geojson")
+                    }
+                    fileUrl = url
+                }
+                self.geoJSON = CGeoJSONKit(url: fileUrl)
+                self.geoJSON?.featureCollection.addFeature(feature)
+                feature.geometry.style(properties: feature.properties)
+                feature.geometry.renderer(map: self.mapView)
+                if ENABLE_SOUND_EFFECT {
+                    SoundPlayer.play(file: "snap.mp3")
+                }
+            }))
+            
+            alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
+                textField.placeholder = NSLocalizedString("Type your file name", comment: "")
+                textField.text = fileUrl.lastPathComponent
+                textField.isSelected = true
+            })
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func cancelFeatureAction() {
+        if selectedPoint != nil {
+            selectedPoint.visibleMode = .normal
+            selectedPoint = nil
+        }
+        if selectedLineString != nil {
+            selectedLineString.visibleMode = .normal
+            selectedLineString = nil
+        }
+        if selectedPolygon != nil {
+            selectedPolygon.visibleMode = .normal
+            selectedPolygon = nil
+        }
+    }
+    
+    @objc func editGeometryAction() {
+        if selectedPoint != nil {
+            selectedPoint.visibleMode = .editing
+        } else if selectedLineString != nil {
+            selectedLineString.visibleMode = .editing
+        } else if selectedPolygon != nil {
+            selectedPolygon.visibleMode = .editing
+        }
+    }
+
+    @objc func editGeometryDoneAction() {
+        //      + Nếu Done mà không đủ điều kiện để lưu:
+        //          - Polyline chưa đủ 2 đỉnh
+        //          - Polygon chưa đủ 3 đỉnh
+        //          thì hủy không lưu: selected = nil
+        showSomeView()
+        if selectedPoint != nil {
+            selectedPoint.visibleMode = .selecting
+        } else if selectedLineString != nil {
+            selectedLineString.visibleMode = .selecting
+        } else if selectedPolygon != nil {
+            selectedPolygon.visibleMode = .selecting
+        }
+    }
+
+    @objc func featureDetailAction() {
+        // Cập nhật bản đồ, zoom tới đối tượng
+        var feature: CFeature!
+        if selectedPoint != nil {
+            feature = selectedPoint.feature
+        } else if selectedLineString != nil {
+            feature = selectedLineString.feature
+        } else if selectedPolygon != nil {
+            feature = selectedPolygon.feature
+        }
+
+        mapView?.animate(with: GMSCameraUpdate.fit(feature.geometry.boundingBox.fit(map: mapView!, padding: 50)))
+        let when = DispatchTime.now() + 0.4
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.performSegue(withIdentifier: "sequeFeatureDetail", sender: self)
+        }
     }
 }
 
@@ -362,6 +648,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     var mapView: GTMapView?
     var gpx: GPX?
+    var geoJSON: CGeoJSONKit?
     
     // Viết riêng cho GeoServer
     var wmsTileLayer: WMSTileLayer?
@@ -484,7 +771,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     private var scaleBarView: ScaleBarView!
     
-    private var cPolyline: CPolyline!
+    //private var cPolyline: CPolyline!
+    private var selectedLineString: CLineString!
+    private var selectedPolygon: CPolygon!
+    private var selectedPoint: CPoint!
     
     override func loadView() {
         super.loadView()
@@ -505,12 +795,63 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         self.imageViewForCheckingGeoServer.iconForGeoServerBaseUrl()
         
-        let pl = GMSPolyline(path: GMSPath(fromEncodedPath: "ehc{Byw`gSzPi]vAnXuHoXnA|Y`IyNsCtRxEgJ^_COxN"))
-        //pl.map = mapView
-        // Thêm cPolyline để thêm và sửa geometry
-        cPolyline = CPolyline(gmsPolyline: pl)
-        cPolyline.map = mapView
-        cPolyline.visibleMode = .editing
+//        let pl = GMSPolyline(path: GMSPath(fromEncodedPath: "ehc{Byw`gSzPi]vAnXuHoXnA|Y`IyNsCtRxEgJ^_COxN"))
+////        cPolyline = CPolyline(gmsPolyline: pl)
+////        cPolyline.map = mapView
+////        cPolyline.visibleMode = .editing
+//        let ls: LineString = LineString(path: pl.path)
+//        ls.map = mapView
+//        ls.strokeColor = UIColor.red
+//        ls.strokeWidth = 3
+//        let f: Feature
+//
+//        //linestring: asr_CygpdSgZuWf^gJ
+//        //polygon
+//        //outer: _kr_C_hqdSqUGg@m[`Wp@
+//        //inner1: czr_CkoqdSWyHhFDFtH
+//        //inner2: ctr_CazqdSkECAwAvDP
+//        let point = Point(position: CLLocationCoordinate2D(latitude: 21.07421, longitude: 105.77366))
+//        let polyline = GMSPolyline(path: GMSPath(fromEncodedPath: "asr_CygpdSgZuWf^gJ"))
+//        let polygon = GMSPolygon(path: GMSPath(fromEncodedPath: "_kr_C_hqdSqUGg@m[`Wp@"))
+//        polygon.holes = [GMSPath(fromEncodedPath: "czr_CkoqdSWyHhFDFtH")!, GMSPath(fromEncodedPath: "ctr_CazqdSkECAwAvDP")!]
+//
+//        let gjLineString = LineString(path: polyline.path)
+//        let gjPolygon = Polygon(path: polygon.path)
+//        gjPolygon.holes = [GMSPath(fromEncodedPath: "czr_CkoqdSWyHhFDFtH")!, GMSPath(fromEncodedPath: "ctr_CazqdSkECAwAvDP")!]
+//        //let gc = GeometryCollection()
+//        //gc.member = [GeoJSONMember.type.rawValue: GeoJSONValue.geometryCollection, GeoJSONMember.geometries.rawValue: [point.member, gjLineString.member, gjPolygon.member]]
+//
+//        //print(gc.member.json)
+//        //print(gjPolygon.member.json)
+//
+//        let feature1 = Feature(geometry: gjLineString, properties: ["stroke-color":"#ff0000","stroke-width" : "2"])
+//        let feature2 = Feature(geometry: gjPolygon, properties: ["fill":"#00ff00","fill-opacity":"0.2","stroke-color":"#00ff00","stroke-width" : "2"])
+//
+//        gjLineString.map = mapView
+//        gjPolygon.map = mapView
+//
+//
+//        let geoJSONUrl: URL = Bundle.main.url(forResource: "GeoJSON", withExtension: "geojson")!
+////        let geoJSON: GeoJSON = GeoJSON(url: geoJSONUrl)
+////        geoJSON.parse()
+////        geoJSON.renderer(map: mapView!)
+////        let features = geoJSON.features
+////
+////
+//
+//        let geoJSONKit = CGeoJSONKit(url: geoJSONUrl)
+//        geoJSONKit.renderer(map: mapView!)
+//        geoJSONKit.save()
+        
+//        if !geoJSON.save() {
+//            print("Save error!")
+//        }
+//
+//        geoJSON.renderer(map: mapView!)
+        
+        
+        
+//        gc.map = mapView
         
 //        let when = DispatchTime.now() + 5
 //        // change 2 to desired number of seconds
@@ -570,7 +911,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         let layer = DownloadTileLayer()
         //layer.tileSize *= U
-        layer.zIndex = 1000
+        layer.zIndex = 3
         //layer.map = mapView
         
         createIslands()
@@ -585,6 +926,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         self.gpx = GPX(mapView!)
         
+        // Nếu có recent url geojson thì hỏi xem có mở lại không
+        showOpenRecentGeoJSONPath()
+        
         //NSNotification.Name.UIApplicationWillEnterForeground
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillEnterForeground(_:)),
@@ -594,10 +938,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillChangeStatusBarOrientation,
                                                object: nil,
                                                queue: OperationQueue.main) { (notifi) in
-                                                if self.cPolyline != nil && self.cPolyline.visibleMode == .editing {
-                                                    // Tạm thời ẩn các đỉnh
-                                                    self.cPolyline.visibleVertices(false)
+                                                if self.selectedLineString != nil && self.selectedLineString.visibleMode == .editing {
+                                                    self.selectedLineString.visibleVertices(false)
+                                                } else if self.selectedPolygon != nil && self.selectedPolygon.visibleMode == .editing {
+                                                    self.selectedPolygon.visibleVertices(false)
                                                 }
+//                                                if self.cPolyline != nil && self.cPolyline.visibleMode == .editing {
+//                                                    // Tạm thời ẩn các đỉnh
+//                                                    self.cPolyline.visibleVertices(false)
+//                                                }
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIDeviceOrientationDidChange,
                                                object: nil,
@@ -605,10 +954,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                                 let when = DispatchTime.now() + 1
                                                 // change 2 to desired number of seconds
                                                 DispatchQueue.main.asyncAfter(deadline: when) {
-                                                    if self.cPolyline != nil && self.cPolyline.visibleMode == .editing {
-                                                        self.cPolyline.updateVertex()
-                                                        self.cPolyline.visibleVertices(true)
+                                                    if self.selectedLineString != nil && self.selectedLineString.visibleMode == .editing {
+                                                        self.selectedLineString.updateVertex()
+                                                        self.selectedLineString.visibleVertices(true)
+                                                    } else if self.selectedPolygon != nil && self.selectedPolygon.visibleMode == .editing {
+                                                        self.selectedPolygon.updateVertex()
+                                                        self.selectedPolygon.visibleVertices(true)
                                                     }
+
+//                                                    if self.cPolyline != nil && self.cPolyline.visibleMode == .editing {
+//                                                        self.cPolyline.updateVertex()
+//                                                        self.cPolyline.visibleVertices(true)
+//                                                    }
                                                 }
         }
     }
@@ -711,6 +1068,31 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
     }
     
+    func showOpenRecentGeoJSONPath() {
+        guard let url = getRecentGeoJSONPath() else {
+            return
+        }
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return
+        }
+        let alert = UIAlertController(
+            title: NSLocalizedString("Open a recent GeoJSON", comment: ""),
+            message: getRecentGeoJSONPath().lastPathComponent,
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (alert) -> Void in
+            self.geoJSON = CGeoJSONKit(url: url)
+            self.geoJSON?.renderer(map: self.mapView!)
+        }))
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    
     // Bắt buôc phải có nếu dùng MotionContainer
     func startUpdateMotion() {
         guard let motionManager = motionManager, motionManager.isAccelerometerAvailable else { return }
@@ -744,6 +1126,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //            let nav: UINavigationController = segue.destination as! UINavigationController
 //            let vc: SubscribeViewController = nav.viewControllers.first as! SubscribeViewController
         }
+        if (segue.identifier == "sequeFeatureDetail") {
+            //let nav: UINavigationController = segue.destination as! UINavigationController
+            let vc: FeatureDetailViewController = segue.destination as! FeatureDetailViewController
+            vc.mapView = mapView
+            if selectedPoint != nil {
+                vc.feature = selectedPoint.feature
+            } else if selectedLineString != nil {
+                vc.feature = selectedLineString.feature
+            } else if selectedPolygon != nil {
+                vc.feature = selectedPolygon.feature
+            }
+        }
+        
     }
     
     func setupTrackButton() {
@@ -1524,7 +1919,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func setupButtonRecording() {
-        if isTesting || getProVersion() || (gpx?.trackSegments.count)! < 2 {
+        if isDebug || getProVersion() || (gpx?.trackSegments.count)! < 2 {
             buttonRecord?.MainButton.isHidden = true
             buttonRecording?.MainButton.isHidden = false
             buttonRecording?.MainButton.startFlashing()
@@ -1558,10 +1953,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.setupButtonRecord()
     }
     
-    
     func btnAddGPSMarker() {
         if let location = self.mapView?.myLocation?.coordinate {
-            if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+            if isDebug || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
                 let ele = (self.mapView?.myLocation?.altitude)!
                 let wpt = GPXWaypoint(position: location)
                 wpt.ele = ele.toString(2)
@@ -1577,6 +1971,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     // Thêm điểm trên bản đồ và thêm điểm theo tọa độ
     func btnAddMarker() {
+        
         // Add a marker from the map
         // Add a marker from coordinates
         let alert = UIAlertController(
@@ -1587,7 +1982,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             title: NSLocalizedString("Add a marker from GPS", comment: ""),
             style: .default,
             handler: { (action: UIAlertAction!) in
-                self.btnAddGPSMarker()
+                //self.btnAddGPSMarker() GPX
+                self.btnAddCPointGPSMarker() // GeoJSON
         }))
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("Add a marker from the map", comment: ""),
@@ -1612,7 +2008,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 items.append(
                     UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.didDoneAddMarker))
                 )
-                self.navigationController?.toolbar.items = items
+                self.setToolbarItems(items, animated: true)
         }))
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("Add a marker from coordinates", comment: ""),
@@ -1636,7 +2032,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func btnAddPolyline() {
-        if isTesting || isTesting || getProVersion() || (gpx?.trackSegments.count)! < 2 {
+        if isDebug || getProVersion() || (gpx?.trackSegments.count)! < 5 {
             self.gpx?.newTrackSegment()
             self.gpx?.currentTrackSegment?.actions = .editing
             selectedOverlay = self.gpx?.currentTrackSegment?.overlay
@@ -1650,7 +2046,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func btnAddPolygon() {
         // Tạm thời chưa dùng polygon
         // btnAddPolyline()
-        if isTesting || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
+        if isDebug || getProVersion() || (gpx?.pointSegments.count)! <= 2 {
             self.gpx?.newPointSegment()
             self.gpx?.currentPointSegment?.actions = .editing
             selectedPolygonOverlay = self.gpx?.currentPointSegment?.overlay
@@ -1661,6 +2057,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
 
+    
     func didSelectOverlay() {
         self.navigationController?.isToolbarHidden = false
         self.navigationController?.toolbar.barStyle = .black
@@ -1781,19 +2178,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     @objc func didDoneAddMarker() {
         let location = self.mapView?.getFixedMapCenter()
         let coord = self.mapView?.projection.coordinate(for: location!)
-        if isTesting || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
-            let wpt = GPXWaypoint(position: coord!)
-            wpt.iconType = ""
-            wpt.icon = #imageLiteral(resourceName: "pin")
-            gpx?.addWaypoint(wpt)
-            didDeSelectOverlay()
+        if isDebug || getProVersion() || (gpx?.wayPoints.count)! <= 2 {
+//            let wpt = GPXWaypoint(position: coord!)
+//            wpt.iconType = ""
+//            wpt.icon = #imageLiteral(resourceName: "pin")
+//            gpx?.addWaypoint(wpt)
+
+            let pt = CPoint(position: coord!)
+            let ft = CFeature(geometry: pt, properties: ["marker-symbol":"pin",
+                                                         "name":"Marker",
+                                                         "desc":Date().local])
+            addGeoJSONFeature(ft)
             
             self.mapView?.showCrossMarker(false)
-            
+            didDeSelectOverlay()
+
             showSomeView()
-            if ENABLE_SOUND_EFFECT {
-                SoundPlayer.play(file: "snap.mp3")
-            }
+            
         } else {
             self.showSubscription()
         }
@@ -1802,6 +2203,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.interstitial.present(fromRootViewController: self)
         }
     }
+    
+
     
     @objc func removeActiveVertex() {
         if selectedOverlay != nil {
@@ -1882,6 +2285,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func actionClose() {
         self.gpx?.save()
+        if self.geoJSON != nil {
+            self.geoJSON?.save()
+        } else {
+            setRecentGeoJSONPath(nil)
+        }
         // Thoát view
         self.dismiss(animated: true) {
             self.statusBarStyle = .lightContent
@@ -2993,7 +3401,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         // Nếu đã có map offline
         if offlineTileLayer != nil {
             // Display on the map at a specific zIndex
-            offlineTileLayer?.zIndex = 100
+            offlineTileLayer?.zIndex = 1
             offlineTileLayer?.map = mapView
             self.buttonMapSourceOffline?.pressedDown = true
             self.buttonMapSourceWMS?.pressedDown = false
@@ -3047,7 +3455,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 wmsTileLayer = WMSTileLayer(tileSize)
                 // Display on the map at a specific zIndex
                 
-                wmsTileLayer?.zIndex = 100
+                wmsTileLayer?.zIndex = 2
                 wmsTileLayer?.map = mapView
                 self.buttonMapSourceWMS?.pressedDown = true
                 self.buttonMapSourceOffline?.pressedDown = false
@@ -3291,26 +3699,61 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        if marker.userData != nil {
-            let attributes:[String:String] = marker.userData as! [String : String]
-            if attributes.count == 2 {
-                let type = attributes["type"]!
-                let index = UInt(attributes["id"]!)!
-                if selectedOverlay != nil {
-                    if type == "vertex" {
-                        selectedOverlay?.trackSegment.setActiveVertex(index)
-                    } else if type == "middle" {
-                        selectedOverlay?.trackSegment.insertVertex(index, marker.position)
-                    }
-                } else if selectedPolygonOverlay != nil {
-                    if type == "vertex" {
-                        selectedPolygonOverlay?.pointSegment.setActiveVertex(index)
-                    } else if type == "middle" {
-                        selectedPolygonOverlay?.pointSegment.insertVertex(index, marker.position)
-                    }
+        if let cPoint: CPoint = marker as? CPoint {
+            switch cPoint.visibleMode {
+            case .normal:
+                // Nếu chọn lineString thì bỏ chọn polygon
+                if selectedLineString != nil {
+                    selectedLineString.visibleMode = .normal
+                    selectedLineString = nil
                 }
+                // Nếu chọn polygon thì bỏ chọn lineString
+                if selectedPolygon != nil {
+                    selectedPolygon.visibleMode = .normal
+                    selectedPolygon = nil
+                }
+                // Nếu đã chọn point thì bỏ chọn point
+                if selectedPoint != nil {
+                    selectedPoint.visibleMode = .normal
+                    selectedPoint = nil
+                }
+                selectedPoint = cPoint
+                selectedPoint.delegate = self
+                selectedPoint.visibleMode = .selecting
+            case .selecting:
+                break
+                //selectedPoint.visibleMode = .editing
+            case .editing:
+                break
+//                if selectedPoint.selectedPoint != nil {
+//                    selectedPoint.selectedPoint.pointMode = .normal
+//                    selectedPoint.selectedPoint = nil
+//                }
+//                selectedPoint.visibleMode = .normal
+//                selectedPoint = nil
             }
         } else {
+        
+//        if marker.userData != nil {
+//            let attributes:[String:String] = marker.userData as! [String : String]
+//            if attributes.count == 2 {
+//                let type = attributes["type"]!
+//                let index = UInt(attributes["id"]!)!
+//                if selectedOverlay != nil {
+//                    if type == "vertex" {
+//                        selectedOverlay?.trackSegment.setActiveVertex(index)
+//                    } else if type == "middle" {
+//                        selectedOverlay?.trackSegment.insertVertex(index, marker.position)
+//                    }
+//                } else if selectedPolygonOverlay != nil {
+//                    if type == "vertex" {
+//                        selectedPolygonOverlay?.pointSegment.setActiveVertex(index)
+//                    } else if type == "middle" {
+//                        selectedPolygonOverlay?.pointSegment.insertVertex(index, marker.position)
+//                    }
+//                }
+//            }
+//        } else {
             mapView.selectedMarker = marker
             // Nếu là requestMarker
             if marker == self.requestMarker {
@@ -3372,6 +3815,110 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        if let lineString: CLineString = overlay as? CLineString {
+            switch lineString.visibleMode {
+            case .normal:
+                // Nếu chọn lineString thì bỏ chọn polygon
+                if selectedLineString != nil {
+                    selectedLineString.visibleMode = .normal
+                    selectedLineString = nil
+                }
+                // Nếu chọn polygon thì bỏ chọn lineString
+                if selectedPolygon != nil {
+                    selectedPolygon.visibleMode = .normal
+                    selectedPolygon = nil
+                }
+                // Nếu đã chọn point thì bỏ chọn point
+                if selectedPoint != nil {
+                    selectedPoint.visibleMode = .normal
+                    selectedPoint = nil
+                }
+                selectedLineString = lineString
+                selectedLineString.delegate = self
+                selectedLineString.visibleMode = .selecting
+            case .selecting:
+                break
+                //selectedLineString.visibleMode = .editing
+            case .editing:
+                break
+//                if selectedLineString.selectedPoint != nil {
+//                    selectedLineString.selectedPoint.pointMode = .normal
+//                    selectedLineString.selectedPoint = nil
+//                }
+//                selectedLineString.visibleMode = .normal
+//                selectedLineString = nil
+            }
+//            if selectedLineString.visibleMode == .normal {
+//                selectedLineString.visibleMode = .selecting
+//
+//                // Nếu chọn lineString thì bỏ chọn polygon
+//                if selectedPolygon != nil {
+//                    selectedPolygon.visibleMode = .normal
+//                    selectedPolygon = nil
+//                }
+//            } else if selectedLineString.visibleMode == .selecting {
+//                selectedLineString.visibleMode = .editing
+//            } else if selectedLineString.visibleMode == .editing {
+//                if selectedLineString.selectedPoint != nil {
+//                    selectedLineString.selectedPoint.pointMode = .normal
+//                    selectedLineString.selectedPoint = nil
+//                }
+//                selectedLineString.visibleMode = .normal
+//                selectedLineString = nil
+//            }
+        } else if let polygon: CPolygon = overlay as? CPolygon {
+            switch polygon.visibleMode {
+            case .normal:
+                // Nếu chọn lineString thì bỏ chọn polygon
+                if selectedLineString != nil {
+                    selectedLineString.visibleMode = .normal
+                    selectedLineString = nil
+                }
+                // Nếu chọn polygon thì bỏ chọn lineString
+                if selectedPolygon != nil {
+                    selectedPolygon.visibleMode = .normal
+                    selectedPolygon = nil
+                }
+                // Nếu đã chọn point thì bỏ chọn point
+                if selectedPoint != nil {
+                    selectedPoint.visibleMode = .normal
+                    selectedPoint = nil
+                }
+                selectedPolygon = polygon
+                selectedPolygon.delegate = self
+                selectedPolygon.visibleMode = .selecting
+            case .selecting:
+                break
+                //selectedPolygon.visibleMode = .editing
+            case .editing:
+                break
+//                if selectedPolygon.selectedPoint != nil {
+//                    selectedPolygon.selectedPoint.pointMode = .normal
+//                    selectedPolygon.selectedPoint = nil
+//                }
+//                selectedPolygon.visibleMode = .normal
+//                selectedPolygon = nil
+            }
+//            if selectedPolygon.visibleMode == .normal {
+//                selectedPolygon.visibleMode = .selecting
+//
+//                // Nếu chọn polygon thì bỏ chọn lineString
+//                if selectedLineString != nil {
+//                    selectedLineString.visibleMode = .normal
+//                    selectedLineString = nil
+//                }
+//            } else if selectedPolygon.visibleMode == .selecting {
+//                selectedPolygon.visibleMode = .editing
+//            } else if selectedPolygon.visibleMode == .editing {
+//                if selectedPolygon.selectedPoint != nil {
+//                    selectedPolygon.selectedPoint.pointMode = .normal
+//                    selectedPolygon.selectedPoint = nil
+//                }
+//                selectedPolygon.visibleMode = .normal
+//                selectedPolygon = nil
+//            }
+        }
+/*
         if let trackSegmentOverlay: GPXTrackSegmentOverlay = overlay as? GPXTrackSegmentOverlay {
             if trackSegmentOverlay.trackSegment.actions == .editing ||
                 selectedPolygonOverlay?.pointSegment.actions == .editing {
@@ -3412,9 +3959,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             selectedOverlay = nil
             self.didSelectOverlay()
         }
+ */
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        
 //        if cPolyline.visibleMode == .normal {
 //            cPolyline.visibleMode = .selecting
 //        } else if cPolyline.visibleMode == .selecting {
@@ -3430,9 +3979,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (self.mapView?.padding.bottom != 0.0) {
                 togglePaneView(0)
             } else { // Nên kiểm tra điều kiện trước khi tìm kiếm
-                if cPolyline.visibleMode == .editing {
-                    cPolyline.addPointFor(mapView.projection.point(for: coordinate))
+                // Nếu đang chọn LineString mà chạm ra ngoài map thì bỏ chọn
+                if selectedLineString != nil && selectedLineString.visibleMode == .selecting {
+                    selectedLineString.visibleMode = .normal
+                } else if selectedPolygon != nil && selectedPolygon.visibleMode == .selecting {
+                    selectedPolygon.visibleMode = .normal
+                } else if selectedPoint != nil && selectedPoint.visibleMode == .selecting {
+                    selectedPoint.visibleMode = .normal
                 }
+                
+                if selectedLineString != nil && selectedLineString.visibleMode == .editing {
+                    selectedLineString.addPointFor(mapView.projection.point(for: coordinate))
+                } else if selectedPolygon != nil && selectedPolygon.visibleMode == .editing {
+                    selectedPolygon.addPointFor(mapView.projection.point(for: coordinate))
+                } else if selectedPoint != nil && selectedPoint.visibleMode == .editing {
+                    selectedPoint.addPointFor(mapView.projection.point(for: coordinate))
+                }
+//                if cPolyline.visibleMode == .editing {
+//                    cPolyline.addPointFor(mapView.projection.point(for: coordinate))
+//                }
                 
                 let bound = GMSCoordinateBounds(path: pathOfActiveLayersBoundaryForWFS())
                 if selectedPolygonOverlay?.pointSegment.actions == .editing {
@@ -3493,10 +4058,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      */
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
         print("willMove")
-        if cPolyline != nil && cPolyline.visibleMode == .editing {
-            // Tạm thời ẩn các đỉnh
-            cPolyline.visibleVertices(false)
+        if selectedLineString != nil && selectedLineString.visibleMode == .editing {
+            selectedLineString.visibleVertices(false)
+        } else if selectedPolygon != nil && selectedPolygon.visibleMode == .editing {
+            selectedPolygon.visibleVertices(false)
+        } else if selectedPoint != nil && selectedPoint.visibleMode == .editing {
+            selectedPoint.visibleVertices(false)
         }
+//        if cPolyline != nil && cPolyline.visibleMode == .editing {
+//            // Tạm thời ẩn các đỉnh
+//            cPolyline.visibleVertices(false)
+//        }
         if gesture { // Pan bằng tay
             isFollowMyLocation = false
             myLocationLabel?.attributedText = NSAttributedString()
@@ -3537,10 +4109,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-        if cPolyline != nil && cPolyline.visibleMode == .editing {
-            cPolyline.updateVertex()
-            cPolyline.visibleVertices(true)
+        if selectedLineString != nil && selectedLineString.visibleMode == .editing {
+            selectedLineString.updateVertex()
+            selectedLineString.visibleVertices(true)
+        } else if selectedPolygon != nil && selectedPolygon.visibleMode == .editing {
+            selectedPolygon.updateVertex()
+            selectedPolygon.visibleVertices(true)
+        } else if selectedPoint != nil && selectedPoint.visibleMode == .editing {
+            selectedPoint.updateVertex()
+            selectedPoint.visibleVertices(true)
         }
+//        if cPolyline != nil && cPolyline.visibleMode == .editing {
+//            cPolyline.updateVertex()
+//            cPolyline.visibleVertices(true)
+//        }
         print("idleAt position")
         if mapView.selectedMarker == nil {
             self.line?.map = nil

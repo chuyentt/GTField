@@ -8,19 +8,33 @@
 
 import UIKit
 
+enum WebViewContent {
+    case `default`
+    case `agreement`
+}
+
 class WebViewController: UIViewController, UIWebViewDelegate {
     
     @IBOutlet weak var webView: UIWebView!
     var urlString: String?
-    
+    var webViewContent: WebViewContent = .default
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadWebSite()
         
-        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(close))
+        let shareItem = UIBarButtonItem(title: "Close", style: UIBarButtonItemStyle.plain, target: self, action: #selector(close))
         
         self.navigationItem.rightBarButtonItems = [shareItem]
+        if self.webViewContent == .agreement {
+            let btnAgree = UIBarButtonItem(title: NSLocalizedString("Agree", comment: ""), style: .done, target: self, action: #selector(agreeAction))
+            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+            self.toolbarItems = [spacer, btnAgree, spacer]
+            self.navigationController?.setToolbarHidden(false, animated: false)
+            self.navigationController?.toolbar.barStyle = UIBarStyle.default
+            self.navigationController?.toolbar.isTranslucent = true
+            self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -30,7 +44,28 @@ class WebViewController: UIViewController, UIWebViewDelegate {
     
     @objc func close() {
         self.dismiss(animated: true, completion: { () -> Void in
+            if self.webViewContent == .agreement {
+                if !getAgreement() {
+                    let alert = UIAlertController(title: NSLocalizedString("Agreement", comment: ""),
+                                                  message: nil,
+                                                  preferredStyle: .alert)
+                    
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .destructive, handler: { (action: UIAlertAction!) in
+                        setAgreement(false)
+                        exit(0)
+                    }))
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Agree", comment: ""), style: .default, handler: { (action: UIAlertAction!) in
+                        setAgreement(true)
+                    }))
+                    alert.show()
+                }
+            }
         })
+    }
+    
+    @objc func agreeAction() {
+        setAgreement(true)
+        self.close()
     }
     
     func loadWebSite() {

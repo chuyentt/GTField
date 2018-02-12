@@ -14,7 +14,7 @@ let kNoItem = NSLocalizedString("No Item", comment: "")
 
 class GPXTableViewController: UITableViewController {
 
-    var itemList: NSMutableArray = [kNoItem]
+    var itemList: NSMutableArray = []
     var itemFound = false;
     var selectedRowIndex = -1
     
@@ -32,14 +32,23 @@ class GPXTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItems = [shareItem]
         
         //get gpx files
-        let list: NSArray = GPXFileManager.fileList as NSArray
-        if list.count != 0 {
-            self.itemList.removeAllObjects()
-            self.itemList.addObjects(from: list as [AnyObject])
-            self.itemFound = true
+        self.view.showLoading()
+        DispatchQueue.main.async() {
+            let list: NSArray = GPXFileManager.fileList as NSArray
+            if list.count != 0 {
+                self.itemList.removeAllObjects()
+                self.itemList.addObjects(from: list as [AnyObject])
+                self.itemFound = true
+            }
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableView.reloadData()
+        self.view.hideLoading()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -154,7 +163,7 @@ class GPXTableViewController: UITableViewController {
                 style: .default,
                 handler: { (action: UIAlertAction!) in
                     let fileURL: URL = docsURL.appendingPathComponent(filename)
-                    self.actionSendEmailGPX(fileURL)
+                    self.actionSendEmailGPX(fileURL, "application/gpx+xml")
             }))
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Delete", comment: ""),
@@ -169,12 +178,12 @@ class GPXTableViewController: UITableViewController {
                 message: nil,
                 preferredStyle: .alert)
             
-            //            alert.addAction(UIAlertAction(
-            //                title: NSLocalizedString("Send by email", comment: ""),
-            //                style: .default,
-            //                handler: { (action: UIAlertAction!) in
-            //                    self.actionSendEmailWithAttachment(indexPath.row)
-            //            }))
+                alert.addAction(UIAlertAction(
+                    title: NSLocalizedString("Send by email", comment: ""),
+                    style: .default,
+                    handler: { (action: UIAlertAction!) in
+                        self.actionSendEmailGPX(fileURL, "application/vnd.google-earth.kml+xml")
+                }))
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Cancel", comment: ""),
                 style: .cancel,
@@ -196,12 +205,12 @@ class GPXTableViewController: UITableViewController {
                 message: nil,
                 preferredStyle: .alert)
             
-            //            alert.addAction(UIAlertAction(
-            //                title: NSLocalizedString("Send by email", comment: ""),
-            //                style: .default,
-            //                handler: { (action: UIAlertAction!) in
-            //                    self.actionSendEmailWithAttachment(indexPath.row)
-            //            }))
+                alert.addAction(UIAlertAction(
+                    title: NSLocalizedString("Send by email", comment: ""),
+                    style: .default,
+                    handler: { (action: UIAlertAction!) in
+                        self.actionSendEmailGPX(fileURL, "application/geo+json")
+                }))
             alert.addAction(UIAlertAction(
                 title: NSLocalizedString("Cancel", comment: ""),
                 style: .cancel,
@@ -244,14 +253,14 @@ class GPXTableViewController: UITableViewController {
     }
 
     // Export GPX
-    internal func actionSendEmailGPX(_ fileURL: URL) {
+    internal func actionSendEmailGPX(_ fileURL: URL,_ mimeType: String) {
         
         let composer = MFMailComposeViewController()
         composer.mailComposeDelegate = self
         
         if MFMailComposeViewController.canSendMail() {
             // set the subject
-            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export Waypoints & Tracks to GPX file", comment: ""))
+            composer.setSubject("[\(APP_NAME)] " + NSLocalizedString("Export to a file", comment: ""))
             
             //Add some text to the body and attach the file
             let body = "\(APP_FULL_NAME). " + NSLocalizedString("You can copy your files between your computer and apps on your iOS device using File Sharing.", comment: "") + " https://support.apple.com/en-us/HT201301<br />"
@@ -260,7 +269,7 @@ class GPXTableViewController: UITableViewController {
             //composer.setToRecipients(["chuyentt@gmail.com"])
             do {
                 let fileData: Data = try Data(contentsOf: URL(fileURLWithPath: fileURL.path), options: .mappedIfSafe)
-                composer.addAttachmentData(fileData, mimeType:"application/gpx+xml", fileName: fileURL.lastPathComponent)
+                composer.addAttachmentData(fileData, mimeType: mimeType, fileName: fileURL.lastPathComponent)
             } catch {
                 
             }

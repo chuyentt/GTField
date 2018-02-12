@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, readonly) NSArray<id<GMUGeometryContainer>> *features;
 
+@property(nonatomic, readonly) NSDictionary *geoJSONDict;
+
 /**
  * Initializes a GMUGeoJSONParser with GeoJSON data contained in a URL.
  *
@@ -56,6 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
  * Parses the stored GeoJSON data.
  */
 - (void)parse;
+
+- (void)save;
 
 @end
 

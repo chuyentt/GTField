@@ -100,12 +100,24 @@ class SubscribeViewController: UIViewController {
         
         let shareItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close(_:)))
         self.navigationItem.leftBarButtonItems = [shareItem]
+        
+        let btnAgree = UIBarButtonItem(title: NSLocalizedString("Terms of Use", comment: ""), style: .done, target: self, action: #selector(showTermOfUse))
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        self.toolbarItems = [btnAgree, spacer]
+        self.navigationController?.setToolbarHidden(false, animated: false)
+        self.navigationController?.toolbar.barStyle = UIBarStyle.default
+        self.navigationController?.toolbar.isTranslucent = true
+        self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
     }
     
     @IBAction func close(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: { () -> Void in
             
         })
+    }
+    
+    @objc func showTermOfUse() {
+        self.performSegue(withIdentifier: "segueTermsOfUse", sender: self)
     }
     
     @objc func handleActive(notification: Notification) {
@@ -142,6 +154,29 @@ class SubscribeViewController: UIViewController {
     
     @IBAction func back(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let identifier:String = segue.identifier!
+        switch identifier {
+        case "segueTermsOfUse":
+            let nav: UINavigationController = segue.destination as! UINavigationController
+            let vc: WebViewController = nav.viewControllers.first as! WebViewController
+            let prefferedLanguage = Locale.preferredLanguages[0] as String
+            let arr = prefferedLanguage.lowercased().components(separatedBy: "-")
+            
+            if arr.contains("vn") || arr.contains("vi") {
+                vc.title = NSLocalizedString("Terms of Use", comment: "")
+                vc.urlString = TERMS_OF_USE_VI_URL
+                vc.webViewContent = .agreement
+            } else {
+                vc.title = NSLocalizedString("Terms of Use", comment: "")
+                vc.urlString = TERMS_OF_USE_EN_URL
+                vc.webViewContent = .agreement
+            }
+        default:
+            break
+        }
     }
 }
 
@@ -232,11 +267,7 @@ extension SubscribeViewController: UITableViewDataSource {
                         cell.yourPlanLabel.text = cell.yourPlanLabel.text! + "\n" + NSLocalizedString("Expiry date: ", comment: "") + currentSubscription.expiresDate.local
                     }
                 }
-            }
-            if getUnlimited() {
-                if option.product.productIdentifier.contains("Unlimited") {
-                    cell.isCurrentPlan = true
-                }
+                // Nếu đã đăng ký thì vô hiệu hóa hết các lựa chọn
                 cell.isUserInteractionEnabled = false
                 cell.nameLabel.isEnabled = false
                 cell.descriptionLabel.isEnabled = false

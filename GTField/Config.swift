@@ -50,6 +50,8 @@ let TITLE_FONT_DEFAULT: UIFont = UIFont.boldSystemFont(ofSize: UIFont.systemFont
 //UIFont(name: "Bauhaus-Medium", size: 22.0)!
 let TEXTVIEW_TEXT_COLOR_DEFAULT: UIColor = UIColor.darkGray
 
+let BAR_TINT_COLOR_DEFAULT: UIColor = UIColor(red: (82.0/255.0), green: (172.0/255.0), blue: (238.0/255.0), alpha: 1.0)
+
 var IMAGE_COMPRESSION_QUALITY: Float = getImageCompressionQuality()
 let IMAGE_CROP_TO_SIZE: CGSize = CGSize(width: 1280, height: 960)
 
@@ -70,8 +72,8 @@ var HELP_VI_URL: String = "http://gtfield.geomatics.com.vn/vi.html"
 
 var ABOUT_EN_URL: String = "http://gtfield.geomatics.com.vn/abouten.html"
 var ABOUT_VI_URL: String = "http://gtfield.geomatics.com.vn/aboutvi.html"
-var TERMS_OF_USE_EN_URL: String = "http://geomatics.vn/en/gtfield/terms-of-use"
-var TERMS_OF_USE_VI_URL: String = "http://geomatics.vn/en/gtfield/terms-of-use"
+var TERMS_OF_USE_EN_URL: String = "http://geomatics.vn/en/gtfield/terms-of-use?template=blank"
+var TERMS_OF_USE_VI_URL: String = "http://geomatics.vn/vi/gtfield/dieu-khoan-su-dung?template=blank"
 
 let docsURL = applicationDocumentsDirectory()
 var MB_TILES_PATH: String = docsURL.appendingPathComponent("tiles.mbtiles").path
@@ -79,7 +81,12 @@ var MB_TILES_CACHED: String = docsURL.appendingPathComponent(TILE_CACHED).append
 
 let MB_TILES_VERSION = "1.2"
 var DOWNLOADING_PATH_TO_DATABASE: String = ""
-var isTesting = false
+
+#if DEBUG
+let isDebug = true
+#else
+let isDebug = false
+#endif
 
 // Độ cao mylocation
 var myAltitude = 0.0
@@ -89,7 +96,7 @@ var myAltitude = 0.0
 // -------------------------------------------------------------------
 func configMainView() {
     // Customize Navigation Bar
-    UINavigationBar.appearance().barTintColor = UIColor(red: (82.0/255.0), green: (172.0/255.0), blue: (238.0/255.0), alpha: 1.0)
+    UINavigationBar.appearance().barTintColor = BAR_TINT_COLOR_DEFAULT
     UINavigationBar.appearance().tintColor = UIColor.white
     
     let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)

@@ -79,13 +79,14 @@ class SubscriptionService: NSObject {
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: SubscriptionService.activeNotification, object: nil)
                             }
+                            // Lần đầu tiên đăng ký, kích hoạt gói thành công
                             print("uploadReceipt success setProVersion(true)", currentSubscription.productId)
                         } else {
                             setProVersion(false)
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
                             }
-                            print("uploadReceipt success setProVersion(false)", currentSubscription.productId)
+                            print("uploadReceipt inActive setProVersion(false)", currentSubscription.productId)
                         }
                     }
                 case .failure(let error):
