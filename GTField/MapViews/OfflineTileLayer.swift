@@ -91,7 +91,7 @@ class OfflineTileLayer: GMSTileLayer {
     
     override func requestTileFor(x: UInt, y: UInt, zoom: UInt, receiver: GMSTileReceiver) {
         let flippedY = (1 << zoom) - y - 1
-        if self.layersBbox.contains(x: x, y: y, zoom: zoom),
+        if //self.layersBbox.contains(x: x, y: y, zoom: zoom),
             let tileData = offlineTileDB?.tile(z: zoom, x: x, y: flippedY) {
             receiver.receiveTileWith(x: x, y: y, zoom: zoom, image: UIImage(data: tileData))
         } else {

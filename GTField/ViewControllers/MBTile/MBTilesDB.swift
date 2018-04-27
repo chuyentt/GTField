@@ -254,6 +254,21 @@ class MBTileDB: NSObject {
         return data
     }
     
+    func updateMissingBounds() {
+        let minx: Double = -180
+        let miny: Double = 0
+        let maxx: Double = 180
+        let maxy: Double = 90
+        
+        let bounds = "\(minx),\(miny),\(maxx),\(maxy)"
+        let center = "\((maxx+minx)/2),\((maxy+miny)/2)"
+        saveToMetadata(name: "version", value: MB_TILES_VERSION)
+        saveToMetadata(name: "bounds", value: bounds)
+        saveToMetadata(name: "center", value: center)
+        saveToMetadata(name: "format", value: "png")
+        saveToMetadata(name: "description", value: APP_FULL_NAME)
+    }
+    
     func saveToMBTile(z: UInt, x: UInt, y: UInt, tileData: Data, override: Bool) {
         // y = flippedY = (1 << z) - y - 1
         let data = NSData(data: tileData)

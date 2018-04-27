@@ -207,11 +207,13 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
         DispatchQueue.main.async() {
             let url = docsURL.appendingPathComponent(geoJSONFilename)
             if self.geoJSON != nil {
+                self.geoJSON?.save()
                 self.geoJSON?.renderer(map: nil)
             }
             self.geoJSON = CGeoJSONKit(url: url)
             self.geoJSON?.renderer(map: self.mapView!)
             self.mapView?.moveCamera(GMSCameraUpdate.fit((self.geoJSON?.featureCollection.boundingBox)!))
+            self.mapView?.hideLoading()
 //
 //            self.geoJsonParser = GMUGeoJSONParser(url: url)
 //            self.geoJsonParser.parse()
@@ -246,7 +248,7 @@ extension MapViewController: GPXFilesTableViewControllerDelegate {
 //                    self.mapView?.moveCamera(GMSCameraUpdate.fit(self.geoJSONRenderer1.boundingBox()))
 //                }
 //            }
-            self.mapView?.hideLoading()
+            
         }
     }
     
@@ -354,11 +356,8 @@ extension MapViewController:InputFromCoordinatesViewControllerDelegate {
             let ft = CFeature(geometry: pt, properties: ["marker-symbol":"pin",
                                                          "name":"Marker",
                                                          "desc":Date().local])
-            addGeoJSONFeature(ft)
+            self.addGeoJSONFeature(ft)
             
-            self.mapView?.showCrossMarker(false)
-            didDeSelectOverlay()
-            showSomeView()
         } else {
             self.showSubscription()
         }
@@ -369,10 +368,27 @@ extension MapViewController:InputFromCoordinatesViewControllerDelegate {
     }
 }
 
+extension MapViewController: FeatureDetailViewControllerDelegate {
+    func didDeleteFeature() {
+        self.geoJSON?.isModified = true
+    }
+    
+    func didSaveFeature(_ feature: CFeature) {
+        self.geoJSON?.isModified = true
+        if selectedLineString != nil && selectedLineString.visibleMode == .selecting {
+            selectedLineString.visibleMode = .normal
+        } else if selectedPolygon != nil && selectedPolygon.visibleMode == .selecting {
+            selectedPolygon.visibleMode = .normal
+        } else if selectedPoint != nil && selectedPoint.visibleMode == .selecting {
+            selectedPoint.visibleMode = .normal
+        }
+    }
+}
+
 extension MapViewController: CGeoJSONDelegate {
-    func visibleModeNormal(featue: CFeature) {
+    func visibleModeNormal(feature: CFeature) {
         print("visibleModeNormal")
-        // Ẩn toolbar
+        // Hiện toolbar
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         self.toolbarItems = [spacer, spacer]
         self.navigationController?.setToolbarHidden(true, animated: true)
@@ -407,7 +423,7 @@ extension MapViewController: CGeoJSONDelegate {
         }
     }
     
-    func visibleModeSelecting(featue: CFeature) {
+    func visibleModeSelecting(feature: CFeature) {
         print("visibleModeSelecting")
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         self.navigationController?.setToolbarHidden(false, animated: true)
@@ -416,34 +432,46 @@ extension MapViewController: CGeoJSONDelegate {
         self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
         hideSomeView()
         
-        let btnCancel = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelFeatureAction))
+        //let btnCancel = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelFeatureAction))
         let btnEditGeometry = UIBarButtonItem(title: NSLocalizedString("Edit geometry", comment: ""), style: .plain, target: self, action: #selector(editGeometryAction))
         let btnFeatureDetail = UIBarButtonItem(title: NSLocalizedString("Feature detail »", comment: ""), style: .done, target: self, action: #selector(featureDetailAction))
+        
+        
+        
         self.toolbarItems = [btnEditGeometry, spacer, btnFeatureDetail]
         // Hiện toolbar với chế độ slecting.
         // + Nút edit (icon) để sửa geometry => chuyển sang mod editing
         // + Nút close/cancel nếu chạm vào sẽ chuyển sang chế độ normal
         // + Nút Detail >>> để xem thuộc tính
         
-        switch featue.geometry.type {
+        // Kiểm tra nếu nhiều đỉnh thì không cho sửa. Tạm thời chỉ cho sửa lineString và polygon
+        switch feature.geometry.type {
         case .point:
             break
         case .multiPoint:
             break
         case .lineString:
-            break
+            let path = (feature.geometry as! CLineString).path
+            if Int((path?.count())!) > MAX_N_VERTICES_EDITABLE {
+                btnEditGeometry.isEnabled = false
+            }
         case .multiLineString:
-            break
+            btnEditGeometry.isEnabled = false
         case .polygon:
-            break
+            let path = (feature.geometry as! CPolygon).path
+            if Int((path?.count())!) > MAX_N_VERTICES_EDITABLE {
+                btnEditGeometry.isEnabled = false
+            }
         case .multiPolygon:
-            break
+            btnEditGeometry.isEnabled = false
         case .geometryCollection:
-            break
+            btnEditGeometry.isEnabled = false
         }
     }
     
-    func visibleModeEditing(featue: CFeature) {
+    func visibleModeEditing(feature: CFeature) {
+        self.geoJSON?.isModified = true
+        
         print("visibleModeEditing")
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         self.navigationController?.setToolbarHidden(false, animated: false)
@@ -456,7 +484,7 @@ extension MapViewController: CGeoJSONDelegate {
         // + Nút cancel/close để đóng
         // + Nút Done để kết thúc => chuyển sang chế độ selecting
         
-        let btnCancel = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelFeatureAction))
+        //let btnCancel = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: self, action: #selector(cancelFeatureAction))
         let btnDone = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""), style: .done, target: self, action: #selector(editGeometryDoneAction))
         self.toolbarItems = [spacer, btnDone]
     }
@@ -509,6 +537,7 @@ extension MapViewController: CGeoJSONDelegate {
             self.selectedLineString.updateVertex()
         }
     }
+    
     /*
      * Thêm điểm từ GPS
      */
@@ -522,10 +551,6 @@ extension MapViewController: CGeoJSONDelegate {
                                                 properties: ["marker-symbol":"pinWaypoint",
                                                              "name":"GPS Marker",
                                                              "desc":Date().local]))
-                
-                if ENABLE_SOUND_EFFECT {
-                    SoundPlayer.play(file: "snap.mp3")
-                }
             } else {
                 self.showSubscription()
             }
@@ -538,6 +563,7 @@ extension MapViewController: CGeoJSONDelegate {
     func addGeoJSONFeature(_ feature: CFeature) {
         if self.geoJSON != nil {
             self.geoJSON?.featureCollection.addFeature(feature)
+            self.geoJSON?.isModified = true
             feature.geometry.style(properties: feature.properties)
             feature.geometry.renderer(map: mapView)
             if ENABLE_SOUND_EFFECT {
@@ -561,6 +587,7 @@ extension MapViewController: CGeoJSONDelegate {
                 }
                 self.geoJSON = CGeoJSONKit(url: fileUrl)
                 self.geoJSON?.featureCollection.addFeature(feature)
+                self.geoJSON?.isModified = true
                 feature.geometry.style(properties: feature.properties)
                 feature.geometry.renderer(map: self.mapView)
                 if ENABLE_SOUND_EFFECT {
@@ -934,6 +961,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                                selector: #selector(applicationWillEnterForeground(_:)),
                                                name: NSNotification.Name.UIApplicationWillEnterForeground,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillTerminate(_:)),
+                                               name: NSNotification.Name.UIApplicationWillTerminate,
+                                               object: nil)
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillChangeStatusBarOrientation,
                                                object: nil,
@@ -976,6 +1007,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self?.buttonRecording?.MainButton.stopFlashing()
                 self?.buttonRecording?.MainButton.startFlashing()
             }
+        }
+    }
+    
+    @objc func applicationWillTerminate(_ notification: NSNotification) {
+        DispatchQueue.main.async { [weak self] in
+            self?.actionClose()
         }
     }
     
@@ -1082,8 +1119,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         )
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (alert) -> Void in
-            self.geoJSON = CGeoJSONKit(url: url)
-            self.geoJSON?.renderer(map: self.mapView!)
+            self.mapView?.showLoading()
+            DispatchQueue.main.async() {
+                self.geoJSON = CGeoJSONKit(url: url)
+                self.geoJSON?.renderer(map: self.mapView!)
+                self.mapView?.moveCamera(GMSCameraUpdate.fit((self.geoJSON?.featureCollection.boundingBox)!))
+                self.mapView?.hideLoading()
+            }
         }))
         
         let alertWindow = UIWindow(frame: UIScreen.main.bounds)
@@ -1130,6 +1172,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //let nav: UINavigationController = segue.destination as! UINavigationController
             let vc: FeatureDetailViewController = segue.destination as! FeatureDetailViewController
             vc.mapView = mapView
+            vc.delegate = self
             if selectedPoint != nil {
                 vc.feature = selectedPoint.feature
             } else if selectedLineString != nil {
@@ -2286,7 +2329,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func actionClose() {
         self.gpx?.save()
         if self.geoJSON != nil {
-            self.geoJSON?.save()
+            self.mapView?.showLoading()
+            DispatchQueue.main.async() {
+                self.geoJSON?.save()
+                self.mapView?.hideLoading()
+            }
         } else {
             setRecentGeoJSONPath(nil)
         }

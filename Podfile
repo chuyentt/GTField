@@ -19,6 +19,7 @@ target 'GTField' do
   pod 'Firebase/AdMob'
   #pod 'SwiftyStoreKit'
   pod 'Surge', '~> 2.0.0'
+  pod 'SwiftyPlistManager'
   
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!

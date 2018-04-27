@@ -23,6 +23,9 @@ let STROKE_WIDTH_EDITING: CGFloat = 2
 
 extension GMSPath {
     func closed() -> GMSPath {
+        if count() < 3 {
+            return self
+        }
         let cllc2d1 = self.coordinate(at: 0)
         let cllc2d2 = self.coordinate(at: count()-1)
         if cllc2d1.latitude == cllc2d2.latitude && cllc2d1.longitude == cllc2d2.longitude {

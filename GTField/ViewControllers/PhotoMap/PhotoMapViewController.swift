@@ -270,7 +270,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
                 // we only care about PhotoAnnotations
                 var filteredAnnotationsInBucket = allAnnotationsInBucket == nil ?
                     Set<PhotoAnnotation>()
-                : Set<PhotoAnnotation>(allAnnotationsInBucket!.lazy.flatMap {obj in
+                    : Set<PhotoAnnotation>(allAnnotationsInBucket!.lazy.compactMap {obj in
                     obj as? PhotoAnnotation
                     })
                 

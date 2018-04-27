@@ -82,9 +82,9 @@ class InputFromCoordinatesViewController: UITableViewController {
         if warningMessage?.length == 0 {
             //value = ((textField?.text)! as NSString).doubleValue
             location = CLLocation(coordinate: CLLocationCoordinate2D(latitude: latitude*RAD2DEG, longitude: longitude*RAD2DEG), altitude: altitude, horizontalAccuracy: 5, verticalAccuracy: 5, timestamp: Date())
-            delegate?.didFinishWithLocation(location!)
-            self.dismiss(animated: true, completion: { () -> Void in
-                
+            self.dismiss(animated: false, completion: { () -> Void in
+                // Đưa vào trong để fix lỗi không hiện present
+                self.delegate?.didFinishWithLocation(self.location!)
             })
         } else {
             let alert = UIAlertController(title: NSLocalizedString(warningMessage! as String, comment: ""),

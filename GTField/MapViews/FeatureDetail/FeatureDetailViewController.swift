@@ -8,8 +8,13 @@
 
 import UIKit
 
+protocol FeatureDetailViewControllerDelegate: class {
+    func didDeleteFeature()
+    func didSaveFeature(_ feature: CFeature)
+}
+
 class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+    weak var delegate: FeatureDetailViewControllerDelegate?
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -18,12 +23,29 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
     /////////////////////
     var feature: CFeature!
     
-    var points:[String] = []
-    var lengths:[String] = []
+    let filterProperties:[String] = [CPropMember.name.rawValue,
+                           CPropMember.desc.rawValue,
+                           CPropMember.title.rawValue]
+    let filterStyle:[String] = [CPropMember.stroke.rawValue,
+                                CPropMember.strokeOpacity.rawValue,
+                                CPropMember.strokeWidth.rawValue,
+                                CPropMember.fill.rawValue,
+                                CPropMember.fillOpacity.rawValue,
+                                CPropMember.markerColor.rawValue,
+                                CPropMember.markerSize.rawValue,
+                                CPropMember.markerSymbol.rawValue]
+    
+    //var points:[String] = []
+    //var lengths:[String] = []
+    var filteredProperties:[String : Any] = [:]
+    var path: GMSPath?
+    var prevPoint: CLLocationCoordinate2D?
+    
     /////////////////////
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = NSLocalizedString("Feature Detail", comment: "")
         
         // Do any additional setup after loading the view.
         setupParallaxHeader()
@@ -36,7 +58,8 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
         self.navigationController?.toolbar.barTintColor = BAR_TINT_COLOR_DEFAULT
         
         let btnDelete = UIBarButtonItem(title: NSLocalizedString("Delete", comment: ""), style: .plain, target: self, action: #selector(deleteFeatureAction))
-        self.toolbarItems = [btnDelete, spacer]
+        let btnSave = UIBarButtonItem(title: NSLocalizedString("Save", comment: ""), style: .plain, target: self, action: #selector(saveFeatureAction))
+        self.toolbarItems = [btnDelete, spacer, btnSave]
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {
@@ -70,28 +93,29 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.tableHeaderView = segmentedControl
     }
     
+    // Xem lại chỗ này, nên tính khi duyệt đến cell thì sẽ nhẹ hơn
     private func featureDetail() {
         switch feature.geometry.type {
         case .point:
             break
         case .lineString:
-            let path = (feature.geometry as! CLineString).path
-            var prevPoint = path?.coordinate(at: 0)
-            for i in 0..<Int((path?.count())!) {
-                let pt = path?.coordinate(at: UInt(i))
-                lengths.append(Double((pt?.distance(from: prevPoint!))!).distanceUnit())
-                points.append((pt!.localCoordinate(true)))
-                prevPoint = pt
-            }
+            path = (feature.geometry as! CLineString).path
+            prevPoint = path?.coordinate(at: 0)
+//            for i in 0..<Int((path?.count())!) {
+//                let pt = path?.coordinate(at: UInt(i))
+//                lengths.append(Double((pt?.distance(from: prevPoint!))!).distanceUnit())
+//                points.append((pt!.localCoordinate(true)))
+//                prevPoint = pt
+//            }
         case .polygon:
-            let path = (feature.geometry as! CPolygon).path?.closed()
-            var prevPoint = path?.coordinate(at: 0)
-            for i in 0..<Int((path?.count())!) {
-                let pt = path?.coordinate(at: UInt(i))
-                lengths.append(Double((pt?.distance(from: prevPoint!))!).distanceUnit())
-                points.append((path?.coordinate(at: UInt(i)).localCoordinate(true))!)
-                prevPoint = pt
-            }
+            path = (feature.geometry as! CPolygon).path?.closed()
+            prevPoint = path?.coordinate(at: 0)
+//            for i in 0..<Int((path?.count())!) {
+//                let pt = path?.coordinate(at: UInt(i))
+//                lengths.append(Double((pt?.distance(from: prevPoint!))!).distanceUnit())
+//                points.append((path?.coordinate(at: UInt(i)).localCoordinate(true))!)
+//                prevPoint = pt
+//            }
         default:
             break
         }
@@ -116,8 +140,33 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
             break
         }
         feature.delete()
+        delegate?.didDeleteFeature()
         self.navigationController?.popViewController(animated: true)
         // Cần thiết lập delegate, visibleMode,... cho MultiPoint,... để quản lý tốt hơn
+    }
+    
+    @objc func saveFeatureAction() {
+        switch feature.geometry.type {
+        case .point:
+            break
+            //(feature.geometry as! CPoint).visibleMode = .normal
+        case .lineString:
+            break
+            //(feature.geometry as! CLineString).visibleMode = .normal
+        case .polygon:
+            break
+            //(feature.geometry as! CPolygon).visibleMode = .normal
+        case .multiPoint:
+            break
+        case .multiLineString:
+            break
+        case .multiPolygon:
+            break
+        case .geometryCollection:
+            break
+        }
+        delegate?.didSaveFeature(feature)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func detailChanged(_ sender: Any) {
@@ -134,7 +183,9 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch segmentedControl.selectedSegmentIndex {
         case 0: // Properties
-            return 2
+            filteredProperties = (feature.properties?.filter { !filterProperties.contains($0.key) })!
+            filteredProperties = filteredProperties.filter { !filterStyle.contains($0.key) }
+            return 2 + filteredProperties.count
         case 1: // Info
             switch feature.geometry.type {
             case .point:
@@ -142,6 +193,7 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
             case .lineString:
                 return 2 + Int(((feature.geometry as! CLineString).path?.count())!)
             case .polygon:
+                print(3 + Int(((feature.geometry as! CPolygon).path?.closed().count())!))
                 return 3 + Int(((feature.geometry as! CPolygon).path?.closed().count())!)
             case .multiPoint:
                 return 1
@@ -178,6 +230,9 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
             } else if indexPath.row == 1 {
                 cell.textLabel?.text = "Desc"
                 cell.detailTextLabel?.text = feature.properties?[CPropMember.desc.rawValue] as? String
+            } else {
+                cell.textLabel?.text = filteredProperties.compactMap(){ $0.0 } [indexPath.row - 2]
+                cell.detailTextLabel?.text = filteredProperties.compactMap(){ $0.1 } [indexPath.row - 2] as? String
             }
             break
         case 1: // Info
@@ -201,8 +256,17 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
                     cell.textLabel?.text = "Total length"
                     cell.detailTextLabel?.text = (feature.geometry as! CLineString).path?.length(of: GMSLengthKind.geodesic).distanceUnit()
                 } else {
-                    cell.textLabel?.text = "(\(indexPath.row - 1)) \(lengths[indexPath.row - 2])"
-                    cell.detailTextLabel?.text = points[indexPath.row - 2]
+                    //            for i in 0..<Int((path?.count())!) {
+                    //                let pt = path?.coordinate(at: UInt(i))
+                    //                lengths.append(Double((pt?.distance(from: prevPoint!))!).distanceUnit())
+                    //                points.append((path?.coordinate(at: UInt(i)).localCoordinate(true))!)
+                    //                prevPoint = pt
+                    //            }
+                    let index = indexPath.row - 2
+                    let pt = path?.coordinate(at: UInt(index))
+                    cell.textLabel?.text = "(\(index+1)) \(Double((pt?.distance(from: prevPoint!))!).distanceUnit())"
+                    cell.detailTextLabel?.text = path?.coordinate(at: UInt(index)).localCoordinate(true)
+                    prevPoint = pt
                 }
             case .polygon:
                 if indexPath.row == 0 {
@@ -215,8 +279,11 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
                     cell.textLabel?.text = "Closed area"
                     cell.detailTextLabel?.text = GMSGeometryArea((feature.geometry as! CPolygon).path!).areaUnit()
                 } else {
-                    cell.textLabel?.text = "(\(indexPath.row - 2)) \(lengths[indexPath.row - 3])"
-                    cell.detailTextLabel?.text = points[indexPath.row - 3]
+                    let index = indexPath.row - 3
+                    let pt = path?.coordinate(at: UInt(index))
+                    cell.textLabel?.text = "(\(index+1)) \(Double((pt?.distance(from: prevPoint!))!).distanceUnit())"
+                    cell.detailTextLabel?.text = path?.coordinate(at: UInt(index)).localCoordinate(true)
+                    prevPoint = pt
                 }
             case .multiPoint:
                 if indexPath.row == 0 {

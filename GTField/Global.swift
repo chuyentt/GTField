@@ -689,10 +689,14 @@ extension CLLocation {
 extension GMSPath {
     func toNSArray(altitudes:[CGFloat]) -> NSArray {
         var alts = altitudes
-        if altitudes.count+1 == self.count() {
+        if altitudes.count == 0 {
+            let arrays: NSMutableArray = NSMutableArray()
+            for i in 0..<self.count() {
+                arrays.add(self.coordinate(at: i).toNSArray(altitude: -9999.0))
+            }
+            return arrays
+        } else if altitudes.count+1 == self.count() {
             alts.append(altitudes.first!)
-        } else if altitudes.count == 0 {
-            alts = Array(repeatElement(0.0, count: Int(self.count())))
         }
         let arrays: NSMutableArray = NSMutableArray()
         for i in 0..<self.count() {
@@ -732,7 +736,7 @@ extension Dictionary {
     var json: String {
         let invalidJson = "Not a valid JSON"
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: [])
             return String(bytes: jsonData, encoding: String.Encoding.utf8) ?? invalidJson
         } catch {
             return invalidJson
@@ -746,7 +750,7 @@ extension NSArray {
     }
     func toAltitude() -> CGFloat {
         guard self.count > 2 else {
-            return 0.0
+            return -9999.0
         }
         return self[2] as! CGFloat
     }
@@ -756,7 +760,7 @@ extension NSArray {
             let arr: NSArray = array as! NSArray
             path.add(CLLocationCoordinate2D(latitude: arr[1] as! CLLocationDegrees, longitude: arr[0] as! CLLocationDegrees))
         }
-        if removeClosedVertex {
+        if removeClosedVertex && path.count() > 3 {
             if path.coordinate(at: path.count()-1).distance(from: path.coordinate(at: 0)) == 0 {
                 path.removeCoordinate(at: path.count()-1)
             }
@@ -767,10 +771,11 @@ extension NSArray {
         var altitudes: [CGFloat] = [CGFloat]()
         for array in self {
             let arr: NSArray = array as! NSArray
-            if arr.count <= 2 {
-                altitudes.append(0)
-            } else {
+            
+            if arr.count > 2 {
                 altitudes.append(arr[2] as! CGFloat)
+            } else {
+                altitudes.append(-9999.0)
             }
         }
         if removeClosedVertex {
@@ -1081,7 +1086,11 @@ extension CLLocationCoordinate2D {
     }
     
     func toNSArray(altitude: CGFloat) -> NSArray {
-        return NSArray(array: [longitude, latitude, altitude])
+        if altitude == -9999.0 {
+            return NSArray(array: [longitude, latitude])
+        } else {
+            return NSArray(array: [longitude, latitude, altitude])
+        }
     }
 }
 

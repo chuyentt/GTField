@@ -23,6 +23,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet var btnRefresh: UIBarButtonItem!
     @IBOutlet var btnInfo: UIBarButtonItem!
     @IBOutlet weak var inlineLogo: UIImageView!
+    @IBOutlet weak var appInfoLabel: UILabel!
     
     var mapViewController: MapViewController?
     
@@ -47,22 +48,26 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setAgreement(false)
+        if getProVersion() || getUnlimited() {
+            handleActive(notification: Notification(name: Notification.Name(rawValue: "")))
+        }
+        appInfoLabel.text = APP_FULL_NAME
+
         if !getAgreement() {
             self.performSegue(withIdentifier: "segueTermsOfUse", sender: self)
         }
         
         title = APP_FULL_NAME
         
-        if REFRESH_BTN_ENABLED == false {
-            btnRefresh.tintColor = UIColor.clear
-            btnRefresh.isEnabled = false
-        }
-        
-        if INFO_BTN_ENABLED == false {
-            btnInfo.tintColor = UIColor.clear
-            btnInfo.isEnabled = false
-        }
+//        if REFRESH_BTN_ENABLED == false {
+//            btnRefresh.tintColor = UIColor.clear
+//            btnRefresh.isEnabled = false
+//        }
+//
+//        if INFO_BTN_ENABLED == false {
+//            btnInfo.tintColor = UIColor.clear
+//            btnInfo.isEnabled = false
+//        }
         
         if USE_CLOUDKIT {
             querySections() // Query CloudKit

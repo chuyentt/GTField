@@ -127,7 +127,7 @@
                                                     <rect key="frame" x="0.0" y="66" width="90" height="24"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera GPS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3V-ta-y7a" customClass="SpringLabel" customModule="GTField" customModuleProvider="target">
-                                                            <rect key="frame" x="3" y="4.5" width="84" height="15.5"/>
+                                                            <rect key="frame" x="3" y="4" width="84" height="16"/>
                                                             <fontDescription key="fontDescription" name="Bauhaus-Medium" family="Bauhaus-Medium" pointSize="16"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -177,11 +177,19 @@
                                     <outlet property="delegate" destination="huv-kc-fm6" id="VVA-aH-Ojv"/>
                                 </connections>
                             </collectionView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="tsy-fu-0V3">
+                                <rect key="frame" x="20" y="585.5" width="335" height="13.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" red="0.22088277339935303" green="0.45966839790344238" blue="0.63444429636001587" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="2SI-io-4mf" firstAttribute="trailing" secondItem="IcZ-3J-8cU" secondAttribute="trailing" id="5Gq-mZ-Kma"/>
                             <constraint firstItem="2SI-io-4mf" firstAttribute="bottom" secondItem="tzP-NE-V2D" secondAttribute="bottom" id="5UM-cS-oUK"/>
+                            <constraint firstItem="2SI-io-4mf" firstAttribute="bottom" secondItem="tsy-fu-0V3" secondAttribute="bottom" constant="4" id="Nx6-Ud-Sed"/>
+                            <constraint firstItem="2SI-io-4mf" firstAttribute="trailing" secondItem="tsy-fu-0V3" secondAttribute="trailing" constant="20" id="OxS-dJ-Lce"/>
                             <constraint firstItem="2SI-io-4mf" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xU8-qv-mnx" secondAttribute="trailing" id="PTr-aJ-oZt"/>
                             <constraint firstItem="xU8-qv-mnx" firstAttribute="centerX" secondItem="AWT-4Y-G46" secondAttribute="centerX" id="XZA-VM-YLe"/>
                             <constraint firstItem="xU8-qv-mnx" firstAttribute="top" secondItem="2SI-io-4mf" secondAttribute="top" id="bPc-Ef-ox7"/>
@@ -190,37 +198,32 @@
                             <constraint firstItem="tzP-NE-V2D" firstAttribute="top" secondItem="IcZ-3J-8cU" secondAttribute="bottom" constant="-14" id="tIa-UC-cXo"/>
                             <constraint firstItem="IcZ-3J-8cU" firstAttribute="leading" secondItem="2SI-io-4mf" secondAttribute="leading" id="uQX-xG-o3l"/>
                             <constraint firstItem="2SI-io-4mf" firstAttribute="trailing" secondItem="tzP-NE-V2D" secondAttribute="trailing" id="yBD-hI-wlX"/>
+                            <constraint firstItem="tsy-fu-0V3" firstAttribute="centerX" secondItem="2SI-io-4mf" secondAttribute="centerX" id="zaz-xl-Tac"/>
                             <constraint firstItem="tzP-NE-V2D" firstAttribute="leading" secondItem="2SI-io-4mf" secondAttribute="leading" id="zen-jj-OQm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2SI-io-4mf"/>
                     </view>
                     <navigationItem key="navigationItem" id="Ent-Gl-l5E">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" image="info" id="ZYB-Xy-amG">
-                            <connections>
-                                <action selector="btnInfo:" destination="huv-kc-fm6" id="aE1-ea-PkR"/>
-                            </connections>
-                        </barButtonItem>
                         <view key="titleView" contentMode="scaleToFill" id="aod-lH-wvN">
                             <rect key="frame" x="112.5" y="5.5" width="150" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Inline-Logo" translatesAutoresizingMaskIntoConstraints="NO" id="qSG-Jm-Ec9">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Inline-Logo" translatesAutoresizingMaskIntoConstraints="NO" id="qSG-Jm-Ec9">
                                     <rect key="frame" x="0.0" y="-5" width="132" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                             </subviews>
+                            <constraints>
+                                <constraint firstItem="qSG-Jm-Ec9" firstAttribute="centerY" secondItem="aod-lH-wvN" secondAttribute="centerY" id="26J-J2-2JI"/>
+                                <constraint firstItem="qSG-Jm-Ec9" firstAttribute="leading" secondItem="aod-lH-wvN" secondAttribute="leading" id="Zcc-CS-HfC"/>
+                                <constraint firstItem="qSG-Jm-Ec9" firstAttribute="top" secondItem="aod-lH-wvN" secondAttribute="top" constant="-5" id="biY-6b-M49"/>
+                                <constraint firstAttribute="trailing" secondItem="qSG-Jm-Ec9" secondAttribute="trailing" constant="18" id="dNq-og-dny"/>
+                            </constraints>
                         </view>
-                        <barButtonItem key="rightBarButtonItem" image="Reload" id="klg-Xw-RiO">
-                            <connections>
-                                <action selector="btnReload:" destination="huv-kc-fm6" id="gyc-UK-yai"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="btnInfo" destination="ZYB-Xy-amG" id="zQr-bH-Tdu"/>
-                        <outlet property="btnRefresh" destination="klg-Xw-RiO" id="uUn-DU-N0j"/>
+                        <outlet property="appInfoLabel" destination="tsy-fu-0V3" id="J48-g0-8e3"/>
                         <outlet property="heightBackground" destination="5UM-cS-oUK" id="kyX-lG-0If"/>
                         <outlet property="imgLogo" destination="xU8-qv-mnx" id="WT0-BR-r8U"/>
                         <outlet property="inlineLogo" destination="qSG-Jm-Ec9" id="jL7-48-NTz"/>
@@ -2227,11 +2230,11 @@
             <objects>
                 <viewController id="LLD-fB-cTB" customClass="SubscribeViewController" customModule="GTField" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3yq-ie-SUK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="539"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="65" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Ohn-2e-ESI">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="539"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <color key="separatorColor" red="0.14171932640000001" green="0.1607656032" blue="0.16874451939999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <inset key="separatorInset" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -2332,7 +2335,7 @@
                             <rect key="frame" x="112.5" y="5.5" width="150" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Inline-Logo" translatesAutoresizingMaskIntoConstraints="NO" id="eYg-dr-c2B">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Inline-Logo" translatesAutoresizingMaskIntoConstraints="NO" id="eYg-dr-c2B">
                                     <rect key="frame" x="0.0" y="-5" width="132" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
@@ -2899,15 +2902,13 @@
         <image name="Inline-Logo" width="300" height="100"/>
         <image name="Locked" width="15" height="20"/>
         <image name="Logo" width="320" height="104"/>
-        <image name="Reload" width="24" height="24"/>
-        <image name="info" width="24" height="24"/>
         <image name="pinPhoto" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="O0M-A5-LBT"/>
-        <segue reference="beP-Zp-d53"/>
+        <segue reference="PqT-b5-B83"/>
+        <segue reference="gGz-Pd-u9S"/>
         <segue reference="gde-RI-eBn"/>
-        <segue reference="gxV-5v-0Kh"/>
+        <segue reference="Lt0-Tf-hvZ"/>
         <segue reference="euG-Bg-3p4"/>
         <segue reference="Ttb-hX-KL4"/>
     </inferredMetricsTieBreakers>

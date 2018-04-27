@@ -82,6 +82,7 @@ class SubscriptionService: NSObject {
                             // Lần đầu tiên đăng ký, kích hoạt gói thành công
                             print("uploadReceipt success setProVersion(true)", currentSubscription.productId)
                         } else {
+                            // Hết hạn
                             setProVersion(false)
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
@@ -92,10 +93,12 @@ class SubscriptionService: NSObject {
                 case .failure(let error):
                     print("🚫 Receipt Upload Failed: \(error)")
                     completion?(false)
-                    setProVersion(false)
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
-                    }
+//                    if !getUnlimited() {
+//                        setProVersion(false)
+//                    }
+//                    DispatchQueue.main.async {
+//                        NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
+//                    }
                     print("uploadReceipt failure setProVersion(false)")
                 }
             }
@@ -140,5 +143,9 @@ extension SubscriptionService: SKProductsRequestDelegate {
             alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
             print("Subscription Options Failed Loading: \(error.localizedDescription)")
         }
+    }
+    
+    func requestDidFinish(_ request: SKRequest) {
+        
     }
 }

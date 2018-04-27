@@ -62,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         SKPaymentQueue.default().add(self)
+        //SKPaymentQueue.default().add(SKPayment)
         SubscriptionService.shared.loadSubscriptionOptions()
         
         return true
@@ -174,7 +175,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let arrbounds:Array = bounds.components(separatedBy: ",")
                     let center = mbtileDB.metadataValueFor(name: "center")
                     let arrcenter:Array = center.components(separatedBy: ",")
-                    if arrbounds.count == 4 || arrcenter.count == 2 {
+                    
+                    // Nếu không có bounds hay center thì cập nhật
+                    if arrbounds.count != 4 || arrcenter.count != 2 {
+                        mbtileDB.updateMissingBounds()
+                    }
+                    //if arrbounds.count == 4 || arrcenter.count == 2 {
                         if mbtileDB.metadataValueFor(name: "description").length == 0 {
                             mbtileDB.saveToMetadata(name: "description", value: "Imported by GTField")
                         }
@@ -201,7 +207,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                             alert.show()
                         }
-                    }
+                    //}
                 }
             }
             break
@@ -259,11 +265,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        print("applicationWillResignActive")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        print("applicationDidEnterBackground")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -278,6 +286,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.UIApplicationWillTerminate, object: nil)
+        }
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
@@ -301,13 +312,9 @@ func agreement() {
 // MARK: - SKPaymentTransactionObserver
 
 extension AppDelegate: SKPaymentTransactionObserver {
-    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
-        return true
-    }
     
-    func paymentQueue(_ queue: SKPaymentQueue,
-                      updatedTransactions transactions: [SKPaymentTransaction]) {
-        
+    // Sent when the transaction array has changed (additions or state changes).  Client should check state of transactions and finish as appropriate.
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
             switch transaction.transactionState {
             case .purchasing:
@@ -324,6 +331,35 @@ extension AppDelegate: SKPaymentTransactionObserver {
         }
     }
     
+    // Sent when transactions are removed from the queue (via finishTransaction:).
+    func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
+        
+    }
+    
+    // Sent when an error is encountered while adding transactions from the user's purchase history back to the queue.
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        
+    }
+    
+    // Sent when all transactions from the user's purchase history have successfully been added back to the queue.
+    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+        
+    }
+    
+    // Sent when the download state has changed.
+    func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
+        
+    }
+    
+    
+    // Sent when a user initiates an IAP buy from the App Store
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        return true
+    }
+    
+    /////////////////////////////
+    // Handle
+    /////////////////////////////
     func handlePurchasingState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
         print("User is attempting to purchase product id: \(transaction.payment.productIdentifier)")
     }
@@ -368,11 +404,13 @@ extension AppDelegate: SKPaymentTransactionObserver {
     
     func handleFailedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
         print("Purchase failed for product id: \(transaction.payment.productIdentifier)")
-        setProVersion(false)
-        print("setProVersion(false)")
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
-        }
+//        if !getUnlimited() {
+//            setProVersion(false)
+//        }
+//        print("setProVersion(false)")
+//        DispatchQueue.main.async {
+//            NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
+//        }
     }
     
     func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {

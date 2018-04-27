@@ -16,11 +16,11 @@ enum VisibleMode: Int {
 
 protocol CGeoJSONDelegate: class {
     // Sự kiện đối tượng ở trạng thái thông thường
-    func visibleModeNormal(featue: CFeature)
+    func visibleModeNormal(feature: CFeature)
     // Sự kiện ở trạng thái lựa chọn
-    func visibleModeSelecting(featue: CFeature)
+    func visibleModeSelecting(feature: CFeature)
     // Sự kiện ở trạng thái sửa
-    func visibleModeEditing(featue: CFeature)
+    func visibleModeEditing(feature: CFeature)
 }
 
 enum CGeoJSONMember: String {
@@ -204,7 +204,7 @@ class CPoint: GMSMarker, CGeoJSONGeometry, PointViewDelegate {
                         selectedPoint.pointMode = .normal
                         selectedPoint.removeFromSuperview()
                     }
-                    delegate?.visibleModeNormal(featue: feature!)
+                    delegate?.visibleModeNormal(feature: feature!)
                 case .selecting:
                     if prevValue == .normal {
                         _icon = icon!
@@ -216,7 +216,7 @@ class CPoint: GMSMarker, CGeoJSONGeometry, PointViewDelegate {
                         selectedPoint.pointMode = .normal
                         selectedPoint.removeFromSuperview()
                     }
-                    delegate?.visibleModeSelecting(featue: feature!)
+                    delegate?.visibleModeSelecting(feature: feature!)
                 case .editing:
                     if prevValue == .normal {
                         _icon = self.icon!
@@ -231,7 +231,7 @@ class CPoint: GMSMarker, CGeoJSONGeometry, PointViewDelegate {
                     }
                     selectedPoint.pointMode = .editing
                     map?.addSubview(selectedPoint)
-                    delegate?.visibleModeEditing(featue: feature!)
+                    delegate?.visibleModeEditing(feature: feature!)
                 }
             }
         }
@@ -495,7 +495,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
                     
                     border.map = nil
                     
-                    delegate?.visibleModeNormal(featue: feature!)
+                    delegate?.visibleModeNormal(feature: feature!)
                 case .selecting:
                     if prevValue == .normal {
                         _strokeColor = self.strokeColor
@@ -511,7 +511,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
                     self.border.strokeWidth = 3
                     self.border.zIndex = self.zIndex - 1
                     self.border.map = map
-                    delegate?.visibleModeSelecting(featue: feature!)
+                    delegate?.visibleModeSelecting(feature: feature!)
                 case .editing:
                     if prevValue == .normal {
                         _strokeColor = self.strokeColor
@@ -527,7 +527,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
                     self.strokeColor = editing_color
                     self.strokeWidth = editing_width
                     addPointsToMap()
-                    delegate?.visibleModeEditing(featue: feature!)
+                    delegate?.visibleModeEditing(feature: feature!)
                 }
             }
         }
@@ -1053,7 +1053,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
                     removePointsFromMap()
                     
                     border.map = nil
-                    delegate?.visibleModeNormal(featue: feature!)
+                    delegate?.visibleModeNormal(feature: feature!)
                 case .selecting:
                     if prevValue == .normal {
                         if strokeColor != nil {
@@ -1075,7 +1075,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
                     border.strokeWidth = 3
                     border.zIndex = zIndex - 1
                     border.map = map
-                    delegate?.visibleModeSelecting(featue: feature!)
+                    delegate?.visibleModeSelecting(feature: feature!)
                 case .editing:
                     // Vẽ kiểu editing
                     strokeColor = editing_color
@@ -1088,7 +1088,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
                     border.strokeWidth = 3
                     border.zIndex = zIndex - 1
                     border.map = map
-                    delegate?.visibleModeEditing(featue: feature!)
+                    delegate?.visibleModeEditing(feature: feature!)
                 }
             }
         }
@@ -1973,6 +1973,25 @@ class CFeatureCollection: CGeoJSON {
 }
 
 class CGeoJSONKit: NSObject {
+    private var _isModified: Bool = false
+    var isModified: Bool {
+        get {
+            return _isModified
+        }
+        set(value) {
+            _isModified = value
+        }
+    }
+    private var _is3D: Bool = false
+    var is3D: Bool {
+        get {
+            return _is3D
+        }
+        set(value) {
+            _is3D = value
+        }
+    }
+    
     private var _url: URL!
     var url: URL {
         get {
@@ -2056,6 +2075,7 @@ class CGeoJSONKit: NSObject {
                     }
                     self._url = fileUrl
                 }
+                self._is3D = true
             }))
             
             alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
@@ -2093,6 +2113,9 @@ class CGeoJSONKit: NSObject {
         }
         setRecentGeoJSONPath(_url)
         guard _featureCollection.features.count > 0 else {
+            return
+        }
+        guard _isModified else {
             return
         }
         try! _featureCollection.dict.json.write(to: _url, atomically: true, encoding: .utf8)

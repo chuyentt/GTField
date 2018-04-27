@@ -383,20 +383,20 @@ class CalibViewController: UIViewController, MotionContainer {
     // Lưu dữ liệu
     func save(acceData6Pos acce: Array<Any>) {
         
-        // Lấy thư mục Document
-        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//        // Lấy thư mục Document
+//        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//
+//        // Tạo tên file gốc
+//        let fileName = String(getGPSWeekNumber()) + "_" + String(CLong(getGPSTimeOfWeek()))
         
-        // Tạo tên file gốc
-        let fileName = String(getGPSWeekNumber()) + "_" + String(CLong(getGPSTimeOfWeek()))
-        
-        // Tạo tên file Xup
-        let file1 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xu.txt")
-        let file2 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xd.txt")
-        let file3 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yu.txt")
-        let file4 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yd.txt")
-        let file5 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zu.txt")
-        let file6 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zd.txt")
-        let file: Array<Any> = [file1, file2, file3, file4, file5, file6]
+//        // Tạo tên file Xup
+//        let file1 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xu.txt")
+//        let file2 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xd.txt")
+//        let file3 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yu.txt")
+//        let file4 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yd.txt")
+//        let file5 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zu.txt")
+//        let file6 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zd.txt")
+//        let file: Array<Any> = [file1, file2, file3, file4, file5, file6]
         
         // Chuẩn bị ghi vào file
         for i in 0...5 {
@@ -407,38 +407,38 @@ class CalibViewController: UIViewController, MotionContainer {
                 // Tạo chuỗi dữ liệu
                 acceString.append(String(format:"%0.3lf %0.8lf %0.8lf %0.8lf", a[0], a[1], a[2], a[3]))
             }
-            // Ghi vào file
-            do {
-                //try acceString.appendLineToURL(fileURL: file[i] as! URL)
-            } catch {
-                print("Could not write to file")
-            }
+//            // Ghi vào file
+//            do {
+//                //try acceString.appendLineToURL(fileURL: file[i] as! URL)
+//            } catch {
+//                print("Could not write to file")
+//            }
         }
     }
     
     // Lưu dữ liệu
     func save(gyroData6Pos gyro: Array<Any>, acceData6Pos acce: Array<Any>) {
-        // Lấy thư mục Document
-        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//        // Lấy thư mục Document
+//        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//
+//        // Tạo tên file gốc
+//        let fileName = String(getGPSWeekNumber()) + "_" + String(CLong(getGPSTimeOfWeek()))
         
-        // Tạo tên file gốc
-        let fileName = String(getGPSWeekNumber()) + "_" + String(CLong(getGPSTimeOfWeek()))
+//        let file1 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Xu.txt")
+//        let file2 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Xd.txt")
+//        let file3 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Yu.txt")
+//        let file4 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Yd.txt")
+//        let file5 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Zu.txt")
+//        let file6 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Zd.txt")
+//        let gyroFile: Array<Any> = [file1, file2, file3, file4, file5, file6]
         
-        let file1 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Xu.txt")
-        let file2 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Xd.txt")
-        let file3 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Yu.txt")
-        let file4 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Yd.txt")
-        let file5 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Zu.txt")
-        let file6 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_gyro_Zd.txt")
-        let gyroFile: Array<Any> = [file1, file2, file3, file4, file5, file6]
-        
-        let file7 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xu.txt")
-        let file8 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xd.txt")
-        let file9 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yu.txt")
-        let file10 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yd.txt")
-        let file11 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zu.txt")
-        let file12 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zd.txt")
-        let acceFile: Array<Any> = [file7, file8, file9, file10, file11, file12]
+//        let file7 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xu.txt")
+//        let file8 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Xd.txt")
+//        let file9 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yu.txt")
+//        let file10 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Yd.txt")
+//        let file11 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zu.txt")
+//        let file12 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zd.txt")
+//        let acceFile: Array<Any> = [file7, file8, file9, file10, file11, file12]
         
         var meas_a: Array<double3> = Array<double3>(repeating: double3(), count: 6)
         var meas_g: Array<double3> = Array<double3>(repeating: double3(), count: 6)
@@ -458,13 +458,13 @@ class CalibViewController: UIViewController, MotionContainer {
             }
             meas_g[i] = mean;
             
-            // Ghi vào file
-            do {
-                //try gyroString.appendLineToURL(fileURL: gyroFile[i] as! URL)
-                //lblMessage.text = "Gyroscope saved!\r\n"
-            } catch {
-                print("Could not write to file")
-            }
+//            // Ghi vào file
+//            do {
+//                //try gyroString.appendLineToURL(fileURL: gyroFile[i] as! URL)
+//                //lblMessage.text = "Gyroscope saved!\r\n"
+//            } catch {
+//                print("Could not write to file")
+//            }
         }
         
         // Chuẩn bị ghi acce vào file
@@ -482,13 +482,13 @@ class CalibViewController: UIViewController, MotionContainer {
             }
             meas_a[i] = mean;
             
-            // Ghi vào file
-            do {
-                //try acceString.appendLineToURL(fileURL: acceFile[i] as! URL)
-                //lblMessage.text?.append("Accelerometer saved!")
-            } catch {
-                print("Could not write to file")
-            }
+//            // Ghi vào file
+//            do {
+//                //try acceString.appendLineToURL(fileURL: acceFile[i] as! URL)
+//                //lblMessage.text?.append("Accelerometer saved!")
+//            } catch {
+//                print("Could not write to file")
+//            }
         }
         
         // Hiệu chuẩn

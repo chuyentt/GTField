@@ -82,11 +82,17 @@ var MB_TILES_CACHED: String = docsURL.appendingPathComponent(TILE_CACHED).append
 let MB_TILES_VERSION = "1.2"
 var DOWNLOADING_PATH_TO_DATABASE: String = ""
 
-#if DEBUG
+// maximum number of vertices editable
+let MAX_N_VERTICES_EDITABLE = 100
+
+// Tạm thời bỏ giới hạn cho đên khi việc mua trong ứng dụng hoàn thiện => let isDebug = true
 let isDebug = true
-#else
-let isDebug = false
-#endif
+
+//#if DEBUG
+//let isDebug = true
+//#else
+//let isDebug = false
+//#endif
 
 // Độ cao mylocation
 var myAltitude = 0.0

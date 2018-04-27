@@ -247,7 +247,7 @@ extension SubscribeViewController: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Option", for: indexPath) as! SubscriptionOptionTableViewCell
             guard let option = options?[indexPath.row] else { return cell }
-            
+
             cell.nameLabel.text = option.product.localizedTitle
             cell.descriptionLabel.text = option.product.localizedDescription
             if option.product.productIdentifier.contains("Yearly") {
@@ -262,7 +262,7 @@ extension SubscribeViewController: UITableViewDataSource {
                     currentSubscription.isActive {
                     cell.isCurrentPlan = true
                     if option.product.productIdentifier.contains("Unlimited") {
-                        
+
                     } else {
                         cell.yourPlanLabel.text = cell.yourPlanLabel.text! + "\n" + NSLocalizedString("Expiry date: ", comment: "") + currentSubscription.expiresDate.local
                     }
@@ -274,6 +274,20 @@ extension SubscribeViewController: UITableViewDataSource {
                 cell.priceLabel.isEnabled = false
                 cell.alpha = 0.5
             }
+            if getUnlimited() {
+                if option.product.productIdentifier.contains("Unlimited") {
+                    cell.isCurrentPlan = true
+                }
+                cell.isUserInteractionEnabled = false
+                cell.nameLabel.isEnabled = false
+                cell.descriptionLabel.isEnabled = false
+                cell.priceLabel.isEnabled = false
+                cell.alpha = 0.5
+                if let currentSubscription = SubscriptionService.shared.currentSubscription {
+                    print(NSLocalizedString("Expiry date: ", comment: "") + currentSubscription.expiresDate.local)
+                }
+            }
+            
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Button", for: indexPath)
