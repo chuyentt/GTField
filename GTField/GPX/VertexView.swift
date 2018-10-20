@@ -69,7 +69,7 @@ class VertexView: UIView {
     
     @objc func didPan(_ panGR: UIPanGestureRecognizer) {
         
-        self.superview!.bringSubview(toFront: self)
+        self.superview!.bringSubviewToFront(self)
         
         var translation = panGR.translation(in: self)
         

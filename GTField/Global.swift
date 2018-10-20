@@ -383,7 +383,7 @@ extension UIView {
         hudView.layer.cornerRadius = 5
         
         indicatorView.center = CGPoint(x: hudView.frame.size.width/2, y: hudView.frame.size.height/2)
-        indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+        indicatorView.style = UIActivityIndicatorView.Style.whiteLarge
         hudView.addSubview(indicatorView)
         indicatorView.startAnimating()
         view.addSubview(hudView)
@@ -482,7 +482,7 @@ class CButton : UIButton {
     init(_ frame: CGRect, _ title: String, _ view: UIView) {
         super.init(frame: frame)
         titleLabel?.numberOfLines = 2
-        setTitle(title, for: UIControlState.normal)
+        setTitle(title, for: UIControl.State.normal)
         backgroundColor = UIColor(red: 142.0/255.0, green: 224.0/255.0, blue: 102.0/255.0, alpha: 0.90)
         translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(self)
@@ -549,7 +549,7 @@ extension UIAlertController {
     func show() {
         let alertWindow = UIWindow(frame: UIScreen.main.bounds)
         alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.windowLevel = UIWindow.Level.alert + 1;
         alertWindow.makeKeyAndVisible()
         alertWindow.rootViewController?.present(self, animated: true, completion: nil)
     }
@@ -580,9 +580,9 @@ open class UIOutlinedLabel: UILabel {
     override open func drawText(in rect: CGRect) {
         
         let strokeTextAttributes = [
-            NSAttributedStringKey.strokeColor : outlineColor,
-            NSAttributedStringKey.strokeWidth : -1 * outlineWidth,
-            ] as [NSAttributedStringKey : Any]
+            NSAttributedString.Key.strokeColor : outlineColor,
+            NSAttributedString.Key.strokeWidth : -1 * outlineWidth,
+            ] as [NSAttributedString.Key : Any]
         
         self.attributedText = NSAttributedString(string: self.text ?? "", attributes: strokeTextAttributes)
         super.drawText(in: rect)
@@ -715,7 +715,7 @@ extension GMSCoordinateBounds {
         
         let len1 = pNE.x - pNW.x
         let len2 = pSW.y - pNW.y
-        let factor = fabs(len1 - len2) / 2.0 + padding
+        let factor = abs(len1 - len2) / 2.0 + padding
         if len1 > len2 {
             pNE.y = pNE.y - factor
             pSW.y = pSW.y + factor
@@ -1120,7 +1120,7 @@ extension UIViewController {
     func enumerateHierarchy(_ closure: (UIViewController) -> Void) {
         closure(self)
         
-        for child in childViewControllers {
+        for child in children {
             child.enumerateHierarchy(closure)
         }
         

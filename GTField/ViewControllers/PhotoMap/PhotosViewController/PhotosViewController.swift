@@ -47,7 +47,7 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         
         setupView(currentPageIndex: 0)
         
-        self.buttonAction = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: self, action: #selector(btnAction(_:)))
+        self.buttonAction = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.action, target: self, action: #selector(btnAction(_:)))
         self.buttonAction?.tag = 1
         self.navigationItem.rightBarButtonItem = self.buttonAction
     }
@@ -88,9 +88,9 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         
         self.pageViewController!.dataSource = self.modelController
         
-        self.addChildViewController(self.pageViewController!)
+        self.addChild(self.pageViewController!)
         self.view.addSubview(self.pageViewController!.view)
-        self.pageViewController!.didMove(toParentViewController: self)
+        self.pageViewController!.didMove(toParent: self)
         
         // add the page view controller's gesture recognizers to the book view controller's view
         // so that the gestures are started more easily
@@ -258,11 +258,11 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         self.dataViewController?.txtTitle.becomeFirstResponder()
         
         // back button = cancel, right button = save
-        let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(self.btnAction(_:)))
+        let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.save, target: self, action: #selector(self.btnAction(_:)))
         saveButton.tag = 10
         self.navigationItem.rightBarButtonItem = saveButton
         
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(self.btnAction(_:)))
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: self, action: #selector(self.btnAction(_:)))
         cancelButton.tag = 11
         self.navigationItem.leftBarButtonItem = cancelButton
     }
@@ -272,11 +272,11 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
         self.dataViewController?.txtDesc.becomeFirstResponder()
         
         // back button = cancel, right button = save
-        let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(self.btnAction(_:)))
+        let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.save, target: self, action: #selector(self.btnAction(_:)))
         saveButton.tag = 12
         self.navigationItem.rightBarButtonItem = saveButton
         
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(self.btnAction(_:)))
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: self, action: #selector(self.btnAction(_:)))
         cancelButton.tag = 13
         self.navigationItem.leftBarButtonItem = cancelButton
     }
@@ -379,13 +379,13 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
             let alert = UIAlertController(
                 title: NSLocalizedString("No email accounts configured", comment: ""),
                 message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
             let alertWindow = UIWindow(frame: UIScreen.main.bounds)
             alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            alertWindow.windowLevel = UIWindow.Level.alert + 1;
             alertWindow.makeKeyAndVisible()
             alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         }
@@ -398,20 +398,20 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
             alert = UIAlertController(
                 title: NSLocalizedString("Sent", comment: ""),
                 message: error?.localizedDescription,
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             break
         default:
             alert = UIAlertController(
                 title: NSLocalizedString("Whoops", comment: ""),
                 message: error?.localizedDescription,
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
         let alertWindow = UIWindow(frame: UIScreen.main.bounds)
         alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.windowLevel = UIWindow.Level.alert + 1;
         alertWindow.makeKeyAndVisible()
         alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)
@@ -423,7 +423,7 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
     
     //#MARK: - UIPageViewControllerDelegate
     
-    func pageViewController(_ pageViewController: UIPageViewController, spineLocationFor orientation: UIInterfaceOrientation) -> UIPageViewControllerSpineLocation {
+    func pageViewController(_ pageViewController: UIPageViewController, spineLocationFor orientation: UIInterfaceOrientation) -> UIPageViewController.SpineLocation {
         
         // Set the spine position to "min" and the page view controller's view controllers array to contain just one view controller. Setting the spine position to 'UIPageViewControllerSpineLocationMid' in landscape orientation sets the doubleSided property to YES, so set it to NO here.
         let currentViewController = self.pageViewController!.viewControllers![0]

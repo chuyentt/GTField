@@ -42,7 +42,8 @@ public extension UIScreen {
         case "iPad6,3", "iPad6,4":                       fallthrough // iPad Pro (9.7 inch)
         case "iPad6,11", "iPad6,12":                     fallthrough // iPad 5th generation
         case "iPad7,1", "iPad7,2":                       fallthrough // iPad Pro (12.9 inch, 2nd generation)
-        case "iPad7,3", "iPad7,4":                                   // iPad Pro (10.5 inch)
+        case "iPad7,3", "iPad7,4":                       fallthrough // iPad Pro (10.5 inch)
+        case "iPad7,5", "iPad7,6":                                   // iPad 6th generation
             return 264
             
         case "iPhone4,1":                                fallthrough // iPhone 4S
@@ -54,6 +55,7 @@ public extension UIScreen {
         case "iPhone8,1":                                fallthrough // iPhone 6S
         case "iPhone9,1", "iPhone9,3":                   fallthrough // iPhone 7
         case "iPhone10,1", "iPhone10,4":                 fallthrough // iPhone 8
+        case "iPhone11,8":                               fallthrough // iPhone XR
         case "iPod5,1":                                  fallthrough // iPod Touch 5th generation
         case "iPod7,1":                                  fallthrough // iPod Touch 6th generation
         case "iPad4,4", "iPad4,5", "iPad4,6":            fallthrough // iPad Mini 2
@@ -65,13 +67,18 @@ public extension UIScreen {
         case "iPhone8,2":                                fallthrough // iPhone 6S Plus
         case "iPhone9,2", "iPhone9,4":                   fallthrough // iPhone 7 Plus
         case "iPhone10,2", "iPhone10,5":                             // iPhone 8 Plus
-            return 401
+            return 401//489?
             
-        case "iPhone10,3", "iPhone10,6":                             // iPhone X
-            return 458
+        case "iPhone10,3", "iPhone10,6":                 fallthrough // iPhone X
+        case "iPhone11,2":                               fallthrough // iPhone XS
+        case "iPhone11,4", "iPhone11,6":                             // iPhone XS Max
+            return 458//489?
             
         default:                                                     // unknown model identifier
-            return .none
+            let ppi = UIScreen.main.nativeScale * ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad) ? 132 : 163)
+            print("PPI: ", ppi)
+            return ppi
+            //return .none
         }
     }()
     
@@ -91,4 +98,3 @@ public extension UIScreen {
     static let dimensionInCentimeters: CGSize? = computeIfSome(optional: pixelsPerCentimeter, computation: { CGSize(width: main.nativeBounds.width / $0, height: main.nativeBounds.height / $0) })
     
 }
-

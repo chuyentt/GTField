@@ -15,7 +15,7 @@ class ToolsViewController: UITableViewController {
 
         self.title = "GTField Tools"
         
-        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(ToolsViewController.close))
+        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(ToolsViewController.close))
         
         self.navigationItem.rightBarButtonItems = [shareItem]
 

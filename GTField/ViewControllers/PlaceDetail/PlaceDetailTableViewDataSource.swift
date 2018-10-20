@@ -94,7 +94,7 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
     // Configure some other properties.
     tableView.estimatedRowHeight = 44
     tableView.estimatedSectionHeaderHeight = 44
-    tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+    tableView.sectionHeaderHeight = UITableView.automaticDimension
   }
 
   // MARK: - Public Methods
@@ -202,7 +202,7 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
     }
     else {
       if #available(iOS 8.0, *) {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
       } else {
         // This means that on iOS 7 we only get the first line of text.
         return 55
@@ -213,7 +213,7 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
   /// Only needed for iOS 7, explodes if this is not provided.
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     if #available(iOS 8.0, *) {
-      return UITableViewAutomaticDimension
+      return UITableView.automaticDimension
     } else {
       // This means that on iOS 7 we only get the first line of text.
       return 65

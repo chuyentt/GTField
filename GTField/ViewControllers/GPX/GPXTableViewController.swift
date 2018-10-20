@@ -69,7 +69,7 @@ class GPXTableViewController: UITableViewController {
         //Delete from list and Table
         itemList.removeObject(at: rowIndex)
         let indexPath = IndexPath(row: rowIndex, section: 0)
-        tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
         tableView.reloadData()
     }
     
@@ -94,7 +94,7 @@ class GPXTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "Cell")
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "Cell")
         let filename = itemList.object(at: (indexPath as NSIndexPath).row) as? NSString as String? ?? ""
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
@@ -244,10 +244,10 @@ class GPXTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView,
-                            commit editingStyle: UITableViewCellEditingStyle,
+                            commit editingStyle: UITableViewCell.EditingStyle,
                             forRowAt indexPath: IndexPath) {
         
-        if editingStyle == UITableViewCellEditingStyle.delete {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
             actionDeleteFileAtIndex((indexPath as NSIndexPath).row)
         }
     }
@@ -282,13 +282,13 @@ class GPXTableViewController: UITableViewController {
             let alert = UIAlertController(
                 title: NSLocalizedString("No email accounts configured", comment: ""),
                 message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
             let alertWindow = UIWindow(frame: UIScreen.main.bounds)
             alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            alertWindow.windowLevel = UIWindow.Level.alert + 1;
             alertWindow.makeKeyAndVisible()
             alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         }
@@ -321,20 +321,20 @@ extension GPXTableViewController:MFMailComposeViewControllerDelegate {
             alert = UIAlertController(
                 title: NSLocalizedString("Sent", comment: ""),
                 message: error?.localizedDescription,
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             break
         default:
             alert = UIAlertController(
                 title: NSLocalizedString("Whoops", comment: ""),
                 message: error?.localizedDescription,
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
         let alertWindow = UIWindow(frame: UIScreen.main.bounds)
         alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.windowLevel = UIWindow.Level.alert + 1;
         alertWindow.makeKeyAndVisible()
         alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)

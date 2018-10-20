@@ -46,7 +46,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     private var buttonAction: UIBarButtonItem?
     
     // Dùng để zoom tới photos
-    private var photosRect: MKMapRect = MKMapRectNull
+    private var photosRect: MKMapRect = MKMapRect.null
 
     @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         if mapView.isHidden {
@@ -148,9 +148,9 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
                             coord.longitude = -coord.longitude
                         }
                         
-                        let annotationPoint = MKMapPointForCoordinate(coord)
-                        let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
-                        self.photosRect = MKMapRectUnion(self.photosRect, pointRect)
+                        let annotationPoint = MKMapPoint.init(coord)
+                        let pointRect = MKMapRect.init(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
+                        self.photosRect = self.photosRect.union(pointRect)
                         
                         var descXML = String()
                         // Đọc comment từ exif
@@ -216,13 +216,13 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         
         // otherwise,                                        the annotations based on their distance from the center of the grid square,
         // then choose the one closest to the center to show
-        let centerMapPoint = MKMapPointMake(MKMapRectGetMidX(gridMapRect), MKMapRectGetMidY(gridMapRect))
+        let centerMapPoint = MKMapPoint.init(x: gridMapRect.midX, y: gridMapRect.midY)
         let sortedAnnotations = annotations.sorted {obj1, obj2 in
-            let mapPoint1 = MKMapPointForCoordinate(obj1.coordinate)
-            let mapPoint2 = MKMapPointForCoordinate(obj2.coordinate)
+            let mapPoint1 = MKMapPoint.init(obj1.coordinate)
+            let mapPoint2 = MKMapPoint.init(obj2.coordinate)
             
-            let distance1 = MKMetersBetweenMapPoints(mapPoint1, centerMapPoint)
-            let distance2 = MKMetersBetweenMapPoints(mapPoint2, centerMapPoint)
+            let distance1 = mapPoint1.distance(to: centerMapPoint)
+            let distance2 = mapPoint2.distance(to: centerMapPoint)
             
             return distance1 < distance2
         }
@@ -244,26 +244,26 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         
         // find all the annotations in the visible area + a wide margin to avoid popping annotation views in and out while panning the map.
         let visibleMapRect = self.mapView!.visibleMapRect
-        let adjustedVisibleMapRect = MKMapRectInset(visibleMapRect, -marginFactor * visibleMapRect.size.width, -marginFactor * visibleMapRect.size.height)
+        let adjustedVisibleMapRect = visibleMapRect.insetBy(dx: -marginFactor * visibleMapRect.size.width, dy: -marginFactor * visibleMapRect.size.height)
         
         // determine how wide each bucket will be, as a MKMapRect square
         let leftCoordinate = self.mapView!.convert(CGPoint.zero, toCoordinateFrom: self.view)
         let rightCoordinate = self.mapView!.convert(CGPoint(x: bucketSize, y: 0), toCoordinateFrom: self.view)
-        let gridSize = MKMapPointForCoordinate(rightCoordinate).x - MKMapPointForCoordinate(leftCoordinate).x
-        var gridMapRect = MKMapRectMake(0, 0, gridSize, gridSize)
+        let gridSize = MKMapPoint.init(rightCoordinate).x - MKMapPoint.init(leftCoordinate).x
+        var gridMapRect = MKMapRect.init(x: 0, y: 0, width: gridSize, height: gridSize)
         
         // condense annotations, with a padding of two squares, around the visibleMapRect
-        let startX = floor(MKMapRectGetMinX(adjustedVisibleMapRect) / gridSize) * gridSize
-        let startY = floor(MKMapRectGetMinY(adjustedVisibleMapRect) / gridSize) * gridSize
-        let endX = floor(MKMapRectGetMaxX(adjustedVisibleMapRect) / gridSize) * gridSize
-        let endY = floor(MKMapRectGetMaxY(adjustedVisibleMapRect) / gridSize) * gridSize
+        let startX = floor(adjustedVisibleMapRect.minX / gridSize) * gridSize
+        let startY = floor(adjustedVisibleMapRect.minY / gridSize) * gridSize
+        let endX = floor(adjustedVisibleMapRect.maxX / gridSize) * gridSize
+        let endY = floor(adjustedVisibleMapRect.maxY / gridSize) * gridSize
         
         // for each square in our grid, pick one annotation to show
         gridMapRect.origin.y = startY
-        while MKMapRectGetMinY(gridMapRect) <= endY {
+        while gridMapRect.minY <= endY {
             gridMapRect.origin.x = startX
             
-            while MKMapRectGetMinX(gridMapRect) <= endX {
+            while gridMapRect.minX <= endX {
                 let allAnnotationsInBucket = self.allAnnotationsMapView?.annotations(in: gridMapRect)
                 let visibleAnnotationsInBucket = self.mapView!.annotations(in: gridMapRect)
                 
@@ -316,7 +316,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         
         super.viewDidLoad()
 
-        buttonZoomFit = UIBarButtonItem(title: NSLocalizedString("Zoom All", comment: ""), style: UIBarButtonItemStyle.done, target: self, action: #selector(zoomToPhotosRect(_:)))
+        buttonZoomFit = UIBarButtonItem(title: NSLocalizedString("Zoom All", comment: ""), style: UIBarButtonItem.Style.done, target: self, action: #selector(zoomToPhotosRect(_:)))
         buttonAction = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(btnAction(_:)))
         
         self.navigationItem.rightBarButtonItem = buttonZoomFit
@@ -500,13 +500,13 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             let alert = UIAlertController(
                 title: NSLocalizedString("No email accounts configured", comment: ""),
                 message: NSLocalizedString("Please add a mail account in Settings to send mail from, by Go to Settings > Mail > Accounts > Add Account", comment: ""),
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
             let alertWindow = UIWindow(frame: UIScreen.main.bounds)
             alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            alertWindow.windowLevel = UIWindow.Level.alert + 1;
             alertWindow.makeKeyAndVisible()
             alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         }
@@ -519,20 +519,20 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             alert = UIAlertController(
                 title: NSLocalizedString("Sent", comment: ""),
                 message: error?.localizedDescription,
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             break
         default:
             alert = UIAlertController(
                 title: NSLocalizedString("Whoops", comment: ""),
                 message: error?.localizedDescription,
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
         let alertWindow = UIWindow(frame: UIScreen.main.bounds)
         alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.windowLevel = UIWindow.Level.alert + 1;
         alertWindow.makeKeyAndVisible()
         alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)
@@ -669,10 +669,10 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView,
-                            commit editingStyle: UITableViewCellEditingStyle,
+                            commit editingStyle: UITableViewCell.EditingStyle,
                             forRowAt indexPath: IndexPath) {
         let photo = self.photos[indexPath.row]
-        if editingStyle == UITableViewCellEditingStyle.delete {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
             let alert = UIAlertController(
                 title: NSLocalizedString("Warning delete", comment: ""),
                 message: NSLocalizedString("This photo will be deleted from this app on your device", comment: ""),
@@ -694,7 +694,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
                     self.photos.remove(at: indexPath.row)
                     
                     // Đã bổ sung mapView và allAnnotationMapView vào PhotoAnnotation để kiểm soát việc xóa
-                    tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                    tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
                     tableView.reloadData()
             }))
             present(alert, animated: true, completion: nil)

@@ -291,9 +291,9 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            return UIEdgeInsetsMake(10, 14, 44, 14); //top,left,bottom,right
+            return UIEdgeInsets.init(top: 10, left: 14, bottom: 44, right: 14); //top,left,bottom,right
         } else {
-            return UIEdgeInsetsMake(50, 64, 64, 64); //top,left,bottom,right
+            return UIEdgeInsets.init(top: 50, left: 64, bottom: 64, right: 64); //top,left,bottom,right
         }
     }
     

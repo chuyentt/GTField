@@ -22,11 +22,15 @@ public class ScaleBarView: UIView {
     @IBOutlet weak var distanceLabelKm: UILabel!
     @IBOutlet weak var distanceLabelMi: UILabel!
     @IBOutlet weak var zoomLevelLabel: UILabel!
-    private var strokeTextAttributes:[NSAttributedStringKey : Any]?
+    private var strokeTextAttributes:[NSAttributedString.Key : Any]?
     
     override public func awakeFromNib() {
         super.awakeFromNib()
         basePointsPI = UIScreen.pixelsPerInch!/UIScreen.main.nativeScale
+        
+        let ppi = UIScreen.main.nativeScale * ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad) ? 132 : 163)
+        print("PPI: ", ppi, UIScreen.pixelsPerInch!)
+        
         // defaultScaleBarConstant => thước = 0
         // (basePointsPI/25.4) * 5 => thước = 0.5cm
         scaleBarKmConstant.constant = defaultScaleBarConstant
@@ -36,10 +40,10 @@ public class ScaleBarView: UIView {
         trailingViewMiConstant.constant = 150
         bottomViewMiConstant.constant = 16
         strokeTextAttributes = [
-            NSAttributedStringKey.strokeColor : UIColor.white,
-            NSAttributedStringKey.foregroundColor : UIColor.black,
-            NSAttributedStringKey.strokeWidth : -5.0,
-            NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11)
+            NSAttributedString.Key.strokeColor : UIColor.white,
+            NSAttributedString.Key.foregroundColor : UIColor.black,
+            NSAttributedString.Key.strokeWidth : -5.0,
+            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 11)
         ]
     }
     

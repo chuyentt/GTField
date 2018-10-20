@@ -55,7 +55,7 @@ class OfflineTileLayer: GMSTileLayer {
                         let maxy = Double(arr[3])!
                         
                         self.boundaryString = "{{\(minx),\(miny)},{\(maxx-minx),\(maxy-miny)}}"
-                        self.layersBbox = CGRectFromString(self.boundaryString).insetBy(dx: -0.005, dy: -0.005)
+                        self.layersBbox = NSCoder.cgRect(for: self.boundaryString).insetBy(dx: -0.005, dy: -0.005)
                         map?.moveCamera(GMSCameraUpdate.fit(GMSCoordinateBounds.init(path: (pathForBoundary()))))
                     } else {
                         // Kiểm tra xem có trường center và minzoom, maxzoom
@@ -73,7 +73,7 @@ class OfflineTileLayer: GMSTileLayer {
                             let maxx: Double = (bounds?.northEast.longitude)!
                             let maxy: Double = (bounds?.northEast.latitude)!
                             self.boundaryString = "{{\(minx),\(miny)},{\(maxx-minx),\(maxy-miny)}}"
-                            self.layersBbox = CGRectFromString(self.boundaryString).insetBy(dx: -0.005, dy: -0.005)
+                            self.layersBbox = NSCoder.cgRect(for: self.boundaryString).insetBy(dx: -0.005, dy: -0.005)
                         } else {
                             let alert = UIAlertController(title: NSLocalizedString("Missing metadata table or missing bounds value in metadata", comment: ""), message: nil, preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
@@ -119,7 +119,7 @@ class OfflineTileLayer: GMSTileLayer {
     
     func pathForBoundary() -> GMSPath {
         let path = GMSMutablePath()
-        let boxRect = CGRectFromString(self.boundaryString)
+        let boxRect = NSCoder.cgRect(for: self.boundaryString)
         
         let minx = Double(boxRect.origin.x)
         let miny = Double(boxRect.origin.y)

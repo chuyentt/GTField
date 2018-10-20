@@ -127,8 +127,8 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 let crsName = getCrsName() + "\n";
                 let crsMethodName = getMapProjectionName()
                 
-                let yourAttributes = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont.systemFont(ofSize: (cell.detailTextLabel?.font.pointSize)!)]
-                let yourOtherAttributes = [NSAttributedStringKey.foregroundColor: UIColor.darkGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: (cell.detailTextLabel?.font.pointSize)! - 2)]
+                let yourAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: (cell.detailTextLabel?.font.pointSize)!)]
+                let yourOtherAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: (cell.detailTextLabel?.font.pointSize)! - 2)]
                 
                 let partOne = NSMutableAttributedString(string: crsName, attributes: yourAttributes)
                 let partTwo = NSMutableAttributedString(string: crsMethodName!, attributes: yourOtherAttributes)

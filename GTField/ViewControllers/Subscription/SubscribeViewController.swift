@@ -70,7 +70,7 @@ class SubscribeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 99
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         options = SubscriptionService.shared.options
         
         NotificationCenter.default.addObserver(self,

@@ -23,7 +23,7 @@ class WebViewController: UIViewController, UIWebViewDelegate {
         
         loadWebSite()
         
-        let shareItem = UIBarButtonItem(title: "Close", style: UIBarButtonItemStyle.plain, target: self, action: #selector(close))
+        let shareItem = UIBarButtonItem(title: "Close", style: UIBarButtonItem.Style.plain, target: self, action: #selector(close))
         
         self.navigationItem.rightBarButtonItems = [shareItem]
         if self.webViewContent == .agreement {
@@ -82,7 +82,7 @@ class WebViewController: UIViewController, UIWebViewDelegate {
         self.webView.hideHUD()
     }
     
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         if let scheme = request.url?.scheme {
             if scheme == "gtfield" {
                 print("we got a gtfield request: \(scheme)")

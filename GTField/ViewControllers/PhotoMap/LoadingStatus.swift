@@ -36,7 +36,7 @@ class LoadingStatus : UIView {
         
         let loadingFont = UIFont.boldSystemFont(ofSize: 17.0)
         
-        let attrs: [NSAttributedStringKey : Any] = [NSAttributedStringKey.font : loadingFont]
+        let attrs: [NSAttributedString.Key : Any] = [NSAttributedString.Key.font : loadingFont]
 
         let rect = loadingString.boundingRect(with: CGSize(width: frame.width, height: frame.height),
             options: [.usesLineFragmentOrigin, .usesFontLeading],
@@ -52,7 +52,7 @@ class LoadingStatus : UIView {
         self.loadingLabel.text = loadingString as String
         self.loadingLabel.font = loadingFont
         
-        progress = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
+        progress = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
         super.init(frame: frame)
         self.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.4)
         var progressFrame = self.progress.frame

@@ -133,10 +133,10 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
                     self.tableView.reloadData()
                 } else {
                     // create the alert
-                    let alert = UIAlertController(title: NSLocalizedString("Invalid input URL", comment: ""), message: NSLocalizedString("e.g.: http://192.168.1.153:8080", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: NSLocalizedString("Invalid input URL", comment: ""), message: NSLocalizedString("e.g.: http://192.168.1.153:8080", comment: ""), preferredStyle: UIAlertController.Style.alert)
                     
                     // add an action (button)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {
                         alert -> Void in
                         self.present(alertController, animated: true, completion: nil)
                     }))
@@ -156,10 +156,10 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
             // Kiểm tra kết nối trước
             if (self.imageViewForCheckingGeoServer.image == #imageLiteral(resourceName: "IconGeoServerBaseUrlOffline")) {
                 // create the alert
-                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertController.Style.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertAction.Style.default, handler: {
                     alert -> Void in
                     return
                 }))
@@ -174,10 +174,10 @@ class ConfigMapSourceViewController: UIViewController, UITableViewDelegate, UITa
             // Kiểm tra kết nối trước
             if (self.imageViewForCheckingGeoServer.image == #imageLiteral(resourceName: "IconGeoServerBaseUrlOffline")) {
                 // create the alert
-                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: NSLocalizedString("Could not connect to GeoServer!", comment: ""), message: NSLocalizedString("Please verify GeoServer Base Url", comment: ""), preferredStyle: UIAlertController.Style.alert)
                 
                 // add an action (button)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertActionStyle.default, handler: {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: UIAlertAction.Style.default, handler: {
                     alert -> Void in
                     return
                 }))

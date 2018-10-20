@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let motionManager = CMMotionManager()
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         self.window?.makeKeyAndVisible()
         
 //        if !getAgreement() {
@@ -277,7 +277,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+            NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
         }
     }
 
@@ -287,7 +287,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.UIApplicationWillTerminate, object: nil)
+            NotificationCenter.default.post(name: UIApplication.willTerminateNotification, object: nil)
         }
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }

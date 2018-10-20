@@ -12,7 +12,7 @@ import ImageIO
 import CoreLocation
 
 extension NSDictionary {
-    func gpsDictionaryFor(location: CLLocation, heading: Double, orientation: UIImageOrientation) -> NSDictionary {
+    func gpsDictionaryFor(location: CLLocation, heading: Double, orientation: UIImage.Orientation) -> NSDictionary {
         let lat = location.coordinate.latitude
         let lon = location.coordinate.longitude
         let alt = location.altitude

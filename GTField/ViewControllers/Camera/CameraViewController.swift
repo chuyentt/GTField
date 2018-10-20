@@ -49,11 +49,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var lblBearing: UILabel!
     
     let strokeTextAttributes = [
-        NSAttributedStringKey.strokeColor : UIColor.white,
-        NSAttributedStringKey.foregroundColor : UIColor.orange,
-        NSAttributedStringKey.strokeWidth : -4.0,
-        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15)
-        ] as [NSAttributedStringKey : Any]
+        NSAttributedString.Key.strokeColor : UIColor.white,
+        NSAttributedString.Key.foregroundColor : UIColor.orange,
+        NSAttributedString.Key.strokeWidth : -4.0,
+        NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)
+        ] as [NSAttributedString.Key : Any]
     
     override func loadView() {
         super.loadView()
@@ -83,10 +83,10 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         super.viewDidLoad()
         
         // Thêm nút action để gọi photomap
-        self.buttonAction = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.bookmarks, target: self, action: #selector(btnAction(_:)))
+        self.buttonAction = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.bookmarks, target: self, action: #selector(btnAction(_:)))
         self.buttonAction?.tag = 1
         self.navigationItem.rightBarButtonItem = self.buttonAction
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(btnAction(_:)))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(btnAction(_:)))
         self.navigationItem.leftBarButtonItem?.tag = 2
         
         takePhotoTapped(self)
@@ -173,15 +173,15 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 let alert = UIAlertController(
                     title: "IMPORTANT",
                     message: "\(APP_NAME) has been denied access your photo library. The photo library access required for import photo!. To enable access, please go to app settings and turn it on.",
-                    preferredStyle: UIAlertControllerStyle.alert
+                    preferredStyle: UIAlertController.Style.alert
                 )
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                     //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                     if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                     } else {
-                        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                        UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                     }
                 }))
                 self.present(alert, animated: true, completion: nil)
@@ -248,15 +248,15 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 let alert = UIAlertController(
                     title: "IMPORTANT",
                     message: "\(APP_NAME) has been denied access your camera. The camera access required for capturing photos!. To enable access, please go to app settings and turn it on.",
-                    preferredStyle: UIAlertControllerStyle.alert
+                    preferredStyle: UIAlertController.Style.alert
                 )
                 alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                     //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                     if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                     } else {
-                        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                        UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                     }
                 }))
                 self.present(alert, animated: true, completion: nil)
@@ -270,8 +270,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         dismiss(animated: true, completion: nil)
     }
 
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
+        let chosenImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage
         imageView.contentMode = .scaleAspectFit
         imageView.image = chosenImage.cropImage(cropSize: IMAGE_CROP_TO_SIZE)
 
@@ -282,7 +285,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         if picker.sourceType == .photoLibrary {
             picker.dismiss(animated: true, completion: nil)
             // Thông báo ảnh này lấy từ thư viện
-            guard let assetUrl = info[UIImagePickerControllerReferenceURL] as? URL else {
+            guard let assetUrl = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.referenceURL)] as? URL else {
                 return
             }
             let fetchResult = PHAsset.fetchAssets(withALAssetURLs: [assetUrl], options: PHFetchOptions())
@@ -320,17 +323,17 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                                 fileName = photoRoot.appendingPathComponent(getFileNameByGPSTime(ext: "jpg", date: dateObject!))
                             }
                             // Thay đổi kích dung lượng
-                            let imageData = UIImageJPEGRepresentation(self.imageView.image!, CGFloat(IMAGE_COMPRESSION_QUALITY))
+                            let imageData = self.imageView.image!.jpegData(compressionQuality: CGFloat(IMAGE_COMPRESSION_QUALITY))
                             
                             // TODO: Quan trọng: Sau khi xoay thì chuyển ảnh về up = 1
                             imageProperties[kCGImagePropertyOrientation as String] = 1 as AnyObject
                             self.createFileFor(imageData!, imageProperties as NSDictionary, fileName)
                         } else {
                             // create the alert
-                            let alert = UIAlertController(title: "Location Error", message: "The photo you selected does not have GPS data", preferredStyle: UIAlertControllerStyle.alert)
+                            let alert = UIAlertController(title: "Location Error", message: "The photo you selected does not have GPS data", preferredStyle: UIAlertController.Style.alert)
                             
                             // add an action (button)
-                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {
                                 alert -> Void in
                                 return
                             }))
@@ -340,10 +343,10 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                         }
                     } else {
                         // create the alert
-                        let alert = UIAlertController(title: "Location Not Found", message: "The photo you selected does not have GPS data", preferredStyle: UIAlertControllerStyle.alert)
+                        let alert = UIAlertController(title: "Location Not Found", message: "The photo you selected does not have GPS data", preferredStyle: UIAlertController.Style.alert)
                         
                         // add an action (button)
-                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {
                             alert -> Void in
                             return
                         }))
@@ -356,9 +359,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         } else {
             let location = manager.location
             let heading = manager.heading?.trueHeading
-            let imageData = UIImageJPEGRepresentation(imageView.image!, CGFloat(IMAGE_COMPRESSION_QUALITY))
+            let imageData = imageView.image!.jpegData(compressionQuality: CGFloat(IMAGE_COMPRESSION_QUALITY))
             
-            if var metadata: NSDictionary = info[UIImagePickerControllerMediaMetadata] as? NSDictionary {
+            if var metadata: NSDictionary = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaMetadata)] as? NSDictionary {
                 if metadata[kCGImagePropertyGPSDictionary as String] == nil {
                     metadata = metadata.gpsDictionaryFor(location: location!, heading: heading!, orientation: chosenImage.imageOrientation)
                 }
@@ -427,7 +430,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             let alert = UIAlertController(
                 title: "IMPORTANT",
                 message: "\(APP_NAME) has been denied access your location. The location services access required for embed the GPS information within the picture!. To enable access, please go to app settings and select \"While Using the App\" or \"Alway\" option..",
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
                 self.dismiss(animated: true, completion: {
@@ -437,9 +440,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                 }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
@@ -453,7 +456,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             let alert = UIAlertController(
                 title: "IMPORTANT",
                 message: "\(APP_NAME) is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place",
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
                 self.dismiss(animated: true, completion: {
@@ -463,9 +466,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                 }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
@@ -491,7 +494,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             let alert = UIAlertController(
                 title: "IMPORTANT",
                 message: "\(APP_NAME) is not authorized to use location services. You cannot change this app’s status, possibly due to active restrictions such as parental controls being in place",
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
                 self.dismiss(animated: true, completion: {
@@ -501,9 +504,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                 }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
@@ -516,7 +519,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             let alert = UIAlertController(
                 title: "IMPORTANT",
                 message: "\(APP_NAME) has been denied access your location. The location services access required for embed the GPS information within the picture!. To enable access, please go to app settings and select \"While Using the App\" or \"Alway\" option..",
-                preferredStyle: UIAlertControllerStyle.alert
+                preferredStyle: UIAlertController.Style.alert
             )
             alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) -> Void in
                 self.dismiss(animated: true, completion: {
@@ -526,9 +529,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             alert.addAction(UIAlertAction(title: "Settings...", style: .cancel, handler: { (alert) -> Void in
                 //UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler:nil)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                 }
                 self.dismiss(animated: true, completion: {
                     self.stopUpdatingLocation()
@@ -585,4 +588,19 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         lblBearing.attributedText = NSMutableAttributedString(string: "∡ \(manager.heading?.trueHeading.toString(1) ?? "N/A")° T", attributes: strokeTextAttributes)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }

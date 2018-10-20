@@ -98,7 +98,7 @@ class PointView: UIView {
         guard self.pointMode == .moving else {
             return
         }
-        self.superview!.bringSubview(toFront: self)
+        self.superview!.bringSubviewToFront(self)
         
         var translation = panGR.translation(in: self)
         

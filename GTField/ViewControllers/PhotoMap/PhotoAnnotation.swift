@@ -139,7 +139,7 @@ class PhotoAnnotation: NSObject, MKAnnotation {
             wpt.addChild(AEXMLElement(name: "name", value: imgName))
             wpt.addChild(AEXMLElement(name: "title", value: _photoTitle))
             wpt.addChild(AEXMLElement(name: "type", value: "Photo"))
-            let imageData = UIImageJPEGRepresentation(image!, CGFloat(IMAGE_COMPRESSION_QUALITY)/2.5)
+            let imageData = image!.jpegData(compressionQuality: CGFloat(IMAGE_COMPRESSION_QUALITY)/2.5)
             let imageStr:String = (imageData?.base64EncodedString())!
             let imgtag = "<img width='800' height=auto src='data:image/jpeg;base64,\(imageStr)'><br />"
             wpt.addChild(AEXMLElement(name: "cmt", value: "\(imgtag)\(_photoDesc)"))

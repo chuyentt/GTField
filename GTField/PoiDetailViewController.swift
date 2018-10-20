@@ -159,9 +159,9 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
         
         if (UIApplication.shared.canOpenURL(URL(string:"http://maps.apple.com")!)) {
             if #available(iOS 10.0, *) {
-                UIApplication.shared.open(URL(string: directionUrl)!, options: [:], completionHandler:nil)
+                UIApplication.shared.open(URL(string: directionUrl)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
             } else {
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
             }
         } else {
             NSLog("Can't use Apple Maps");
@@ -283,4 +283,9 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
 
 
    
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

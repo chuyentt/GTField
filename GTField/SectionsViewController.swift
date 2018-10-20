@@ -224,8 +224,8 @@ class SectionsViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             }
             
             // Check if current annotation is inside visible map rect, else go to next one
-            let point:MKMapPoint  =  MKMapPointForCoordinate(view.annotation!.coordinate);
-            if (!MKMapRectContainsPoint(self.mapView.visibleMapRect, point)) {
+            let point:MKMapPoint  =  MKMapPoint.init(view.annotation!.coordinate);
+            if (!self.mapView.visibleMapRect.contains(point)) {
                 continue;
             }
             
@@ -238,15 +238,15 @@ class SectionsViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             
             // Animate drop
             let delay = 0.02 * Double(i)
-            UIView.animate(withDuration: 0.2, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations:{() in
+            UIView.animate(withDuration: 0.2, delay: delay, options: UIView.AnimationOptions.curveEaseIn, animations:{() in
                 view.frame = endFrame
                 // Animate squash
                 }, completion:{(Bool) in
-                    UIView.animate(withDuration: 0.0, delay: 0.0, options: UIViewAnimationOptions.curveEaseIn, animations:{() in
+                    UIView.animate(withDuration: 0.0, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations:{() in
                         view.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
                         
                         }, completion: {(Bool) in
-                            UIView.animate(withDuration: 0.0, delay: 0.0, options: UIViewAnimationOptions.curveEaseIn, animations:{() in
+                            UIView.animate(withDuration: 0.0, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations:{() in
                                 view.transform = CGAffineTransform.identity
                                 }, completion: nil)
                     })

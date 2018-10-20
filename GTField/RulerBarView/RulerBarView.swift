@@ -12,17 +12,17 @@ public class RulerBarView: UIView {
     private var basePointsPI: CGFloat = 154.0
     public var isShowRuler: Bool = true
     private var strokeTextAttributes = [
-        NSAttributedStringKey.strokeColor : UIColor.white,
-        NSAttributedStringKey.foregroundColor : UIColor.black,
-        NSAttributedStringKey.strokeWidth : -5.0,
-        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11)
-        ] as [NSAttributedStringKey : Any]
+        NSAttributedString.Key.strokeColor : UIColor.white,
+        NSAttributedString.Key.foregroundColor : UIColor.black,
+        NSAttributedString.Key.strokeWidth : -5.0,
+        NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 11)
+        ] as [NSAttributedString.Key : Any]
     private var coordinateLabelStrokeTextAttributes = [
-        NSAttributedStringKey.strokeColor : UIColor.white,
-        NSAttributedStringKey.foregroundColor : UIColor.orange,
-        NSAttributedStringKey.strokeWidth : -4.0,
-        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 18)
-        ] as [NSAttributedStringKey : Any]
+        NSAttributedString.Key.strokeColor : UIColor.white,
+        NSAttributedString.Key.foregroundColor : UIColor.orange,
+        NSAttributedString.Key.strokeWidth : -4.0,
+        NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)
+        ] as [NSAttributedString.Key : Any]
     @IBOutlet weak var scaleLabel: UILabel!
     @IBOutlet weak var scaleLabelBottomConstant: NSLayoutConstraint!
     

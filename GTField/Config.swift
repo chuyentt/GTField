@@ -108,7 +108,7 @@ func configMainView() {
     let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
     
     if let font = font {
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.white]
     }
     
     let fontButton = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
@@ -116,8 +116,8 @@ func configMainView() {
     if let fontButton = fontButton {
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [
-                NSAttributedStringKey.font : fontButton,
-                NSAttributedStringKey.foregroundColor : UIColor.white
+                NSAttributedString.Key.font : fontButton,
+                NSAttributedString.Key.foregroundColor : UIColor.white
             ],
             for: .normal)
     }

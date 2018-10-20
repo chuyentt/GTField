@@ -78,11 +78,11 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     //
 
     let strokeTextAttributes = [
-        NSAttributedStringKey.strokeColor : UIColor.white,
-        NSAttributedStringKey.foregroundColor : UIColor.orange,
-        NSAttributedStringKey.strokeWidth : -4.0,
-        NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15)
-        ] as [NSAttributedStringKey : Any]
+        NSAttributedString.Key.strokeColor : UIColor.white,
+        NSAttributedString.Key.foregroundColor : UIColor.orange,
+        NSAttributedString.Key.strokeWidth : -4.0,
+        NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)
+        ] as [NSAttributedString.Key : Any]
     
     override func viewDidLoad() {
         super.viewDidLoad()

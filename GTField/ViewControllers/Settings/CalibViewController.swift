@@ -124,15 +124,15 @@ class CalibViewController: UIViewController, MotionContainer {
     
     @IBAction func close(_ sender: UIBarButtonItem) {
         // create the alert
-        let alert = UIAlertController(title: "Close calibration", message: "Are you sure you want to close?", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Close calibration", message: "Are you sure you want to close?", preferredStyle: UIAlertController.Style.alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
             self.dismiss(animated: true, completion: { () -> Void in
                 
             })
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
         // show the alert
         self.present(alert, animated: true, completion: nil)
     }
@@ -140,10 +140,10 @@ class CalibViewController: UIViewController, MotionContainer {
     @IBAction func resetCalibrationAction(_ sender: Any) {
         
         // create the alert
-        let alert = UIAlertController(title: "Reset calibration", message: "Are you sure you want to reset?", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Reset calibration", message: "Are you sure you want to reset?", preferredStyle: UIAlertController.Style.alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
             // Lưu vào setting giá trị mặc định
             let bias = double3([0,0,0])
             let sf = double3x3()
@@ -158,17 +158,17 @@ class CalibViewController: UIViewController, MotionContainer {
             // Khởi động lại cảm biến
             self.startUpdateMotion();
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
         // show the alert
         self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func calibrateAction(_ sender: Any) {
         // create the alert
-        let alert = UIAlertController(title: "Calibration", message: "Are you sure you want to calibrate?", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Calibration", message: "Are you sure you want to calibrate?", preferredStyle: UIAlertController.Style.alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: "Calibrate", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: "Calibrate", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
             self.requestedCalibration = true
             // Cho hiển thị thanh tiến trình
             self.progressView.isHidden = false
@@ -195,7 +195,7 @@ class CalibViewController: UIViewController, MotionContainer {
             textField.text = "\(self.MaxPts)"
         }
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
         // show the alert
         self.present(alert, animated: true, completion: nil)
     }

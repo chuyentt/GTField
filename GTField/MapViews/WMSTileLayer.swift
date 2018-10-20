@@ -40,7 +40,7 @@ class WMSTileLayer: GMSTileLayer {
 
         // Lấy ở hệ thống
         let layersBboxStr = getLayersBoundingBoxForWMS()
-        self.layersBbox = CGRectFromString(layersBboxStr).insetBy(dx: -0.001, dy: -0.001)
+        self.layersBbox = NSCoder.cgRect(for: layersBboxStr).insetBy(dx: -0.001, dy: -0.001)
 
         // Tạo url chuẩn
         self.urlComponents = URLComponents(string: (getGeoServerTilesUrl()?.absoluteString)!)!

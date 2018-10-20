@@ -72,7 +72,7 @@ class InputViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: "Cell")
         cell.contentMode = .center
         let frame = cell.contentView.frame
         textField = UITextField(frame: frame.applying(CGAffineTransform(translationX: 20, y: 0)))
