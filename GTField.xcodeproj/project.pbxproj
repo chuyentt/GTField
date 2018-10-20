@@ -41,7 +41,6 @@
 		16D845901D8D2DCB005DF780 /* DesignableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845721D8D2DCB005DF780 /* DesignableTextView.swift */; };
 		16D845911D8D2DCB005DF780 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845731D8D2DCB005DF780 /* DesignableView.swift */; };
 		16D845921D8D2DCB005DF780 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845741D8D2DCB005DF780 /* ImageLoader.swift */; };
-		16D845931D8D2DCB005DF780 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 16D845751D8D2DCB005DF780 /* Info.plist */; };
 		16D845941D8D2DCB005DF780 /* KeyboardLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845761D8D2DCB005DF780 /* KeyboardLayoutConstraint.swift */; };
 		16D845951D8D2DCB005DF780 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845771D8D2DCB005DF780 /* LoadingView.swift */; };
 		16D845961D8D2DCB005DF780 /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16D845781D8D2DCB005DF780 /* LoadingView.xib */; };
@@ -229,12 +228,14 @@
 		DEB2268E1E64282400D27CB5 /* PlaceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB226871E64282200D27CB5 /* PlaceDetailViewController.xib */; };
 		DEB2268F1E64282400D27CB5 /* PlaceNameHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB226881E64282200D27CB5 /* PlaceNameHeader.swift */; };
 		DEB226901E64282400D27CB5 /* PlaceNameHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEB226891E64282200D27CB5 /* PlaceNameHeader.xib */; };
+		DEB4696920939A1400CF20F6 /* Data.plist in Resources */ = {isa = PBXBuildFile; fileRef = DEB4696820939A1300CF20F6 /* Data.plist */; };
 		DEC0BE041F585A640094BF74 /* Projection.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC0BE031F585A630094BF74 /* Projection.m */; };
 		DEC7B8581EECDAC300EE81CB /* WMSTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B8571EECDAC300EE81CB /* WMSTileLayer.swift */; };
 		DEC7B85A1EED131700EE81CB /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B8591EED131700EE81CB /* Data+Extensions.swift */; };
 		DEC7B85C1EED381400EE81CB /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B85B1EED381400EE81CB /* UIImageView+Extensions.swift */; };
 		DEC7B85E1EED49BC00EE81CB /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC7B85D1EED49BC00EE81CB /* Utilities.swift */; };
 		DECB8EBD1F7CF8680064450C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DECB8EBC1F7CF8680064450C /* Launch Screen.storyboard */; };
+		DECD1787209421E6009C0A81 /* iPhone6Plus_1973_184586.gpx in Resources */ = {isa = PBXBuildFile; fileRef = DECD1786209421E6009C0A81 /* iPhone6Plus_1973_184586.gpx */; };
 		DEDE38FD1F17D8E3000F1446 /* GPXTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE38FC1F17D8E3000F1446 /* GPXTableViewController.swift */; };
 		DEDE38FF1F17DA11000F1446 /* WayPointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE38FE1F17DA11000F1446 /* WayPointManager.swift */; };
 		DEDE39011F17DA2D000F1446 /* TrackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDE39001F17DA2D000F1446 /* TrackManager.swift */; };
@@ -571,6 +572,7 @@
 		DEB226871E64282200D27CB5 /* PlaceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlaceDetailViewController.xib; path = ViewControllers/PlaceDetail/PlaceDetailViewController.xib; sourceTree = "<group>"; };
 		DEB226881E64282200D27CB5 /* PlaceNameHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceNameHeader.swift; path = ViewControllers/PlaceDetail/PlaceNameHeader.swift; sourceTree = "<group>"; };
 		DEB226891E64282200D27CB5 /* PlaceNameHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlaceNameHeader.xib; path = ViewControllers/PlaceDetail/PlaceNameHeader.xib; sourceTree = "<group>"; };
+		DEB4696820939A1300CF20F6 /* Data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Data.plist; sourceTree = "<group>"; };
 		DEC0BE021F585A630094BF74 /* Projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Projection.h; sourceTree = "<group>"; };
 		DEC0BE031F585A630094BF74 /* Projection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Projection.m; sourceTree = "<group>"; };
 		DEC7B8571EECDAC300EE81CB /* WMSTileLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WMSTileLayer.swift; path = MapViews/WMSTileLayer.swift; sourceTree = "<group>"; };
@@ -578,6 +580,7 @@
 		DEC7B85B1EED381400EE81CB /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageView+Extensions.swift"; path = "Support/UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		DEC7B85D1EED49BC00EE81CB /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		DECB8EBC1F7CF8680064450C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		DECD1786209421E6009C0A81 /* iPhone6Plus_1973_184586.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = iPhone6Plus_1973_184586.gpx; sourceTree = "<group>"; };
 		DEDE38FC1F17D8E3000F1446 /* GPXTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GPXTableViewController.swift; path = ViewControllers/GPX/GPXTableViewController.swift; sourceTree = "<group>"; };
 		DEDE38FE1F17DA11000F1446 /* WayPointManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WayPointManager.swift; path = ViewControllers/GPX/WayPointManager.swift; sourceTree = "<group>"; };
 		DEDE39001F17DA2D000F1446 /* TrackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackManager.swift; path = ViewControllers/GPX/TrackManager.swift; sourceTree = "<group>"; };
@@ -765,6 +768,8 @@
 		16C6519F1CB259D0000BCF75 /* Plist Files */ = {
 			isa = PBXGroup;
 			children = (
+				DECD1786209421E6009C0A81 /* iPhone6Plus_1973_184586.gpx */,
+				DEB4696820939A1300CF20F6 /* Data.plist */,
 				16488C641CB574780090E120 /* Main.plist */,
 				DE2648161F0DAE8D00CC324D /* Track.json */,
 				DE2648181F0DF38C00CC324D /* Track.gpx */,
@@ -1567,6 +1572,7 @@
 				DEDEC5C61F7F35DD00F5CE0F /* Icon-76@2x.png in Resources */,
 				DEB2268E1E64282400D27CB5 /* PlaceDetailViewController.xib in Resources */,
 				DE6781881E55F1A100026C86 /* bauhausl.ttf in Resources */,
+				DECD1787209421E6009C0A81 /* iPhone6Plus_1973_184586.gpx in Resources */,
 				DEDEC5C91F7F35DD00F5CE0F /* Icon-Small-40@2x.png in Resources */,
 				DE53B4881F816C6E00D58D18 /* Icon-1024.png in Resources */,
 				DE28C3C11F176BD700C3A190 /* snap.mp3 in Resources */,
@@ -1584,6 +1590,7 @@
 				DE2648171F0DAE9000CC324D /* Track.json in Resources */,
 				DE9EBEFE203085DA0096390F /* FeatureTableViewCell.xib in Resources */,
 				DE6781891E55F1A500026C86 /* bauhauhb.ttf in Resources */,
+				DEB4696920939A1400CF20F6 /* Data.plist in Resources */,
 				DE28C3BD1F17673600C3A190 /* beep.mp3 in Resources */,
 				DEDEC5CA1F7F35DD00F5CE0F /* Icon-Small-60.png in Resources */,
 				DEDEC5CF1F7F35DD00F5CE0F /* Icon-Small@3x.png in Resources */,
@@ -1600,7 +1607,6 @@
 				DEA2EE6B2004684100577616 /* HighlightView.xib in Resources */,
 				DE43F9BC1F861C8D00362F45 /* ProductIds.plist in Resources */,
 				DEB2268B1E64282400D27CB5 /* PlaceAttributeCell.xib in Resources */,
-				16D845931D8D2DCB005DF780 /* Info.plist in Resources */,
 				DE370EE62021DF1500B7A6A8 /* GeoJSON.geojson in Resources */,
 				16349EE81A28543D00D670A7 /* GTFieldGeo.geojson in Resources */,
 				DE86DDBC1FA949E3005E5825 /* KML_Sample.kml in Resources */,
@@ -1649,7 +1655,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GTField/Pods-GTField-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GeoTrans/GeoTrans.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Surge/Surge.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyPlistManager/SwiftyPlistManager.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
@@ -1657,7 +1663,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GeoTrans.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Surge.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyPlistManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",

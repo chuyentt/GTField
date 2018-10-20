@@ -1517,6 +1517,11 @@ class GPX: NSObject {
         pointSegments.removeAll()
     }
     
+    private var _fileUrl: URL?
+    var fileUrl: URL? {
+        get { return _fileUrl }
+    }
+    
     private var _gpxDoc: AEXMLDocument?
     var gpxDoc: AEXMLDocument? {
         get { return _gpxDoc }
@@ -1600,6 +1605,13 @@ class GPX: NSObject {
         _root.addChild(_metadata.root)
         _map = map
         _bounds = GMSCoordinateBounds()
+        
+        var fileName = createDocumentFileFor(subPath: "", fileName: _metadata.name, ext: String())
+        if fileName.pathExtension != "gpx" {
+            fileName = fileName.appendingPathExtension("gpx")
+        }
+        _fileUrl = fileName
+        
         super.init()
     }
     
@@ -1620,6 +1632,12 @@ class GPX: NSObject {
             _root.addChild(_metadata.root)
             _save()
         }
+        
+        var fileName = createDocumentFileFor(subPath: "", fileName: _metadata.name, ext: String())
+        if fileName.pathExtension != "gpx" {
+            fileName = fileName.appendingPathExtension("gpx")
+        }
+        _fileUrl = fileName
         
         // TODO: Parse
         

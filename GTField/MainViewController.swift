@@ -117,7 +117,8 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         } else {
             //heightBackground.constant = 0
         }
-        UIApplication.shared.statusBarStyle = .lightContent
+        statusBarStyle = .lightContent
+        setNeedsStatusBarAppearanceUpdate()
     }
 
     override func viewDidDisappear(_ animated: Bool) {

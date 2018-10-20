@@ -14,6 +14,7 @@ import GooglePlacePicker
 import GoogleMobileAds
 import Firebase
 import MessageUI
+import SwiftyPlistManager
 
 let kPaneViewHeight = CGFloat(280.0)
 
@@ -803,6 +804,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     private var selectedPolygon: CPolygon!
     private var selectedPoint: CPoint!
     
+    private var archivedLocations = [Data]()
+    
     override func loadView() {
         super.loadView()
     }
@@ -893,12 +896,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if self.mapView?.mapType == GMSMapViewType.normal || self.mapView?.mapType == GMSMapViewType.terrain {
-            UIApplication.shared.statusBarStyle = .default
+            statusBarStyle = .default
+            setNeedsStatusBarAppearanceUpdate()
         } else {
-            UIApplication.shared.statusBarStyle = .lightContent
+            statusBarStyle = .lightContent
+            setNeedsStatusBarAppearanceUpdate()
         }
         
-        UIApplication.shared.statusBarStyle = .default
+        statusBarStyle = .default
+        setNeedsStatusBarAppearanceUpdate()
         
         if ADS_ENABLED == true {
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -1969,6 +1975,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             buttonPaused?.MainButton.isHidden = true
             buttonRecording?.MainButton.GroupIndex = 1
             gpx?.status = .tracking
+            
+            // Khởi tạo SwiftyPlistManager với tên file cùng tên file gpx
+//            let plistFileName = (gpx?.fileUrl?.deletingPathExtension().lastPathComponent)!
+//            _ = createDocumentFileFor(subPath: "", fileName: plistFileName, ext: "plist")
+            _ = deleteFolderFor(docsURL.appendingPathComponent("Data").appendingPathExtension("plist").path)
+            SwiftyPlistManager.shared.start(plistNames: ["Data"], logging: true)
+            let options = ["LocationRepeatBehavior": Float(2),
+                           "LocationDeliveryBehavior": Float(0)]
+            SwiftyPlistManager.shared.addNew(options, key: "Options", toPlistWithName: "Data") { (err) in
+                if err == nil {
+                    print("Value successfully added into plist.")
+                }
+            }
+            archivedLocations = [Data]()
+//            SwiftyPlistManager.shared.save(options, forKey: "Options", toPlistWithName: "Data") { (err) in
+//                if err == nil {
+//                    print("Value successfully saved into plist.")
+//                }
+//            }
         } else {
             self.showSubscription()
         }
@@ -1993,6 +2018,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func setupButtonDone() {
         print("Done")
         gpx?.actions = .done
+        SwiftyPlistManager.shared.addNew(archivedLocations, key: "Locations", toPlistWithName: "Data") { (err) in
+            if err == nil {
+                print("Value successfully added into plist.")
+            }
+        }
+        let plistFileName = (gpx?.fileUrl?.deletingPathExtension().appendingPathExtension("plist").path)!
+        if !FileManager.default.fileExists(atPath: plistFileName) {
+            do {
+                try FileManager.default.moveItem(atPath: docsURL.appendingPathComponent("Data").appendingPathExtension("plist").path, toPath: plistFileName)
+            } catch let error as NSError {
+                print("[SwiftyPlistManager]", error.localizedDescription)
+            }
+        }
+        _ = createDocumentFileFor(subPath: "", fileName: plistFileName, ext: "plist")
+
         self.setupButtonRecord()
     }
     
@@ -3176,7 +3216,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    
     @IBAction func btnMapType(_ sender: UIButton) {
         switch sender.tag {
         case 1:
@@ -3184,21 +3223,24 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.buttonMapTypeDefault?.pressedDown = true
             self.buttonMapTypeSatellite?.pressedDown = false
             self.buttonMapTypeTerrain?.pressedDown = false
-            UIApplication.shared.statusBarStyle = .default
+            statusBarStyle = .default
+            setNeedsStatusBarAppearanceUpdate()
             break
         case 2:
             mapView?.mapType = GMSMapViewType.satellite
             self.buttonMapTypeDefault?.pressedDown = false
             self.buttonMapTypeSatellite?.pressedDown = true
             self.buttonMapTypeTerrain?.pressedDown = false
-            UIApplication.shared.statusBarStyle = .lightContent
+            statusBarStyle = .lightContent
+            setNeedsStatusBarAppearanceUpdate()
             break
         case 3:
             mapView?.mapType = GMSMapViewType.terrain
             self.buttonMapTypeDefault?.pressedDown = false
             self.buttonMapTypeSatellite?.pressedDown = false
             self.buttonMapTypeTerrain?.pressedDown = true
-            UIApplication.shared.statusBarStyle = .default
+            statusBarStyle = .default
+            setNeedsStatusBarAppearanceUpdate()
             break
         default:
             break
@@ -4437,9 +4479,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if isFollowMyLocation {
             self.mapView?.animate(toLocation: (location?.coordinate)!)
         }
-        
+        print("hdop: ", location?.horizontalAccuracy ?? 0, " vdop: ", location?.verticalAccuracy ?? 0, " course: ", location?.course ?? 0, " speed: ", location?.speed ?? 0)
         if gpx?.status == .tracking {
             gpx?.addTrackPoint(GPXTrackPoint(location!), .tracking)
+            
+            // Thêm bản ghi vào plist (chưa save)
+            let archived = NSKeyedArchiver.archivedData(withRootObject: locations)
+            archivedLocations.append(archived)
         }
         trackingDistance()
     }

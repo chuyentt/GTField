@@ -197,7 +197,7 @@ static NSString *const kGeoJSONPropertyDesc = @"desc";
         GMSMarker *strongMarker = weakMarker;
         GMSMapView *strongMap = weakMap;
         strongMarker.icon = image;
-        if (!_isMapCleared) {
+          if (!self->_isMapCleared) {
           strongMarker.map = strongMap;
         }
       });
@@ -355,7 +355,7 @@ static NSString *const kGeoJSONPropertyDesc = @"desc";
       GMSGroundOverlay *strongGroundOverlay = weakGroundOverlay;
       GMSMapView *strongMap = weakMap;
       strongGroundOverlay.icon = image;
-      if (!_isMapCleared) {
+        if (!self->_isMapCleared) {
         strongGroundOverlay.map = strongMap;
       }
     });
