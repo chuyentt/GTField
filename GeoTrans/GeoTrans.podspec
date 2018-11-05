@@ -30,7 +30,8 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = ['GeoTrans/Classes/**/*']
+  s.source_files = 'GeoTrans/Classes/**/*'#, 'GeoTrans/geotrans3.7/*.{cpp,h}'
+  #s.pod_xcconfig = {'SWIFT_INCLUDE_PATHS' => '$(SRCROOT)/GeoTrans/GeoTrans/geotrans3.7/CCS/src/**','LIBRARY_SEARCH_PATHS' => '$(SRCROOT)/GeoTrans/GeoTrans/'}
 
   # s.resource_bundles = {
   #   'GeoTrans' => ['GeoTrans/Assets/*.png']
