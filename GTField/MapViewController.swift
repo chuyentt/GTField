@@ -35,11 +35,6 @@ let strokeTextAttributesAlignLeft = [
     NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)
     ] as [NSAttributedString.Key : Any]
 
-open class GTMapView: GMSMapView, GMSMapViewDelegate {
-
-}
-
-
 class DownloadTileLayer: GMSSyncTileLayer {
     override func tileFor(x: UInt, y: UInt, zoom: UInt) -> UIImage? {
         tileSize = 256*Int(UIScreen.main.nativeScale)
@@ -674,7 +669,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var adMobBannerView = GADBannerView()
     var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
     
-    var mapView: GTMapView?
+    var mapView: GMSMapView?
+    
     var gpx: GPX?
     var geoJSON: CGeoJSONKit?
     
@@ -936,7 +932,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     override func viewDidLoad() {
         super.viewDidLoad()
         let camera = GMSCameraPosition.camera(withTarget: getDefaultCoordinate2D(), zoom: 5)
-        mapView = GTMapView.map(withFrame: .zero, camera: camera)
+//        mapView.camera = camera
+        mapView = GMSMapView.map(withFrame: .zero, camera: camera)
         mapView?.delegate = self
         mapView?.tag = 11
         mapView?.translatesAutoresizingMaskIntoConstraints = false
@@ -1189,18 +1186,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         
     }
-    
-    func setupTrackButton() {
-        // Căn giữa X
-//        NSLayoutConstraint(item: gpx?.startButton as Any,
-//                           attribute: .centerX,
-//                           relatedBy: .equal,
-//                           toItem: self.view,
-//                           attribute: .centerX,
-//                           multiplier: 1.0,
-//                           constant: 0).isActive = true
-    }
-    
     
     func setupView() {
         
@@ -4136,9 +4121,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
+        guard mapView.myLocation != nil else {
+            return false
+        }
         isFollowMyLocation = true
         style.alignment = .left
-        myLocationLabel?.attributedText = NSMutableAttributedString(string: (mapView.myLocation?.showMyLocationInfo())!, attributes: strokeTextAttributesAlignLeft)
+        myLocationLabel.attributedText = NSMutableAttributedString(string: (mapView.myLocation?.showMyLocationInfo())!, attributes: strokeTextAttributesAlignLeft)
         return false
     }
     

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QuartzCore
 
 enum VisibleMode: Int {
     case normal
@@ -117,7 +118,7 @@ class CPoint: GMSMarker, CGeoJSONGeometry, PointViewDelegate {
             if magnifyView == nil {
                 magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
                 magnifyView.viewToMagnify = map // nền bản đồ
-                magnifyView.setTouchPoint(pt: point.center)
+                magnifyView.touchPoint = point.center
                 map?.addSubview(magnifyView)
             }
         }
@@ -138,7 +139,7 @@ class CPoint: GMSMarker, CGeoJSONGeometry, PointViewDelegate {
             // position = (map?.projection.coordinate(for: point.center))!
             
             // Kính lúp: Di chuyển kính lúp
-            magnifyView.setTouchPoint(pt: point.center)
+            magnifyView.touchPoint = point.center
             magnifyView.setNeedsDisplay()
         }
     }
@@ -367,12 +368,14 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
             // Ẩn điểm giữa
             visibleMidPoints(false)
             
-            // Kính lúp: Nếu chưa có thì tạo và hiển thị
-            if magnifyView == nil {
-                magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
-                magnifyView.viewToMagnify = map // nền bản đồ
-                magnifyView.setTouchPoint(pt: point.center)
-                map?.addSubview(magnifyView)
+//            // Kính lúp: Nếu chưa có thì tạo và hiển thị
+//            if magnifyView == nil {
+//                magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
+            if magnifyView.viewToMagnify == nil && magnifyView.superview == nil {
+                magnifyView.viewToMagnify = self.map // nền bản đồ
+                magnifyView.touchPoint = point.center
+                
+                self.map?.addSubview(magnifyView)
             }
         }
     }
@@ -396,7 +399,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
             updatePathFor(point)
             
             // Kính lúp: Di chuyển kính lúp
-            magnifyView.setTouchPoint(pt: point.center)
+            magnifyView.touchPoint = point.center
             magnifyView.setNeedsDisplay()
         }
     }
@@ -437,16 +440,15 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
         }
         
         // Kính lúp: nếu đã có thì gỡ đi
-        if magnifyView != nil {
+//        if magnifyView != nil {
             magnifyView.removeFromSuperview()
-            magnifyView = nil
-        }
+            magnifyView.viewToMagnify = nil
+//            magnifyView = nil
+//        }
         
         // Trả lại trạng thái pointMoved trước đó
         pointMoved = false
     }
-    
-    
     
     // Màu của polyline: dùng để lưu lại màu gốc
     public var _strokeColor: UIColor = UIColor.blue
@@ -475,7 +477,9 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
     private var polylineViewMoved: Bool = false
     
     // Kính lúp
-    private var magnifyView: MagnifyView!
+    private var magnifyingGlassShowDelay: TimeInterval = 0.2
+    private var magnifyView: MagnifyView = MagnifyView(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
+//    private var magnifyView: MagnifyView!
     
     // Border outline
     private var border: GMSPolyline = GMSPolyline()
@@ -911,7 +915,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
             if magnifyView == nil {
                 magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
                 magnifyView.viewToMagnify = map // nền bản đồ
-                magnifyView.setTouchPoint(pt: point.center)
+                magnifyView.touchPoint = point.center
                 map?.addSubview(magnifyView)
             }
         }
@@ -936,7 +940,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
             updatePathFor(point)
             
             // Kính lúp: Di chuyển kính lúp
-            magnifyView.setTouchPoint(pt: point.center)
+            magnifyView.touchPoint = point.center
             magnifyView.setNeedsDisplay()
         }
     }

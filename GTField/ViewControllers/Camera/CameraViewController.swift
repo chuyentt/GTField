@@ -48,6 +48,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var lblPosition2: UILabel!
     @IBOutlet weak var lblBearing: UILabel!
     
+    @IBOutlet weak var stackView: UIStackView!
+    
     let strokeTextAttributes = [
         NSAttributedString.Key.strokeColor : UIColor.white,
         NSAttributedString.Key.foregroundColor : UIColor.orange,
@@ -92,17 +94,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         takePhotoTapped(self)
         
         // TODO: Nên xem xét thêm
-        buttonTakePhotoBorder.layer.borderColor = UIColor.white.cgColor
-        lblPosition1.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: 10, y: 20)
-        lblPosition2.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: lblPosition1.frame.width + lblPosition2.frame.width, y: lblPosition1.frame.height + 25 + lblPosition2.frame.height/2)
-        lblBearing.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: lblPosition1.frame.width + lblPosition2.frame.width + lblBearing.frame.width*2, y: lblPosition1.frame.height + 35 + lblPosition2.frame.height + lblBearing.frame.height/2)
-        
-//        lblPosition1.shadowColor = UIColor.white
-//        lblPosition1.shadowOffset = CGSize(width: -1, height: -1)
-//        lblPosition2.shadowColor = UIColor.white
-//        lblPosition2.shadowOffset = CGSize(width: -1, height: -1)
-//        lblBearing.shadowColor = UIColor.white
-//        lblBearing.shadowOffset = CGSize(width: -1, height: -1)
+        stackView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2).translatedBy(x: self.view.frame.width / 2, y: self.view.frame.width / 2 - stackView.frame.height)
+
+        buttonTakePhoto.layer.borderColor = UIColor.white.cgColor
         
         if ADS_ENABLED == true {
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -214,13 +208,11 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                     // Cho rộng nốt phần còn lại
                     //let scale = screenSize.height / cameraImageHeight
                     //self.imagePicker.cameraViewTransform = self.imagePicker.cameraViewTransform.scaledBy(x: scale, y: scale)
-                    
-                    let overlayView = UIView(frame: UIScreen.main.bounds)
-                    overlayView.layer.borderWidth = 3
-                    overlayView.layer.borderColor = UIColor.red.cgColor
-                    self.cameraPane.layer.borderWidth = 0.5
-                    self.cameraPane.layer.borderColor = UIColor.darkGray.cgColor
-                    self.imagePicker.cameraOverlayView = self.cameraPane
+                    DispatchQueue.main.async {
+                        self.cameraPane.layer.borderWidth = 0.5
+                        self.cameraPane.layer.borderColor = UIColor.darkGray.cgColor
+                        self.imagePicker.cameraOverlayView = self.cameraPane
+                    }
                     
                     // Kiểm tra dịch vụ định vị, nếu đã cho phép thì mới hiện
                     if CLLocationManager.authorizationStatus() == .authorizedAlways ||

@@ -509,3 +509,172 @@ func localGravity(_ latitude: Double,_ altitude: Double) -> Double {
 func calculateMidPoint(_ p1 : CGPoint, _ p2 : CGPoint) -> CGPoint {
     return CGPoint(x: (p1.x + p2.x) * 0.5, y: (p1.y + p2.y) * 0.5);
 }
+
+func copyFileFrom(url: URL) -> URL? {
+    // Kiểm tra xem xml có bị lỗi không
+    let ext = url.pathExtension
+    var outputURL: URL?
+    switch ext {
+    case kGPXFileExt:
+        let data = try! Data.init(contentsOf: url)
+        let xml = XMLParser(data: data)
+        if xml.parse() {
+            var options = AEXMLOptions()
+            options.parserSettings.shouldProcessNamespaces = false
+            options.parserSettings.shouldReportNamespacePrefixes = false
+            options.parserSettings.shouldResolveExternalEntities = false
+            let xmlDoc = try! AEXMLDocument(xml: data, options: options)
+            let gpxRoot = xmlDoc["gpx"]
+            if (gpxRoot.error == nil) {
+                let fileName = url.deletingPathExtension().lastPathComponent
+                var gpxURL = createDocumentFileFor(subPath: "", fileName: fileName, ext: "gpx")
+                var counter = 0
+                while FileManager.default.fileExists(atPath: gpxURL.path) {
+                    counter += 1
+                    gpxURL = createDocumentFileFor(subPath: "", fileName: "\(fileName)(\(counter))", ext: "gpx")
+                }
+                // Kiểm tra xem có metadata hay không
+                let metadataElement = gpxRoot["metadata"]
+                if metadataElement.error == nil {
+                    // Kiểm tra xem có thông tin cần thiết hay không
+                    let now = Date()
+                    let _name = AEXMLElement(name: "name", value: gpxURL.lastPathComponent)
+                    let _time = AEXMLElement(name: "time", value: now.iso8601)
+                    let _desc = AEXMLElement(name: "desc", value: "Imported")
+                    
+                    if metadataElement["name"].error != nil {
+                        metadataElement.addChild(_name)
+                    } else {
+                        metadataElement["name"].value = gpxURL.lastPathComponent
+                    }
+                    if metadataElement["desc"].error != nil {
+                        metadataElement.addChild(_desc)
+                    } else if metadataElement["desc"].value?.length == 0 {
+                        metadataElement["desc"].value = "Imported"
+                    }
+                    if metadataElement["time"].error != nil {
+                        metadataElement.addChild(_time)
+                    } else if metadataElement["time"].value?.length == 0 {
+                        metadataElement["time"].value = now.iso8601
+                    }
+                } else {
+                    // Nếu không có thì tạo mới
+                    let metadata = GPXMetadata()
+                    gpxRoot.addChild(metadata.root)
+                }
+                print(metadataElement.xml)
+                do {
+                    try! xmlDoc.xml.write(toFile: gpxURL.path, atomically: true, encoding: .utf8)
+                    let alert = UIAlertController(title: "Your file \"\(gpxURL.lastPathComponent)\" was copied to app's GPX folder.", message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                    alert.show()
+                    outputURL = gpxURL
+                }
+            } else {
+                let alert = UIAlertController(title: "Ooops! Something went wrong: \(error)", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                alert.show()
+            }
+        }
+        break
+    case kMBTileFileExt:
+        let mbtileDB = MBTileDB(path: url.path)
+        if mbtileDB.isDBOpen {
+            let format = mbtileDB.metadataValueFor(name: "format")
+            if format.lowercased().length != 0 && (format.lowercased() != "png" && format.lowercased() != "jpg") {
+                let alert = UIAlertController(title: NSLocalizedString("This format", comment: "")+" \"\(format)\" "+NSLocalizedString("does not support", comment: ""), message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                alert.show()
+            } else {
+                let bounds = mbtileDB.metadataValueFor(name: "bounds")
+                let arrbounds:Array = bounds.components(separatedBy: ",")
+                let center = mbtileDB.metadataValueFor(name: "center")
+                let arrcenter:Array = center.components(separatedBy: ",")
+                
+                // Nếu không có bounds hay center thì cập nhật
+                if arrbounds.count != 4 || arrcenter.count != 2 {
+                    mbtileDB.updateMissingBounds()
+                }
+                //if arrbounds.count == 4 || arrcenter.count == 2 {
+                if mbtileDB.metadataValueFor(name: "description").length == 0 {
+                    mbtileDB.saveToMetadata(name: "description", value: "Imported by GTField")
+                }
+                // Tạo tên file mặc định tự tăng
+                let fileName = "Import"
+                var tileName = fileName
+                var mbtilesURL = docsURL.appendingPathComponent(tileName).appendingPathExtension(kMBTileFileExt)
+                var counter = 0
+                while FileManager.default.fileExists(atPath: mbtilesURL.path) {
+                    counter += 1
+                    tileName = "\(fileName)\(counter)"
+                    mbtilesURL = docsURL.appendingPathComponent(tileName).appendingPathExtension(kMBTileFileExt)
+                }
+                if mbtileDB.metadataValueFor(name: "name").length == 0 {
+                    mbtileDB.saveToMetadata(name: "name", value: tileName)
+                }
+                do {
+                    try FileManager.default.copyItem(at: url, to: mbtilesURL)
+                    let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(mbtilesURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                    alert.show()
+                    outputURL = mbtilesURL
+                } catch {
+                    let alert = UIAlertController(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                    alert.show()
+                }
+                //}
+            }
+        }
+        break
+    case kKmlFileExt:
+        var kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
+        let fileName = kmlURL.deletingPathExtension().lastPathComponent
+        let pathExtension = kmlURL.pathExtension
+        var counter = 0
+        while FileManager.default.fileExists(atPath: kmlURL.path) {
+            counter += 1
+            kmlURL = kmlURL.deletingLastPathComponent().appendingPathComponent("\(fileName)(\(counter))").appendingPathExtension(pathExtension)
+        }
+        do {
+            try FileManager.default.copyItem(at: url, to: kmlURL)
+            let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(kmlURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+            alert.show()
+            outputURL = kmlURL
+        } catch {
+            let alert = UIAlertController(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+            alert.show()
+        }
+        break
+    case kGeoJSONExt, kGeoJSONExt1:
+        var jsonURL = docsURL.appendingPathComponent(url.lastPathComponent)
+        let fileName = jsonURL.deletingPathExtension().lastPathComponent
+        let pathExtension = jsonURL.pathExtension
+        var counter = 0
+        while FileManager.default.fileExists(atPath: jsonURL.path) {
+            counter += 1
+            jsonURL = jsonURL.deletingLastPathComponent().appendingPathComponent("\(fileName)(\(counter))").appendingPathExtension(pathExtension)
+        }
+        
+        do {
+            try FileManager.default.copyItem(at: url, to: jsonURL)
+            let alert = UIAlertController(title: NSLocalizedString("Your file", comment: "")+" \"\(url.lastPathComponent)\" "+NSLocalizedString("was copied to GTField documents folder with the new name", comment: "")+" \"\(jsonURL.lastPathComponent)\".", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+            alert.show()
+            outputURL = jsonURL
+        } catch {
+            let alert = UIAlertController(title: NSLocalizedString("Ooops! Something went wrong:", comment: "")+" \(error)", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+            alert.show()
+        }
+        break
+    default:
+        break
+    }
+    if FileManager.default.fileExists(atPath: url.path) {
+        try! FileManager.default.removeItem(at: url)
+    }
+    return outputURL
+}

@@ -155,7 +155,7 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
     
     @IBAction func btnDirections(_ sender: AnyObject) {
         
-        let directionUrl = "http://maps.apple.com/?daddr=\(poiLat),\(poiLon)&dirflg=\(NAV_MODE)"
+        let directionUrl = "https://maps.apple.com/?daddr=\(poiLat),\(poiLon)&dirflg=\(NAV_MODE)"
         
         if (UIApplication.shared.canOpenURL(URL(string:"http://maps.apple.com")!)) {
             if #available(iOS 10.0, *) {

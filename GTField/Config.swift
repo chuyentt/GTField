@@ -39,7 +39,7 @@ extension Bundle {
 let APP_NAME: String = "GTField";
 let APP_VERSION: String = Bundle.main.releaseVersionNumber!
 let APP_BUILD: String = Bundle.main.buildVersionNumber!
-let APP_WEBSITE: String = "http://geomatics.vn"
+let APP_WEBSITE: String = "https://geomatics.vn"
 let APP_FULL_NAME: String = APP_NAME + " v" + APP_VERSION + " (build " + APP_BUILD + ")"
 
 let TEXTVIEW_FONT_DEFAULT: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
@@ -67,13 +67,13 @@ var ENABLE_IMPROVED_PERFORMANCE: Bool = getEnableImprovedPerformance()
 var INTERNET_AVAILABLE: Bool = false
 var WIFI_AVAILABLE: Bool = false
 
-var HELP_EN_URL: String = "http://gtfield.geomatics.com.vn/index.html"
-var HELP_VI_URL: String = "http://gtfield.geomatics.com.vn/vi.html"
+var HELP_EN_URL: String = "https://gtfield.geomatics.com.vn/index.html"
+var HELP_VI_URL: String = "https://gtfield.geomatics.com.vn/vi.html"
 
-var ABOUT_EN_URL: String = "http://gtfield.geomatics.com.vn/abouten.html"
-var ABOUT_VI_URL: String = "http://gtfield.geomatics.com.vn/aboutvi.html"
-var TERMS_OF_USE_EN_URL: String = "http://geomatics.vn/en/gtfield/terms-of-use?template=blank"
-var TERMS_OF_USE_VI_URL: String = "http://geomatics.vn/vi/gtfield/dieu-khoan-su-dung?template=blank"
+var ABOUT_EN_URL: String = "https://gtfield.geomatics.com.vn/abouten.html"
+var ABOUT_VI_URL: String = "https://gtfield.geomatics.com.vn/aboutvi.html"
+var TERMS_OF_USE_EN_URL: String = "https://geomatics.vn/en/gtfield/terms-of-use?template=blank"
+var TERMS_OF_USE_VI_URL: String = "https://geomatics.vn/vi/gtfield/dieu-khoan-su-dung?template=blank"
 
 let docsURL = applicationDocumentsDirectory()
 var MB_TILES_PATH: String = docsURL.appendingPathComponent("tiles.mbtiles").path
@@ -104,23 +104,24 @@ func configMainView() {
     // Customize Navigation Bar
     UINavigationBar.appearance().barTintColor = BAR_TINT_COLOR_DEFAULT
     UINavigationBar.appearance().tintColor = UIColor.white
-    
-    let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
-    
-    if let font = font {
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.white]
-    }
-    
-    let fontButton = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
-    
-    if let fontButton = fontButton {
-        UIBarButtonItem.appearance().setTitleTextAttributes(
-            [
-                NSAttributedString.Key.font : fontButton,
-                NSAttributedString.Key.foregroundColor : UIColor.white
-            ],
-            for: .normal)
-    }
+    UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+//    let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
+//    
+//    if let font = font {
+//        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.white]
+//    }
+//    
+//    let fontButton = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
+//    
+//    if let fontButton = fontButton {
+//        UIBarButtonItem.appearance().setTitleTextAttributes(
+//            [
+//                NSAttributedString.Key.font : fontButton,
+//                NSAttributedString.Key.foregroundColor : UIColor.white
+//            ],
+//            for: .normal)
+//    }
     
     // Tạo thư mục cần thiết
     _ = createDirectoryAtURL(url: applicationDocumentsDirectory().appendingPathComponent(TILE_CACHED))
@@ -239,7 +240,7 @@ let CENTER_MAP_LON = 10.505000 as CLLocationDegrees
 
 // ----------------------------------------------------------------------------------------------
 // GeoServer Url
-var GEOSERVER_URL = "http://webgis.humg.edu.vn:8080/geoserver"
+var GEOSERVER_URL = "https://webgis.humg.edu.vn:8080/geoserver"
 
 // ----------------------------------------------------------------------------------------------
 // OfflineTiles

@@ -37,7 +37,7 @@ class CPolyline: GMSPolyline, PointViewDelegate {
             if magnifyView == nil {
                 magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
                 magnifyView.viewToMagnify = map // nền bản đồ
-                magnifyView.setTouchPoint(pt: point.center)
+                magnifyView.touchPoint = point.center
                 map?.addSubview(magnifyView)
             }
         }
@@ -60,7 +60,7 @@ class CPolyline: GMSPolyline, PointViewDelegate {
             updatePathFor(point)
             
             // Kính lúp: Di chuyển kính lúp
-            magnifyView.setTouchPoint(pt: point.center)
+            magnifyView.touchPoint = point.center
             magnifyView.setNeedsDisplay()
         }
     }

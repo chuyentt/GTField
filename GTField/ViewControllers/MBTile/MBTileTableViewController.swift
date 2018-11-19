@@ -9,6 +9,7 @@
 import UIKit
 //import AEXML
 import MessageUI
+import CoreServices
 
 class MBTileTableViewController: UITableViewController {
     
@@ -34,6 +35,23 @@ class MBTileTableViewController: UITableViewController {
             self.itemList.addObjects(from: list as [AnyObject])
             self.itemFound = true
         }
+        
+        // Thêm chức năng mở file từ Documents
+        let buttonMore = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(moreAction(_:)))
+        self.navigationItem.leftBarButtonItem = buttonMore
+        
+    }
+    
+    // Mở file từ mục tài liệu
+    @IBAction func moreAction(_ sender: Any) {
+        let documentPicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypeItem)], in: UIDocumentPickerMode.import)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .pageSheet
+        UINavigationBar.appearance().barTintColor = BAR_TINT_COLOR_DEFAULT
+        UINavigationBar.appearance().tintColor = UIColor.darkGray
+        self.present(documentPicker, animated: true, completion: {
+            configMainView()
+        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -274,3 +292,32 @@ extension MBTileTableViewController:MFMailComposeViewControllerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 }
+
+
+extension MBTileTableViewController: UIDocumentPickerDelegate, UINavigationControllerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let url = urls.first else { return }
+        switch url.pathExtension {
+        case kMBTileFileExt:
+            if copyFileFrom(url: url) != nil {
+                self.tableView.reloadData()
+            }
+            break
+        default:
+            let alertController = UIAlertController(title: NSLocalizedString("This file does not support", comment: ""), message: urls.first?.lastPathComponent, preferredStyle: .actionSheet)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            alertController.modalPresentationStyle = .popover
+            
+            present(alertController, animated: true, completion: nil)
+            break
+        }
+        
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("view was cancelled")
+        dismiss(animated: true, completion: nil)
+    }
+}
+

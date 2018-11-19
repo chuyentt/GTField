@@ -259,6 +259,9 @@ public extension GMSMapView {
     }
     
     public func showRulerBar(_ show: Bool) {
+        guard show else {
+            return
+        }
         // Tìm RulerBarView
         if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
             // Nếu tồn tại
