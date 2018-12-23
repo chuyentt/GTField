@@ -73,6 +73,7 @@ class SubscriptionService: NSObject {
                     strongSelf.currentSessionId = result.sessionId
                     strongSelf.currentSubscription = result.currentSubscription
                     completion?(true)
+                    
                     if let currentSubscription = result.currentSubscription {
                         if currentSubscription.isActive {
                             setProVersion(true)

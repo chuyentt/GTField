@@ -818,7 +818,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Subscription" id="0Bs-Xf-0Jv">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Wki-lg-aN9" style="IBUITableViewCellStyleDefault" id="JNC-L3-ddG">
+                                    <tableViewCell hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Wki-lg-aN9" style="IBUITableViewCellStyleDefault" id="JNC-L3-ddG">
                                         <rect key="frame" x="0.0" y="1069" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JNC-L3-ddG" id="pwZ-yV-R2g">
@@ -865,7 +865,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PDv-q8-Q6S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-474" y="-622"/>
+            <point key="canvasLocation" x="-398" y="-620"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="X2J-2z-RqQ">
@@ -2004,7 +2004,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GDC-7p-94Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1234.4000000000001" y="-620.23988005997012"/>
+            <point key="canvasLocation" x="-1201" y="-620"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="qwi-bU-Omf">
@@ -2051,11 +2051,11 @@
             <objects>
                 <viewController id="LLD-fB-cTB" customClass="SubscribeViewController" customModule="GTField" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3yq-ie-SUK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="539"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="65" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Ohn-2e-ESI">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="539"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <color key="separatorColor" red="0.14171932640000001" green="0.1607656032" blue="0.16874451939999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <inset key="separatorInset" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -2843,7 +2843,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="O0M-A5-LBT"/>
-        <segue reference="beP-Zp-d53"/>
+        <segue reference="gGz-Pd-u9S"/>
         <segue reference="gde-RI-eBn"/>
         <segue reference="gxV-5v-0Kh"/>
         <segue reference="euG-Bg-3p4"/>

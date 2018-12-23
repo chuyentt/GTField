@@ -106,27 +106,17 @@ class SelectingTableViewController: UITableViewController {
     }
     
     func loadCrs() -> [ListItem] {
-        var crsItems = [ListItem]()
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 8
-        
-        let arrayCrs = NSArray(contentsOfFile: Bundle.main.path(forResource: "crs", ofType: "plist")!)!
-        
-        for crs in arrayCrs {
-            queue.addOperation {
-                let code = (crs as AnyObject).object(forKey: "code") as! String
-                let name = (crs as AnyObject).object(forKey: "name") as! String
-                let value = (crs as AnyObject).object(forKey: "value") as! String
-                
-                let item = ListItem(code: code, name: name, value: value)
-                synchronized(crsItems as AnyObject) {
-                    crsItems.append(item)
-                }
-            }
-            queue.waitUntilAllOperationsAreFinished()
+        typealias ListItems = [ListItem]
+        var _crsItems = [ListItem]()
+        do {
+            let data = try Data(contentsOf: Bundle.main.url(forResource: "crs", withExtension: "plist")!)
+            let decoder = PropertyListDecoder()
+            _crsItems = try decoder.decode(ListItems.self, from: data)
+        } catch {
+            // Handle error
+            print(error)
         }
-
-        return crsItems
+        return _crsItems
     }
     
     // MARK: - Table view data source

@@ -13,6 +13,22 @@ import CoreMotion
 import GeoTrans
 import simd
 
+extension UIView {
+    func snapshotView() -> UIView? {
+        guard let image = snapshotImage() else { return nil }
+        return UIImageView(image: image)
+    }
+    
+    func snapshotImage() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, contentScaleFactor)
+        defer { UIGraphicsEndImageContext() }
+        
+        drawHierarchy(in: bounds, afterScreenUpdates: false)
+        
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
+
 var areaUnitItems: [ListItem] = [
     ListItem(code: "0", name:"\(AreaUnit.squareMeter.name) (\(AreaUnit.squareMeter.symbol))", value:""),
     ListItem(code: "1", name:"\(AreaUnit.squareKilometer.name) (\(AreaUnit.squareKilometer.symbol))", value:""),

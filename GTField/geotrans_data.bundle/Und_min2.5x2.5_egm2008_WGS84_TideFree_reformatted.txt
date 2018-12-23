@@ -1,0 +1,4 @@
+Lưu ý:
+Hiện tại file gốc chưa dùng đến (sau này chuyển đổi từ XYZ của thiết bị GPS qua thì dùng để tính chuyển sang MLS) Und_min2.5x2.5_egm2008_WGS84_TideFree_reformatted
+File gốc sẽ được thay bằng file egm84.grd đổi tên thành Und_min2.5x2.5_egm2008_WGS84_TideFree_reformatted
+Mục đích làm nhẹ dung lượng gói cài đặt

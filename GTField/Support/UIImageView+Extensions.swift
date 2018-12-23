@@ -17,7 +17,7 @@ extension UIImageView {
      - result icon online hoặc offline
     */
     public func imageForGeoServerBaseUrlChecking() -> Void {
-        var request = URLRequest(url: getCapabilitiesForWFS()!)
+        var request = URLRequest(url: getCapabilitiesForWMS()!)
         request.httpMethod = "GET"
         
         let session = URLSession.shared
@@ -32,7 +32,7 @@ extension UIImageView {
                         options.parserSettings.shouldReportNamespacePrefixes = false
                         options.parserSettings.shouldResolveExternalEntities = false
                         let xmlDoc = try AEXMLDocument(xml: data!, options: options)
-                        if xmlDoc.root.name == "wfs:WFS_Capabilities" {
+                        if xmlDoc.root.name.contains("WMS_Capabilities") {
                             self.image = #imageLiteral(resourceName: "IconGeoServerBaseUrl")
                         } else {
                             self.image = #imageLiteral(resourceName: "IconGeoServerBaseUrlOffline")
@@ -51,7 +51,7 @@ extension UIImageView {
      */
     public func iconForGeoServerBaseUrl() -> Void {
         self.image = #imageLiteral(resourceName: "IconBroken")
-        var request = URLRequest(url: getCapabilitiesForWFS()!)
+        var request = URLRequest(url: getCapabilitiesForWMS()!)
         request.httpMethod = "GET"
         
         let session = URLSession.shared
@@ -66,7 +66,7 @@ extension UIImageView {
                         options.parserSettings.shouldReportNamespacePrefixes = false
                         options.parserSettings.shouldResolveExternalEntities = false
                         let xmlDoc = try AEXMLDocument(xml: data!, options: options)
-                        if xmlDoc.root.name == "wfs:WFS_Capabilities" {
+                        if xmlDoc.root.name.contains("WMS_Capabilities") {
                             self.image = #imageLiteral(resourceName: "IconLink")
                         } else {
                             self.image = #imageLiteral(resourceName: "IconBroken")

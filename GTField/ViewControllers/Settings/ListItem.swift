@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ListItem {
+struct ListItem: Codable {
     let code: String
     let name: String
     let value: String

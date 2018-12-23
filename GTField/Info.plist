@@ -105,7 +105,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4.8</string>
+	<string>1.4.10</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -128,7 +128,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>60</string>
+	<string>66</string>
 	<key>FacebookAppID</key>
 	<string>328913314185622</string>
 	<key>FacebookDisplayName</key>
@@ -156,19 +156,19 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Some ad content may access calendar</string>
 	<key>NSCameraUsageDescription</key>
-	<string>to Take photos</string>
+	<string>This app uses the camera to take pictures of answer sheets and scan the barcode</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>to Use only while you are recording the route at all times in your field work</string>
+	<string>Your current location will be shown on the map and used for nearby search results and landmark creation</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>to Use only while you are recording the route at all times in your field work</string>
+	<string>Your current location will be shown on the map and used for nearby search results and landmark creation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>to Show your location on the maps view and to embed the GPS information within the picture in your field research</string>
+	<string>Your current location will be shown on the map and used for nearby search results and landmark creation</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>$(PRODUCT_NAME) motion use.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>to Save photos to Camera Roll and to Import photo to this app</string>
+	<string>Enable this app to access your camera roll to save photos to camera roll and to import the photo to this app</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>HeitiTC-Light.ttf</string>

@@ -21,9 +21,10 @@ target 'GTField' do
   pod 'Surge', '~> 2.0.0'
   pod 'SwiftyPlistManager'
   
+#  pod 'GeoTrans', :git => 'https://github.com/chuyentt/GeoTrans.git'
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-  pod 'GeoTrans', :path => 'GeoTrans'
+#  use_frameworks!
+#  pod 'GeoTrans', :path => 'GeoTrans'
 end
 
 pre_install do |installer|

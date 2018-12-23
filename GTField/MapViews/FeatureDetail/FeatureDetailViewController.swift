@@ -191,9 +191,8 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
             case .point:
                 return 3
             case .lineString:
-                return 2 + Int(((feature.geometry as! CLineString).path?.count())!)
+                return 3 + Int(((feature.geometry as! CLineString).path?.count())!)
             case .polygon:
-                print(3 + Int(((feature.geometry as! CPolygon).path?.closed().count())!))
                 return 3 + Int(((feature.geometry as! CPolygon).path?.closed().count())!)
             case .multiPoint:
                 return 1
@@ -255,6 +254,9 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 } else if indexPath.row == 1 {
                     cell.textLabel?.text = "Total length"
                     cell.detailTextLabel?.text = (feature.geometry as! CLineString).path?.length(of: GMSLengthKind.geodesic).distanceUnit()
+                } else if indexPath.row == 2 {
+                    cell.textLabel?.text = "Closed area"
+                    cell.detailTextLabel?.text = GMSGeometryArea(((feature.geometry as! CLineString).path?.closed())!).areaUnit()
                 } else {
                     //            for i in 0..<Int((path?.count())!) {
                     //                let pt = path?.coordinate(at: UInt(i))
@@ -262,7 +264,7 @@ class FeatureDetailViewController: UIViewController, UITableViewDelegate, UITabl
                     //                points.append((path?.coordinate(at: UInt(i)).localCoordinate(true))!)
                     //                prevPoint = pt
                     //            }
-                    let index = indexPath.row - 2
+                    let index = indexPath.row - 3
                     let pt = path?.coordinate(at: UInt(index))
                     cell.textLabel?.text = "(\(index+1)) \(Double((pt?.distance(from: prevPoint!))!).distanceUnit())"
                     cell.detailTextLabel?.text = path?.coordinate(at: UInt(index)).localCoordinate(true)

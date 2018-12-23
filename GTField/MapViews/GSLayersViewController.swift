@@ -76,12 +76,22 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
                                 
                                 var layers : Array<[String:AnyObject]> = Array()
                                 for layer in properties {
-                                    layers.append(["Name":layer["Name"].value as AnyObject,
-                                                   "Title":layer["Title"].value as AnyObject,
-                                                   "Abstract":layer["Abstract"].value as AnyObject,
-                                                   "EX_GeographicBoundingBox":[
-                                                    "{\"westBoundLongitude\":\(layer["EX_GeographicBoundingBox"]["westBoundLongitude"].value!),\"southBoundLatitude\":\(layer["EX_GeographicBoundingBox"]["southBoundLatitude"].value!),\"eastBoundLongitude\":\(layer["EX_GeographicBoundingBox"]["eastBoundLongitude"].value!),\"northBoundLatitude\":\(layer["EX_GeographicBoundingBox"]["northBoundLatitude"].value!)}"] as AnyObject
-                                                   ])
+                                    if (layer["EX_GeographicBoundingBox"]["westBoundLongitude"].value == nil) ||
+                                        (layer["EX_GeographicBoundingBox"]["westBoundLongitude"].value == nil) ||
+                                        (layer["EX_GeographicBoundingBox"]["southBoundLatitude"].value == nil) ||
+                                        (layer["EX_GeographicBoundingBox"]["eastBoundLongitude"].value == nil) ||
+                                        (layer["EX_GeographicBoundingBox"]["northBoundLatitude"].value == nil) {
+                                        continue
+                                    }
+                                    
+                                    layers.append([
+                                        "Name":layer["Name"].value as AnyObject,
+                                        "Title":layer["Title"].value as AnyObject,
+                                        "Abstract":layer["Abstract"].value as AnyObject,
+                                        "EX_GeographicBoundingBox":[
+                                            "{\"westBoundLongitude\":\(layer["EX_GeographicBoundingBox"]["westBoundLongitude"].value!),\"southBoundLatitude\":\(layer["EX_GeographicBoundingBox"]["southBoundLatitude"].value!),\"eastBoundLongitude\":\(layer["EX_GeographicBoundingBox"]["eastBoundLongitude"].value!),\"northBoundLatitude\":\(layer["EX_GeographicBoundingBox"]["northBoundLatitude"].value!)}"
+                                            ] as AnyObject
+                                        ])
                                 }
                                 return layers as [[String:AnyObject]]
                             })
@@ -129,7 +139,9 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
                                 }
                                 return layers as [[String:AnyObject]]
                             })
-                            self.arrRes = layersAll!
+                            if let layersAll = layersAll {
+                                self.arrRes = layersAll
+                            }
                             if self.arrRes.count > 0 {
                                 self.tableView.reloadData()
                             }

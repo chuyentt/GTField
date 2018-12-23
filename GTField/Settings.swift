@@ -113,7 +113,7 @@ enum HeightType: Int {
 
 func getCapabilitiesForWFS() -> URL? {
     var urlComponents = URLComponents(string: getGeoServerBaseUrl())
-    urlComponents?.path = "/geoserver/wfs"
+    //urlComponents?.path = "/geoserver/wfs"
     urlComponents?.queryItems = [URLQueryItem(name: "service", value: "WFS"),
                                  URLQueryItem(name: "request", value: "GetCapabilities")]
     return urlComponents?.url
@@ -128,7 +128,7 @@ func getCapabilitiesForWFS() -> URL? {
 
 func getCapabilitiesForWMS() -> URL? {
     var urlComponents = URLComponents(string: getGeoServerBaseUrl())
-    urlComponents?.path = "/geoserver/wms"
+    //urlComponents?.path = "/geoserver/wms"
     urlComponents?.queryItems = [URLQueryItem(name: "service", value: "WMS"),
                                  URLQueryItem(name: "request", value: "GetCapabilities")]
     return urlComponents?.url
@@ -145,7 +145,7 @@ func getCapabilitiesForWMS() -> URL? {
 
 func getFeatureForWFS(typeName: String, propertyName: String, maxFeatures: Int) -> URL? {
     var urlComponents = URLComponents(string: getGeoServerBaseUrl())
-    urlComponents?.path = "/geoserver/wfs"
+    //urlComponents?.path = "/geoserver/wfs"
     urlComponents?.queryItems = [URLQueryItem(name: "service", value: "WFS"),
                                  URLQueryItem(name: "version", value: "2.0.0"),
                                  URLQueryItem(name: "request", value: "GetFeature"),
@@ -157,11 +157,11 @@ func getFeatureForWFS(typeName: String, propertyName: String, maxFeatures: Int) 
 
 /**
  * Lấy đường dẫn của GeoServerLayers
- * BaseUrl = http://192.168.1.152:8080/geoserver/
+ * BaseUrl = http://192.168.1.152:8080
  */
 func getGeoServerTilesUrl() -> URL? {
     var urlComponents = URLComponents(string: getGeoServerBaseUrl())
-    urlComponents?.path = "/geoserver/wms"
+    //urlComponents?.path = "/geoserver/wms"
     urlComponents?.queryItems = [URLQueryItem(name: "service", value: "WMS"),
                                  URLQueryItem(name: "version", value: "1.3.0"),
                                  URLQueryItem(name: "request", value: "GetMap"),
@@ -196,24 +196,26 @@ func getActiveLayersPropertyName() -> String {
 
 /************************************************
  * Lưu đường dẫn của GeoServer
- * BaseUrl = http://192.168.1.152:8080/geoserver/
+ * BaseUrl = http://192.168.1.152:8080
  */
 func setGeoServerBaseUrl(urlString: String) -> Bool {
     var urlComponents = URLComponents(string: urlString)
-    urlComponents?.path = "/geoserver"
-    let success = UIApplication.shared.canOpenURL((urlComponents?.url)!)
-    if !success {
+    //urlComponents?.path = "/geoserver"
+    guard UIApplication.shared.canOpenURL((urlComponents?.url)!) else {
         return false
-    } else {
-        UserDefaults.standard.set(urlComponents?.url?.absoluteString, forKey: "GeoServerBaseUrl")
-        UserDefaults.standard.synchronize()
-        return success
     }
+    urlComponents?.query = nil
+    if let s = urlComponents?.url?.absoluteString {
+        UserDefaults.standard.set(s, forKey: "GeoServerBaseUrl")
+        UserDefaults.standard.synchronize()
+        return true
+    }
+    return false
 }
 
 /**
  * Lấy đường dẫn của GeoServer
- * BaseUrl = http://192.168.1.152:8080/geoserver/
+ * BaseUrl = http://192.168.1.152:8080
  */
 func getGeoServerBaseUrl() -> String {
     var geoServerBaseUrl = UserDefaults.standard.value(forKey: "GeoServerBaseUrl")
@@ -424,7 +426,7 @@ func setRecentGeoJSONPath(_ value: URL!) {
  * Quangr caos
  */
 func getEnableADS() -> Bool {
-    guard UserDefaults.standard.object(forKey: "ADS_ENABLED") != nil else { return true }
+    guard UserDefaults.standard.object(forKey: "ADS_ENABLED") != nil else { return false }
     return UserDefaults.standard.bool(forKey: "ADS_ENABLED")
 }
 

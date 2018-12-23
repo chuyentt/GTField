@@ -12,7 +12,7 @@ import GooglePlaces
 import CoreMotion
 //import AEXML
 import Firebase
-import StoreKit
+//import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -57,13 +57,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Provide the Maps API with your API key. We need to provide this as well because the Place
         // Picker displays a Google Map.
         GMSServices.provideAPIKey(kMapsAPIKey)
-
+        
+        FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
 
-        SKPaymentQueue.default().add(self)
-        //SKPaymentQueue.default().add(SKPayment)
-        SubscriptionService.shared.loadSubscriptionOptions()
-
+        // Tạm thời bỏ
+        //SKPaymentQueue.default().add(self)
+        //SubscriptionService.shared.loadSubscriptionOptions()
+        setProVersion(true)
+        
         return true
     }
     
@@ -106,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kiểm tra xem xml có bị lỗi không
         let ext = url.pathExtension
         switch ext {
-        case kGPXFileExt:
+        case kGPXFileExt, kGpxFileExt:
             let data = try! Data.init(contentsOf: url)
             let xml = XMLParser(data: data)
             if xml.parse() {
@@ -216,7 +218,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             break
-        case kKmlFileExt:
+        case kKmlFileExt, kKMLFileExt:
             var kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
             let fileName = kmlURL.deletingPathExtension().lastPathComponent
             let pathExtension = kmlURL.pathExtension
@@ -236,7 +238,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 alert.show()
             }
             break
-        case kGeoJSONExt, kGeoJSONExt1:
+        case kGeoJSONExt, kGeoJSONExt1, kGeoJsonExt, kGeoJsonExt1:
             var jsonURL = docsURL.appendingPathComponent(url.lastPathComponent)
             let fileName = jsonURL.deletingPathExtension().lastPathComponent
             let pathExtension = jsonURL.pathExtension

@@ -84,6 +84,9 @@
 		DE2BFE301F37491400DACF78 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BFE291F37491400DACF78 /* Error.swift */; };
 		DE2BFE311F37491400DACF78 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BFE2A1F37491400DACF78 /* Options.swift */; };
 		DE2BFE321F37491400DACF78 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BFE2B1F37491400DACF78 /* Parser.swift */; };
+		DE2EF32321C6C6E1007BE8B8 /* GeoTrans.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE2FBA8421BD9A6900B1E4E1 /* GeoTrans.framework */; };
+		DE2EF32421C6C6E1007BE8B8 /* GeoTrans.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DE2FBA8421BD9A6900B1E4E1 /* GeoTrans.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DE2FBA8921BD9BE900B1E4E1 /* geotrans_data.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DE2FBA8821BD9BE900B1E4E1 /* geotrans_data.bundle */; };
 		DE322ACA1F643C39005E09B9 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE322AC91F643C38005E09B9 /* InputViewController.swift */; };
 		DE35F28F1EEDAD06009EE354 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE35F28E1EEDAD06009EE354 /* Settings.swift */; };
 		DE35F2911EEE2647009EE354 /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE35F2901EEE2647009EE354 /* Double+Extensions.swift */; };
@@ -119,7 +122,6 @@
 		DE434B491F23A8B800935974 /* MBTileFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B481F23A8B800935974 /* MBTileFileManager.swift */; };
 		DE434B4F1F23C9D700935974 /* MBTilesDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE434B4E1F23C9D700935974 /* MBTilesDB.swift */; };
 		DE43F9BC1F861C8D00362F45 /* ProductIds.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE43F9BB1F861C8500362F45 /* ProductIds.plist */; };
-		DE44BE021F3E03E400434C2E /* geotrans_data.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DE44BE011F3E03E400434C2E /* geotrans_data.bundle */; };
 		DE44BE0B1F4016E000434C2E /* SelectingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44BE0A1F4016E000434C2E /* SelectingTableViewController.swift */; };
 		DE44C1181F40357300434C2E /* AreaUnit+Imperial.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44C1091F40357300434C2E /* AreaUnit+Imperial.swift */; };
 		DE44C1191F40357300434C2E /* AreaUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE44C10A1F40357300434C2E /* AreaUnit.swift */; };
@@ -162,8 +164,6 @@
 		DE7287B61F615EFD009C0860 /* CrsProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7287B51F615EFC009C0860 /* CrsProcessing.swift */; };
 		DE7287B91F62A60B009C0860 /* MapProjectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7287B81F62A60B009C0860 /* MapProjectionDetailViewController.swift */; };
 		DE77E2F01F653B3E00075185 /* InputFromCoordinatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2EF1F653B3E00075185 /* InputFromCoordinatesViewController.swift */; };
-		DE77E2F31F6ECD8400075185 /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2F21F6ECD8400075185 /* SubscribeViewController.swift */; };
-		DE77E2F51F6ED0ED00075185 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2F41F6ED0ED00075185 /* SubscriptionService.swift */; };
 		DE820A181F5FF16A00E68F5F /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE820A171F5FF16A00E68F5F /* ListItem.swift */; };
 		DE86DDBB1FA949E3005E5825 /* GeoJSON_sample.json in Resources */ = {isa = PBXBuildFile; fileRef = DE86DDB91FA949E2005E5825 /* GeoJSON_sample.json */; };
 		DE86DDBC1FA949E3005E5825 /* KML_Sample.kml in Resources */ = {isa = PBXBuildFile; fileRef = DE86DDBA1FA949E3005E5825 /* KML_Sample.kml */; };
@@ -194,6 +194,8 @@
 		DE88492320090AA4003A619F /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE88492220090AA4003A619F /* UIScreenExtension.swift */; };
 		DE8E41331F361B87005766B5 /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8E41321F361B87005766B5 /* VertexView.swift */; };
 		DE96B8AE1F6077E70038A8C2 /* crs.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE96B8AD1F6077E70038A8C2 /* crs.plist */; };
+		DE9D6E8721B18FA000BDBA82 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2F41F6ED0ED00075185 /* SubscriptionService.swift */; };
+		DE9D6E8821B18FA300BDBA82 /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE77E2F21F6ECD8400075185 /* SubscribeViewController.swift */; };
 		DE9EBEFD203085DA0096390F /* FeatureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9EBEFB203085DA0096390F /* FeatureTableViewCell.swift */; };
 		DE9EBEFE203085DA0096390F /* FeatureTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE9EBEFC203085DA0096390F /* FeatureTableViewCell.xib */; };
 		DEA2EE6B2004684100577616 /* HighlightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEA2EE692004684100577616 /* HighlightView.xib */; };
@@ -260,6 +262,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DE2EF32521C6C6E1007BE8B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE2FBA7E21BD9A6900B1E4E1 /* GeoTrans.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DE2FB5D721BD5DA500B1E4E1;
+			remoteInfo = GeoTrans;
+		};
+		DE2FBA8321BD9A6900B1E4E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE2FBA7E21BD9A6900B1E4E1 /* GeoTrans.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DE2FB5D821BD5DA500B1E4E1;
+			remoteInfo = GeoTrans;
+		};
+		DE2FBA8521BD9A6900B1E4E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE2FBA7E21BD9A6900B1E4E1 /* GeoTrans.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DE2FB5E121BD5DA500B1E4E1;
+			remoteInfo = GeoTransTests;
+		};
 		DEA3914D1F88E0ED00251C9A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1628239319AB38A100D08755 /* Project object */;
@@ -277,6 +300,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				DEA391501F88E0ED00251C9A /* GTFieldService.framework in Embed Frameworks */,
+				DE2EF32421C6C6E1007BE8B8 /* GeoTrans.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,6 +406,8 @@
 		DE2BFE291F37491400DACF78 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		DE2BFE2A1F37491400DACF78 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		DE2BFE2B1F37491400DACF78 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		DE2FBA7E21BD9A6900B1E4E1 /* GeoTrans.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeoTrans.xcodeproj; path = GeoTrans/GeoTrans.xcodeproj; sourceTree = "<group>"; };
+		DE2FBA8821BD9BE900B1E4E1 /* geotrans_data.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = geotrans_data.bundle; sourceTree = "<group>"; };
 		DE322AC91F643C38005E09B9 /* InputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputViewController.swift; path = ViewControllers/Settings/InputViewController.swift; sourceTree = "<group>"; };
 		DE35F28E1EEDAD06009EE354 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		DE35F2901EEE2647009EE354 /* Double+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Double+Extensions.swift"; path = "Support/Double+Extensions.swift"; sourceTree = "<group>"; };
@@ -422,7 +448,6 @@
 		DE434B481F23A8B800935974 /* MBTileFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBTileFileManager.swift; path = ViewControllers/MBTile/MBTileFileManager.swift; sourceTree = "<group>"; };
 		DE434B4E1F23C9D700935974 /* MBTilesDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MBTilesDB.swift; path = ViewControllers/MBTile/MBTilesDB.swift; sourceTree = "<group>"; };
 		DE43F9BB1F861C8500362F45 /* ProductIds.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductIds.plist; sourceTree = "<group>"; };
-		DE44BE011F3E03E400434C2E /* geotrans_data.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = geotrans_data.bundle; path = GeoTrans/Example/GeoTrans/geotrans_data.bundle; sourceTree = SOURCE_ROOT; };
 		DE44BE0A1F4016E000434C2E /* SelectingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SelectingTableViewController.swift; path = ViewControllers/Settings/SelectingTableViewController.swift; sourceTree = "<group>"; };
 		DE44C1091F40357300434C2E /* AreaUnit+Imperial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AreaUnit+Imperial.swift"; sourceTree = "<group>"; };
 		DE44C10A1F40357300434C2E /* AreaUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AreaUnit.swift; sourceTree = "<group>"; };
@@ -612,6 +637,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE3AAD401FDA870900DC58DE /* CoreMotion.framework in Frameworks */,
+				DE2EF32321C6C6E1007BE8B8 /* GeoTrans.framework in Frameworks */,
 				16549DA71A08AC4C00C59D2E /* Foundation.framework in Frameworks */,
 				DEA3914F1F88E0ED00251C9A /* GTFieldService.framework in Frameworks */,
 				16C675EF1B94933A00EF4913 /* QuartzCore.framework in Frameworks */,
@@ -642,6 +668,7 @@
 		1628239219AB38A100D08755 = {
 			isa = PBXGroup;
 			children = (
+				DE2FBA7E21BD9A6900B1E4E1 /* GeoTrans.xcodeproj */,
 				DE86E2E21FA96041005E5825 /* Google-Maps-iOS-Utils */,
 				DEF2B3181F587C35004BD46D /* Package.swift */,
 				1628239D19AB38A100D08755 /* GTField */,
@@ -700,7 +727,7 @@
 		1628239E19AB38A100D08755 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				DE44BE011F3E03E400434C2E /* geotrans_data.bundle */,
+				DE2FBA8821BD9BE900B1E4E1 /* geotrans_data.bundle */,
 				DE28C3C01F176BD700C3A190 /* snap.mp3 */,
 				DE43F9BB1F861C8500362F45 /* ProductIds.plist */,
 				DE28C3BE1F176AAF00C3A190 /* click.mp3 */,
@@ -960,6 +987,15 @@
 				DE2BFE2B1F37491400DACF78 /* Parser.swift */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		DE2FBA7F21BD9A6900B1E4E1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DE2FBA8421BD9A6900B1E4E1 /* GeoTrans.framework */,
+				DE2FBA8621BD9A6900B1E4E1 /* GeoTransTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		DE35F29C1EF02AAD009EE354 /* GeoServerDetailView */ = {
@@ -1478,6 +1514,7 @@
 			);
 			dependencies = (
 				DEA3914E1F88E0ED00251C9A /* PBXTargetDependency */,
+				DE2EF32621C6C6E1007BE8B8 /* PBXTargetDependency */,
 			);
 			name = GTField;
 			productName = LuccaMap;
@@ -1552,6 +1589,12 @@
 			mainGroup = 1628239219AB38A100D08755;
 			productRefGroup = 1628239C19AB38A100D08755 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DE2FBA7F21BD9A6900B1E4E1 /* Products */;
+					ProjectRef = DE2FBA7E21BD9A6900B1E4E1 /* GeoTrans.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				16549D9A1A08AC4C00C59D2E /* GTField */,
@@ -1560,13 +1603,29 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		DE2FBA8421BD9A6900B1E4E1 /* GeoTrans.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GeoTrans.framework;
+			remoteRef = DE2FBA8321BD9A6900B1E4E1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DE2FBA8621BD9A6900B1E4E1 /* GeoTransTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GeoTransTests.xctest;
+			remoteRef = DE2FBA8521BD9A6900B1E4E1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		16549DAC1A08AC4C00C59D2E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				DEDEC5C21F7F35DD00F5CE0F /* Icon-20@2x.png in Resources */,
-				DE44BE021F3E03E400434C2E /* geotrans_data.bundle in Resources */,
 				DEDEC5CB1F7F35DD00F5CE0F /* Icon-Small-60@2x.png in Resources */,
 				DE86DDBB1FA949E3005E5825 /* GeoJSON_sample.json in Resources */,
 				DEDEC5C61F7F35DD00F5CE0F /* Icon-76@2x.png in Resources */,
@@ -1580,6 +1639,7 @@
 				DE434B451F233A0E00935974 /* GoogleService-Info.plist in Resources */,
 				DE67818B1E55F25800026C86 /* bauhausm.ttf in Resources */,
 				DE88479C2008AFE3003A619F /* RulerBarView.xib in Resources */,
+				DE2FBA8921BD9BE900B1E4E1 /* geotrans_data.bundle in Resources */,
 				164D488D1A397B3800C669A6 /* Assets.xcassets in Resources */,
 				DE26455B1F4E8AFA008B759B /* Localizable.strings in Resources */,
 				DEDEC5C11F7F35DD00F5CE0F /* Icon-20@2x-2.png in Resources */,
@@ -1654,7 +1714,6 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GTField/Pods-GTField-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GeoTrans/GeoTrans.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Surge/Surge.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyPlistManager/SwiftyPlistManager.framework",
@@ -1662,7 +1721,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GeoTrans.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Surge.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyPlistManager.framework",
@@ -1704,6 +1762,7 @@
 			files = (
 				DE3AAD3C1FDA7A0B00DC58DE /* GraphSegment.swift in Sources */,
 				16D8458B1D8D2DCB005DF780 /* DesignableButton.swift in Sources */,
+				DE9D6E8721B18FA000BDBA82 /* SubscriptionService.swift in Sources */,
 				DEAD15681EEA942700BFD5CE /* PoiDetailViewController.swift in Sources */,
 				DE86E3361FA9614C005E5825 /* GQTPointQuadTree.m in Sources */,
 				DE434B371F1B4D0A00935974 /* MotionContainer.swift in Sources */,
@@ -1754,7 +1813,6 @@
 				DE86E3261FA9614C005E5825 /* GMUSimpleClusterAlgorithm.m in Sources */,
 				DE35F29B1EF02A99009EE354 /* GWFViewController.swift in Sources */,
 				DE2BFE2F1F37491400DACF78 /* Element.swift in Sources */,
-				DE77E2F31F6ECD8400075185 /* SubscribeViewController.swift in Sources */,
 				DE1C8C03200E23FB00D135AC /* GeoJSONStyle.m in Sources */,
 				16549DA11A08AC4C00C59D2E /* AppDelegate.swift in Sources */,
 				16D8459F1D8D2DCB005DF780 /* SpringTextView.swift in Sources */,
@@ -1765,6 +1823,7 @@
 				DEB2267E1E608E0A00D27CB5 /* RoundedButton.swift in Sources */,
 				DE44C11B1F40357300434C2E /* LengthUnit+Imperial.swift in Sources */,
 				DE1C8BFF200CD07800D135AC /* GMUGradient.m in Sources */,
+				DE9D6E8821B18FA300BDBA82 /* SubscribeViewController.swift in Sources */,
 				DE085E1B1F25E93F005DD248 /* FMDatabase.m in Sources */,
 				DE3AAD361FDA73FA00DC58DE /* CalibViewController.swift in Sources */,
 				DE52C3391F0507E300DE94F5 /* TileDownloader.swift in Sources */,
@@ -1797,7 +1856,6 @@
 				DE4E7BE61F3C56340012E317 /* BinaryReader.swift in Sources */,
 				DEB2268D1E64282400D27CB5 /* PlaceDetailViewController.swift in Sources */,
 				16D845891D8D2DCB005DF780 /* AutoTextView.swift in Sources */,
-				DE77E2F51F6ED0ED00075185 /* SubscriptionService.swift in Sources */,
 				DE86E32E1FA9614C005E5825 /* GMUPlacemark.m in Sources */,
 				DEAD156C1EEA950000BFD5CE /* MapListPoiTableViewCell.swift in Sources */,
 				DE379D681F15A73300B0FEA0 /* GPXFileManager.swift in Sources */,
@@ -1897,6 +1955,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DE2EF32621C6C6E1007BE8B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GeoTrans;
+			targetProxy = DE2EF32521C6C6E1007BE8B8 /* PBXContainerItemProxy */;
+		};
 		DEA3914E1F88E0ED00251C9A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DEA391471F88E0ED00251C9A /* GTFieldService */;

@@ -117,7 +117,7 @@ class CPoint: GMSMarker, CGeoJSONGeometry, PointViewDelegate {
             // Kính lúp: Nếu chưa có thì tạo và hiển thị
             if magnifyView == nil {
                 magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
-                magnifyView.viewToMagnify = map // nền bản đồ
+                magnifyView.viewToMagnify = map
                 magnifyView.touchPoint = point.center
                 map?.addSubview(magnifyView)
             }
@@ -372,10 +372,12 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
 //            if magnifyView == nil {
 //                magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
             if magnifyView.viewToMagnify == nil && magnifyView.superview == nil {
-                magnifyView.viewToMagnify = self.map // nền bản đồ
+                magnifyView.viewToMagnify = map
+
                 magnifyView.touchPoint = point.center
                 
                 self.map?.addSubview(magnifyView)
+                self.map?.bringSubviewToFront(magnifyView)
             }
         }
     }
@@ -914,7 +916,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
             // Kính lúp: Nếu chưa có thì tạo và hiển thị
             if magnifyView == nil {
                 magnifyView = MagnifyView.init(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
-                magnifyView.viewToMagnify = map // nền bản đồ
+                magnifyView.viewToMagnify = map
                 magnifyView.touchPoint = point.center
                 map?.addSubview(magnifyView)
             }

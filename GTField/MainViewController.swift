@@ -11,7 +11,7 @@ import UIKit
 import Foundation
 import Firebase
 import CloudKit
-import StoreKit
+//import StoreKit
 import CoreMotion
 
 
@@ -30,8 +30,8 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet var myCollectionView: UICollectionView!
     var mainSectionsArray = NSArray()
 
-    var list = [SKProduct]()
-    var p = SKProduct()
+//    var list = [SKProduct]()
+//    var p = SKProduct()
     
     let userDefaults = UserDefaults.standard
     var adMobBannerView = GADBannerView()
@@ -84,11 +84,11 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
                                                name: SubscriptionService.inactiveNotification,
                                                object: nil)
         
-        guard SubscriptionService.shared.currentSessionId != nil,
-            SubscriptionService.shared.hasReceiptData else {
-                SubscriptionService.shared.restorePurchases()
-                return
-        }
+//        guard SubscriptionService.shared.currentSessionId != nil,
+//            SubscriptionService.shared.hasReceiptData else {
+//                SubscriptionService.shared.restorePurchases()
+//                return
+//        }
     }
 
     @objc func handleActive(notification: Notification) {

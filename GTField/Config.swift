@@ -240,7 +240,8 @@ let CENTER_MAP_LON = 10.505000 as CLLocationDegrees
 
 // ----------------------------------------------------------------------------------------------
 // GeoServer Url
-var GEOSERVER_URL = "https://webgis.humg.edu.vn:8080/geoserver"
+// var GEOSERVER_URL = "https://webgis.humg.edu.vn:8080/geoserver"
+var GEOSERVER_URL = "https://openwms.statkart.no/skwms1/wms.norges_grunnkart"
 
 // ----------------------------------------------------------------------------------------------
 // OfflineTiles
