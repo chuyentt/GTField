@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
-import GooglePlacePicker
+//import GooglePlacePicker (stubbed)
 //import AEXML
 import GoogleMobileAds
 import Firebase
@@ -135,7 +135,7 @@ extension MapViewController:JDJellyButtonDataSource {
 //    func numberOfComponents(in pickerView: UIPickerView) -> Int {
 //        return 1
 //    }
-//    
+//
 //    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
 //        return titlestr.count
 //    }
@@ -146,7 +146,7 @@ extension MapViewController:JDJellyButtonDataSource {
 //        let strings:NSAttributedString = NSAttributedString(string: titlestr[row], attributes: [NSForegroundColorAttributeName:UIColor.white])
 //        return strings
 //    }
-//    
+//
 //    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 //        button.setJellyType(type: typerow[row])
 //    }
@@ -883,7 +883,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //        // change 2 to desired number of seconds
 //        DispatchQueue.main.asyncAfter(deadline: when) {
 //            let pl = self.cPolyline.gpsPolyline()
-//            
+//
 //            self.cPolyline.map = nil
 //            self.cPolyline = nil
 //        }
@@ -902,7 +902,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         statusBarStyle = .default
         setNeedsStatusBarAppearanceUpdate()
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 //bottomTableView.constant = 62
             } else {
@@ -3310,7 +3310,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let delayQueue = DispatchQueue.main
             let additionalTime: DispatchTimeInterval = .seconds(2)
             self.view.showHUD(self.paneView!)
-            self.buttonDownload?.isHidden = true          
+            self.buttonDownload?.isHidden = true
             
             // Tạo tên file mặc định tự tăng
             let fileName = NSLocalizedString("Download", comment: "")
@@ -3428,7 +3428,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     var tilesFailed = 0
                     for tileDownloader in self.tiles {
                         if tileDownloader.tileRecord.state == .downloaded {
-                            self.tiles.remove(at: self.tiles.index(of: tileDownloader)!)
+                            self.tiles.remove(at: self.tiles.firstIndex(of: tileDownloader)!)
                         } else {
                             tilesFailed += 1
                         }
@@ -3707,7 +3707,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func actionEditTrackSegment() {
 //        let tractSegment: GPXTrackSegment = (selectedOverlay?.trackSegment)!
 //        let alertController = UIAlertController(title: "Type your New description or Delete this track segment", message: "current description\n\(tractSegment.desc)", preferredStyle: .alert)
-//        
+//
 //        alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: {
 //            alert -> Void in
 //            let textField = alertController.textFields![0] as UITextField
@@ -3720,7 +3720,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //            self.gpx?.save()
 //        }))
 //        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-//        
+//
 //        alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
 //            textField.placeholder = "New description"
 //        })
@@ -3730,7 +3730,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func actionEditPointSegment() {
 //        let pointSegment: GPXPointSegment = (selectedPolygonOverlay?.pointSegment)!
 //        let alertController = UIAlertController(title: "Type your New description or Delete this point segment", message: "current description\n\(pointSegment.desc)", preferredStyle: .alert)
-//        
+//
 //        alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: {
 //            alert -> Void in
 //            let textField = alertController.textFields![0] as UITextField
@@ -3743,7 +3743,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //            self.gpx?.save()
 //        }))
 //        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-//        
+//
 //        alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
 //            textField.placeholder = "New description"
 //        })
@@ -4324,13 +4324,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
                 }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
             // show the alert
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
             break
         case .restricted:
             //This app is not authorized to use location services. The user cannot change this app’s status, possibly due to active restrictions such as parental controls being in place.
@@ -4347,13 +4347,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
                 }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
             // show the alert
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
             break
         default:
             //The user has not yet made a choice regarding whether this app can use location services.
@@ -4385,7 +4385,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
                 }
             }))
             // show the alert
@@ -4420,13 +4420,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
                 }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
             // show the alert
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
             break
         case .denied:
             let alert = UIAlertController(
@@ -4443,13 +4443,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
                 } else {
-                    UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
                 }
                 self.stopUpdatingLocation()
                 self.btnClose(0)
             }))
             // show the alert
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
             break
         case .notDetermined:
             break
@@ -4461,18 +4461,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
      manager. Updates the batch count with the added locations.
      */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last
+        // RIPR: locations có thể rỗng theo doc Apple; mapView.myLocation có thể nil
+        // ngay sau khi grant permission. Trước đây 3 force-unwrap → crash khi GPS reset.
+        guard let location = locations.last else { return }
         style.alignment = .left
-        self.myLocationLabel?.attributedText = NSMutableAttributedString(string: (mapView?.myLocation?.showMyLocationInfo())!, attributes: strokeTextAttributesAlignLeft)
-        if isFollowMyLocation {
-            self.mapView?.animate(toLocation: (location?.coordinate)!)
+        if let info = mapView?.myLocation?.showMyLocationInfo() {
+            self.myLocationLabel?.attributedText = NSMutableAttributedString(string: info, attributes: strokeTextAttributesAlignLeft)
         }
-        print("hdop: ", location?.horizontalAccuracy ?? 0, " vdop: ", location?.verticalAccuracy ?? 0, " course: ", location?.course ?? 0, " speed: ", location?.speed ?? 0)
+        if isFollowMyLocation {
+            self.mapView?.animate(toLocation: location.coordinate)
+        }
+        print("hdop: ", location.horizontalAccuracy, " vdop: ", location.verticalAccuracy, " course: ", location.course, " speed: ", location.speed)
         if gpx?.status == .tracking {
-            gpx?.addTrackPoint(GPXTrackPoint(location!), .tracking)
-            
+            gpx?.addTrackPoint(GPXTrackPoint(location), .tracking)
+
             // Thêm bản ghi vào plist (chưa save)
-            let archived = NSKeyedArchiver.archivedData(withRootObject: locations)
+            // RIPR: NSKeyedArchiver.archivedData(withRootObject:) deprecated
+            // từ iOS 12; sẽ bị remove tương lai. Dùng requiringSecureCoding:false
+            // để giữ tương thích định dạng cũ.
+            let archived = (try? NSKeyedArchiver.archivedData(withRootObject: locations, requiringSecureCoding: false)) ?? Data()
             archivedLocations.append(archived)
         }
         trackingDistance()
@@ -4683,61 +4690,49 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             adMobBannerView = GADBannerView(adSize: GADAdSizeFromCGSize(CGSize(width: 256, height: 40)))
             break
         case "375": //6,7
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         case "414": //6+,7+
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         case "768": //iPad
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeFullBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeFullBanner)
             break
         default:
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         }
         
-        self.view.addSubview(adMobBannerView)
+        installAdMobBanner(adMobBannerView)
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         interstitial.load(request)
         adMobBannerView.load(request)
-        adMobBannerView.load(GADRequest())
     }
-    
-    
+
+
     // Hide the banner
     func hideBanner(banner: UIView) {
-        UIView.beginAnimations("hideBanner", context: nil)
-        // Hide the banner moving it below the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
-        UIView.commitAnimations()
-        banner.isHidden = true
+        banner.setAdBannerVisible(false)
     }
-    
-    
+
+
     // Show the banner
     func showBanner(banner: UIView) {
-        UIView.beginAnimations("showBanner", context: nil)
-        
-        // Move the banner on the bottom of the screen
-        banner.frame = CGRect(x:0, y:self.view.frame.size.height - banner.frame.size.height,
-                              width:banner.frame.size.width, height:banner.frame.size.height);
-        UIView.commitAnimations()
-        banner.isHidden = false
+        banner.setAdBannerVisible(true)
     }
     
     
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(banner: adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
     }
@@ -4778,5 +4773,5 @@ extension MapViewController : GMSPlacePickerViewControllerDelegate {
 
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
-	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+    return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

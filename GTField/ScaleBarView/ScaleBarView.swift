@@ -105,13 +105,13 @@ public extension GMSMapView {
         static let Tag = 100
     }
     
-    public func updateScaleBar() {
+    func updateScaleBar() {
         if let scaleBarXibView = self.viewWithTag(ScaleBarViewConstants.Tag) {
             scaleBarXibView.setNeedsLayout()
         }
     }
     
-    public func showScaleBar() {
+    func showScaleBar() {
         // Kiểm tra nếu self là mapView
         
         if self.viewWithTag(ScaleBarViewConstants.Tag) != nil {
@@ -127,7 +127,7 @@ public extension GMSMapView {
         scaleBarXibView.alpha = 1
     }
     
-    public func hideScaleBar() {
+    func hideScaleBar() {
         if let scaleBarXibView = self.viewWithTag(ScaleBarViewConstants.Tag) {
             scaleBarXibView.alpha = 0
         }

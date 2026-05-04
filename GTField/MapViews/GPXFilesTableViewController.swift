@@ -13,6 +13,8 @@ import MobileCoreServices
 let kNoFiles = NSLocalizedString("No Item", comment: "")
 
 import UIKit
+
+import GoogleMobileAds
 import MessageUI
 import Firebase
 
@@ -65,7 +67,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             }
         }
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             
             if UIDevice.current.userInterfaceIdiom == .pad {
                 
@@ -176,7 +178,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         let filename = fileList.object(at: (indexPath as NSIndexPath).row) as? NSString as String? ?? ""
         let fileURL: URL = docsURL.appendingPathComponent(filename)
         let pathExtension = fileURL.pathExtension
-        switch pathExtension {
+        switch pathExtension.lowercased() {
         case kGPXFileExt:
             // self.showAlert(fileList.objectAtIndex(indexPath.row) as NSString, rowToUseInAlert: indexPath.row)
             let alert = UIAlertController(
@@ -223,7 +225,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             present(alert, animated: true, completion: nil)
             self.selectedRowIndex = (indexPath as NSIndexPath).row
             break
-        case kKmlFileExt:
+        case kKMLFileExt:
             let alert = UIAlertController(
                 title: NSLocalizedString("Select option", comment: ""),
                 message: nil,
@@ -368,7 +370,11 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             options.parserSettings.shouldProcessNamespaces = false
             options.parserSettings.shouldReportNamespacePrefixes = false
             options.parserSettings.shouldResolveExternalEntities = false
-            let gpxDoc = try! AEXMLDocument(xml: data, options: options)
+            // RIPR: GPX có thể bị rỗng/không hợp lệ → try! crash khi mở file ngoài.
+            guard let gpxDoc = try? AEXMLDocument(xml: data, options: options) else {
+                self.closeGPXFilesTableViewController()
+                return
+            }
             self.delegate?.didLoadGPXFileWithName(filename, gpxRoot: gpxDoc.root, add: add)
         }
         self.closeGPXFilesTableViewController()
@@ -413,11 +419,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindow.Level.alert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
         }
     }
     
@@ -436,7 +438,8 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         options.parserSettings.shouldProcessNamespaces = false
         options.parserSettings.shouldReportNamespacePrefixes = false
         options.parserSettings.shouldResolveExternalEntities = false
-        let gpxDoc = try! AEXMLDocument(xml: data, options: options)
+        // RIPR: gửi mail kèm GPX hỏng → try! crash. Bỏ qua attachment nếu lỗi.
+        guard let gpxDoc = try? AEXMLDocument(xml: data, options: options) else { return }
         
         
         let composer = MFMailComposeViewController()
@@ -454,47 +457,57 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             let fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
             
             let stream = OutputStream(toFileAtPath: (fileURL?.path)!, append: false)!
-            let dxf = try! CSVWriter(stream: stream)
-            
-            let dxfLayer = "0\r\nSECTION\r\n2\r\nTABLES\r\n0\r\nTABLE\r\n2\r\nLAYER\r\n70\r\n5\r\n0\r\nLAYER\r\n2\r\n0\r\n70\r\n0\r\n62\r\n7\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_NAME\r\n70\r\n0\r\n62\r\n5\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_ALTITUDE\r\n70\r\n0\r\n62\r\n1\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_DESCRIPTION\r\n70\r\n0\r\n62\r\n3\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_POINT\r\n70\r\n0\r\n62\r\n6\r\n6\r\nCONTINUOUS\r\n0\r\nENDTAB\r\n0\r\nENDSEC"
-            let dxfBlockAttribute = "0\r\nSECTION\r\n2\r\nBLOCKS\r\n0\r\nBLOCK\r\n8\r\n0\r\n2\r\nGTField\r\n70\r\n2\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n3\r\nGTField\r\n0\r\nPOINT\r\n8\r\nWP_POINT\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n0\r\nATTDEF\r\n8\r\nWP_DESCRIPTION\r\n10\r\n0\r\n20\r\n-2.5\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\nNODESCRIPTION\r\n11\r\n0\r\n21\r\n0\r\n31\r\n0\r\n3\r\nDescription\r\n2\r\nDESCRIPTION\r\n70\r\n0\r\n74\r\n3\r\n0\r\nATTDEF\r\n5\r\n211\r\n8\r\nWP_ALTITUDE\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\n0\r\n3\r\nElevation\r\n2\r\nELEVATION\r\n70\r\n0\r\n0\r\nATTDEF\r\n8\r\nWP_NAME\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\nNONAME\r\n72\r\n2\r\n11\r\n0\r\n21\r\n0\r\n31\r\n0\r\n3\r\nWPName\r\n2\r\nNAME\r\n70\r\n0\r\n74\r\n2\r\n0\r\nENDBLK\r\n8\r\n0\r\n0\r\nENDSEC"
-            let dxfEntities = "0\r\nSECTION\r\n2\r\nENTITIES"
-            let dxfEnd = "0\r\nENDSEC\r\n0\r\nEOF"
-            try! dxf.write(row: [dxfLayer])
-            try! dxf.write(row: [dxfBlockAttribute])
-            try! dxf.write(row: [dxfEntities])
-            
-            // Đọc tất cả các đối tượng
-            // Parse các điểm mốc wpt
-            let gpxRoot = gpxDoc.root
-            if let wpts = gpxRoot["wpt"].all {
-                for wpt in wpts {
-                    let w = GPXWaypoint(xmlElement: wpt)
-                    try! dxf.write(row: [w.dxfBlockInsert])
+            // RIPR: nếu disk đầy / quyền sai, mọi try! dưới đây sẽ crash app khi export DXF.
+            // Bọc toàn bộ block trong do/catch + show alert lỗi để user biết, không chết app.
+            do {
+                let dxf = try CSVWriter(stream: stream)
+
+                let dxfLayer = "0\r\nSECTION\r\n2\r\nTABLES\r\n0\r\nTABLE\r\n2\r\nLAYER\r\n70\r\n5\r\n0\r\nLAYER\r\n2\r\n0\r\n70\r\n0\r\n62\r\n7\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_NAME\r\n70\r\n0\r\n62\r\n5\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_ALTITUDE\r\n70\r\n0\r\n62\r\n1\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_DESCRIPTION\r\n70\r\n0\r\n62\r\n3\r\n6\r\nCONTINUOUS\r\n0\r\nLAYER\r\n2\r\nWP_POINT\r\n70\r\n0\r\n62\r\n6\r\n6\r\nCONTINUOUS\r\n0\r\nENDTAB\r\n0\r\nENDSEC"
+                let dxfBlockAttribute = "0\r\nSECTION\r\n2\r\nBLOCKS\r\n0\r\nBLOCK\r\n8\r\n0\r\n2\r\nGTField\r\n70\r\n2\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n3\r\nGTField\r\n0\r\nPOINT\r\n8\r\nWP_POINT\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n0\r\nATTDEF\r\n8\r\nWP_DESCRIPTION\r\n10\r\n0\r\n20\r\n-2.5\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\nNODESCRIPTION\r\n11\r\n0\r\n21\r\n0\r\n31\r\n0\r\n3\r\nDescription\r\n2\r\nDESCRIPTION\r\n70\r\n0\r\n74\r\n3\r\n0\r\nATTDEF\r\n5\r\n211\r\n8\r\nWP_ALTITUDE\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\n0\r\n3\r\nElevation\r\n2\r\nELEVATION\r\n70\r\n0\r\n0\r\nATTDEF\r\n8\r\nWP_NAME\r\n10\r\n0\r\n20\r\n0\r\n30\r\n0\r\n40\r\n2.5\r\n1\r\nNONAME\r\n72\r\n2\r\n11\r\n0\r\n21\r\n0\r\n31\r\n0\r\n3\r\nWPName\r\n2\r\nNAME\r\n70\r\n0\r\n74\r\n2\r\n0\r\nENDBLK\r\n8\r\n0\r\n0\r\nENDSEC"
+                let dxfEntities = "0\r\nSECTION\r\n2\r\nENTITIES"
+                let dxfEnd = "0\r\nENDSEC\r\n0\r\nEOF"
+                try dxf.write(row: [dxfLayer])
+                try dxf.write(row: [dxfBlockAttribute])
+                try dxf.write(row: [dxfEntities])
+
+                // Đọc tất cả các đối tượng
+                // Parse các điểm mốc wpt
+                let gpxRoot = gpxDoc.root
+                if let wpts = gpxRoot["wpt"].all {
+                    for wpt in wpts {
+                        let w = GPXWaypoint(xmlElement: wpt)
+                        try dxf.write(row: [w.dxfBlockInsert])
+                    }
                 }
-            }
-            // Parse các polyine
-            if let trks = gpxRoot["trk"].all {
-                for track in trks {
-                    let trackSegElements = track["trkseg"].all
-                    if trackSegElements != nil {
-                        for trksegElement in trackSegElements! {
-                            let trkseg:GPXTrackSegment = GPXTrackSegment(xmlElement: trksegElement, map: GMSMapView())
-                            try! dxf.write(row: [trkseg.dxfAcDbPolyline])
+                // Parse các polyine
+                if let trks = gpxRoot["trk"].all {
+                    for track in trks {
+                        let trackSegElements = track["trkseg"].all
+                        if trackSegElements != nil {
+                            for trksegElement in trackSegElements! {
+                                let trkseg:GPXTrackSegment = GPXTrackSegment(xmlElement: trksegElement, map: GMSMapView())
+                                try dxf.write(row: [trkseg.dxfAcDbPolyline])
+                            }
                         }
                     }
                 }
-            }
-            // Parse các polygon
-            let pointSegElements = gpxRoot["ptseg"].all
-            if pointSegElements != nil {
-                for pointElement in pointSegElements! {
-                    let pointSeg = GPXPointSegment(xmlElement: pointElement, map: GMSMapView())
-                    try! dxf.write(row: [pointSeg.dxfAcDbPolyline])
+                // Parse các polygon
+                let pointSegElements = gpxRoot["ptseg"].all
+                if pointSegElements != nil {
+                    for pointElement in pointSegElements! {
+                        let pointSeg = GPXPointSegment(xmlElement: pointElement, map: GMSMapView())
+                        try dxf.write(row: [pointSeg.dxfAcDbPolyline])
+                    }
                 }
+                try dxf.write(row: [dxfEnd])
+                dxf.stream.close()
+            } catch {
+                let a = UIAlertController(title: NSLocalizedString("Export DXF failed", comment: ""),
+                                          message: error.localizedDescription, preferredStyle: .alert)
+                a.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                a.show()
+                return
             }
-            try! dxf.write(row: [dxfEnd])
-            dxf.stream.close()
 
             
             // set the subject
@@ -525,58 +538,43 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindow.Level.alert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
         }
     }
     
     // Initialize Google AdMob banner
     func initAdMobBanner() {
-        adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
         self.view.addSubview(adMobBannerView)
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
         interstitial.load(request)
-        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
     }
     
     
     // Hide the banner
     func hideBanner(banner: UIView) {
-        UIView.beginAnimations("hideBanner", context: nil)
-        // Hide the banner moving it below the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
-        UIView.commitAnimations()
-        banner.isHidden = true
+        banner.setAdBannerVisible(false)
     }
     
     
     // Show the banner
     func showBanner(banner: UIView) {
-        UIView.beginAnimations("showBanner", context: nil)
-        
-        // Move the banner on the bottom of the screen
-        banner.frame = CGRect(x:0, y:self.view.frame.size.height - banner.frame.size.height,
-                              width:banner.frame.size.width, height:banner.frame.size.height);
-        UIView.commitAnimations()
-        banner.isHidden = false
+        banner.setAdBannerVisible(true)
     }
     
     
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(banner: adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
     }
@@ -601,11 +599,7 @@ extension GPXFilesTableViewController: MFMailComposeViewControllerDelegate {
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindow.Level.alert + 1;
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+        alert.show()
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -614,7 +608,7 @@ extension GPXFilesTableViewController: UIDocumentPickerDelegate, UINavigationCon
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let url = urls.first else { return }
         switch url.pathExtension {
-        case kGPXFileExt, kKmlFileExt, kGeoJSONExt, kGeoJSONExt1, kMBTileFileExt:
+        case kGPXFileExt, kKMLFileExt, kGeoJSONExt, kGeoJSONExt1, kMBTileFileExt:
             if copyFileFrom(url: url) != nil {
                 self.tableView.reloadData()
             }

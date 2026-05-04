@@ -249,10 +249,14 @@ func getFileNameByGPSTime(ext: String, date: Date) -> String {
  *
  */
 func getImagePropertyExifUserComment(_ url: URL) -> String {
-    let data = try! Data(contentsOf: url)
-    let dataProvider = CGDataProvider(data: data as CFData)
-    let imageSource = CGImageSourceCreateWithDataProvider(dataProvider!, nil)
-    let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource!, 0, nil) as! [String: AnyObject]
+    // RIPR: file ảnh có thể đã bị xoá / sandbox không cho đọc → trước đây
+    // try! + force-unwrap chuỗi crash app khi đọc EXIF của thư viện cũ.
+    guard let data = try? Data(contentsOf: url),
+          let dataProvider = CGDataProvider(data: data as CFData),
+          let imageSource = CGImageSourceCreateWithDataProvider(dataProvider, nil),
+          let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: AnyObject] else {
+        return ""
+    }
     if let exifInfo = imageProperties[kCGImagePropertyExifDictionary as String] as? [String: AnyObject] {
         if let comment = exifInfo[kCGImagePropertyExifUserComment as String] as? String {
             return comment
@@ -627,7 +631,7 @@ func copyFileFrom(url: URL) -> URL? {
             }
         }
         break
-    case kKmlFileExt:
+    case kKMLFileExt:
         var kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
         let fileName = kmlURL.deletingPathExtension().lastPathComponent
         let pathExtension = kmlURL.pathExtension

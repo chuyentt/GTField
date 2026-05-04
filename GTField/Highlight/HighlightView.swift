@@ -34,7 +34,7 @@ public extension UIView {
         static let Tag = 1001
     }
     
-    public func showHighlight() {
+    func showHighlight() {
         
         if self.viewWithTag(HighlightViewConstants.Tag) != nil {
             // If highight view is already found in current view hierachy, do nothing
@@ -52,7 +52,7 @@ public extension UIView {
         })
     }
     
-    public func hideHighlight() {
+    func hideHighlight() {
         
         if let highlightXibView = self.viewWithTag(HighlightViewConstants.Tag) {
             highlightXibView.alpha = 1

@@ -14,6 +14,8 @@
  */
 
 import UIKit
+
+import GoogleMobileAds
 import MapKit
 import Firebase
 //import AEXML
@@ -94,7 +96,7 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         addPin()
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height+200)
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             initAdMobBanner()
             let request = GADRequest()
             interstitial.load(request)
@@ -270,13 +272,12 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     
     // Initialize Google AdMob banner
     func initAdMobBanner() {
-        adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
         self.view.addSubview(adMobBannerView)
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
     }
@@ -305,13 +306,13 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     
     
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(banner: adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
     }

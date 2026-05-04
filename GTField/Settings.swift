@@ -184,7 +184,7 @@ func setActiveLayersPropertyName(activeLayersPropertyName: String) {
 
 /**
  * Lấy danh sách các trường để tra cứu
- * 
+ *
  */
 func getActiveLayersPropertyName() -> String {
     var activeLayersPropertyName = UserDefaults.standard.value(forKey: "ActiveLayersPropertyName")
@@ -312,7 +312,7 @@ func getLayersBoundingBoxForWFS() -> String {
 
 /************************************************
  * Lưu đường dẫn hiện tại của map offline (offlineActiveTilesPath)
- * offlineActiveTilesPath 
+ * offlineActiveTilesPath
  */
 func setOfflineActiveTilesPath(_ offlineActiveTilesPath: String) {
     UserDefaults.standard.set(offlineActiveTilesPath, forKey: "OfflineActiveTilesPath")
@@ -426,7 +426,8 @@ func setRecentGeoJSONPath(_ value: URL!) {
  * Quangr caos
  */
 func getEnableADS() -> Bool {
-    guard UserDefaults.standard.object(forKey: "ADS_ENABLED") != nil else { return false }
+    // Default: ads ON. Người dùng / settings.xml có thể tắt sau.
+    guard UserDefaults.standard.object(forKey: "ADS_ENABLED") != nil else { return true }
     return UserDefaults.standard.bool(forKey: "ADS_ENABLED")
 }
 
@@ -439,33 +440,42 @@ func getSettings(urlString: String) {
     guard let url = URL(string: urlString) else {
         return
     }
-    DispatchQueue.main.async { 
-        if let data = try? Data(contentsOf: url) {
-            let xml = XMLParser(data: data)
-            if xml.parse() {
-                var options = AEXMLOptions()
-                options.parserSettings.shouldProcessNamespaces = false
-                options.parserSettings.shouldReportNamespacePrefixes = false
-                options.parserSettings.shouldResolveExternalEntities = false
-                let xmlDoc = try! AEXMLDocument(xml: data, options: options)
-                let settings = xmlDoc.root
-                let ads = settings["ads"]
-                let server = settings["server"]
-                let help = settings["help"]
-                if ads.error == nil {
-                    ADS_ENABLED = Bool(ads["ads_enabled"].value!)!
-                    setEnableADS(ADS_ENABLED)
-                }
-                if server.error == nil {
-                    GEOSERVER_URL = server["geoserver_url"].value!
-                }
-                if help.error == nil {
-                    HELP_EN_URL = help["en_url"].value!
-                    HELP_VI_URL = help["vi_url"].value!
-                }
+    // Tải settings.xml KHÔNG đồng bộ trên background queue.
+    // Trước đây dùng `Data(contentsOf:)` bên trong `DispatchQueue.main.async`
+    // → vẫn là synchronous network call trên main thread, gây treo UI khi
+    // khởi động app (đặc biệt khi mạng chậm hoặc DNS resolve lâu).
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 8
+    request.cachePolicy = .reloadIgnoringLocalCacheData
+    URLSession.shared.dataTask(with: request) { data, _, error in
+        guard error == nil, let data = data else { return }
+        var options = AEXMLOptions()
+        options.parserSettings.shouldProcessNamespaces = false
+        options.parserSettings.shouldReportNamespacePrefixes = false
+        options.parserSettings.shouldResolveExternalEntities = false
+        guard let xmlDoc = try? AEXMLDocument(xml: data, options: options) else { return }
+        let settings = xmlDoc.root
+        let ads = settings["ads"]
+        let server = settings["server"]
+        let help = settings["help"]
+
+        // Đọc giá trị trên background, áp dụng (ghi UserDefaults / set biến
+        // toàn cục) trên main để tránh race condition.
+        let newAdsEnabled: Bool? = (ads.error == nil) ? Bool(ads["ads_enabled"].value ?? "") : nil
+        let newGeoserverURL: String? = (server.error == nil) ? server["geoserver_url"].value : nil
+        let newHelpEN: String? = (help.error == nil) ? help["en_url"].value : nil
+        let newHelpVI: String? = (help.error == nil) ? help["vi_url"].value : nil
+
+        DispatchQueue.main.async {
+            if let v = newAdsEnabled {
+                ADS_ENABLED = v
+                setEnableADS(v)
             }
+            if let v = newGeoserverURL { GEOSERVER_URL = v }
+            if let v = newHelpEN { HELP_EN_URL = v }
+            if let v = newHelpVI { HELP_VI_URL = v }
         }
-    }
+    }.resume()
 }
 
 func createSettings() {
@@ -482,8 +492,8 @@ func createSettings() {
     server.addChild(geoserver_url)
     let help = AEXMLElement(name: "help")
     settings.addChild(help)
-    let vi_url = AEXMLElement(name: "vi_url", value: "https://gtfield.geomatics.com.vn/vi.html")
-    let en_url = AEXMLElement(name: "vi_url", value: "https://gtfield.geomatics.com.vn/index.html")
+    let vi_url = AEXMLElement(name: "vi_url", value: "https://gtfield.rbc.vn/vi.html")
+    let en_url = AEXMLElement(name: "vi_url", value: "https://gtfield.rbc.vn/index.html")
     help.addChild(en_url)
     help.addChild(vi_url)
     print(xmlDoc.xml)

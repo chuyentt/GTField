@@ -39,7 +39,7 @@ extension Bundle {
 let APP_NAME: String = "GTField";
 let APP_VERSION: String = Bundle.main.releaseVersionNumber!
 let APP_BUILD: String = Bundle.main.buildVersionNumber!
-let APP_WEBSITE: String = "https://geomatics.vn"
+let APP_WEBSITE: String = "https://gtfield.rbc.vn"
 let APP_FULL_NAME: String = APP_NAME + " v" + APP_VERSION + " (build " + APP_BUILD + ")"
 
 let TEXTVIEW_FONT_DEFAULT: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
@@ -67,13 +67,13 @@ var ENABLE_IMPROVED_PERFORMANCE: Bool = getEnableImprovedPerformance()
 var INTERNET_AVAILABLE: Bool = false
 var WIFI_AVAILABLE: Bool = false
 
-var HELP_EN_URL: String = "https://gtfield.geomatics.com.vn/index.html"
-var HELP_VI_URL: String = "https://gtfield.geomatics.com.vn/vi.html"
+var HELP_EN_URL: String = "https://gtfield.rbc.vn/index.html"
+var HELP_VI_URL: String = "https://gtfield.rbc.vn/vi.html"
 
-var ABOUT_EN_URL: String = "https://gtfield.geomatics.com.vn/abouten.html"
-var ABOUT_VI_URL: String = "https://gtfield.geomatics.com.vn/aboutvi.html"
-var TERMS_OF_USE_EN_URL: String = "https://geomatics.vn/en/gtfield/terms-of-use?template=blank"
-var TERMS_OF_USE_VI_URL: String = "https://geomatics.vn/vi/gtfield/dieu-khoan-su-dung?template=blank"
+var ABOUT_EN_URL: String = "https://gtfield.rbc.vn/abouten.html"
+var ABOUT_VI_URL: String = "https://gtfield.rbc.vn/aboutvi.html"
+var TERMS_OF_USE_EN_URL: String = "https://gtfield.rbc.vn/terms-en.html"
+var TERMS_OF_USE_VI_URL: String = "https://gtfield.rbc.vn/terms-vi.html"
 
 let docsURL = applicationDocumentsDirectory()
 var MB_TILES_PATH: String = docsURL.appendingPathComponent("tiles.mbtiles").path

@@ -109,7 +109,12 @@ class SelectingTableViewController: UITableViewController {
         typealias ListItems = [ListItem]
         var _crsItems = [ListItem]()
         do {
-            let data = try Data(contentsOf: Bundle.main.url(forResource: "crs", withExtension: "plist")!)
+            // RIPR: Bundle.main.url(forResource:) trả nil nếu plist bị xoá khỏi
+            // bundle (vd. khi Asset bị strip nhầm). Force-unwrap → crash.
+            guard let url = Bundle.main.url(forResource: "crs", withExtension: "plist") else {
+                return _crsItems
+            }
+            let data = try Data(contentsOf: url)
             let decoder = PropertyListDecoder()
             _crsItems = try decoder.decode(ListItems.self, from: data)
         } catch {
@@ -188,7 +193,7 @@ class SelectingTableViewController: UITableViewController {
         } else {
             item = items[indexPath.row]
         }
-        let index = items.index(where: { (_item) -> Bool in
+        let index = items.firstIndex(where: { (_item) -> Bool in
             (_item.name == item.name) && (_item.code == item.code)
         })
         

@@ -148,7 +148,10 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
         cell.propertyValue.text = String(format: format, place.coordinate.latitude,
                                          place.coordinate.longitude)
       case .openNowStatus:
-        cell.propertyValue.text = text(for: place.openNowStatus)
+        // GMSPlacesOpenNowStatus / openNowStatus removed in GoogleMaps 7.x;
+        // fall back to the generic "unknown" string.
+        cell.propertyValue.text = NSLocalizedString("Places.OpenNow.Unknown",
+                                                    comment: "Closed/Open state for when it is unknown")
       case .phoneNumber:
         cell.propertyValue.text = place.phoneNumber ?? noneText
       case .website:
@@ -167,7 +170,7 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
       case .priceLevel:
         cell.propertyValue.text = text(for: place.priceLevel)
       case .types:
-        cell.propertyValue.text = place.types.joined(separator: ", ")
+        cell.propertyValue.text = (place.types ?? []).joined(separator: ", ")
       case .attribution:
         if let attributions = place.attributions {
           cell.propertyValue.attributedText = attributions
@@ -230,6 +233,8 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
   // MARK: - Utilities
 
   /// Return the appropriate text string for the specified |GMSPlacesOpenNowStatus|.
+  /// (GMSPlacesOpenNowStatus removed in GoogleMaps 7.x — kept here unused for reference.)
+  /*
   private func text(for status: GMSPlacesOpenNowStatus) -> String {
     switch status {
     case .no: return NSLocalizedString("Places.OpenNow.No",
@@ -240,6 +245,7 @@ class PlaceDetailTableViewDataSource: NSObject, UITableViewDataSource, UITableVi
                                             comment: "Closed/Open state for when it is unknown")
     }
   }
+  */
 
   /// Return the appropriate text string for the specified |GMSPlacesPriceLevel|.
   private func text(for priceLevel: GMSPlacesPriceLevel) -> String {

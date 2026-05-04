@@ -137,11 +137,7 @@ extension SubscriptionService: SKProductsRequestDelegate {
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindow.Level.alert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
             print("Subscription Options Failed Loading: \(error.localizedDescription)")
         }
     }

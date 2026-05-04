@@ -98,7 +98,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         buttonTakePhoto.layer.borderColor = UIColor.white.cgColor
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 
             } else {

@@ -9,14 +9,11 @@
 import Foundation
 
 //GPX File extension
-let kGpxFileExt = "gpx"
-let kGPXFileExt = "GPX"
-let kKmlFileExt = "kml"
-let kKMLFileExt = "KML"
-let kGeoJsonExt = "json"
-let kGeoJSONExt = "JSON"
-let kGeoJsonExt1 = "geojson"
-let kGeoJSONExt1 = "GEOJSON"
+let kGPXFileExt = "gpx"
+let kKMLFileExt = "kml"
+let kGeoJSONExt = "json"
+let kGeoJSONExt1 = "geojson"
+let kMBTileFileExt = "mbtiles"
 
 //
 // Class to handle actions with gpx files (save, delete, etc..)
@@ -34,15 +31,11 @@ class GPXFileManager: NSObject {
                                                                                     options: FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants) {
                     
                     for url: URL in directoryURLs {
-                        if url.pathExtension == kGPXFileExt ||
-                            url.pathExtension == kGpxFileExt ||
-                            url.pathExtension == kKMLFileExt ||
-                            url.pathExtension == kKmlFileExt ||
-                            url.pathExtension == kGeoJSONExt ||
-                            url.pathExtension == kGeoJsonExt ||
-                            url.pathExtension == kGeoJSONExt1 ||
-                            url.pathExtension == kGeoJsonExt1 ||
-                            url.pathExtension == kMBTileFileExt {
+                        if url.pathExtension.lowercased() == kGPXFileExt ||
+                            url.pathExtension.lowercased() == kKMLFileExt ||
+                            url.pathExtension.lowercased() == kGeoJSONExt ||
+                            url.pathExtension.lowercased() == kGeoJSONExt1 ||
+                            url.pathExtension.lowercased() == kMBTileFileExt {
                             Files.append(url.lastPathComponent)
                         }
                     }

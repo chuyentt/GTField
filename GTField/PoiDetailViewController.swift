@@ -18,6 +18,8 @@
 
 
 import UIKit
+
+import GoogleMobileAds
 import MapKit
 import Firebase
 
@@ -59,7 +61,7 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
 
     override func viewWillAppear(_ animated: Bool) {
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             initAdMobBanner()
         } else {
             hideBanner(banner: adMobBannerView)
@@ -161,7 +163,7 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(URL(string: directionUrl)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:nil)
             } else {
-                UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
             }
         } else {
             NSLog("Can't use Apple Maps");
@@ -235,48 +237,37 @@ class PoiDetailViewController: UIViewController, MKMapViewDelegate, GADBannerVie
     
     // Initialize Google AdMob banner
     func initAdMobBanner() {
-        adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        self.view.addSubview(adMobBannerView)
+        adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
+        
+        installAdMobBanner(adMobBannerView)
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
-        adMobBannerView.load(GADRequest())
     }
     
     
     // Hide the banner
     func hideBanner(banner: UIView) {
-        UIView.beginAnimations("hideBanner", context: nil)
-        // Hide the banner moving it below the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
-        UIView.commitAnimations()
-        banner.isHidden = true
+        banner.setAdBannerVisible(false)
     }
     
     
     // Show the banner
     func showBanner(banner: UIView) {
-        UIView.beginAnimations("showBanner", context: nil)
-        
-        // Move the banner on the bottom of the screen
-        banner.frame = CGRect(x:0, y:self.view.frame.size.height - banner.frame.size.height,
-                              width:banner.frame.size.width, height:banner.frame.size.height);
-        UIView.commitAnimations()
-        banner.isHidden = false
+        banner.setAdBannerVisible(true)
     }
     
     
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(banner: adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
     }

@@ -42,11 +42,23 @@ class TileDownloader: Operation {
         let flippedY = (1 << z) - y - 1
         let bbox = bboxForTile(x: x, y: flippedY, zoom: z)
         let tileSize = 256 // Tương thích cho các app khác
-        var urlComponents = URLComponents(string: (getGeoServerTilesUrl()?.absoluteString)!)!
+        // RIPR: getGeoServerTilesUrl() có thể nil khi user chưa cấu hình; URLComponents có thể nil
+        // nếu URL chứa ký tự không hợp lệ → trước đây force-unwrap crash mỗi lần pan/zoom.
+        guard let baseURLString = getGeoServerTilesUrl()?.absoluteString,
+              var urlComponents = URLComponents(string: baseURLString) else {
+            self.tileRecord.state = .failed
+            self.tileRecord.image = #imageLiteral(resourceName: "NoTile")
+            return
+        }
         urlComponents.queryItems?.append(URLQueryItem(name: "width", value: "\(tileSize)"))
         urlComponents.queryItems?.append(URLQueryItem(name: "height", value: "\(tileSize)"))
         urlComponents.queryItems?.append(URLQueryItem(name: "bbox", value: bbox))
-        let data = try? Data(contentsOf: urlComponents.url!)
+        guard let tileURL = urlComponents.url else {
+            self.tileRecord.state = .failed
+            self.tileRecord.image = #imageLiteral(resourceName: "NoTile")
+            return
+        }
+        let data = try? Data(contentsOf: tileURL)
         if data != nil, let image = UIImage(data:data!) {
             self.tileRecord.image = image
             self.tileRecord.state = .downloaded

@@ -113,17 +113,30 @@ public class RulerBarView: UIView {
     }
     
     public func showCrossMarker(_ show: Bool) {
+        // Hiện/ẩn dấu chữ thập tâm bản đồ một cách tường minh, BỎ QUA cờ
+        // ENABLE_MAP_CENTER_COORDINATE — vì khi user thêm mốc từ bản đồ phải
+        // luôn nhìn thấy crosshair để căn chỉnh, kể cả khi đã tắt hiển thị
+        // toạ độ tâm trong Settings.
+        crossLine.isHidden = !show
         if show {
             crossLine.showHighlight()
         } else {
             crossLine.hideHighlight()
+            // Sau khi xong, trả crossLine về trạng thái theo cấu hình người dùng.
+            crossLine.isHidden = !ENABLE_MAP_CENTER_COORDINATE
         }
     }
         
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
-        mapFrameVerticalSpaceConstant.constant = UIApplication.shared.statusBarFrame.height
-        coordinateLabelVerticalSpaceConstant.constant = UIApplication.shared.statusBarFrame.height + 54
+        // RIPR: UIApplication.shared.statusBarFrame deprecated từ iOS 13;
+        // trên iPhone có Dynamic Island/safe-area lớn (Pro 14+) sẽ trả 0
+        // → toạ độ tâm bị nhảy lên đỉnh. Dùng safeAreaInsets của window.
+        let topInset: CGFloat = (self.window?.safeAreaInsets.top
+                                 ?? UIViewController.topMostPresented()?.view.safeAreaInsets.top
+                                 ?? 20)
+        mapFrameVerticalSpaceConstant.constant = topInset
+        coordinateLabelVerticalSpaceConstant.constant = topInset + 54
         if isShowRuler {
             let unit = getDistanceUnit()
             let screenWidth = UIScreen.main.bounds.width
@@ -232,48 +245,52 @@ public extension GMSMapView {
         static let Tag = 200
     }
     
-    public func updateRulerBarLabel() {
+    func updateRulerBarLabel() {
         if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
             // Nếu tồn tại
             rulerBarXibView.updateScaleLabel()
         }
     }
     
-    public func hideCoordinateLabel(_ hidden: Bool) {
+    func hideCoordinateLabel(_ hidden: Bool) {
         if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
             rulerBarXibView.hideCoordinateLabel(hidden)
         }
     }
     
-    public func getFixedMapCenter() -> CGPoint {
+    func getFixedMapCenter() -> CGPoint {
         if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
             return rulerBarXibView.crossLine.center
         }
         return self.center
     }
     
-    public func showCrossMarker(_ show: Bool) {
-        if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
-            rulerBarXibView.showCrossMarker(show)
-        }
+    func showCrossMarker(_ show: Bool) {
+        // Đảm bảo RulerBarView đã tồn tại (lazily install) ngay cả khi user
+        // tắt thước (Ruler Bar) trong Settings — nếu không, dấu chữ thập sẽ
+        // không bao giờ hiển thị khi thêm mốc từ bản đồ.
+        let bar = ensureRulerBarView()
+        bar.showCrossMarker(show)
     }
     
-    public func showRulerBar(_ show: Bool) {
-        guard show else {
-            return
+    func showRulerBar(_ show: Bool) {
+        let bar = ensureRulerBarView()
+        bar.isShowRuler = show
+        bar.setNeedsDisplay()
+    }
+    
+    /// Trả về RulerBarView hiện có, hoặc tạo mới (mặc định KHÔNG vẽ thước).
+    @discardableResult
+    private func ensureRulerBarView() -> RulerBarView {
+        if let bar = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
+            return bar
         }
-        // Tìm RulerBarView
-        if let rulerBarXibView: RulerBarView = self.viewWithTag(RulerBarViewConstants.Tag) as? RulerBarView {
-            // Nếu tồn tại
-            rulerBarXibView.isShowRuler = show
-            rulerBarXibView.setNeedsLayout()
-        } else {
-            let rulerBarXibView: RulerBarView = RulerBarView.designCodeView(nibNamed: "RulerBarView") as! RulerBarView
-            rulerBarXibView.frame = self.bounds
-            rulerBarXibView.tag = RulerBarViewConstants.Tag
-            self.addSubview(rulerBarXibView)
-            rulerBarXibView.isShowRuler = show
-            rulerBarXibView.setNeedsLayout()
-        }
+        let bar: RulerBarView = RulerBarView.designCodeView(nibNamed: "RulerBarView") as! RulerBarView
+        bar.frame = self.bounds
+        bar.tag = RulerBarViewConstants.Tag
+        bar.isShowRuler = false   // mặc định không vẽ thước; bật qua showRulerBar(true)
+        bar.isUserInteractionEnabled = false   // không chặn gesture của map
+        self.addSubview(bar)
+        return bar
     }
 }

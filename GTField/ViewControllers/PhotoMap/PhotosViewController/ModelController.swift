@@ -64,7 +64,7 @@ class ModelController: NSObject, UIPageViewControllerDataSource {
         if viewController.dataObject == nil {
             return NSNotFound
         }   //This may never happen?
-        return self.pageData.index(of: viewController.dataObject!)!
+        return self.pageData.firstIndex(of: viewController.dataObject!)!
     }
     
     

@@ -562,12 +562,45 @@ class CButton : UIButton {
 }
 
 extension UIAlertController {
+    /// Present alert một cách an toàn, không phụ thuộc caller có VC hợp lệ hay không.
+    ///
+    /// Trước đây hàm này tạo một `UIWindow` cục bộ rồi gọi `present` lên nó.
+    /// Vì `alertWindow` là biến local, ngay khi function trả về ARC giải phóng
+    /// window → alert biến mất hoặc bị màn hình mới (vd. map vừa load xong)
+    /// che lấp. Triệu chứng: hộp thoại nháy lên rồi bị màn hình bản đồ phủ
+    /// trước khi user kịp bấm OK/Cancel.
+    ///
+    /// Cách mới: tìm view controller trên cùng của scene đang foreground và
+    /// present trực tiếp ở đó — không cần window phụ.
     func show() {
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindow.Level.alert + 1;
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(self, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            guard let top = UIViewController.topMostPresented() else { return }
+            // Nếu top đang trình diễn cái gì khác (đang chạy animation),
+            // chờ rồi thử lại để tránh "Attempt to present ... while presenting".
+            if top.isBeingDismissed || top.isBeingPresented {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { self.show() }
+                return
+            }
+            top.present(self, animated: true, completion: nil)
+        }
+    }
+}
+
+extension UIViewController {
+    /// Trả về view controller trên cùng (modal stack) của key window thuộc
+    /// scene đang foreground active.
+    static func topMostPresented() -> UIViewController? {
+        let activeScene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first(where: { $0.activationState == .foregroundActive })
+            ?? (UIApplication.shared.connectedScenes.first as? UIWindowScene)
+        let keyWindow = activeScene?.windows.first(where: { $0.isKeyWindow })
+            ?? activeScene?.windows.first
+        var top = keyWindow?.rootViewController
+        while let presented = top?.presentedViewController, !presented.isBeingDismissed {
+            top = presented
+        }
+        return top
     }
 }
 

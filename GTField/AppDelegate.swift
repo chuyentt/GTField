@@ -12,7 +12,8 @@ import GooglePlaces
 import CoreMotion
 //import AEXML
 import Firebase
-//import StoreKit
+import StoreKit
+import GoogleMobileAds
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            agreement()
 //        }
 
-        getSettings(urlString: "https://gtfield.geomatics.com.vn/settings.xml")
+        getSettings(urlString: "https://gtfield.rbc.vn/settings.xml")
         self.window?.rootViewController?.enumerateHierarchy { viewController in
             guard var container = viewController as? MotionContainer else { return }
             container.motionManager = motionManager
@@ -60,6 +61,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
+
+        // Khởi tạo Google Mobile Ads (GMA SDK 10.x). App ID phải được khai báo trong
+        // Info.plist với key `GADApplicationIdentifier`, nếu không SDK sẽ crash app.
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        #if DEBUG
+        // Test device IDs: simulator + 2 thiết bị test cũ. Ads sản xuất sẽ KHÔNG được
+        // phục vụ trên các thiết bị này (chỉ test ad). Trong Release build, mảng rỗng.
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [
+            kGADSimulatorID,
+            "b0363f55ef349672aa7932774e71491d",
+            "74fe0112c024148d80fba2b4f9761655406f5c25",
+        ]
+        #endif
 
         // Tạm thời bỏ
         //SKPaymentQueue.default().add(self)
@@ -106,17 +120,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         // Kiểm tra xem xml có bị lỗi không
-        let ext = url.pathExtension
+        let ext = url.pathExtension.lowercased()
         switch ext {
-        case kGPXFileExt, kGpxFileExt:
-            let data = try! Data.init(contentsOf: url)
+        case kGPXFileExt:
+            // RIPR: try! sẽ crash app nếu user share GPX không đọc được/lỗi XML.
+            guard let data = try? Data(contentsOf: url) else {
+                let a = UIAlertController(title: "Cannot read file", message: url.lastPathComponent, preferredStyle: .alert)
+                a.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                a.show()
+                return true
+            }
             let xml = XMLParser(data: data)
             if xml.parse() {
                 var options = AEXMLOptions()
                 options.parserSettings.shouldProcessNamespaces = false
                 options.parserSettings.shouldReportNamespacePrefixes = false
                 options.parserSettings.shouldResolveExternalEntities = false
-                let xmlDoc = try! AEXMLDocument(xml: data, options: options)
+                guard let xmlDoc = try? AEXMLDocument(xml: data, options: options) else {
+                    let a = UIAlertController(title: "Invalid GPX", message: url.lastPathComponent, preferredStyle: .alert)
+                    a.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                    a.show()
+                    return true
+                }
                 let gpxRoot = xmlDoc["gpx"]
                 if (gpxRoot.error == nil) {
                     let fileName = url.deletingPathExtension().lastPathComponent
@@ -157,13 +182,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     print(metadataElement.xml)
                     do {
-                        try! xmlDoc.xml.write(toFile: gpxURL.path, atomically: true, encoding: .utf8)
+                        try xmlDoc.xml.write(toFile: gpxURL.path, atomically: true, encoding: .utf8)
                         let alert = UIAlertController(title: "Your file \"\(gpxURL.lastPathComponent)\" was copied to app's GPX folder.", message: nil, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
+                        alert.show()
+                    } catch {
+                        let alert = UIAlertController(title: "Cannot save file", message: error.localizedDescription, preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                         alert.show()
                     }
                 } else {
-                    let alert = UIAlertController(title: "Ooops! Something went wrong: \(error)", message: nil, preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Ooops! Something went wrong: \(gpxRoot.error?.localizedDescription ?? "")", message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: nil))
                     alert.show()
                 }
@@ -218,7 +247,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             break
-        case kKmlFileExt, kKMLFileExt:
+        case kKMLFileExt:
             var kmlURL = docsURL.appendingPathComponent(url.lastPathComponent)
             let fileName = kmlURL.deletingPathExtension().lastPathComponent
             let pathExtension = kmlURL.pathExtension
@@ -238,7 +267,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 alert.show()
             }
             break
-        case kGeoJSONExt, kGeoJSONExt1, kGeoJsonExt, kGeoJsonExt1:
+        case kGeoJSONExt, kGeoJSONExt1:
             var jsonURL = docsURL.appendingPathComponent(url.lastPathComponent)
             let fileName = jsonURL.deletingPathExtension().lastPathComponent
             let pathExtension = jsonURL.pathExtension
@@ -263,7 +292,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             break
         }
         if FileManager.default.fileExists(atPath: url.path) {
-            try! FileManager.default.removeItem(at: url)
+            try? FileManager.default.removeItem(at: url)
         }
         
         return true
@@ -319,24 +348,6 @@ func agreement() {
 // MARK: - SKPaymentTransactionObserver
 
 extension AppDelegate: SKPaymentTransactionObserver {
-    
-    // Sent when the transaction array has changed (additions or state changes).  Client should check state of transactions and finish as appropriate.
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                handlePurchasingState(for: transaction, in: queue)
-            case .purchased:
-                handlePurchasedState(for: transaction, in: queue)
-            case .restored:
-                handleRestoredState(for: transaction, in: queue)
-            case .failed:
-                handleFailedState(for: transaction, in: queue)
-            case .deferred:
-                handleDeferredState(for: transaction, in: queue)
-            }
-        }
-    }
     
     // Sent when transactions are removed from the queue (via finishTransaction:).
     func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
@@ -423,6 +434,24 @@ extension AppDelegate: SKPaymentTransactionObserver {
     func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
         print("Purchase deferred for product id: \(transaction.payment.productIdentifier)")
     }
+    
+    // Sent when the transaction array has changed (additions or state changes).  Client should check state of transactions and finish as appropriate.
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
+            switch transaction.transactionState {
+            case .purchasing:
+                handlePurchasingState(for: transaction, in: queue)
+            case .purchased:
+                handlePurchasedState(for: transaction, in: queue)
+            case .restored:
+                handleRestoredState(for: transaction, in: queue)
+            case .failed:
+                handleFailedState(for: transaction, in: queue)
+            case .deferred:
+                handleDeferredState(for: transaction, in: queue)
+            @unknown default:
+                break
+            }
+        }
+    }
 }
-
-

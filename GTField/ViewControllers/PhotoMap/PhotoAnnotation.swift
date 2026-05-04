@@ -35,10 +35,15 @@ class PhotoAnnotation: NSObject, MKAnnotation {
     //private var _thumbnail: UIImage?
     var thumbnail: UIImage? {
         get {
-            let imageData = try! Data(contentsOf: URL(fileURLWithPath: imagePath!))
-            let dataProvider = CGDataProvider(data: imageData as CFData)
-            let imageSource = CGImageSourceCreateWithDataProvider(dataProvider!, nil)
-            return thumbnailImage(src: imageSource!)
+            // RIPR: imagePath có thể nil hoặc file đã bị xoá khỏi Photos.
+            // Trước đây dùng try! → crash khi sinh thumbnail trong list ảnh.
+            guard let path = imagePath,
+                  let imageData = try? Data(contentsOf: URL(fileURLWithPath: path)),
+                  let dataProvider = CGDataProvider(data: imageData as CFData),
+                  let imageSource = CGImageSourceCreateWithDataProvider(dataProvider, nil) else {
+                return nil
+            }
+            return thumbnailImage(src: imageSource)
             
             // Nếu lưu _thumbnail thì một nhiều ảnh sẽ bị memorywaring
 //            if _thumbnail == nil {

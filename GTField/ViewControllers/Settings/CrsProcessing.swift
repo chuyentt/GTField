@@ -14,7 +14,7 @@ func datumProcessing(_ keyValue: [String]) {
     //var index = 9999
     var datumParameters = DatumParameters(code: "WGE", name: "WGS 84", deltaX: 0, deltaY: 0, deltaZ: 0, rotationX: 0, rotationY: 0, rotationZ: 0, scaleFactor: 0)
     var datum: ListItem = datumItems[0];
-    if let index = datumItems.index(where: { (_item) -> Bool in
+    if let index = datumItems.firstIndex(where: { (_item) -> Bool in
         (_item.code == dCode)
     }) {
         datum = datumItems[index]

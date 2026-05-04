@@ -60,7 +60,9 @@ public class KeyboardLayoutConstraint: NSLayoutConstraint {
                     delay: 0,
                     options: options,
                     animations: {
-                        UIApplication.shared.keyWindow?.layoutIfNeeded()
+                        // RIPR: UIApplication.shared.keyWindow deprecated từ iOS 13;
+                        // multi-scene có thể trả nil. Dùng scene đang foreground active.
+                        Self.activeKeyWindow()?.layoutIfNeeded()
                         return
                     }, completion: { finished in
                 })
@@ -89,7 +91,7 @@ public class KeyboardLayoutConstraint: NSLayoutConstraint {
                     delay: 0,
                     options: options,
                     animations: {
-                        UIApplication.shared.keyWindow?.layoutIfNeeded()
+                        Self.activeKeyWindow()?.layoutIfNeeded()
                         return
                     }, completion: { finished in
                 })
@@ -101,6 +103,15 @@ public class KeyboardLayoutConstraint: NSLayoutConstraint {
     
     func updateConstant() {
         self.constant = offset + keyboardVisibleHeight
+    }
+
+    /// Trả về key window thuộc scene đang foreground active.
+    /// Thay thế `UIApplication.shared.keyWindow` đã deprecated từ iOS 13.
+    private static func activeKeyWindow() -> UIWindow? {
+        return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first(where: { $0.activationState == .foregroundActive })?
+            .windows.first(where: { $0.isKeyWindow })
     }
     
 }

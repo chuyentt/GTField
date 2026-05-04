@@ -23,7 +23,6 @@
 		169B359D1B9DDEF000B83857 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169B359C1B9DDEF000B83857 /* MainCollectionViewCell.swift */; };
 		16C675E71B94900C00EF4913 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C675E61B94900C00EF4913 /* Global.swift */; };
 		16C675EC1B94933A00EF4913 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C675DF1B948BC400EF4913 /* SystemConfiguration.framework */; };
-		16C675ED1B94933A00EF4913 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C675DD1B948BBA00EF4913 /* StoreKit.framework */; };
 		16C675EE1B94933A00EF4913 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C675DB1B948BAD00EF4913 /* Security.framework */; };
 		16C675EF1B94933A00EF4913 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C675D91B948BA100EF4913 /* QuartzCore.framework */; };
 		16C675F01B94933A00EF4913 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C675D71B948B6D00EF4913 /* CoreGraphics.framework */; };
@@ -57,6 +56,9 @@
 		16D845A11D8D2DCB005DF780 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845841D8D2DCB005DF780 /* TransitionManager.swift */; };
 		16D845A21D8D2DCB005DF780 /* TransitionZoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845851D8D2DCB005DF780 /* TransitionZoom.swift */; };
 		16D845A31D8D2DCB005DF780 /* UnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D845861D8D2DCB005DF780 /* UnwindSegue.swift */; };
+		AA11220330440550660770B1 /* AdMobStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11220330440550660770C1 /* AdMobStub.swift */; };
+		AA11220330440550660770B2 /* GooglePlacePickerStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11220330440550660770C2 /* GooglePlacePickerStub.swift */; };
+		AA11220330440550660770B3 /* AdMobBannerPlacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11220330440550660770C3 /* AdMobBannerPlacement.swift */; };
 		C914C8FC8CF462CD432326BA /* Pods_GTField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F776653B7D08AA7BA409CC33 /* Pods_GTField.framework */; };
 		DE085E1B1F25E93F005DD248 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DE085E111F25E93F005DD248 /* FMDatabase.m */; };
 		DE085E1C1F25E93F005DD248 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = DE085E131F25E93F005DD248 /* FMDatabaseAdditions.m */; };
@@ -188,7 +190,6 @@
 		DE86E3351FA9614C005E5825 /* GMUGeoJSONParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E3191FA9614C005E5825 /* GMUGeoJSONParser.m */; };
 		DE86E3361FA9614C005E5825 /* GQTPointQuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E31C1FA9614C005E5825 /* GQTPointQuadTree.m */; };
 		DE86E3371FA9614C005E5825 /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = DE86E31E1FA9614C005E5825 /* GQTPointQuadTreeChild.m */; };
-		DE8847792007DA4D003A619F /* ScaleBarView1.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE8847782007DA4D003A619F /* ScaleBarView1.xib */; };
 		DE88479A2008AFD5003A619F /* RulerBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8847992008AFD5003A619F /* RulerBarView.swift */; };
 		DE88479C2008AFE3003A619F /* RulerBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE88479B2008AFE3003A619F /* RulerBarView.xib */; };
 		DE88492320090AA4003A619F /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE88492220090AA4003A619F /* UIScreenExtension.swift */; };
@@ -327,7 +328,6 @@
 		16C675D71B948B6D00EF4913 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		16C675D91B948BA100EF4913 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		16C675DB1B948BAD00EF4913 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		16C675DD1B948BBA00EF4913 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		16C675DF1B948BC400EF4913 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		16C675E61B94900C00EF4913 /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		16D4914B19FA8B990021259E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -364,6 +364,9 @@
 		16D845861D8D2DCB005DF780 /* UnwindSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnwindSegue.swift; sourceTree = "<group>"; };
 		16EC1C8D1DCF45F50078B7F4 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		6B15FECC2FED9709063760E0 /* Pods-GTField.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GTField.release.xcconfig"; path = "Pods/Target Support Files/Pods-GTField/Pods-GTField.release.xcconfig"; sourceTree = "<group>"; };
+		AA11220330440550660770C1 /* AdMobStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobStub.swift; sourceTree = "<group>"; };
+		AA11220330440550660770C2 /* GooglePlacePickerStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacePickerStub.swift; sourceTree = "<group>"; };
+		AA11220330440550660770C3 /* AdMobBannerPlacement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerPlacement.swift; sourceTree = "<group>"; };
 		DE085E101F25E93F005DD248 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		DE085E111F25E93F005DD248 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		DE085E121F25E93F005DD248 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -555,7 +558,6 @@
 		DE86E3201FA9614C005E5825 /* GQTPointQuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTree.h; sourceTree = "<group>"; };
 		DE86E3211FA9614C005E5825 /* GQTPointQuadTreeChild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTPointQuadTreeChild.h; sourceTree = "<group>"; };
 		DE86E3221FA9614C005E5825 /* GQTBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GQTBounds.h; sourceTree = "<group>"; };
-		DE8847782007DA4D003A619F /* ScaleBarView1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ScaleBarView1.xib; path = ../../../../Downloads/ScaleBarView/ScaleBarView1.xib; sourceTree = "<group>"; };
 		DE8847992008AFD5003A619F /* RulerBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RulerBarView.swift; path = GTField/RulerBarView/RulerBarView.swift; sourceTree = SOURCE_ROOT; };
 		DE88479B2008AFE3003A619F /* RulerBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RulerBarView.xib; path = GTField/RulerBarView/RulerBarView.xib; sourceTree = SOURCE_ROOT; };
 		DE88492220090AA4003A619F /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
@@ -650,7 +652,6 @@
 				16C675F21B94933A00EF4913 /* AudioToolbox.framework in Frameworks */,
 				16C675F01B94933A00EF4913 /* CoreGraphics.framework in Frameworks */,
 				16C675EE1B94933A00EF4913 /* Security.framework in Frameworks */,
-				16C675ED1B94933A00EF4913 /* StoreKit.framework in Frameworks */,
 				C914C8FC8CF462CD432326BA /* Pods_GTField.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -693,6 +694,7 @@
 		1628239D19AB38A100D08755 /* GTField */ = {
 			isa = PBXGroup;
 			children = (
+				AA11220330440550660770A0 /* Shims */,
 				DE57C4D0202F5A74005498D2 /* ParallaxHeader */,
 				DE3DC311201CD17900850011 /* GeoJSONKit */,
 				DEDEC5AC1F7F35A000F5CE0F /* Icons */,
@@ -734,7 +736,6 @@
 				DE28C3BC1F17673600C3A190 /* beep.mp3 */,
 				DEB226221E5F22B600D27CB5 /* GTField-Bridging-Header.h */,
 				DE6781861E55F19600026C86 /* bauhausl.ttf */,
-				DE8847782007DA4D003A619F /* ScaleBarView1.xib */,
 				DE6781871E55F19600026C86 /* bauhauhb.ttf */,
 				DE67818A1E55F25800026C86 /* bauhausm.ttf */,
 				165CCEE91BA299AE00677F88 /* Info.plist */,
@@ -812,7 +813,6 @@
 				16EC1C8D1DCF45F50078B7F4 /* GoogleMobileAds.framework */,
 				164835B71C709B6B00FA7FEF /* CloudKit.framework */,
 				16C675DF1B948BC400EF4913 /* SystemConfiguration.framework */,
-				16C675DD1B948BBA00EF4913 /* StoreKit.framework */,
 				16C675DB1B948BAD00EF4913 /* Security.framework */,
 				16C675D91B948BA100EF4913 /* QuartzCore.framework */,
 				16C675D71B948B6D00EF4913 /* CoreGraphics.framework */,
@@ -871,6 +871,17 @@
 				6B15FECC2FED9709063760E0 /* Pods-GTField.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		AA11220330440550660770A0 /* Shims */ = {
+			isa = PBXGroup;
+			children = (
+				AA11220330440550660770C1 /* AdMobStub.swift */,
+				AA11220330440550660770C3 /* AdMobBannerPlacement.swift */,
+				AA11220330440550660770C2 /* GooglePlacePickerStub.swift */,
+			);
+			name = Shims;
+			path = Shims;
 			sourceTree = "<group>";
 		};
 		DE085E0F1F25E93F005DD248 /* FMDB */ = {
@@ -1552,13 +1563,13 @@
 				TargetAttributes = {
 					16549D9A1A08AC4C00C59D2E = {
 						DevelopmentTeam = 62RSNGGTGD;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 							com.apple.InAppPurchase = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
 								enabled = 0;
@@ -1570,14 +1581,14 @@
 					};
 					DEA391471F88E0ED00251C9A = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 1628239619AB38A100D08755 /* Build configuration list for PBXProject "GTField" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -1673,7 +1684,6 @@
 				DEDEC5BF1F7F35DD00F5CE0F /* Icon-20.png in Resources */,
 				DEDEC5C41F7F35DD00F5CE0F /* Icon-60@3x.png in Resources */,
 				DE28C3BF1F176AAF00C3A190 /* click.mp3 in Resources */,
-				DE8847792007DA4D003A619F /* ScaleBarView1.xib in Resources */,
 				DEDEC5C01F7F35DD00F5CE0F /* Icon-20@2x-1.png in Resources */,
 				162F1F2C1CA92CC600400C56 /* GTField.entitlements in Resources */,
 			);
@@ -1713,22 +1723,30 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-GTField/Pods-GTField-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-GTField/Pods-GTField-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
 				"${BUILT_PRODUCTS_DIR}/Surge/Surge.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyPlistManager/SwiftyPlistManager.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseInstallations.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Surge.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyPlistManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GTField/Pods-GTField-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GTField/Pods-GTField-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DE754A0CEC6ADBB974F19AC9 /* [CP] Copy Pods Resources */ = {
@@ -1737,20 +1755,22 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-GTField/Pods-GTField-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
-				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
-				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-GTField/Pods-GTField-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.xcframework/ios-arm64_x86_64-simulator/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.xcframework/ios-arm64/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.xcframework/ios-arm64_x86_64-simulator/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUserMessagingPlatform/UserMessagingPlatformResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UserMessagingPlatformResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GTField/Pods-GTField-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GTField/Pods-GTField-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1760,6 +1780,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA11220330440550660770B1 /* AdMobStub.swift in Sources */,
+				AA11220330440550660770B3 /* AdMobBannerPlacement.swift in Sources */,
+				AA11220330440550660770B2 /* GooglePlacePickerStub.swift in Sources */,
 				DE3AAD3C1FDA7A0B00DC58DE /* GraphSegment.swift in Sources */,
 				16D8458B1D8D2DCB005DF780 /* DesignableButton.swift in Sources */,
 				DE9D6E8721B18FA000BDBA82 /* SubscriptionService.swift in Sources */,
@@ -2048,7 +2071,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2104,7 +2127,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
@@ -2124,20 +2147,22 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				CURRENT_PROJECT_VERSION = 69;
 				DEVELOPMENT_TEAM = 62RSNGGTGD;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = GTField/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.4.12;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTField;
 				PRODUCT_NAME = GTField;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2153,16 +2178,18 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				CURRENT_PROJECT_VERSION = 69;
 				DEVELOPMENT_TEAM = 62RSNGGTGD;
 				INFOPLIST_FILE = GTField/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.4.12;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTField;
 				PRODUCT_NAME = GTField;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "GTField/GTField-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2184,14 +2211,14 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = GTFieldService/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTFieldService;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2215,12 +2242,12 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = GTFieldService/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = vn.geomatics.GTFieldService;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

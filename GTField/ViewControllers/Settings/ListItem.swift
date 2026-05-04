@@ -16,7 +16,7 @@ struct ListItem: Codable {
 
 struct DatumParameters {
     func proj4() -> String {
-        if datumItems.index(where: { (_item) -> Bool in
+        if datumItems.firstIndex(where: { (_item) -> Bool in
             (_item.code == code)
         }) != nil {
             return " +datum=\(code) +units=m +no_defs"

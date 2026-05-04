@@ -120,10 +120,14 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         
         for photoURL in photoURLs ?? [] {
             queue.addOperation {
-                let imageData = try! Data(contentsOf: photoURL)
-                let dataProvider = CGDataProvider(data: imageData as CFData)
-                let imageSource = CGImageSourceCreateWithDataProvider(dataProvider!, nil)
-                let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource!, 0, nil) as! [String: AnyObject]
+                // RIPR: photoURL có thể không đọc được (sandbox, file deleted).
+                // try! sẽ crash thread BG, app treo. Đổi sang guard + skip.
+                guard let imageData = try? Data(contentsOf: photoURL),
+                      let dataProvider = CGDataProvider(data: imageData as CFData),
+                      let imageSource = CGImageSourceCreateWithDataProvider(dataProvider, nil),
+                      let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: AnyObject] else {
+                    return
+                }
                 //print(photoURL.lastPathComponent)
                 // check if the image is geotagged
                 if let gpsInfo = imageProperties[kCGImagePropertyGPSDictionary as String] as? [String: AnyObject] {
@@ -328,7 +332,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
         // now load all photos from Resources and add them as annotations to the map view
         self.populateMapWithAllPhotoAnnotations()
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 
             } else {
@@ -361,16 +365,16 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             adMobBannerView = GADBannerView(adSize: GADAdSizeFromCGSize(CGSize(width: 256, height: 40)))
             break
         case "375": //6,7
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         case "414": //6+,7+
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         case "768": //iPad
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeFullBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeFullBanner)
             break
         default:
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         }
         
@@ -407,13 +411,13 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     
     
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(banner: adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
     }
@@ -504,11 +508,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindow.Level.alert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
         }
     }
     
@@ -530,11 +530,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindow.Level.alert + 1;
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+        alert.show()
         self.dismiss(animated: true, completion: nil)
     }
     

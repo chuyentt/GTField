@@ -23,9 +23,9 @@
 import UIKit
 
 public extension String {
-    public var length: Int { return self.count }
+    var length: Int { return self.count }
     
-    public func toURL() -> NSURL? {
+    func toURL() -> NSURL? {
         return NSURL(string: self)
     }
 }
@@ -51,9 +51,15 @@ public func delay(delay:Double, closure: @escaping ()->()) {
 }
 
 public func imageFromURL(_ Url: String) -> UIImage {
-    let url = Foundation.URL(string: Url)
-    let data = try? Data(contentsOf: url!)
-    return UIImage(data: data!)!
+    // RIPR: Url string có thể không phải URL hợp lệ, server có thể down,
+    // dữ liệu trả về có thể không phải ảnh. Trước đây 3 force-unwrap → crash.
+    // Trả về UIImage() rỗng để caller render placeholder.
+    guard let url = Foundation.URL(string: Url),
+          let data = try? Data(contentsOf: url),
+          let image = UIImage(data: data) else {
+        return UIImage()
+    }
+    return image
 }
 
 public extension UIColor {

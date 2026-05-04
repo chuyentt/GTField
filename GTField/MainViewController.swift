@@ -8,6 +8,8 @@
 
 
 import UIKit
+
+import GoogleMobileAds
 import Foundation
 import Firebase
 import CloudKit
@@ -189,7 +191,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
             let imageFile = catClass["pic"] as? CKAsset
             if imageFile != nil {
-                cell.imgSection.image = UIImage(contentsOfFile: imageFile!.fileURL.path)
+                cell.imgSection.image = UIImage(contentsOfFile: imageFile!.fileURL!.path)
             }
 
             let isFree = catClass["isFree"] as! Int
@@ -477,61 +479,47 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
             adMobBannerView = GADBannerView(adSize: GADAdSizeFromCGSize(CGSize(width: 256, height: 40)))
             break
         case "375": //6,7
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         case "414": //6+,7+
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         case "768": //iPad
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeFullBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeFullBanner)
             break
         default:
-            adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+            adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
             break
         }
         
-        self.view.addSubview(adMobBannerView)
+        installAdMobBanner(adMobBannerView)
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
-        adMobBannerView.load(GADRequest())
     }
 
 
     // Hide the banner
     func hideBanner(_ banner: UIView) {
-        UIView.beginAnimations("hideBanner", context: nil)
-        // Hide the banner moving it below the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
-        UIView.commitAnimations()
-        banner.isHidden = true
-        
+        banner.setAdBannerVisible(false)
     }
-    
+
     // Show the banner
     func showBanner(_ banner: UIView) {
-        UIView.beginAnimations("showBanner", context: nil)
-        
-        // Move the banner on the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height - banner.frame.size.height,
-            width: banner.frame.size.width, height: banner.frame.size.height);
-        UIView.commitAnimations()
-        banner.isHidden = false
-        
+        banner.setAdBannerVisible(true)
     }
 
 
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(adMobBannerView)
         

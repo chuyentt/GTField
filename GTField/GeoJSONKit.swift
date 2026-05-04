@@ -600,7 +600,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
     // Chèn đỉnh tại midPoint
     private func insertPointFor(_ midPoint: PointView) {
         // Xác định id của midPoint
-        let i: Int = midPoints.index(of: midPoint)!
+        let i: Int = midPoints.firstIndex(of: midPoint)!
         if points.count > 0 {
             // Chèn đỉnh mới
             let newPoint = PointView(frame: CGRect.zero)
@@ -634,7 +634,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
             return
         }
         let newPath: GMSMutablePath = GMSMutablePath(path: path!)
-        let i = points.index(of: point)!
+        let i = points.firstIndex(of: point)!
         newPath.removeCoordinate(at: UInt(i))
         path = newPath
         
@@ -781,7 +781,7 @@ class CLineString: GMSPolyline, CGeoJSONGeometry, PointViewDelegate {
     // Cập nhật lại path khi có thay đổi đỉnh
     private func updatePathFor(_ point: PointView) {
         let newPath: GMSMutablePath = GMSMutablePath(path: path!)
-        let i: UInt = UInt(points.index(of: point)!)
+        let i: UInt = UInt(points.firstIndex(of: point)!)
         newPath.replaceCoordinate(at: i, with: (map?.projection.coordinate(for: point.center))!)
         path = newPath
     }
@@ -1178,7 +1178,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
     // Chèn đỉnh tại midPoint
     private func insertPointFor(_ midPoint: PointView) {
         // Xác định id của midPoint
-        let i: Int = midPoints.index(of: midPoint)!
+        let i: Int = midPoints.firstIndex(of: midPoint)!
         if points.count > 0 {
             // Chèn đỉnh mới
             let newPoint = PointView(frame: CGRect.zero)
@@ -1215,7 +1215,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
             return
         }
         let newPath: GMSMutablePath = GMSMutablePath(path: path!)
-        let i = points.index(of: point)!
+        let i = points.firstIndex(of: point)!
         newPath.removeCoordinate(at: UInt(i))
         path = newPath
         if i == 0 {
@@ -1366,7 +1366,7 @@ class CPolygon: GMSPolygon, CGeoJSONGeometry, PointViewDelegate {
     // Cập nhật lại path khi có thay đổi đỉnh
     private func updatePathFor(_ point: PointView) {
         let newPath: GMSMutablePath = GMSMutablePath(path: path!)
-        let i: UInt = UInt(points.index(of: point)!)
+        let i: UInt = UInt(points.firstIndex(of: point)!)
         newPath.replaceCoordinate(at: i, with: (map?.projection.coordinate(for: point.center))!)
         path = newPath
     }
@@ -1941,7 +1941,7 @@ class CFeatureCollection: CGeoJSON {
     }
     
     fileprivate func deleteFeature(_ feature: CFeature) {
-        if let index = _features.index(where: {$0 == feature}) {
+        if let index = _features.firstIndex(where: {$0 == feature}) {
             feature.geometry.renderer(map: nil)
             _features.remove(at: index)
         }
@@ -2088,7 +2088,7 @@ class CGeoJSONKit: NSObject {
                 textField.placeholder = NSLocalizedString("Type your file name", comment: "")
                 textField.text = getFileNameByGPSTime(ext: "geojson", date: Date())
             })
-            UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+            alertController.show()
         }
     }
     

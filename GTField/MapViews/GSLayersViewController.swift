@@ -188,7 +188,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
             let bbox: NSArray = dict["EX_GeographicBoundingBox"] as! NSArray
             let bboxStr: String = bbox.firstObject as! String
             
-            let boxDict: NSDictionary = try! JSONSerialization.jsonObject(with: bboxStr.data(using: .utf8)!, options: []) as! NSDictionary
+            guard let _bd = bboxStr.data(using: .utf8), let boxDict = (try? JSONSerialization.jsonObject(with: _bd, options: [])) as? NSDictionary else { return }
             
             let minx = boxDict["westBoundLongitude"] as! Double
             let miny = boxDict["southBoundLatitude"] as! Double
@@ -219,7 +219,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
             setWFSActiveLayers(wfsActiveLayers: (cell?.textLabel?.text)!)
             let bbox: NSArray = dict["WGS84BoundingBox"] as! NSArray
             let bboxStr: String = bbox.firstObject as! String
-            let boxDict: NSDictionary = try! JSONSerialization.jsonObject(with: bboxStr.data(using: .utf8)!, options: []) as! NSDictionary
+            guard let _bd = bboxStr.data(using: .utf8), let boxDict = (try? JSONSerialization.jsonObject(with: _bd, options: [])) as? NSDictionary else { return }
             let lowerCornerStr: String = boxDict["LowerCorner"] as! String
             let upperCornerStr: String = boxDict["UpperCorner"] as! String
             let lowerCornerStrArray = lowerCornerStr.components(separatedBy: .whitespaces)

@@ -112,7 +112,8 @@ class GPXTableViewController: UITableViewController {
                 options.parserSettings.shouldProcessNamespaces = false
                 options.parserSettings.shouldReportNamespacePrefixes = false
                 options.parserSettings.shouldResolveExternalEntities = false
-                let gpxDoc = try! AEXMLDocument(xml: data, options: options)
+                // RIPR: GPX rỗng / không hợp lệ → bỏ qua dòng list, không crash.
+                guard let gpxDoc = try? AEXMLDocument(xml: data, options: options) else { return cell }
                 let metadataElement = gpxDoc.root["metadata"]
                 
                 if metadataElement.error == nil {
@@ -125,7 +126,7 @@ class GPXTableViewController: UITableViewController {
                 } else {
                     cell.detailTextLabel?.text = ""
                 }
-            case kKmlFileExt, kGeoJSONExt, kGeoJSONExt1, kMBTileFileExt:
+            case kGeoJSONExt, kGeoJSONExt1, kMBTileFileExt:
                 let date = creationDateForLocalFilePath(filePath: fileURL.path)
                 let size = sizeForLocalFilePath(filePath: fileURL.path)
                 //let font = cell.detailTextLabel?.font
@@ -172,7 +173,7 @@ class GPXTableViewController: UITableViewController {
                     self.actionDeleteFileAtIndex((indexPath as NSIndexPath).row)
             }))
             present(alert, animated: true, completion: nil)
-        case kKmlFileExt:
+        case kKMLFileExt:
             let alert = UIAlertController(
                 title: NSLocalizedString("Select option", comment: ""),
                 message: nil,
@@ -286,11 +287,7 @@ class GPXTableViewController: UITableViewController {
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindow.Level.alert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
         }
     }
 }
@@ -332,11 +329,7 @@ extension GPXTableViewController:MFMailComposeViewControllerDelegate {
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindow.Level.alert + 1;
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+        alert.show()
         self.dismiss(animated: true, completion: nil)
     }
 }

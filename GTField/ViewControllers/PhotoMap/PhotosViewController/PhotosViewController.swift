@@ -383,11 +383,7 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
             
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindow.Level.alert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
         }
     }
     
@@ -409,11 +405,7 @@ class PhotosViewController: UIViewController, UIPageViewControllerDelegate, MFMa
             )
         }
         alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindow.Level.alert + 1;
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+        alert.show()
         self.dismiss(animated: true, completion: nil)
     }
     

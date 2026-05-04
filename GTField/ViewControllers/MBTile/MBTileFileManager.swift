@@ -8,8 +8,6 @@
 
 import UIKit
 
-let kMBTileFileExt = "mbtiles"
-
 class MBTileFileManager: NSObject {
     // Duyệt sâu đến các subdirectory
     class var mbtilesList: [String: URL] {

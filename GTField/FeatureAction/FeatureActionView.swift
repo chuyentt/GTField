@@ -77,7 +77,7 @@ public extension GMSMapView {
         static let tag = 201
     }
     
-    public func showFeatureAction(_ show: Bool) {
+    func showFeatureAction(_ show: Bool) {
         // Tìm FeatureActionView
         if let featureActionXibView: FeatureActionView = self.viewWithTag(FeatureActionViewConstants.tag) as? FeatureActionView {
             // Nếu tồn tại

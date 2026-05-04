@@ -141,7 +141,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 break
             case 1: // Datum
                 let datumCode = getDatumCode()
-                if let index = datumItems.index(where: { (item) -> Bool in
+                if let index = datumItems.firstIndex(where: { (item) -> Bool in
                     item.code == datumCode! as String
                 }) {
                     cell.detailTextLabel?.text = datumItems[index].name
@@ -151,7 +151,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 break
             case 2: // Ellipsoid
                 let ellipsoidCode = getEllipsoidCode()
-                if let index = ellipsoidItems.index(where: { (item) -> Bool in
+                if let index = ellipsoidItems.firstIndex(where: { (item) -> Bool in
                     item.code == ellipsoidCode! as String
                 }) {
                     cell.detailTextLabel?.text = ellipsoidItems[index].name
@@ -334,7 +334,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if ADS_ENABLED == true {
+        if ADS_ENABLED && !getProVersion() {
             
             if UIDevice.current.userInterfaceIdiom == .pad {
                 
@@ -352,13 +352,12 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         
     // Initialize Google AdMob banner
     func initAdMobBanner() {
-        adMobBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        adMobBannerView = GADBannerView(adSize: GADAdSizeBanner)
         self.view.addSubview(adMobBannerView)
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        request.testDevices = ["b0363f55ef349672aa7932774e71491d","74fe0112c024148d80fba2b4f9761655406f5c25",kGADSimulatorID]
         adMobBannerView.load(request)
         adMobBannerView.load(GADRequest())
 
@@ -388,13 +387,13 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     
     
     // AdMob banner available
-    func adViewDidReceiveAd(_ view: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("AdMob loaded!")
         showBanner(banner: adMobBannerView)
     }
     
     // NO AdMob banner available
-    func adView(_ view: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         print("AdMob Can't load ads right now, they'll be available later \n\(error)")
         hideBanner(banner: adMobBannerView)
     }

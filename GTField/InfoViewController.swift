@@ -73,12 +73,7 @@ class InfoViewController: UIViewController, SKPaymentTransactionObserver, MFMail
                 preferredStyle: UIAlertControllerStyle.alert
             )
             alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .default, handler: nil))
-            
-            let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-            alertWindow.rootViewController = UIViewController()
-            alertWindow.windowLevel = UIWindowLevelAlert + 1;
-            alertWindow.makeKeyAndVisible()
-            alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
+            alert.show()
         }
     }
     

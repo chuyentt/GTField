@@ -383,7 +383,7 @@ class MapProjectionDetailViewController: UITableViewController {
             case 0: // Chọn datum từ danh sách. +datum=datum.code
                 let vc: SelectingTableViewController = SelectingTableViewController()
                 vc.selectionType = .ellipsoid
-                vc.ellipsoidIndex = ellipsoidItems.index(where: { (item) -> Bool in
+                vc.ellipsoidIndex = ellipsoidItems.firstIndex(where: { (item) -> Bool in
                     item.code == ellpParameters.code
                 })!
                 vc.delegate = self
@@ -409,7 +409,7 @@ class MapProjectionDetailViewController: UITableViewController {
                 let vc: SelectingTableViewController = SelectingTableViewController()
                 vc.selectionType = .datumTransformation
                 var datumIndex = 9999
-                if let index = datumItems.index(where: { (item) -> Bool in
+                if let index = datumItems.firstIndex(where: { (item) -> Bool in
                     item.code == datumParameters.code
                 }) {
                     datumIndex = index
@@ -535,7 +535,7 @@ class MapProjectionDetailViewController: UITableViewController {
      * Xử lý ellipsoid
      */
     func ellpProcessing(_ ellps_code: String) -> EllipsoidParameters {
-        let index = ellipsoidItems.index(where: { (_item:ListItem) -> Bool in
+        let index = ellipsoidItems.firstIndex(where: { (_item:ListItem) -> Bool in
             (_item.code == ellps_code)
         })
         let ellpItem: ListItem = ellipsoidItems[index!]
@@ -558,7 +558,7 @@ class MapProjectionDetailViewController: UITableViewController {
      */
     func datumProcessing(_ dCode: String) -> DatumParameters {
         var datum: ListItem = datumItems[0]
-        if let index = datumItems.index(where: { (_item) -> Bool in
+        if let index = datumItems.firstIndex(where: { (_item) -> Bool in
             (_item.code == dCode)
         }) {
             datum = datumItems[index]
@@ -1212,7 +1212,7 @@ extension MapProjectionDetailViewController:SelectingTableViewControllerDelegate
     func didSelectItem(_ item: ListItem, _ selectionType: SelectionType) {
         switch selectionType {
         case .mapProjection:
-            if let index = projectionItems.index(where: { (_item:ListItem) -> Bool in
+            if let index = projectionItems.firstIndex(where: { (_item:ListItem) -> Bool in
                 _item.code == item.code
             }) {
                 if self.type != index {

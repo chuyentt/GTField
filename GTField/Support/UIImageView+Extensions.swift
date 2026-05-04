@@ -118,12 +118,8 @@ extension UIImageView {
                 if error != nil {
                     self.image = nil // Or kUIImageNoImage
                 } else {
-                    //if let image = UIImage(data: data!) {
-                        //self.image = image
-                        try! data?.write(to: URL(fileURLWithPath: destinationPath))
-//                    } else {
-//                        self.image = nil // Or kUIImageNoImage
-//                    }
+                    // RIPR: ghi cache có thể fail (disk đầy, no permission) → try! crash app.
+                    try? data?.write(to: URL(fileURLWithPath: destinationPath))
                 }
             })
         }).resume()
