@@ -14,22 +14,5 @@
 import UIKit
 import GoogleMobileAds
 
-/// Alias cho hang so da doi ten trong GMA 8.0 (kGADSimulatorID -> GADSimulatorID).
+/// Alias cho hằng số đổi tên trong GMA 8.0 (kGADSimulatorID → GADSimulatorID).
 public let kGADSimulatorID: String = GADSimulatorID
-
-/// No-op stub thay cho GADInterstitial da bi xoa tu GMA 8.0.
-/// TODO: migrate sang GADInterstitialAd.load(withAdUnitID:request:completionHandler:).
-public final class GADInterstitial {
-    public let adUnitID: String
-    public weak var delegate: AnyObject?
-
-    public init(adUnitID: String) {
-        self.adUnitID = adUnitID
-    }
-
-    public var isReady: Bool { false }
-
-    public func load(_ request: GADRequest) { /* no-op */ }
-
-    public func present(fromRootViewController rootViewController: UIViewController) { /* no-op */ }
-}

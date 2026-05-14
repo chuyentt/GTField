@@ -260,6 +260,7 @@
 		DEE708662005F2D300C31843 /* ScaleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE708652005F2D300C31843 /* ScaleBarView.swift */; };
 		DEE708682005F2F500C31843 /* ScaleBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEE708672005F2F500C31843 /* ScaleBarView.xib */; };
 		DEF2B3191F587C36004BD46D /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF2B3181F587C35004BD46D /* Package.swift */; };
+		AA11220330440550660770B4 /* InterstitialHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11220330440550660770C4 /* InterstitialHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -631,6 +632,7 @@
 		DEE708672005F2F500C31843 /* ScaleBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScaleBarView.xib; sourceTree = "<group>"; };
 		DEF2B3181F587C35004BD46D /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Package.swift; path = GTField/Package.swift; sourceTree = "<group>"; };
 		F776653B7D08AA7BA409CC33 /* Pods_GTField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GTField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA11220330440550660770C4 /* InterstitialHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -871,17 +873,6 @@
 				6B15FECC2FED9709063760E0 /* Pods-GTField.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		AA11220330440550660770A0 /* Shims */ = {
-			isa = PBXGroup;
-			children = (
-				AA11220330440550660770C1 /* AdMobStub.swift */,
-				AA11220330440550660770C3 /* AdMobBannerPlacement.swift */,
-				AA11220330440550660770C2 /* GooglePlacePickerStub.swift */,
-			);
-			name = Shims;
-			path = Shims;
 			sourceTree = "<group>";
 		};
 		DE085E0F1F25E93F005DD248 /* FMDB */ = {
@@ -1495,6 +1486,18 @@
 			name = Icons;
 			sourceTree = "<group>";
 		};
+		AA11220330440550660770A0 /* Shims */ = {
+			isa = PBXGroup;
+			children = (
+				AA11220330440550660770C1 /* AdMobStub.swift */,
+				AA11220330440550660770C2 /* GooglePlacePickerStub.swift */,
+				AA11220330440550660770C3 /* AdMobBannerPlacement.swift */,
+				AA11220330440550660770C4 /* InterstitialHelper.swift */,
+			);
+			name = Shims;
+			path = Shims;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1780,6 +1783,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA11220330440550660770B4 /* InterstitialHelper.swift in Sources */,
 				AA11220330440550660770B1 /* AdMobStub.swift in Sources */,
 				AA11220330440550660770B3 /* AdMobBannerPlacement.swift in Sources */,
 				AA11220330440550660770B2 /* GooglePlacePickerStub.swift in Sources */,
@@ -2147,7 +2151,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 71;
 				DEVELOPMENT_TEAM = 62RSNGGTGD;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2178,7 +2182,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				CURRENT_PROJECT_VERSION = 70;
+				CURRENT_PROJECT_VERSION = 71;
 				DEVELOPMENT_TEAM = 62RSNGGTGD;
 				INFOPLIST_FILE = GTField/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

@@ -667,7 +667,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var motionManager: CMMotionManager?
     
     var adMobBannerView = GADBannerView()
-    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
+    private let interstitialHelper = InterstitialHelper()
     
     var mapView: GMSMapView?
     
@@ -2201,9 +2201,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.navigationController?.isToolbarHidden = true
         self.showSomeView()
         
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     @objc func didResetOverlay() {
@@ -2267,9 +2265,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.showSubscription()
         }
         
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
 
@@ -2370,9 +2366,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     @IBAction func btnLayer(_ sender: AnyObject) {
         togglePaneView(10)
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     @IBAction func btnFolder(_ sender: AnyObject) {
@@ -2402,8 +2396,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //            self.isRequesFeatureInfo = true
 //            // Hiện thông báo trên màn map
 //        }
-//        if (self.interstitial.isReady) {
-//            self.interstitial.present(fromRootViewController: self)
 //        }
 //    }
     
@@ -3230,9 +3222,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         default:
             break
         }
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     func pathOfActiveLayersBoundary() -> GMSPath {
@@ -3602,9 +3592,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         default:
             break
         }
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     class MyButton: UIButton {
@@ -4708,7 +4696,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        interstitial.load(request)
+        interstitialHelper.load()
         adMobBannerView.load(request)
     }
 

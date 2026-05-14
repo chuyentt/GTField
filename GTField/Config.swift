@@ -168,8 +168,11 @@ var ADS_ENABLED = getEnableADS()
 // GTField: 
 //  App ID: ca-app-pub-9906627814658770~4067421272
 //  Ad unit ID: ca-app-pub-9906627814658770/5544154475
-let ADMOB_UNIT_ID_Banner = "ca-app-pub-9906627814658770/5544154475"
-let ADMOB_UNIT_ID_Interstitial = "ca-app-pub-9906627814658770/5403877649"
+let ADMOB_UNIT_ID_Banner        = "ca-app-pub-9906627814658770/5544154475"
+let ADMOB_UNIT_ID_Interstitial  = "ca-app-pub-9906627814658770/5403877649"
+// Rewarded Ad — dùng cho "Xem quảng cáo để xuất DXF/CSV/KML".
+// TODO: Tạo Ad Unit ID mới trong AdMob Console (loại Rewarded) rồi thay chuỗi dưới.
+let ADMOB_UNIT_ID_Rewarded      = "ca-app-pub-3940256099942544/1712485313" // Google test ID tạm
 
 
 // -------------------------------------------------------------------

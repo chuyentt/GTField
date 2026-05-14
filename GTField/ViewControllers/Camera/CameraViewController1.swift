@@ -19,7 +19,7 @@ import Firebase
 
 class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, MotionContainer {
     
-    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
+    private let interstitialHelper = InterstitialHelper()
     
     // Bắt buôc phải có nếu dùng MotionContainer
     var motionManager: CMMotionManager?
@@ -76,9 +76,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         stopUpdateMotion()
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     override func viewDidLoad() {
@@ -105,7 +103,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                 
             }
             let request = GADRequest()
-            interstitial.load(request)
+            interstitialHelper.load()
         }
     }
     

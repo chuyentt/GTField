@@ -75,7 +75,7 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     var poiDestBearing = 0.0
     var poiDateTime = ""
     
-    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
+    private let interstitialHelper = InterstitialHelper()
     var adMobBannerView = GADBannerView()
     //
 
@@ -99,7 +99,7 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         if ADS_ENABLED && !getProVersion() {
             initAdMobBanner()
             let request = GADRequest()
-            interstitial.load(request)
+            interstitialHelper.load()
         } else {
             hideBanner(banner: adMobBannerView)
         }
@@ -120,9 +120,7 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     

@@ -31,7 +31,7 @@ func synchronized(_ object: AnyObject, block: () -> Void) {
 class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate, GADBannerViewDelegate {
     
     var adMobBannerView = GADBannerView()
-    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
+    private let interstitialHelper = InterstitialHelper()
     
     private var photos: [PhotoAnnotation] = [PhotoAnnotation]()
     private var allAnnotationsMapView: MKMapView?
@@ -339,7 +339,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
                 
             }
             let request = GADRequest()
-            interstitial.load(request)
+            interstitialHelper.load()
             initAdMobBanner()
         } else {
             hideBanner(banner: adMobBannerView)
@@ -348,9 +348,7 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UITableViewDe
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
     }
     
     override func didReceiveMemoryWarning() {

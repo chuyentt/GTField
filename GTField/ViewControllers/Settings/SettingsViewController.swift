@@ -25,7 +25,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     @IBOutlet weak var lblTrackDistanceFilter: UILabel!
         
     var adMobBannerView = GADBannerView()
-    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
+    private let interstitialHelper = InterstitialHelper()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,9 +210,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
 
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 break
             case 1:
                 /* Tạm thời không cho chọn, nếu chọn thì chỉ cho xem thông tin hiện tại
@@ -225,9 +223,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 */
                 break;
             case 2:
@@ -241,9 +237,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 */
                 break;
             default:
@@ -262,9 +256,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 break
             case 1: // Length Unit
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -277,9 +269,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 break
             case 2: // Coordniate
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -291,9 +281,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 break
             case 3: // MapGrid
                 let vc: SelectingTableViewController = SelectingTableViewController()
@@ -305,9 +293,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 self.present(nav, animated: true, completion: {
                     
                 })
-                if (self.interstitial.isReady) {
-                    self.interstitial.present(fromRootViewController: vc)
-                }
+                interstitialHelper.show(from: self)
                 break
             default:
                 break
@@ -342,7 +328,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
                 
             }
             let request = GADRequest()
-            interstitial.load(request)
+            interstitialHelper.load()
             
             //initAdMobBanner()
         } else {

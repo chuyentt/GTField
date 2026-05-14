@@ -35,7 +35,8 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     var selectedRowIndex = -1
     weak var delegate: GPXFilesTableViewControllerDelegate?
     var adMobBannerView = GADBannerView()
-    var interstitial = GADInterstitial(adUnitID: ADMOB_UNIT_ID_Interstitial)
+    private let interstitialHelper = InterstitialHelper()
+    private let rewardedHelper = RewardedAdHelper()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -106,9 +107,7 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tableView.reloadData()
-        if (self.interstitial.isReady) {
-            self.interstitial.present(fromRootViewController: self)
-        }
+        interstitialHelper.show(from: self)
         self.view.hideLoading()
         tableView.reloadData()
     }
@@ -424,6 +423,18 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
     }
     
     internal func actionSendEmailDxfWithAttachment(_ rowIndex: Int) {
+        // Nếu user chưa Pro: yêu cầu xem Rewarded Ad trước khi export DXF.
+        if ADS_ENABLED && !getProVersion() && !getUnlimited() {
+            rewardedHelper.show(from: self) { [weak self] (didEarn: Bool) in
+                guard didEarn, let self = self else { return }
+                self.performDxfExport(rowIndex)
+            }
+            return
+        }
+        performDxfExport(rowIndex)
+    }
+
+    private func performDxfExport(_ rowIndex: Int) {
         guard let filename: String = fileList.object(at: rowIndex) as? String else {
             return
         }
@@ -550,7 +561,8 @@ class GPXFilesTableViewController: UITableViewController, UINavigationBarDelegat
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
         let request = GADRequest()
-        interstitial.load(request)
+        interstitialHelper.load()
+        rewardedHelper.load()
         adMobBannerView.load(request)
     }
     
