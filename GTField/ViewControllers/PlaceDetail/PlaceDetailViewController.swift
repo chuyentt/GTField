@@ -142,7 +142,7 @@ class PlaceDetailViewController: BaseContainerViewController {
 
     // Add a constraint to the top of the navigation bar so that it respects the top layout guide.
     view.addConstraint(NSLayoutConstraint(item: navigationBar, attribute: .top, relatedBy: .equal,
-                                          toItem: topLayoutGuide, attribute: .bottom, multiplier: 1,
+                                          toItem: view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1,
                                           constant: 0))
 
     // Set the color of the hight extension view.

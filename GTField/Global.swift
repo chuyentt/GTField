@@ -399,7 +399,7 @@ extension UIView {
         hudView.layer.cornerRadius = 5
         
         indicatorView.center = CGPoint(x: hudView.frame.size.width/2, y: hudView.frame.size.height/2)
-        indicatorView.style = UIActivityIndicatorView.Style.whiteLarge
+        indicatorView.style = UIActivityIndicatorView.Style.large
         hudView.addSubview(indicatorView)
         indicatorView.startAnimating()
         view.addSubview(hudView)
@@ -1187,7 +1187,6 @@ class NetworkActivityIndicatorManager: NSObject {
         
         #if os(iOS)
             if loadingCount == 0 {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
             }
             loadingCount += 1
         #endif
@@ -1199,7 +1198,6 @@ class NetworkActivityIndicatorManager: NSObject {
                 loadingCount -= 1
             }
             if loadingCount == 0 {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         #endif
     }
@@ -1212,24 +1210,24 @@ class NetworkActivityIndicatorManager: NSObject {
  * - m is inverse of m matrix (scale and non-orthogonalities)
  */
 extension CMAccelerometerData {
-    @objc func valueWithCompensation(b: double3, m: double3x3) -> double3 {
-        var a: double3 = [self.acceleration.y, self.acceleration.x, -self.acceleration.z] * 9.80665
+    @objc func valueWithCompensation(b: SIMD3<Double>, m: double3x3) -> SIMD3<Double> {
+        var a: SIMD3<Double> = [self.acceleration.y, self.acceleration.x, -self.acceleration.z] * 9.80665
         a = (a - b)*m
         return a
     }
 }
 
 extension CMGyroData {
-    @objc func valueWithCompensation(b: double3, m: double3x3) -> double3 {
-        var a: double3 = [self.rotationRate.y, self.rotationRate.x, -self.rotationRate.z]
+    @objc func valueWithCompensation(b: SIMD3<Double>, m: double3x3) -> SIMD3<Double> {
+        var a: SIMD3<Double> = [self.rotationRate.y, self.rotationRate.x, -self.rotationRate.z]
         a = (a - b)*m
         return a
     }
 }
 
 extension CMMagnetometerData {
-    @objc func valueWithCompensation(b: double3, m: double3x3) -> double3 {
-        var a: double3 = [self.magneticField.y, self.magneticField.x, -self.magneticField.z]
+    @objc func valueWithCompensation(b: SIMD3<Double>, m: double3x3) -> SIMD3<Double> {
+        var a: SIMD3<Double> = [self.magneticField.y, self.magneticField.x, -self.magneticField.z]
         a = (a - b)*m
         return a
     }

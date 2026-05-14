@@ -102,7 +102,6 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
             } else {
                 
             }
-            let request = GADRequest()
             interstitialHelper.load()
         }
     }

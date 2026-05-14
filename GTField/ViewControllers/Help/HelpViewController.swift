@@ -7,80 +7,48 @@
 //
 
 import UIKit
+import WebKit
 
-class HelpViewController: UIViewController, UIWebViewDelegate {
+class HelpViewController: UIViewController, WKNavigationDelegate {
 
-    @IBOutlet weak var webView: UIWebView!
-    
+    private var webView: WKWebView!
+
+    override func loadView() {
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        view = webView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadWebSite()
-
         self.title = "GTField Help"
-        
-        let shareItem = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(HelpViewController.close))
-        
+        let shareItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(close))
         self.navigationItem.rightBarButtonItems = [shareItem]
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    @objc func close() {
-        self.dismiss(animated: true, completion: { () -> Void in
-        })
-    }
+    @objc func close() { self.dismiss(animated: true) }
 
     func loadWebSite() {
-        var myURL = URL(string: HELP_EN_URL)
-        
-        let prefferedLanguage = Locale.preferredLanguages[0] as String
-        let arr = prefferedLanguage.lowercased().components(separatedBy: "-")
-        if arr.contains("vn") || arr.contains("vi") {
-            myURL = URL(string: HELP_VI_URL)
-        }
-        
-        let myURLRequest:URLRequest = URLRequest(url: myURL!)
-        webView.loadRequest(myURLRequest)
+        var urlStr = HELP_EN_URL
+        let lang = Locale.preferredLanguages[0].lowercased()
+        if lang.contains("vn") || lang.contains("vi") { urlStr = HELP_VI_URL }
+        guard let url = URL(string: urlStr) else { return }
+        webView.load(URLRequest(url: url))
     }
-    
-    // UIWebViewDelegate
-    func webViewDidStartLoad(_ webView: UIWebView) {
-        self.view.showHUD(self.webView)
-    }
-    
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        self.webView.hideHUD()
-    }
-    
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
-        if let scheme = request.url?.scheme {
-            if scheme == "gtfield" {
-                print("we got a gtfield request: \(scheme)")
-                if let result = webView.stringByEvaluatingJavaScript(from: "GTField.someJavascriptFunc()") {
-                    print("result: \(result)")
-                }
-                return false
-            }
-        }
-        return true
-    }
-    
-    @IBAction func refreshButtonTapped(sender: AnyObject) {
-        webView.reload()
-    }
-    
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // WKNavigationDelegate
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        self.view.showHUD(webView)
     }
-    */
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.view.hideHUD()
+    }
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.request.url?.scheme == "gtfield" { decisionHandler(.cancel); return }
+        decisionHandler(.allow)
+    }
 
+    @IBAction func refreshButtonTapped(sender: AnyObject) { webView.reload() }
 }

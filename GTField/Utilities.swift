@@ -378,9 +378,9 @@ func fileListFromDocs(subPath: String, ext: String) -> [AnyObject] {
 }
 
 // Xác định vị trí hiệu chuẩn tự động
-func getCalibPos(gravity gr: double3) -> Int {
+func getCalibPos(gravity gr: SIMD3<Double>) -> Int {
     let recipNorm = 1.0/norm_one(gr)
-    var g: double3 = gr
+    var g: SIMD3<Double> = gr
     g[0] *= recipNorm
     g[1] *= recipNorm
     g[2] *= recipNorm
@@ -420,9 +420,9 @@ func getCalibPos(gravity gr: double3) -> Int {
 }
 
 // Kiểm tra sự ổn định
-func isStable(accelerometer a: double3) -> Bool {
+func isStable(accelerometer a: SIMD3<Double>) -> Bool {
     let recipNorm = 1.0/norm_one(a)
-    var gravity: double3 = a
+    var gravity: SIMD3<Double> = a
     gravity[0] *= recipNorm
     gravity[1] *= recipNorm
     gravity[2] *= recipNorm
@@ -431,21 +431,21 @@ func isStable(accelerometer a: double3) -> Bool {
     return norm_one(ua) <= 0.07
 }
 
-func setLocation(_ location: double3) {
+func setLocation(_ location: SIMD3<Double>) {
     let defaults = UserDefaults.standard
     defaults.set(Array.init(arrayLiteral: location[0],location[1],location[2]), forKey: "Location")
 }
 
-func getLocation() -> double3 {
+func getLocation() -> SIMD3<Double> {
     let defaults = UserDefaults.standard
     let obj = defaults.object(forKey: "Location")
     if obj == nil {
-        return double3.init(21.07, 105.0, 10.0)
+        return SIMD3<Double>.init(21.07, 105.0, 10.0)
     }
-    return double3.init(obj as! Array)
+    return SIMD3<Double>.init(obj as! Array)
 }
 
-func setFixedBias(fixedBias b: double3, forKey key: String) {
+func setFixedBias(fixedBias b: SIMD3<Double>, forKey key: String) {
     let defaults = UserDefaults.standard
     defaults.set(Array.init(arrayLiteral: b[0],b[1],b[2]), forKey: key)
 }
@@ -461,13 +461,13 @@ func setFactorMatrix(factorMatrix m: double3x3, forKey key: String) {
     defaults.set(Array.init(arrayLiteral: r0,r1,r2), forKey: key)
 }
 
-func getFixedBias(forKey key: String) -> double3 {
+func getFixedBias(forKey key: String) -> SIMD3<Double> {
     let defaults = UserDefaults.standard
     let obj = defaults.object(forKey: key)
     if obj == nil {
-        return double3.init()
+        return SIMD3<Double>.init()
     }
-    return double3.init(obj as! Array)
+    return SIMD3<Double>.init(obj as! Array)
 }
 
 func getFactorMatrix(forKey key: String) -> double3x3 {
@@ -482,14 +482,14 @@ func getFactorMatrix(forKey key: String) -> double3x3 {
         return double3x3.init(diagonal: [1.0,1.0,1.0])
     }
     // Khôi phục lại double3x3
-    return double3x3.init([double3.init(r[0]),double3.init(r[1]),double3.init(r[2])])
+    return double3x3.init([SIMD3<Double>.init(r[0]),SIMD3<Double>.init(r[1]),SIMD3<Double>.init(r[2])])
 }
 
 func RadiansToDegrees(_ radians: Double) -> Double {
     return radians * 180.0 / Double.pi
 }
 
-func RadiansToDegrees(_ radians: double3) -> double3 {
+func RadiansToDegrees(_ radians: SIMD3<Double>) -> SIMD3<Double> {
     let inv = 180.0/Double.pi
     return radians * inv
 }
@@ -498,7 +498,7 @@ func DegreesToRadians(_ degrees: Double) -> Double {
     return degrees * Double.pi / 180.0
 }
 
-func DegreesToRadians(_ degrees: double3) -> double3 {
+func DegreesToRadians(_ degrees: SIMD3<Double>) -> SIMD3<Double> {
     let inv = Double.pi / 180.0
     return degrees * inv
 }

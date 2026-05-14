@@ -14,9 +14,9 @@ class GraphSegment: UIView {
     
     @objc static let capacity = 32
     
-    private(set) var dataPoints = [double3]()
+    private(set) var dataPoints = [SIMD3<Double>]()
     
-    private let startPoint: double3
+    private let startPoint: SIMD3<Double>
     
     private let valueRanges: [ClosedRange<Double>]
     
@@ -32,7 +32,7 @@ class GraphSegment: UIView {
     
     // MARK: Initialization
     
-    init(startPoint: double3, valueRanges: [ClosedRange<Double>]) {
+    init(startPoint: SIMD3<Double>, valueRanges: [ClosedRange<Double>]) {
         self.startPoint = startPoint
         self.valueRanges = valueRanges
         
@@ -43,7 +43,7 @@ class GraphSegment: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func add(_ values: double3) {
+    @objc func add(_ values: SIMD3<Double>) {
         guard dataPoints.count < GraphSegment.capacity else { return }
         
         dataPoints.append(values)

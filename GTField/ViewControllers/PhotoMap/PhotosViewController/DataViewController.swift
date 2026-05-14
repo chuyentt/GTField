@@ -98,7 +98,6 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         
         if ADS_ENABLED && !getProVersion() {
             initAdMobBanner()
-            let request = GADRequest()
             interstitialHelper.load()
         } else {
             hideBanner(banner: adMobBannerView)
@@ -275,31 +274,27 @@ class DataViewController: UIViewController, MKMapViewDelegate, UITextFieldDelega
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
-        let request = GADRequest()
-        adMobBannerView.load(request)
+        adMobBannerView.load(GADRequest())
         adMobBannerView.load(GADRequest())
     }
     
     
     // Hide the banner
     func hideBanner(banner: UIView) {
-        UIView.beginAnimations("hideBanner", context: nil)
-        // Hide the banner moving it below the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
-        UIView.commitAnimations()
+        UIView.animate(withDuration: 0.25) {
+            banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
+        }
         banner.isHidden = true
     }
     
     
     // Show the banner
     func showBanner(banner: UIView) {
-        UIView.beginAnimations("showBanner", context: nil)
-        
-        // Move the banner on the bottom of the screen
-        banner.frame = CGRect(x:0, y:self.view.frame.size.height - banner.frame.size.height,
-                              width:banner.frame.size.width, height:banner.frame.size.height);
-        UIView.commitAnimations()
         banner.isHidden = false
+        UIView.animate(withDuration: 0.25) {
+            banner.frame = CGRect(x: 0, y: self.view.frame.size.height - banner.frame.size.height,
+                                  width: banner.frame.size.width, height: banner.frame.size.height)
+        }
     }
     
     

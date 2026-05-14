@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol InputViewControllerDelegate: class {
+protocol InputViewControllerDelegate: AnyObject {
     func didFinishWithValue(_ value: Double, _ index: Int, _ type: SelectionType)
 }
 

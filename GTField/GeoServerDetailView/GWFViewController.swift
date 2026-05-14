@@ -68,7 +68,7 @@ class GWFViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
-        var dict = arrRes[(indexPath as NSIndexPath).section]
+        let dict = arrRes[(indexPath as NSIndexPath).section]
         cell.textLabel?.text = dict["name"] as? String
         cell.detailTextLabel?.text = dict["value"] as? String
         return cell

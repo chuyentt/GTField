@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FeatureDetailViewControllerDelegate: class {
+protocol FeatureDetailViewControllerDelegate: AnyObject {
     func didDeleteFeature()
     func didSaveFeature(_ feature: CFeature)
 }

@@ -15,7 +15,7 @@ enum VisibleMode: Int {
     case editing
 }
 
-protocol CGeoJSONDelegate: class {
+protocol CGeoJSONDelegate: AnyObject {
     // Sự kiện đối tượng ở trạng thái thông thường
     func visibleModeNormal(feature: CFeature)
     // Sự kiện ở trạng thái lựa chọn
@@ -65,13 +65,13 @@ enum CPropMember: String {
     case desc = "desc"
 }
 
-protocol CGeoJSON: class {
+protocol CGeoJSON: AnyObject {
     var type: CGeoJSONTypeValue { get }
     init(dict: Dictionary<String, Any>)
     var dict: Dictionary<String, Any> { get }
 }
 
-protocol CGeoJSONObject: class {
+protocol CGeoJSONObject: AnyObject {
     func style(properties: [String: Any]?)
     func renderer(map: GMSMapView!)
 }
@@ -83,7 +83,7 @@ protocol CGeoJSONGeometry: CGeoJSONObject {
     var feature: CFeature? { get set }
 }
 
-protocol CGeoJSONContainer: class {
+protocol CGeoJSONContainer: AnyObject {
     var type: CGeoJSONTypeValue { get }
     var geometry: CGeoJSONGeometry! { get }
     var properties: [String: Any]? { get set }

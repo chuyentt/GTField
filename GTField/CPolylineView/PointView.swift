@@ -17,7 +17,7 @@ enum PointMode: Int {
 }
 
 // Các sự kiện về đỉnh, điểm giữa
-protocol PointViewDelegate: class {
+protocol PointViewDelegate: AnyObject {
     // Sự kiện chạm down
     func pointTouchBegan(touch:UITouch)
     // Sự kiện chạm drag

@@ -969,7 +969,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
         
-        NotificationCenter.default.addObserver(forName: UIApplication.willChangeStatusBarOrientationNotification,
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification,
                                                object: nil,
                                                queue: OperationQueue.main) { (notifi) in
                                                 if self.selectedLineString != nil && self.selectedLineString.visibleMode == .editing {
@@ -1209,15 +1209,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: self.mapView!,
                            attribute: .top,
                            relatedBy: .equal,
-                           toItem: self.topLayoutGuide,
-                           attribute: .top,
+                           toItem: self.view.safeAreaLayoutGuide,
+                           attribute: .bottom,
                            multiplier: 1.0,
                            constant: 0).isActive = true
         // Căn dưới
         NSLayoutConstraint(item: self.mapView!,
                            attribute: .bottom,
                            relatedBy: .equal,
-                           toItem: self.bottomLayoutGuide,
+                           toItem: self.view.safeAreaLayoutGuide,
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: 0).isActive = true
@@ -1278,7 +1278,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: toolsView!,
                            attribute: .top,
                            relatedBy: .equal,
-                           toItem: self.topLayoutGuide,
+                           toItem: self.view.safeAreaLayoutGuide,
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: 5).isActive = true
@@ -1504,7 +1504,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: myLocationLabel!,
                            attribute: .bottom,
                            relatedBy: .equal,
-                           toItem: self.bottomLayoutGuide,
+                           toItem: self.view.safeAreaLayoutGuide,
                            attribute: .bottom,
                            multiplier: 1.0,
                            constant: -45).isActive = true
@@ -1822,8 +1822,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: buttonRecord?.Container! as Any,
                            attribute: .bottom,
                            relatedBy: .equal,
-                           toItem: self.bottomLayoutGuide,
-                           attribute: .top,
+                           toItem: self.view.safeAreaLayoutGuide,
+                           attribute: .bottom,
                            multiplier: 1.0,
                            constant: -54).isActive = true
         
@@ -1858,8 +1858,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: buttonRecording?.Container! as Any,
                            attribute: .bottom,
                            relatedBy: .equal,
-                           toItem: self.bottomLayoutGuide,
-                           attribute: .top,
+                           toItem: self.view.safeAreaLayoutGuide,
+                           attribute: .bottom,
                            multiplier: 1.0,
                            constant: -54).isActive = true
         
@@ -1887,8 +1887,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         NSLayoutConstraint(item: buttonPaused?.Container! as Any,
                            attribute: .bottom,
                            relatedBy: .equal,
-                           toItem: self.bottomLayoutGuide,
-                           attribute: .top,
+                           toItem: self.view.safeAreaLayoutGuide,
+                           attribute: .bottom,
                            multiplier: 1.0,
                            constant: -54).isActive = true
         buttonPaused?.MainButton.isHidden = true
@@ -3095,7 +3095,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     NSLayoutConstraint(item: self.buttonDownload!,
                                        attribute: .bottom,
                                        relatedBy: .equal,
-                                       toItem: self.bottomLayoutGuide,
+                                       toItem: self.view.safeAreaLayoutGuide,
                                        attribute: .bottom,
                                        multiplier: 1,
                                        constant: -15).isActive = true
@@ -4559,12 +4559,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func didRequestAutocompletePredictions(for tableDataSource: GMSAutocompleteTableDataSource) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         resultsController?.tableView.reloadData()
     }
     
     func didUpdateAutocompletePredictions(for tableDataSource: GMSAutocompleteTableDataSource) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         resultsController?.tableView.reloadData()
         
     }
@@ -4596,7 +4594,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             NSLayoutConstraint(item: resultsController?.view! as Any,
                                attribute: .bottom,
                                relatedBy: .equal,
-                               toItem: self.bottomLayoutGuide,
+                               toItem: self.view.safeAreaLayoutGuide,
                                attribute: .bottom,
                                multiplier: 1,
                                constant: 0).isActive = true

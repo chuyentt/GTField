@@ -18,7 +18,7 @@ import GoogleMobileAds
 import MessageUI
 import Firebase
 
-protocol GPXFilesTableViewControllerDelegate: class {
+protocol GPXFilesTableViewControllerDelegate: AnyObject {
     
     //GPXFilesTableView controller will be dismissed after calling this method
     //gpxFile is the name without extension

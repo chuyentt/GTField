@@ -35,14 +35,14 @@ extension MotionGraphContainer {
         return valueLabels.sorted { $0.center.y < $1.center.y }
     }
     
-    func setValueLabels(rollPitchYaw: double3) {
+    func setValueLabels(rollPitchYaw: SIMD3<Double>) {
         let sortedLabels = self.sortedLabels
         sortedLabels[0].text = String(format: "Roll: %+6.6f", rollPitchYaw[0])
         sortedLabels[1].text = String(format: "Pitch: %+6.6f", rollPitchYaw[1])
         sortedLabels[2].text = String(format: "Yaw: %+6.6f", rollPitchYaw[2])
     }
     
-    func setValueLabels(xyz: double3) {
+    func setValueLabels(xyz: SIMD3<Double>) {
         let sortedLabels = self.sortedLabels
         sortedLabels[0].text = String(format: "x: %+6.6f", xyz[0])
         sortedLabels[1].text = String(format: "y: %+6.6f", xyz[1])

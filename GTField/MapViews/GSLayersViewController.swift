@@ -17,7 +17,7 @@ class GSLayersViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var buttonRefresh: UIBarButtonItem!
     
-    private var uiBusy = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
+    private var uiBusy = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
 
     // Array of dictionary
     // Danh sách thông tin layers

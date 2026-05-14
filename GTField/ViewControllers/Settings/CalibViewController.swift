@@ -145,7 +145,7 @@ class CalibViewController: UIViewController, MotionContainer {
         // add the actions (buttons)
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
             // Lưu vào setting giá trị mặc định
-            let bias = double3([0,0,0])
+            let bias = SIMD3<Double>([0,0,0])
             let sf = double3x3()
             setFixedBias(fixedBias: bias, forKey: "FixedBiasAcce")
             setFixedBias(fixedBias: bias, forKey: "FixedBiasGyro")
@@ -235,21 +235,21 @@ class CalibViewController: UIViewController, MotionContainer {
         var donePos:[Bool] = [false, false, false, false, false, false];
         
         // Dữ liệu một vị trí
-        var acceDataPos = Array<double4>()
-        var gyroDataPos = Array<double4>()
+        var acceDataPos = Array<SIMD4<Double>>()
+        var gyroDataPos = Array<SIMD4<Double>>()
         
         // Dữ liệu sáu vị trí
         var acceData6Pos: Array<Any> = Array<Any>(repeating: Any.self, count: 6)
         var gyroData6Pos: Array<Any> = Array<Any>(repeating: Any.self, count: 6)
         
         // Lấy độ lệch cảm biến gia tốc từ hệ thống đã lưu
-        let b_a: double3 = getFixedBias(forKey: "FixedBiasAcce")
+        let b_a: SIMD3<Double> = getFixedBias(forKey: "FixedBiasAcce")
         
         // Lấy ma trận hệ số tỷ lệ và chéo trục của cảm biến gia tốc từ hệ thống đã lưu
         let SM_a: double3x3 = double3x3.init(diagonal: [1.0,1.0,1.0]) + getFactorMatrix(forKey: "FactorMatrixAcce")
         
         // Lấy độ lệch cảm biến tốc độ góc từ hệ thống đã lưu
-        let b_g: double3 = getFixedBias(forKey: "FixedBiasGyro")
+        let b_g: SIMD3<Double> = getFixedBias(forKey: "FixedBiasGyro")
         
         // Lấy ma trận hệ số tỷ lệ và chéo trục của cảm biến tốc độ góc từ hệ thống đã lưu
         let SM_g: double3x3 = double3x3.init(diagonal: [1.0,1.0,1.0]) + getFactorMatrix(forKey: "FactorMatrixGyro")
@@ -270,7 +270,7 @@ class CalibViewController: UIViewController, MotionContainer {
         motionManager.startAccelerometerUpdates(to: .main) { accelerometerData, error in
             guard let accelerometerData = accelerometerData else { print("Loi acce"); return }
             
-            let a = double3([accelerometerData.acceleration.y,
+            let a = SIMD3<Double>([accelerometerData.acceleration.y,
                              accelerometerData.acceleration.x,
                              -accelerometerData.acceleration.z])
             calibPos = getCalibPos(gravity: a)
@@ -285,7 +285,7 @@ class CalibViewController: UIViewController, MotionContainer {
                 // Lấy mẫu nếu thời gian ổn định được 1.5 giây
                 if (lastDisturbance.timeIntervalSinceNow < -1.0 && (staticAccePts < self.MaxPts)) {
                     let timestamp = gpsTimestamp + accelerometerData.timestamp
-                    let a = double4([timestamp,
+                    let a = SIMD4<Double>([timestamp,
                                      accelerometerData.acceleration.y*g2mpss,
                                      accelerometerData.acceleration.x*g2mpss,
                                      -accelerometerData.acceleration.z*g2mpss])
@@ -320,7 +320,7 @@ class CalibViewController: UIViewController, MotionContainer {
         self.gyroGraphView.setScale(200.0)
         motionManager.startGyroUpdates(to: .main) { gyroData, error in
             guard let gyroData = gyroData else {print("Loi gyro"); return }
-            let a = double3([gyroData.rotationRate.y,
+            let a = SIMD3<Double>([gyroData.rotationRate.y,
                              gyroData.rotationRate.x,
                              -gyroData.rotationRate.z])
             self.gyroGraphView.add(gyroData.valueWithCompensation(b: b_g, m: mg))
@@ -346,7 +346,7 @@ class CalibViewController: UIViewController, MotionContainer {
                 // Lấy mẫu nếu thời gian ổn định được 1.5 giây
                 if (lastDisturbance.timeIntervalSinceNow < -1.0 && (staticGyroPts < self.MaxPts)) {
                     let timestamp = gpsTimestamp + gyroData.timestamp
-                    let g = double4([timestamp,
+                    let g = SIMD4<Double>([timestamp,
                                      gyroData.rotationRate.y,
                                      gyroData.rotationRate.x,
                                      -gyroData.rotationRate.z])
@@ -401,9 +401,9 @@ class CalibViewController: UIViewController, MotionContainer {
         // Chuẩn bị ghi vào file
         for i in 0...5 {
             var acceString = String()
-            let pos: Array<double4> = acce[i] as! Array<double4>
+            let pos: Array<SIMD4<Double>> = acce[i] as! Array<SIMD4<Double>>
             for j in 0...pos.count-1 {
-                let a: double4 = pos[j]
+                let a: SIMD4<Double> = pos[j]
                 // Tạo chuỗi dữ liệu
                 acceString.append(String(format:"%0.3lf %0.8lf %0.8lf %0.8lf", a[0], a[1], a[2], a[3]))
             }
@@ -440,16 +440,16 @@ class CalibViewController: UIViewController, MotionContainer {
 //        let file12 = URL(fileURLWithPath: documentDirectory).appendingPathComponent(fileName+"_acce_Zd.txt")
 //        let acceFile: Array<Any> = [file7, file8, file9, file10, file11, file12]
         
-        var meas_a: Array<double3> = Array<double3>(repeating: double3(), count: 6)
-        var meas_g: Array<double3> = Array<double3>(repeating: double3(), count: 6)
+        var meas_a: Array<SIMD3<Double>> = Array<SIMD3<Double>>(repeating: SIMD3<Double>(), count: 6)
+        var meas_g: Array<SIMD3<Double>> = Array<SIMD3<Double>>(repeating: SIMD3<Double>(), count: 6)
         
         // Chuẩn bị ghi gyro vào file
         for i in 0...5 {
             var gyroString = String()
-            let pos: Array<double4> = gyro[i] as! Array<double4>
-            var mean = double3()
+            let pos: Array<SIMD4<Double>> = gyro[i] as! Array<SIMD4<Double>>
+            var mean = SIMD3<Double>()
             for j in 0...pos.count-1 {
-                let g: double4 = pos[j]
+                let g: SIMD4<Double> = pos[j]
                 mean[0] = (mean[0] * Double(j) +  g[1]) / (Double(j)+1.0)
                 mean[1] = (mean[1] * Double(j) +  g[2]) / (Double(j)+1.0)
                 mean[2] = (mean[2] * Double(j) +  g[3]) / (Double(j)+1.0)
@@ -470,10 +470,10 @@ class CalibViewController: UIViewController, MotionContainer {
         // Chuẩn bị ghi acce vào file
         for i in 0...5 {
             var acceString = String()
-            let pos: Array<double4> = acce[i] as! Array<double4>
-            var mean = double3()
+            let pos: Array<SIMD4<Double>> = acce[i] as! Array<SIMD4<Double>>
+            var mean = SIMD3<Double>()
             for j in 0...pos.count-1 {
-                let a: double4 = pos[j]
+                let a: SIMD4<Double> = pos[j]
                 mean[0] = (mean[0] * Double(j) +  a[1]) / (Double(j)+1.0)
                 mean[1] = (mean[1] * Double(j) +  a[2]) / (Double(j)+1.0)
                 mean[2] = (mean[2] * Double(j) +  a[3]) / (Double(j)+1.0)
@@ -537,7 +537,7 @@ class CalibViewController: UIViewController, MotionContainer {
                                  [  0,   0,   0,   0, 1.0,   0],
                                  [  0,   0,   0,   0,   0, 1.0]])
         let Xa : Matrix<Double> = (Ra*Pa*transpose(Aa))*inv(Aa*Pa*transpose(Aa))
-        let ba: double3 = double3(Xa[0,3],Xa[1,3],Xa[2,3])
+        let ba: SIMD3<Double> = SIMD3<Double>(Xa[0,3],Xa[1,3],Xa[2,3])
         let ma: double3x3 = double3x3([[Xa[0,0],Xa[0,1],Xa[0,2]],
                                        [Xa[1,0],Xa[1,1],Xa[1,2]],
                                        [Xa[2,0],Xa[2,1],Xa[2,2]]])
@@ -598,7 +598,7 @@ class CalibViewController: UIViewController, MotionContainer {
                                  [  0,   0,   0,   0,   0, 1.0]])
         
         let Xg : Matrix<Double> = (Rg*Pg*transpose(Ag))*inv(Ag*Pg*transpose(Ag))
-        let bg: double3 = double3(Xg[0,3],Xg[1,3],Xg[2,3])
+        let bg: SIMD3<Double> = SIMD3<Double>(Xg[0,3],Xg[1,3],Xg[2,3])
         let mg: double3x3 = double3x3([[Xg[0,0],Xg[0,1],Xg[0,2]],
                                        [Xg[1,0],Xg[1,1],Xg[1,2]],
                                        [Xg[2,0],Xg[2,1],Xg[2,2]]])
@@ -627,9 +627,9 @@ class CalibViewController: UIViewController, MotionContainer {
         let mpss2mipss: Double = 1e6
         let rps2dph: Double = 206264.806247096
         
-        let ba: double3 = getFixedBias(forKey: "FixedBiasAcce")
+        let ba: SIMD3<Double> = getFixedBias(forKey: "FixedBiasAcce")
         let ma: double3x3 = getFactorMatrix(forKey: "FactorMatrixAcce")
-        let bg: double3 = getFixedBias(forKey: "FixedBiasGyro")
+        let bg: SIMD3<Double> = getFixedBias(forKey: "FixedBiasGyro")
         let mg: double3x3 = getFactorMatrix(forKey: "FactorMatrixGyro")
         
         _labelFBAX.text = self._numberFormatterFixBias.string(for: ba[0]*mpss2mipss)

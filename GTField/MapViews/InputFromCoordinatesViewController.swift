@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import GeoTrans
 
-protocol InputFromCoordinatesViewControllerDelegate: class {
+protocol InputFromCoordinatesViewControllerDelegate: AnyObject {
     func didFinishWithLocation(_ location: CLLocation)
     func didFinishWithValue(_ value: Double, _ index: Int, _ type: SelectionType)
 }

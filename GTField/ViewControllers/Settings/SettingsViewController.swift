@@ -327,7 +327,6 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
             } else {
                 
             }
-            let request = GADRequest()
             interstitialHelper.load()
             
             //initAdMobBanner()
@@ -343,8 +342,7 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
         adMobBannerView.adUnitID = ADMOB_UNIT_ID_Banner
         adMobBannerView.rootViewController = self
         adMobBannerView.delegate = self
-        let request = GADRequest()
-        adMobBannerView.load(request)
+        adMobBannerView.load(GADRequest())
         adMobBannerView.load(GADRequest())
 
     }
@@ -352,23 +350,20 @@ class SettingsViewController: UITableViewController, GADBannerViewDelegate {
     
     // Hide the banner
     func hideBanner(banner: UIView) {
-        UIView.beginAnimations("hideBanner", context: nil)
-        // Hide the banner moving it below the bottom of the screen
-        banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
-        UIView.commitAnimations()
+        UIView.animate(withDuration: 0.25) {
+            banner.frame = CGRect(x: 0, y: self.view.frame.size.height, width: banner.frame.size.width, height: banner.frame.size.height)
+        }
         banner.isHidden = true
     }
     
     
     // Show the banner
     func showBanner(banner: UIView) {
-        UIView.beginAnimations("showBanner", context: nil)
-        
-        // Move the banner on the bottom of the screen
-        banner.frame = CGRect(x:0, y:self.view.frame.size.height - banner.frame.size.height,
-                              width:banner.frame.size.width, height:banner.frame.size.height);
-        UIView.commitAnimations()
         banner.isHidden = false
+        UIView.animate(withDuration: 0.25) {
+            banner.frame = CGRect(x: 0, y: self.view.frame.size.height - banner.frame.size.height,
+                                  width: banner.frame.size.width, height: banner.frame.size.height)
+        }
     }
     
     

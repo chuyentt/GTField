@@ -52,7 +52,7 @@ class LoadingStatus : UIView {
         self.loadingLabel.text = loadingString as String
         self.loadingLabel.font = loadingFont
         
-        progress = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
+        progress = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         super.init(frame: frame)
         self.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.4)
         var progressFrame = self.progress.frame

@@ -28,7 +28,7 @@ public class ScaleBarView: UIView {
         super.awakeFromNib()
         basePointsPI = UIScreen.pixelsPerInch!/UIScreen.main.nativeScale
         
-        let ppi = UIScreen.main.nativeScale * ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad) ? 132 : 163)
+        let ppi = UIScreen.main.nativeScale * ((UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad) ? 132 : 163)
         print("PPI: ", ppi, UIScreen.pixelsPerInch!)
         
         // defaultScaleBarConstant => thước = 0

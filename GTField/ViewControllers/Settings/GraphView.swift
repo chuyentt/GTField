@@ -58,7 +58,7 @@ class GraphView: UIView {
     
     // MARK: Update methods
     
-    @objc func add(_ values: double3) {
+    @objc func add(_ values: SIMD3<Double>) {
         // Move all the segments horizontally.
         for segment in segments {
             segment.center.x += 1
@@ -87,7 +87,7 @@ class GraphView: UIView {
         let segmentWidth = CGFloat(GraphSegment.capacity)
         
         // Determine the start point for the next segment.
-        let startPoint: double3
+        let startPoint: SIMD3<Double>
         if let currentSegment = currentSegment {
             startPoint = currentSegment.dataPoints.last!
         }

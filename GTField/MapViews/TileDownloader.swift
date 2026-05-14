@@ -23,7 +23,7 @@ class TileRecord {
     }
 }
 
-class TileDownloader: Operation {
+class TileDownloader: Operation, @unchecked Sendable {
     let tileRecord: TileRecord
     
     init(tileRecord: TileRecord) {

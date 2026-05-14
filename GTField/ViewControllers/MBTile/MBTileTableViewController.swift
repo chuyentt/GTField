@@ -257,7 +257,7 @@ extension MBTileTableViewController: MBTileTableViewControllerDelegate {
     }
 }
 
-protocol MBTileTableViewControllerDelegate: class {
+protocol MBTileTableViewControllerDelegate: AnyObject {
     func didLoadMBTileFilePath(_ mbtileFilePath: String)
 }
 

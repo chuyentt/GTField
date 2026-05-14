@@ -9,7 +9,7 @@
 import UIKit
 import GeoTrans
 
-protocol MapProjectionDetailViewControllerDelegate: class {
+protocol MapProjectionDetailViewControllerDelegate: AnyObject {
     func didSave()
 }
 

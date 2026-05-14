@@ -20,7 +20,7 @@ enum SelectionType: Int {
     case mapGridFormat = 7
 }
 
-protocol SelectingTableViewControllerDelegate: class {
+protocol SelectingTableViewControllerDelegate: AnyObject {
     func didSelectItem(_ item: ListItem, _ selectionType: SelectionType)
 }
 
@@ -86,8 +86,7 @@ class SelectingTableViewController: UITableViewController {
         searchController.searchResultsUpdater = self
         tableView.tableHeaderView = searchController.searchBar
         definesPresentationContext = true
-        searchController.dimsBackgroundDuringPresentation = false
-        
+                
         // Setup the Scope Bar
         searchController.searchBar.delegate = self
 
