@@ -75,12 +75,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         #endif
 
-        // Tạm thời bỏ
-        //SKPaymentQueue.default().add(self)
-        //SubscriptionService.shared.loadSubscriptionOptions()
-        setProVersion(true)
-        
+        // Đăng ký IAP observer — phải làm trước khi app kết thúc launch để không bỏ sót
+        // transaction nào được Apple gửi lại (ví dụ: mua bị gián đoạn, deferred).
+        SKPaymentQueue.default().add(self)
+
+        // Tải danh sách sản phẩm IAP từ App Store (async, không block UI).
+        SubscriptionService.shared.loadSubscriptionOptions()
+
+        // Khôi phục trạng thái Pro/Unlimited dựa trên dữ liệu đã lưu cục bộ:
+        // - Unlimited (one-time): kiểm tra UserDefaults (không cần server).
+        // - Pro (subscription): kiểm tra UserDefaults + xác thực receipt với GTFieldService.
+        //   Nếu server không trả lời, giữ nguyên trạng thái cũ (không revoke offline).
+        if getUnlimited() {
+            // One-time purchase đã xác nhận trước đó → Pro mãi mãi.
+            setProVersion(true)
+        } else if getProVersion() {
+            // Subscription đang active → xác thực receipt ngầm để kiểm tra còn hạn không.
+            SubscriptionService.shared.uploadReceipt()
+        }
+        // Nếu chưa mua gì: getProVersion() = false → AdMob banner sẽ hiển thị.
+
         return true
+    }
+
+    func applicationDidBecomeActive_iap(_ application: UIApplication) {
+        // Xác thực lại receipt mỗi khi app vào foreground để bắt subscription hết hạn.
+        // Chỉ gọi khi có receipt data (tức là đã từng mua) để tránh traffic thừa.
+        if !getUnlimited() && SubscriptionService.shared.hasReceiptData {
+            SubscriptionService.shared.uploadReceipt()
+        }
     }
     
     // Xử lý các thay đổi từ phiên bản cũ
@@ -318,7 +341,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // Restart any tasks that were paused (or not yet started) while the application was inactive.
+        applicationDidBecomeActive_iap(application)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -356,12 +380,31 @@ extension AppDelegate: SKPaymentTransactionObserver {
     
     // Sent when an error is encountered while adding transactions from the user's purchase history back to the queue.
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        
+        if let skError = error as? SKError, skError.code != .paymentCancelled {
+            DispatchQueue.main.async {
+                let alert = UIAlertController(
+                    title: NSLocalizedString("Restore Failed", comment: ""),
+                    message: error.localizedDescription,
+                    preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel))
+                alert.show()
+            }
+        }
     }
     
     // Sent when all transactions from the user's purchase history have successfully been added back to the queue.
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        
+        // Nếu không có giao dịch nào được restore, thông báo cho user.
+        DispatchQueue.main.async {
+            if !getProVersion() && !getUnlimited() {
+                let alert = UIAlertController(
+                    title: NSLocalizedString("Nothing to Restore", comment: ""),
+                    message: NSLocalizedString("No previous purchases were found for this Apple ID.", comment: ""),
+                    preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel))
+                alert.show()
+            }
+        }
     }
     
     // Sent when the download state has changed.
@@ -422,13 +465,18 @@ extension AppDelegate: SKPaymentTransactionObserver {
     
     func handleFailedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
         print("Purchase failed for product id: \(transaction.payment.productIdentifier)")
-//        if !getUnlimited() {
-//            setProVersion(false)
-//        }
-//        print("setProVersion(false)")
-//        DispatchQueue.main.async {
-//            NotificationCenter.default.post(name: SubscriptionService.inactiveNotification, object: nil)
-//        }
+        queue.finishTransaction(transaction)
+        // Thông báo lỗi cho user (trừ khi user tự cancel).
+        if let error = transaction.error as? SKError, error.code != .paymentCancelled {
+            DispatchQueue.main.async {
+                let alert = UIAlertController(
+                    title: NSLocalizedString("Purchase Failed", comment: ""),
+                    message: error.localizedDescription,
+                    preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel))
+                alert.show()
+            }
+        }
     }
     
     func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {

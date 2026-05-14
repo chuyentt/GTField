@@ -85,14 +85,13 @@ var DOWNLOADING_PATH_TO_DATABASE: String = ""
 // maximum number of vertices editable
 let MAX_N_VERTICES_EDITABLE = 100
 
-// Tạm thời bỏ giới hạn cho đên khi việc mua trong ứng dụng hoàn thiện => let isDebug = true
+// Feature gate: true chỉ trong DEBUG build (simulator / development device).
+// Trong Release build (Archive → App Store), isDebug = false → gate IAP hoạt động đúng.
+#if DEBUG
 let isDebug = true
-
-//#if DEBUG
-//let isDebug = true
-//#else
-//let isDebug = false
-//#endif
+#else
+let isDebug = false
+#endif
 
 // Độ cao mylocation
 var myAltitude = 0.0
