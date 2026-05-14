@@ -106,13 +106,13 @@ func configMainView() {
     UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
 //    let font = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
-//    
+//
 //    if let font = font {
 //        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.white]
 //    }
-//    
+//
 //    let fontButton = UIFont(name: ".SFUIText-Light", size: UIFont.systemFontSize)
-//    
+//
 //    if let fontButton = fontButton {
 //        UIBarButtonItem.appearance().setTitleTextAttributes(
 //            [
@@ -165,14 +165,19 @@ var ADS_ENABLED = getEnableADS()
 
 // Replace the string below with the unit id you've got
 // by registering your App on AdMob
-// GTField: 
+// GTField:
 //  App ID: ca-app-pub-9906627814658770~4067421272
 //  Ad unit ID: ca-app-pub-9906627814658770/5544154475
 let ADMOB_UNIT_ID_Banner        = "ca-app-pub-9906627814658770/5544154475"
 let ADMOB_UNIT_ID_Interstitial  = "ca-app-pub-9906627814658770/5403877649"
 // Rewarded Ad — dùng cho "Xem quảng cáo để xuất DXF/CSV/KML".
-// TODO: Tạo Ad Unit ID mới trong AdMob Console (loại Rewarded) rồi thay chuỗi dưới.
-let ADMOB_UNIT_ID_Rewarded      = "ca-app-pub-3940256099942544/1712485313" // Google test ID tạm
+// ⚠️ TODO TRƯỚC KHI RELEASE:
+//   1. Mở https://apps.admob.com → Ứng dụng "GTField GPS & Data co..." → Đơn vị quảng cáo
+//   2. Bấm "Thêm đơn vị quảng cáo" → chọn loại "Có thưởng" (Rewarded)
+//   3. Đặt tên: "GTField Rewarded Export"
+//   4. Copy ID dạng ca-app-pub-9906627814658770/XXXXXXXXXX → thay vào dòng dưới
+//   Hiện đang dùng Google test ID — ads KHÔNG tính doanh thu thực.
+let ADMOB_UNIT_ID_Rewarded      = "ca-app-pub-3940256099942544/1712485313" // ← THAY BẰNG ID THẬT
 
 
 // -------------------------------------------------------------------

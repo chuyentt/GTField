@@ -2,17 +2,14 @@
 //  AdMobStub.swift
 //  GTField
 //
-//  Local no-op stub cho cac API AdMob da bi Google xoa khoi Google-Mobile-Ads-SDK
-//  tu phien ban 8.0 (2021), nhung codebase 1.4.11/68 van con dung:
-//  - GADInterstitial (xoa v8.0; thay bang GADInterstitialAd async)
-//  - kGADSimulatorID (xoa v8.0; thay bang GADSimulatorID khong co chu k)
+//  Stub cho các API AdMob đã bị Google xoá khỏi Google-Mobile-Ads-SDK v8.0+.
+//  - GADInterstitial → đã migrate sang InterstitialHelper.swift (GADInterstitialAd async)
+//  - kGADSimulatorID → đã xoá; simulators tự động ở test mode, không cần set
 //
-//  Banner that (GADBannerView, GADRequest, GADBannerViewDelegate, GADAdSizeBanner)
-//  den tu pod Google-Mobile-Ads-SDK 10.x - KHONG duoc stub o day vi trung ten class.
+//  Banner thật (GADBannerView, GADRequest, GADBannerViewDelegate, GADAdSizeBanner)
+//  đến từ pod Google-Mobile-Ads-SDK 10.x — KHÔNG stub ở đây.
 //
 
 import UIKit
 import GoogleMobileAds
-
-/// Alias cho hằng số đổi tên trong GMA 8.0 (kGADSimulatorID → GADSimulatorID).
-public let kGADSimulatorID: String = GADSimulatorID
+// Không còn stub nào cần thiết sau khi migrate sang GADInterstitialAd + GADRewardedAd.
