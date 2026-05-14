@@ -173,11 +173,9 @@ let ADMOB_UNIT_ID_Interstitial  = "ca-app-pub-9906627814658770/5403877649"
 // Rewarded Ad — dùng cho "Xem quảng cáo để xuất DXF/CSV/KML".
 // GTField Rewarded: ca-app-pub-9906627814658770/2106619310
 let ADMOB_UNIT_ID_Rewarded      = "ca-app-pub-9906627814658770/2106619310"
-
-
-// -------------------------------------------------------------------
-// DEFAULT MAP NAVIGATION MODE
-//
+// App Open Ad — hiện khi splash screen kết thúc / app foreground lại.
+// GTField App Open: ca-app-pub-9906627814658770/7933055820
+let ADMOB_UNIT_ID_AppOpen       = "ca-app-pub-9906627814658770/7933055820"
 // "w" - by foot
 // "d" - by car
 // "r" - by public transit

@@ -10,10 +10,12 @@ UUID = {
     "build_picker":       "AA11220330440550660770B2",
     "build_placement":    "AA11220330440550660770B3",
     "build_interstitial": "AA11220330440550660770B4",
+    "build_appopen":      "AA11220330440550660770B5",
     "ref_admob":          "AA11220330440550660770C1",
     "ref_picker":         "AA11220330440550660770C2",
     "ref_placement":      "AA11220330440550660770C3",
     "ref_interstitial":   "AA11220330440550660770C4",
+    "ref_appopen":        "AA11220330440550660770C5",
     "group_shims":        "AA11220330440550660770A0",
 }
 
@@ -22,6 +24,7 @@ SHIM_FILES = [
     ("build_picker",       "ref_picker",       "GooglePlacePickerStub.swift"),
     ("build_placement",    "ref_placement",    "AdMobBannerPlacement.swift"),
     ("build_interstitial", "ref_interstitial", "InterstitialHelper.swift"),
+    ("build_appopen",      "ref_appopen",      "AppOpenAdHelper.swift"),
 ]
 
 inserts = []

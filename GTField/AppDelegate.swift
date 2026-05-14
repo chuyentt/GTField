@@ -64,7 +64,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Khởi tạo Google Mobile Ads (GMA SDK 10.x). App ID phải được khai báo trong
         // Info.plist với key `GADApplicationIdentifier`, nếu không SDK sẽ crash app.
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().start { _ in
+            // Pre-load App Open Ad ngay khi SDK sẵn sàng
+            AppOpenAdHelper.shared.loadAd()
+        }
         #if DEBUG
         // Test device IDs: simulator + 2 thiết bị test cũ. Ads sản xuất sẽ KHÔNG được
         // phục vụ trên các thiết bị này (chỉ test ad). Trong Release build, mảng rỗng.
@@ -343,6 +346,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive.
         applicationDidBecomeActive_iap(application)
+        // Hiện App Open Ad nếu đủ điều kiện (không Pro, ADS_ENABLED, ad còn hạn)
+        AppOpenAdHelper.shared.showAdIfAvailable()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
