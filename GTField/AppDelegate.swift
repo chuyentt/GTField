@@ -68,8 +68,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if DEBUG
         // Test device IDs: simulator + 2 thiết bị test cũ. Ads sản xuất sẽ KHÔNG được
         // phục vụ trên các thiết bị này (chỉ test ad). Trong Release build, mảng rỗng.
+        // Simulators are automatically in test mode — không cần kGADSimulatorID.
         GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [
-            kGADSimulatorID,
             "b0363f55ef349672aa7932774e71491d",
             "74fe0112c024148d80fba2b4f9761655406f5c25",
         ]
