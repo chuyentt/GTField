@@ -171,13 +171,8 @@ var ADS_ENABLED = getEnableADS()
 let ADMOB_UNIT_ID_Banner        = "ca-app-pub-9906627814658770/5544154475"
 let ADMOB_UNIT_ID_Interstitial  = "ca-app-pub-9906627814658770/5403877649"
 // Rewarded Ad — dùng cho "Xem quảng cáo để xuất DXF/CSV/KML".
-// ⚠️ TODO TRƯỚC KHI RELEASE:
-//   1. Mở https://apps.admob.com → Ứng dụng "GTField GPS & Data co..." → Đơn vị quảng cáo
-//   2. Bấm "Thêm đơn vị quảng cáo" → chọn loại "Có thưởng" (Rewarded)
-//   3. Đặt tên: "GTField Rewarded Export"
-//   4. Copy ID dạng ca-app-pub-9906627814658770/XXXXXXXXXX → thay vào dòng dưới
-//   Hiện đang dùng Google test ID — ads KHÔNG tính doanh thu thực.
-let ADMOB_UNIT_ID_Rewarded      = "ca-app-pub-3940256099942544/1712485313" // ← THAY BẰNG ID THẬT
+// GTField Rewarded: ca-app-pub-9906627814658770/2106619310
+let ADMOB_UNIT_ID_Rewarded      = "ca-app-pub-9906627814658770/2106619310"
 
 
 // -------------------------------------------------------------------
